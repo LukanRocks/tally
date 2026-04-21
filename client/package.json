@@ -32,7 +32,6 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
     "postcss": "^8.4.38",
-    "shadcn": "^4.4.0",
     "typescript": "^5.4.5",
     "vite": "^5.3.1"
   }
