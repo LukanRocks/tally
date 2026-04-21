@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { api, Player } from '../lib/api'
 import { ThemeSetting } from '../hooks/useTheme'
@@ -12,6 +13,7 @@ type FormState = {
 }
 
 export default function SettingsPage() {
+  const navigate = useNavigate()
   const { settings: ctxSettings, updateSetting, isLoading: settingsLoading } = useSettings()
   const [form, setForm] = useState<FormState>({
     currency: 'USD',
@@ -65,9 +67,8 @@ export default function SettingsPage() {
       await api.settings.reset()
       setShowResetConfirm(false)
       setResetConfirmText('')
-      setForm({ currency: 'USD', language: 'en', theme: 'system', default_owner_id: '' })
-      setPlayers([])
       toast.success('All data deleted')
+      navigate('/home')
     } catch (err: any) {
       toast.error(err.message)
     } finally {
