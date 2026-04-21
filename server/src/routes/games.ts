@@ -3,7 +3,7 @@ import { eq, isNull, like, and, gte, lte, desc, asc, sql } from 'drizzle-orm'
 import path from 'path'
 import { existsSync, unlinkSync } from 'fs'
 import { db, DATA_DIR } from '../db'
-import { games as gamesTable, game_attachments as attachmentsTable, sessions as sessionsTable, session_results as resultsTable } from '../db/schema'
+import { games as gamesTable, game_attachments as attachmentsTable, sessions as sessionsTable, session_results as resultsTable, players as playersTable } from '../db/schema'
 import { coverUpload, attachmentUpload } from '../middleware/upload'
 
 const router = Router()
@@ -32,6 +32,8 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
         purchase_at: gamesTable.purchase_at,
         price: gamesTable.price,
         cover_image_path: gamesTable.cover_image_path,
+        owner_id: gamesTable.owner_id,
+        owner_name: sql<string | null>`(SELECT name FROM players WHERE players.id = games.owner_id)`,
         created_at: gamesTable.created_at,
         session_count: sessionCount,
       })
@@ -78,7 +80,11 @@ router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
       .where(and(eq(sessionsTable.game_id, id), isNull(sessionsTable.deleted_at)))
       .get()
 
-    res.json({ ...game, attachments, session_count: countRow?.count ?? 0 })
+    const ownerName = game.owner_id
+      ? (db.select({ name: playersTable.name }).from(playersTable).where(eq(playersTable.id, game.owner_id)).get())?.name ?? null
+      : null
+
+    res.json({ ...game, owner_name: ownerName, attachments, session_count: countRow?.count ?? 0 })
   } catch (err) {
     next(err)
   }
@@ -87,7 +93,7 @@ router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
 // POST /api/v1/games
 router.post('/', (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, description, quick_rules, min_players, max_players, purchase_at, price } = req.body
+    const { name, description, quick_rules, min_players, max_players, purchase_at, price, owner_id } = req.body
 
     if (!name?.trim()) return res.status(400).json({ error: 'Name is required' })
 
@@ -101,6 +107,7 @@ router.post('/', (req: Request, res: Response, next: NextFunction) => {
         max_players: max_players ? Number(max_players) : null,
         purchase_at: purchase_at || null,
         price: price != null ? Number(price) : null,
+        owner_id: owner_id ? Number(owner_id) : null,
       })
       .returning()
       .all()
@@ -132,6 +139,7 @@ router.put('/:id', (req: Request, res: Response, next: NextFunction) => {
     if (body.max_players !== undefined) patch.max_players = body.max_players ? Number(body.max_players) : null
     if (body.purchase_at !== undefined) patch.purchase_at = body.purchase_at || null
     if (body.price !== undefined) patch.price = body.price != null ? Number(body.price) : null
+    if (body.owner_id !== undefined) patch.owner_id = body.owner_id ? Number(body.owner_id) : null
 
     const [updated] = db.update(gamesTable).set(patch).where(eq(gamesTable.id, id)).returning().all()
     res.json(updated)

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { api, Game } from '../lib/api'
+import { api, Player } from '../lib/api'
 
 type FormData = {
   name: string
@@ -10,6 +10,7 @@ type FormData = {
   max_players: string
   purchase_at: string
   price: string
+  owner_id: string
 }
 
 const empty: FormData = {
@@ -20,6 +21,7 @@ const empty: FormData = {
   max_players: '',
   purchase_at: '',
   price: '',
+  owner_id: '',
 }
 
 export default function GameForm() {
@@ -27,26 +29,35 @@ export default function GameForm() {
   const navigate = useNavigate()
   const isEdit = Boolean(id)
   const [form, setForm] = useState<FormData>(empty)
+  const [players, setPlayers] = useState<Player[]>([])
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    if (!isEdit) return
-    api.games.get(Number(id)).then((g: Game) => {
-      setForm({
-        name: g.name,
-        description: g.description ?? '',
-        quick_rules: g.quick_rules ?? '',
-        min_players: g.min_players != null ? String(g.min_players) : '',
-        max_players: g.max_players != null ? String(g.max_players) : '',
-        purchase_at: g.purchase_at ?? '',
-        price: g.price != null ? String(g.price) : '',
+    if (isEdit) {
+      Promise.all([api.games.get(Number(id)), api.players.list()]).then(([g, playerList]) => {
+        setForm({
+          name: g.name,
+          description: g.description ?? '',
+          quick_rules: g.quick_rules ?? '',
+          min_players: g.min_players != null ? String(g.min_players) : '',
+          max_players: g.max_players != null ? String(g.max_players) : '',
+          purchase_at: g.purchase_at ?? '',
+          price: g.price != null ? String(g.price) : '',
+          owner_id: g.owner_id != null ? String(g.owner_id) : '',
+        })
+        setPlayers(playerList)
       })
-    })
+    } else {
+      Promise.all([api.players.list(), api.settings.get()]).then(([playerList, settings]) => {
+        setPlayers(playerList)
+        setForm((f) => ({ ...f, owner_id: settings.default_owner_id != null ? String(settings.default_owner_id) : '' }))
+      })
+    }
   }, [id, isEdit])
 
   function set(field: keyof FormData) {
-    return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm((f) => ({ ...f, [field]: e.target.value }))
+    return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setForm((f) => ({ ...f, [field]: e.target.value }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -66,6 +77,7 @@ export default function GameForm() {
       max_players: form.max_players ? Number(form.max_players) : null,
       purchase_at: form.purchase_at || null,
       price: form.price ? Number(form.price) : null,
+      owner_id: form.owner_id ? Number(form.owner_id) : null,
     }
 
     try {
@@ -133,6 +145,17 @@ export default function GameForm() {
             <input id='price' type='number' min={0} step='0.01' value={form.price} onChange={set('price')} className='input' placeholder='49.99' />
           </Field>
         </div>
+
+        <Field label='Owner' htmlFor='owner_id'>
+          <select id='owner_id' value={form.owner_id} onChange={set('owner_id')} className='input'>
+            <option value=''>— None —</option>
+            {players.map((p) => (
+              <option key={p.id} value={String(p.id)}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </Field>
 
         <div className='flex gap-3 pt-2'>
           <button

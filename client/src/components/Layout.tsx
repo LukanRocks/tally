@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { House, Library, Moon, Sun, Swords, Trophy, Users } from 'lucide-react'
+import { House, Library, Settings, Swords, Trophy, Users } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
 
 const navItems = [
@@ -7,10 +7,11 @@ const navItems = [
   { to: '/leaderboard', label: 'Leaderboard', Icon: Trophy },
   { to: '/library', label: 'Library', Icon: Library },
   { to: '/players', label: 'Players', Icon: Users },
+  { to: '/settings', label: 'Settings', Icon: Settings },
 ]
 
 export default function Layout() {
-  const { theme, toggle } = useTheme()
+  useTheme()
 
   return (
     <div className='flex h-screen bg-background text-foreground'>
@@ -35,15 +36,6 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
-        <div className='border-t border-border px-3 py-4'>
-          <button
-            onClick={toggle}
-            className='flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
-          >
-            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-            {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-          </button>
-        </div>
       </aside>
       <main className='flex-1 overflow-auto bg-background pb-24 md:pb-0'>
         <Outlet />

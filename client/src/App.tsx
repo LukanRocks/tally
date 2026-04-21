@@ -9,6 +9,7 @@ import SessionLogger from './pages/SessionLogger'
 import Players from './pages/Players'
 import PlayerProfile from './pages/PlayerProfile'
 import Leaderboard from './pages/Leaderboard'
+import SettingsPage from './pages/Settings'
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
           <Route path='players' element={<Players />} />
           <Route path='players/:id' element={<PlayerProfile />} />
           <Route path='leaderboard' element={<Leaderboard />} />
+          <Route path='settings' element={<SettingsPage />} />
         </Route>
       </Routes>
       <Toaster />

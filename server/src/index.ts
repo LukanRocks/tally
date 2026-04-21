@@ -6,6 +6,7 @@ import gamesRouter from './routes/games'
 import playersRouter from './routes/players'
 import sessionsRouter from './routes/sessions'
 import statsRouter from './routes/stats'
+import settingsRouter from './routes/settings'
 
 const app = express()
 const PORT = Number(process.env.PORT ?? 3001)
@@ -22,6 +23,7 @@ app.use('/api/v1/games', gamesRouter)
 app.use('/api/v1/players', playersRouter)
 app.use('/api/v1/sessions', sessionsRouter)
 app.use('/api/v1/stats', statsRouter)
+app.use('/api/v1/settings', settingsRouter)
 
 // Serve React app in production
 if (process.env.NODE_ENV === 'production') {

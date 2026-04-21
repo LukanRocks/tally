@@ -31,9 +31,20 @@ export interface Game {
   purchase_at: string | null
   price: number | null
   cover_image_path: string | null
+  owner_id: number | null
+  owner_name: string | null
   created_at: string
   session_count?: number
   attachments?: GameAttachment[]
+}
+
+export interface Settings {
+  id: 1
+  currency: 'USD' | 'BRL'
+  language: 'en' | 'pt'
+  default_owner_id: number | null
+  theme: 'light' | 'dark' | 'system'
+  updated_at: string
 }
 
 export interface GameAttachment {
@@ -165,5 +176,11 @@ export const api = {
     leaderboardByGame: (gameId: number) => req<LeaderboardEntry[]>(`/stats/leaderboard/game/${gameId}`),
     mostPlayed: () => req<MostPlayedGame[]>('/stats/most-played'),
     headToHead: (player1: number, player2: number) => req<HeadToHead>(`/stats/head-to-head?player1=${player1}&player2=${player2}`),
+  },
+
+  settings: {
+    get: () => req<Settings>('/settings'),
+    update: (data: Partial<Omit<Settings, 'id' | 'updated_at'>>) => req<Settings>('/settings', json('PUT', data)),
+    reset: () => req<void>('/settings/reset', { method: 'DELETE' }),
   },
 }

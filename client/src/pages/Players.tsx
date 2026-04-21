@@ -6,6 +6,7 @@ import { api, Player } from '../lib/api'
 
 export default function Players() {
   const [players, setPlayers] = useState<Player[]>([])
+  const [defaultOwnerId, setDefaultOwnerId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [newName, setNewName] = useState('')
   const [editId, setEditId] = useState<number | null>(null)
@@ -16,8 +17,9 @@ export default function Players() {
   const avatarRefs = useRef<Record<number, HTMLInputElement | null>>({})
 
   useEffect(() => {
-    api.players.list().then((data) => {
+    Promise.all([api.players.list(), api.settings.get()]).then(([data, settings]) => {
       setPlayers(data)
+      setDefaultOwnerId(settings.default_owner_id)
       setLoading(false)
     })
   }, [])
@@ -170,7 +172,9 @@ export default function Players() {
                   </button>
                   <button
                     onClick={() => setDeleteId(p.id)}
-                    className='flex items-center gap-1 rounded-lg border border-destructive/30 px-3 py-1 text-xs text-destructive hover:bg-destructive/10'
+                    disabled={p.id === defaultOwnerId}
+                    title={p.id === defaultOwnerId ? 'Default owner — change in Settings first' : undefined}
+                    className='flex items-center gap-1 rounded-lg border border-destructive/30 px-3 py-1 text-xs text-destructive hover:bg-destructive/10 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent'
                   >
                     <Trash2 size={11} /> Delete
                   </button>

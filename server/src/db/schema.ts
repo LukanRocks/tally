@@ -11,6 +11,7 @@ export const games = sqliteTable('games', {
   purchase_at: text('purchase_at'),
   price: real('price'),
   cover_image_path: text('cover_image_path'),
+  owner_id: integer('owner_id'),
   created_at: text('created_at')
     .notNull()
     .default(sql`(datetime('now'))`),
@@ -67,4 +68,15 @@ export const session_results = sqliteTable('session_results', {
   rank: integer('rank').notNull(),
   points_awarded: integer('points_awarded').notNull(),
   deleted_at: text('deleted_at'),
+})
+
+export const settings = sqliteTable('settings', {
+  id: integer('id').primaryKey(),
+  currency: text('currency').notNull().default('USD'),
+  language: text('language').notNull().default('en'),
+  default_owner_id: integer('default_owner_id'),
+  theme: text('theme').notNull().default('system'),
+  updated_at: text('updated_at')
+    .notNull()
+    .default(sql`(datetime('now'))`),
 })

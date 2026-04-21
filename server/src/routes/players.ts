@@ -3,7 +3,7 @@ import { eq, isNull, and, sql } from 'drizzle-orm'
 import path from 'path'
 import { existsSync, unlinkSync } from 'fs'
 import { db, DATA_DIR } from '../db'
-import { players as playersTable, session_results as resultsTable } from '../db/schema'
+import { players as playersTable, session_results as resultsTable, settings as settingsTable } from '../db/schema'
 import { avatarUpload } from '../middleware/upload'
 
 const router = Router()
@@ -122,6 +122,11 @@ router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
       .get()
 
     if (!existing) return res.status(404).json({ error: 'Player not found' })
+
+    const settingsRow = db.select().from(settingsTable).where(eq(settingsTable.id, 1)).get()
+    if (settingsRow?.default_owner_id === id) {
+      return res.status(409).json({ error: 'Cannot delete the default owner. Change the default owner in Settings first.' })
+    }
 
     const now = new Date().toISOString()
     db.update(resultsTable)
