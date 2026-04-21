@@ -21,7 +21,7 @@ export function useTheme() {
     localStorage.setItem('theme', theme)
   }, [theme])
 
-  const toggle = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'))
+  const toggle = () => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
 
   return { theme, toggle }
 }

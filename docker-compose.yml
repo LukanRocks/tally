@@ -1,9 +1,9 @@
-version: "3.8"
+version: '3.8'
 services:
   tally:
     build: .
     ports:
-      - "3000:3000"
+      - '3000:3000'
     volumes:
       - ./data:/app/data
     restart: unless-stopped

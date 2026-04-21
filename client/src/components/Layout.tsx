@@ -14,21 +14,19 @@ export default function Layout() {
 
   return (
     <div className='flex h-screen bg-background text-foreground'>
-      <aside className='hidden md:flex md:flex-col w-56 bg-sidebar text-sidebar-foreground border-r border-border shrink-0'>
-        <NavLink to={navItems[0].to} className='px-6 py-5 border-b border-border flex items-center gap-2 hover:bg-sidebar-accent transition-colors'>
+      <aside className='hidden w-56 shrink-0 border-r border-border bg-sidebar text-sidebar-foreground md:flex md:flex-col'>
+        <NavLink to={navItems[0].to} className='flex items-center gap-2 border-b border-border px-6 py-5 transition-colors hover:bg-sidebar-accent'>
           <Swords size={20} className='text-sidebar-primary' />
           <span className='text-xl font-bold tracking-tight text-sidebar-primary'>Tally</span>
         </NavLink>
-        <nav className='flex-1 px-3 py-4 space-y-1'>
+        <nav className='flex-1 space-y-1 px-3 py-4'>
           {navItems.map(({ to, label, Icon }) => (
             <NavLink
               key={to}
               to={to}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  isActive ?
-                    'bg-sidebar-primary/15 text-sidebar-primary'
-                  : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive ? 'bg-sidebar-primary/15 text-sidebar-primary' : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                 }`
               }
             >
@@ -37,14 +35,12 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
-        <div className='px-3 py-4 border-t border-border'>
+        <div className='border-t border-border px-3 py-4'>
           <button
             onClick={toggle}
-            className='flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors'
+            className='flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
           >
-            {theme === 'dark' ?
-              <Sun size={16} />
-            : <Moon size={16} />}
+            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
             {theme === 'dark' ? 'Light mode' : 'Dark mode'}
           </button>
         </div>
@@ -52,16 +48,14 @@ export default function Layout() {
       <main className='flex-1 overflow-auto bg-background pb-16 md:pb-0'>
         <Outlet />
       </main>
-      <nav className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-sidebar border-t border-border flex">
+      <nav className='fixed inset-x-0 bottom-0 z-50 flex border-t border-border bg-sidebar md:hidden'>
         {navItems.map(({ to, label, Icon }) => (
           <NavLink
             key={to}
             to={to}
             className={({ isActive }) =>
-              `flex flex-col items-center justify-center flex-1 py-2 gap-1 text-xs font-medium transition-colors ${
-                isActive
-                  ? 'bg-sidebar-primary/15 text-sidebar-primary'
-                  : 'text-sidebar-foreground/70'
+              `flex flex-1 flex-col items-center justify-center gap-1 py-2 text-xs font-medium transition-colors ${
+                isActive ? 'bg-sidebar-primary/15 text-sidebar-primary' : 'text-sidebar-foreground/70'
               }`
             }
           >

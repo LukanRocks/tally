@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { api, Game } from '../lib/api';
+import { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { api, Game } from '../lib/api'
 
 type FormData = {
-  name: string;
-  description: string;
-  quick_rules: string;
-  min_players: string;
-  max_players: string;
-  purchase_at: string;
-  price: string;
-};
+  name: string
+  description: string
+  quick_rules: string
+  min_players: string
+  max_players: string
+  purchase_at: string
+  price: string
+}
 
 const empty: FormData = {
   name: '',
@@ -20,18 +20,18 @@ const empty: FormData = {
   max_players: '',
   purchase_at: '',
   price: '',
-};
+}
 
 export default function GameForm() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const isEdit = Boolean(id);
-  const [form, setForm] = useState<FormData>(empty);
-  const [error, setError] = useState('');
-  const [submitting, setSubmitting] = useState(false);
+  const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
+  const isEdit = Boolean(id)
+  const [form, setForm] = useState<FormData>(empty)
+  const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    if (!isEdit) return;
+    if (!isEdit) return
     api.games.get(Number(id)).then((g: Game) => {
       setForm({
         name: g.name,
@@ -41,20 +41,22 @@ export default function GameForm() {
         max_players: g.max_players != null ? String(g.max_players) : '',
         purchase_at: g.purchase_at ?? '',
         price: g.price != null ? String(g.price) : '',
-      });
-    });
-  }, [id, isEdit]);
+      })
+    })
+  }, [id, isEdit])
 
   function set(field: keyof FormData) {
-    return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      setForm(f => ({ ...f, [field]: e.target.value }));
+    return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm((f) => ({ ...f, [field]: e.target.value }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!form.name.trim()) { setError('Name is required'); return; }
-    setError('');
-    setSubmitting(true);
+    e.preventDefault()
+    if (!form.name.trim()) {
+      setError('Name is required')
+      return
+    }
+    setError('')
+    setSubmitting(true)
 
     const payload = {
       name: form.name.trim(),
@@ -64,94 +66,98 @@ export default function GameForm() {
       max_players: form.max_players ? Number(form.max_players) : null,
       purchase_at: form.purchase_at || null,
       price: form.price ? Number(form.price) : null,
-    };
+    }
 
     try {
       if (isEdit) {
-        await api.games.update(Number(id), payload);
-        navigate(`/library/${id}`);
+        await api.games.update(Number(id), payload)
+        navigate(`/library/${id}`)
       } else {
-        const game = await api.games.create(payload as Parameters<typeof api.games.create>[0]);
-        navigate(`/library/${game.id}`);
+        const game = await api.games.create(payload as Parameters<typeof api.games.create>[0])
+        navigate(`/library/${game.id}`)
       }
     } catch (err: any) {
-      setError(err.message);
-      setSubmitting(false);
+      setError(err.message)
+      setSubmitting(false)
     }
   }
 
   return (
-    <div className="p-4 md:p-8 max-w-2xl">
-      <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground">
-        <Link to="/library" className="hover:text-foreground">Library</Link>
+    <div className='max-w-2xl p-4 md:p-8'>
+      <div className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'>
+        <Link to='/library' className='hover:text-foreground'>
+          Library
+        </Link>
         <span>/</span>
-        <span className="text-foreground font-medium">{isEdit ? 'Edit Game' : 'Add Game'}</span>
+        <span className='font-medium text-foreground'>{isEdit ? 'Edit Game' : 'Add Game'}</span>
       </div>
 
-      <h1 className="text-2xl font-bold text-foreground mb-8">{isEdit ? 'Edit Game' : 'Add Game'}</h1>
+      <h1 className='mb-8 text-2xl font-bold text-foreground'>{isEdit ? 'Edit Game' : 'Add Game'}</h1>
 
-      {error && (
-        <div className="mb-4 px-4 py-3 bg-destructive/10 border border-destructive/30 rounded-lg text-sm text-destructive">{error}</div>
-      )}
+      {error && <div className='mb-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive'>{error}</div>}
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <Field label="Name *" htmlFor="name">
-          <input id="name" type="text" value={form.name} onChange={set('name')} required
-            className="input" placeholder="Wingspan" />
+      <form onSubmit={handleSubmit} className='space-y-5'>
+        <Field label='Name *' htmlFor='name'>
+          <input id='name' type='text' value={form.name} onChange={set('name')} required className='input' placeholder='Wingspan' />
         </Field>
 
-        <Field label="Description" htmlFor="description">
-          <textarea id="description" value={form.description} onChange={set('description')} rows={3}
-            className="input resize-none" placeholder="A beautiful engine-builder about birds…" />
+        <Field label='Description' htmlFor='description'>
+          <textarea
+            id='description'
+            value={form.description}
+            onChange={set('description')}
+            rows={3}
+            className='input resize-none'
+            placeholder='A beautiful engine-builder about birds…'
+          />
         </Field>
 
-        <Field label="Quick Rules" htmlFor="quick_rules">
-          <textarea id="quick_rules" value={form.quick_rules} onChange={set('quick_rules')} rows={4}
-            className="input resize-none" placeholder="Brief rules summary…" />
+        <Field label='Quick Rules' htmlFor='quick_rules'>
+          <textarea id='quick_rules' value={form.quick_rules} onChange={set('quick_rules')} rows={4} className='input resize-none' placeholder='Brief rules summary…' />
         </Field>
 
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="Min Players" htmlFor="min_players">
-            <input id="min_players" type="number" min={1} value={form.min_players} onChange={set('min_players')}
-              className="input" placeholder="1" />
+        <div className='grid grid-cols-2 gap-4'>
+          <Field label='Min Players' htmlFor='min_players'>
+            <input id='min_players' type='number' min={1} value={form.min_players} onChange={set('min_players')} className='input' placeholder='1' />
           </Field>
-          <Field label="Max Players" htmlFor="max_players">
-            <input id="max_players" type="number" min={1} value={form.max_players} onChange={set('max_players')}
-              className="input" placeholder="5" />
+          <Field label='Max Players' htmlFor='max_players'>
+            <input id='max_players' type='number' min={1} value={form.max_players} onChange={set('max_players')} className='input' placeholder='5' />
           </Field>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <Field label="Purchase Date" htmlFor="purchase_at">
-            <input id="purchase_at" type="date" value={form.purchase_at} onChange={set('purchase_at')}
-              className="input" />
+        <div className='grid grid-cols-2 gap-4'>
+          <Field label='Purchase Date' htmlFor='purchase_at'>
+            <input id='purchase_at' type='date' value={form.purchase_at} onChange={set('purchase_at')} className='input' />
           </Field>
-          <Field label="Price" htmlFor="price">
-            <input id="price" type="number" min={0} step="0.01" value={form.price} onChange={set('price')}
-              className="input" placeholder="49.99" />
+          <Field label='Price' htmlFor='price'>
+            <input id='price' type='number' min={0} step='0.01' value={form.price} onChange={set('price')} className='input' placeholder='49.99' />
           </Field>
         </div>
 
-        <div className="flex gap-3 pt-2">
-          <button type="submit" disabled={submitting}
-            className="px-6 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 disabled:opacity-50">
+        <div className='flex gap-3 pt-2'>
+          <button
+            type='submit'
+            disabled={submitting}
+            className='rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50'
+          >
             {submitting ? 'Saving…' : isEdit ? 'Save Changes' : 'Add Game'}
           </button>
-          <Link to={isEdit ? `/library/${id}` : '/library'}
-            className="px-6 py-2 border border-border text-sm font-medium rounded-lg hover:bg-accent hover:text-accent-foreground">
+          <Link to={isEdit ? `/library/${id}` : '/library'} className='rounded-lg border border-border px-6 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground'>
             Cancel
           </Link>
         </div>
       </form>
     </div>
-  );
+  )
 }
 
 function Field({ label, htmlFor, children }: { label: string; htmlFor: string; children: React.ReactNode }) {
   return (
     <div>
-      <label htmlFor={htmlFor} className="block text-sm font-medium text-foreground mb-1.5">{label}</label>
+      <label htmlFor={htmlFor} className='mb-1.5 block text-sm font-medium text-foreground'>
+        {label}
+      </label>
       {children}
     </div>
-  );
+  )
 }
