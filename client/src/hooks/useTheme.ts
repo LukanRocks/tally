@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useSettings } from '../contexts/SettingsContext'
 
 export type ThemeSetting = 'light' | 'dark' | 'system'
 type AppliedTheme = 'light' | 'dark'
@@ -7,32 +8,38 @@ function getSystemTheme(): AppliedTheme {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
 }
 
-function getInitialSetting(): ThemeSetting {
-  const stored = localStorage.getItem('theme') as ThemeSetting | null
-  if (stored === 'light' || stored === 'dark' || stored === 'system') return stored
-  return 'system'
-}
-
 export function useTheme() {
-  const [setting, setSetting] = useState<ThemeSetting>(getInitialSetting)
+  const { settings, updateSetting } = useSettings()
+  const setting: ThemeSetting = settings?.theme ?? 'system'
 
-  const applied: AppliedTheme = setting === 'system' ? getSystemTheme() : setting
+  const [applied, setApplied] = useState<AppliedTheme>(
+    setting === 'system' ? getSystemTheme() : setting
+  )
 
+  // Sync resolved theme whenever the setting changes
   useEffect(() => {
-    const root = document.documentElement
+    setApplied(setting === 'system' ? getSystemTheme() : setting)
+  }, [setting])
+
+  // Apply/remove the dark class on <html>
+  useEffect(() => {
     if (applied === 'dark') {
-      root.classList.add('dark')
+      document.documentElement.classList.add('dark')
     } else {
-      root.classList.remove('dark')
+      document.documentElement.classList.remove('dark')
     }
   }, [applied])
 
-  const set = (s: ThemeSetting) => {
-    setSetting(s)
-    localStorage.setItem('theme', s)
-  }
+  // Track OS preference changes when in system mode
+  useEffect(() => {
+    if (setting !== 'system') return
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = (e: MediaQueryListEvent) => setApplied(e.matches ? 'dark' : 'light')
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [setting])
 
-  const toggle = () => set(setting === 'dark' ? 'light' : 'dark')
+  const set = (s: ThemeSetting) => updateSetting({ theme: s })
 
-  return { setting, theme: applied, set, toggle }
+  return { setting, theme: applied, set }
 }
