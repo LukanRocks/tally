@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { LayoutDashboard, Library, Trophy, Users } from 'lucide-react'
+import { LayoutDashboard, Library, Moon, Sun, Swords, Trophy, Users } from 'lucide-react'
+import { useTheme } from '../hooks/useTheme'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', Icon: LayoutDashboard },
@@ -9,12 +10,15 @@ const navItems = [
 ]
 
 export default function Layout() {
+  const { theme, toggle } = useTheme()
+
   return (
-    <div className='flex h-screen bg-gray-50'>
-      <aside className='w-56 bg-white border-r border-gray-200 flex flex-col shrink-0'>
-        <div className='px-6 py-5 border-b border-gray-100'>
-          <span className='text-xl font-bold tracking-tight text-brand-600'>Tally</span>
-        </div>
+    <div className='flex h-screen bg-background text-foreground'>
+      <aside className='w-56 bg-sidebar text-sidebar-foreground border-r border-border flex flex-col shrink-0'>
+        <NavLink to={navItems[0].to} className='px-6 py-5 border-b border-border flex items-center gap-2 hover:bg-sidebar-accent transition-colors'>
+          <Swords size={20} className='text-sidebar-primary' />
+          <span className='text-xl font-bold tracking-tight text-sidebar-primary'>Tally</span>
+        </NavLink>
         <nav className='flex-1 px-3 py-4 space-y-1'>
           {navItems.map(({ to, label, Icon }) => (
             <NavLink
@@ -22,7 +26,9 @@ export default function Layout() {
               to={to}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  isActive ? 'bg-brand-50 text-brand-600' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  isActive
+                    ? 'bg-sidebar-primary/15 text-sidebar-primary'
+                    : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                 }`
               }
             >
@@ -31,8 +37,17 @@ export default function Layout() {
             </NavLink>
           ))}
         </nav>
+        <div className='px-3 py-4 border-t border-border'>
+          <button
+            onClick={toggle}
+            className='flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors'
+          >
+            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+          </button>
+        </div>
       </aside>
-      <main className='flex-1 overflow-auto'>
+      <main className='flex-1 overflow-auto bg-background'>
         <Outlet />
       </main>
     </div>
