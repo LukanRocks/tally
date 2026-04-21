@@ -54,18 +54,18 @@ export default function GameDetail() {
     setGame(g => g ? { ...g, attachments: g.attachments?.filter(a => a.id !== aid) } : g);
   }
 
-  if (loading) return <div className="p-8 text-muted-foreground">Loading…</div>;
-  if (!game) return <div className="p-8 text-muted-foreground">Game not found.</div>;
+  if (loading) return <div className="p-4 md:p-8 text-muted-foreground">Loading…</div>;
+  if (!game) return <div className="p-4 md:p-8 text-muted-foreground">Game not found.</div>;
 
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-4 md:p-8 max-w-4xl">
       <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground">
         <Link to="/library" className="hover:text-foreground">Library</Link>
         <span>/</span>
         <span className="text-foreground font-medium">{game.name}</span>
       </div>
 
-      <div className="flex gap-8">
+      <div className="flex flex-col sm:flex-row gap-8">
         {/* Cover */}
         <div className="shrink-0">
           <div className="w-40 h-52 bg-muted rounded-xl overflow-hidden relative group cursor-pointer"
@@ -87,7 +87,7 @@ export default function GameDetail() {
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-wrap items-start justify-between gap-4">
             <h1 className="text-2xl font-bold text-foreground">{game.name}</h1>
             <div className="flex gap-2 shrink-0">
               <Link to={`/library/${gid}/session/new`}
@@ -166,24 +166,26 @@ export default function GameDetail() {
           <p className="text-sm text-muted-foreground">No sessions logged for this game.</p>
         ) : (
           <div className="bg-card border border-border rounded-xl overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/50 text-xs text-muted-foreground uppercase tracking-wide">
-                <tr>
-                  <th className="px-4 py-3 text-left">Date</th>
-                  <th className="px-4 py-3 text-left">Players</th>
-                  <th className="px-4 py-3 text-left">Notes</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {sessions.map(s => (
-                  <tr key={s.id} className="hover:bg-muted/50">
-                    <td className="px-4 py-3 font-medium">{s.played_at}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{s.player_count} players</td>
-                    <td className="px-4 py-3 text-muted-foreground">{s.notes ?? '—'}</td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-muted/50 text-xs text-muted-foreground uppercase tracking-wide">
+                  <tr>
+                    <th className="px-4 py-3 text-left">Date</th>
+                    <th className="px-4 py-3 text-left">Players</th>
+                    <th className="px-4 py-3 text-left">Notes</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {sessions.map(s => (
+                    <tr key={s.id} className="hover:bg-muted/50">
+                      <td className="px-4 py-3 font-medium">{s.played_at}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{s.player_count} players</td>
+                      <td className="px-4 py-3 text-muted-foreground">{s.notes ?? '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

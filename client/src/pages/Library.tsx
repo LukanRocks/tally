@@ -27,7 +27,7 @@ export default function Library() {
   }, [search, sort, order, minPlayers, maxPlayers]);
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-foreground">Game Library</h1>
         <Link to="/library/new"
@@ -43,7 +43,7 @@ export default function Library() {
           placeholder="Search games…"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="border border-border rounded-lg px-3 py-2 text-sm w-52 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+          className="border border-border rounded-lg px-3 py-2 text-sm w-full sm:w-52 bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         />
         <select value={sort} onChange={e => setSort(e.target.value)}
           className="border border-border rounded-lg px-3 py-2 text-sm bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring">

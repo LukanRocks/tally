@@ -20,11 +20,11 @@ export default function PlayerProfile() {
     }).catch(() => setLoading(false));
   }, [pid]);
 
-  if (loading) return <div className="p-8 text-muted-foreground">Loading…</div>;
-  if (!player) return <div className="p-8 text-muted-foreground">Player not found.</div>;
+  if (loading) return <div className="p-4 md:p-8 text-muted-foreground">Loading…</div>;
+  if (!player) return <div className="p-4 md:p-8 text-muted-foreground">Player not found.</div>;
 
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-4 md:p-8 max-w-4xl">
       <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground">
         <Link to="/players" className="hover:text-foreground">Players</Link>
         <span>/</span>
@@ -61,26 +61,28 @@ export default function PlayerProfile() {
           <p className="text-sm text-muted-foreground">No sessions found.</p>
         ) : (
           <div className="bg-card border border-border rounded-xl overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/50 text-xs text-muted-foreground uppercase tracking-wide">
-                <tr>
-                  <th className="px-4 py-3 text-left">Date</th>
-                  <th className="px-4 py-3 text-left">Game</th>
-                  <th className="px-4 py-3 text-right">Players</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {sessions.slice(0, 20).map(s => (
-                  <tr key={s.id} className="hover:bg-muted/50">
-                    <td className="px-4 py-3 font-medium">{s.played_at}</td>
-                    <td className="px-4 py-3 text-foreground/80">
-                      <Link to={`/library/${s.game_id}`} className="hover:text-primary">{s.game_name}</Link>
-                    </td>
-                    <td className="px-4 py-3 text-right text-muted-foreground">{s.player_count}</td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-muted/50 text-xs text-muted-foreground uppercase tracking-wide">
+                  <tr>
+                    <th className="px-4 py-3 text-left">Date</th>
+                    <th className="px-4 py-3 text-left">Game</th>
+                    <th className="px-4 py-3 text-right">Players</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {sessions.slice(0, 20).map(s => (
+                    <tr key={s.id} className="hover:bg-muted/50">
+                      <td className="px-4 py-3 font-medium">{s.played_at}</td>
+                      <td className="px-4 py-3 text-foreground/80">
+                        <Link to={`/library/${s.game_id}`} className="hover:text-primary">{s.game_name}</Link>
+                      </td>
+                      <td className="px-4 py-3 text-right text-muted-foreground">{s.player_count}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

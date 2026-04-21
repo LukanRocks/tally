@@ -81,7 +81,7 @@ export default function GameForm() {
   }
 
   return (
-    <div className="p-8 max-w-2xl">
+    <div className="p-4 md:p-8 max-w-2xl">
       <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground">
         <Link to="/library" className="hover:text-foreground">Library</Link>
         <span>/</span>

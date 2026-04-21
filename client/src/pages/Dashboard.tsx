@@ -22,10 +22,10 @@ export default function Dashboard() {
     }).catch(() => setLoading(false));
   }, []);
 
-  if (loading) return <div className="p-8 text-muted-foreground">Loading…</div>;
+  if (loading) return <div className="p-4 md:p-8 text-muted-foreground">Loading…</div>;
 
   return (
-    <div className="p-8 space-y-10 max-w-5xl">
+    <div className="p-4 md:p-8 space-y-10 max-w-5xl">
       <h1 className="text-2xl font-bold text-foreground">Home</h1>
 
       {/* Leaderboard snippet */}
@@ -38,28 +38,30 @@ export default function Dashboard() {
           <p className="text-muted-foreground text-sm">No sessions logged yet.</p>
         ) : (
           <div className="bg-card border border-border rounded-xl overflow-hidden">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/50 text-xs text-muted-foreground uppercase tracking-wide">
-                <tr>
-                  <th className="px-4 py-3 text-left">#</th>
-                  <th className="px-4 py-3 text-left">Player</th>
-                  <th className="px-4 py-3 text-right">Points</th>
-                  <th className="px-4 py-3 text-right">Wins</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {leaderboard.map((e, i) => (
-                  <tr key={e.player_id} className="hover:bg-muted/50">
-                    <td className="px-4 py-3 text-muted-foreground font-medium">{i + 1}</td>
-                    <td className="px-4 py-3 font-medium">
-                      <Link to={`/players/${e.player_id}`} className="hover:text-primary">{e.player_name}</Link>
-                    </td>
-                    <td className="px-4 py-3 text-right font-semibold">{e.total_points}</td>
-                    <td className="px-4 py-3 text-right text-muted-foreground">{e.wins}</td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-muted/50 text-xs text-muted-foreground uppercase tracking-wide">
+                  <tr>
+                    <th className="px-4 py-3 text-left">#</th>
+                    <th className="px-4 py-3 text-left">Player</th>
+                    <th className="px-4 py-3 text-right">Points</th>
+                    <th className="px-4 py-3 text-right">Wins</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {leaderboard.map((e, i) => (
+                    <tr key={e.player_id} className="hover:bg-muted/50">
+                      <td className="px-4 py-3 text-muted-foreground font-medium">{i + 1}</td>
+                      <td className="px-4 py-3 font-medium">
+                        <Link to={`/players/${e.player_id}`} className="hover:text-primary">{e.player_name}</Link>
+                      </td>
+                      <td className="px-4 py-3 text-right font-semibold">{e.total_points}</td>
+                      <td className="px-4 py-3 text-right text-muted-foreground">{e.wins}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </section>

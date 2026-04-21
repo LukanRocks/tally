@@ -57,10 +57,10 @@ export default function Players() {
     setPlayers(ps => ps.map(p => p.id === id ? { ...p, avatar_path: updated.avatar_path } : p));
   }
 
-  if (loading) return <div className="p-8 text-muted-foreground">Loading…</div>;
+  if (loading) return <div className="p-4 md:p-8 text-muted-foreground">Loading…</div>;
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-4 md:p-8 max-w-3xl">
       <h1 className="text-2xl font-bold text-foreground mb-6">Players</h1>
 
       {error && (

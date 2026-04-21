@@ -136,7 +136,7 @@ export default function SessionLogger() {
   );
 
   return (
-    <div className="p-8 max-w-2xl">
+    <div className="p-4 md:p-8 max-w-2xl">
       <h1 className="text-2xl font-bold text-foreground mb-8">Log Session</h1>
 
       {error && (
@@ -153,7 +153,7 @@ export default function SessionLogger() {
           </select>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-foreground mb-1.5">Date *</label>
             <input type="date" value={playedAt} onChange={e => setPlayedAt(e.target.value)}
