@@ -58,9 +58,9 @@ router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
     if (!player) return res.status(404).json({ error: 'Player not found' });
 
     const stats = db.select({
-      total_points: sql<number>`COALESCE(SUM(sr.points_awarded), 0)`,
-      total_sessions: sql<number>`COUNT(DISTINCT sr.session_id)`,
-      wins: sql<number>`SUM(CASE WHEN sr.rank = 1 THEN 1 ELSE 0 END)`,
+      total_points: sql<number>`COALESCE(SUM(points_awarded), 0)`,
+      total_sessions: sql<number>`COUNT(DISTINCT session_id)`,
+      wins: sql<number>`SUM(CASE WHEN rank = 1 THEN 1 ELSE 0 END)`,
     })
       .from(resultsTable)
       .where(and(eq(resultsTable.player_id, id), isNull(resultsTable.deleted_at)))

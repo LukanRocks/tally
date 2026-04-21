@@ -87,10 +87,14 @@ export default function Players() {
         <ul className="space-y-3">
           {players.map(p => (
             <li key={p.id}
-              className="flex items-center gap-4 bg-card border border-border rounded-xl px-5 py-4">
+              className="relative flex items-center gap-4 bg-card border border-border rounded-xl px-5 py-4 hover:bg-accent/30 transition-colors">
+              {editId !== p.id && (
+                <Link to={`/players/${p.id}`} className="absolute inset-0 rounded-xl" aria-label={p.name} />
+              )}
+
               {/* Avatar */}
               <button onClick={() => avatarRefs.current[p.id]?.click()}
-                className="relative shrink-0 group">
+                className="relative z-10 shrink-0 group">
                 <div className="w-11 h-11 rounded-full bg-muted overflow-hidden flex items-center justify-center">
                   {p.avatar_path ? (
                     <img src={p.avatar_path} alt={p.name} className="w-full h-full object-cover" />
@@ -109,7 +113,7 @@ export default function Players() {
               {/* Name */}
               <div className="flex-1 min-w-0">
                 {editId === p.id ? (
-                  <form onSubmit={e => { e.preventDefault(); handleUpdate(p.id); }} className="flex gap-2">
+                  <form onSubmit={e => { e.preventDefault(); handleUpdate(p.id); }} className="relative z-10 flex gap-2">
                     <input type="text" value={editName} onChange={e => setEditName(e.target.value)} autoFocus
                       className="border border-border rounded-lg px-2 py-1 text-sm flex-1 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
                     <button type="submit" className="text-xs text-primary hover:underline">Save</button>
@@ -117,7 +121,7 @@ export default function Players() {
                   </form>
                 ) : (
                   <>
-                    <Link to={`/players/${p.id}`} className="font-semibold text-sm text-foreground hover:text-primary">{p.name}</Link>
+                    <p className="font-semibold text-sm text-foreground">{p.name}</p>
                     <p className="text-xs text-muted-foreground mt-0.5">{p.total_points ?? 0} pts · {p.total_sessions ?? 0} sessions</p>
                   </>
                 )}
@@ -125,7 +129,7 @@ export default function Players() {
 
               {/* Actions */}
               {editId !== p.id && (
-                <div className="flex gap-2 shrink-0">
+                <div className="relative z-10 flex gap-2 shrink-0">
                   <button onClick={() => { setEditId(p.id); setEditName(p.name); }}
                     className="flex items-center gap-1 text-xs text-muted-foreground border border-border rounded-lg px-3 py-1 hover:bg-accent hover:text-accent-foreground">
                     <Pencil size={11} /> Edit

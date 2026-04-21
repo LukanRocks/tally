@@ -1,9 +1,9 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { LayoutDashboard, Library, Moon, Sun, Swords, Trophy, Users } from 'lucide-react'
+import { House, Library, Moon, Sun, Swords, Trophy, Users } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
 
 const navItems = [
-  { to: '/dashboard', label: 'Dashboard', Icon: LayoutDashboard },
+  { to: '/home', label: 'Home', Icon: House },
   { to: '/leaderboard', label: 'Leaderboard', Icon: Trophy },
   { to: '/library', label: 'Library', Icon: Library },
   { to: '/players', label: 'Players', Icon: Users },

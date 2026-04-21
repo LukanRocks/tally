@@ -17,11 +17,11 @@ router.get('/leaderboard', (_req: Request, res: Response, next: NextFunction) =>
       player_id: playersTable.id,
       player_name: playersTable.name,
       avatar_path: playersTable.avatar_path,
-      total_points: sql<number>`COALESCE(SUM(sr.points_awarded), 0)`,
-      wins: sql<number>`COALESCE(SUM(CASE WHEN sr.rank = 1 THEN 1 ELSE 0 END), 0)`,
-      total_sessions: sql<number>`COUNT(DISTINCT sr.session_id)`,
-      win_rate: sql<number>`CASE WHEN COUNT(DISTINCT sr.session_id) = 0 THEN 0
-        ELSE ROUND(SUM(CASE WHEN sr.rank = 1 THEN 1.0 ELSE 0 END) / COUNT(DISTINCT sr.session_id) * 100)
+      total_points: sql<number>`COALESCE(SUM(CASE WHEN ${sessionsTable.id} IS NOT NULL THEN ${resultsTable.points_awarded} END), 0)`,
+      wins: sql<number>`COALESCE(SUM(CASE WHEN ${sessionsTable.id} IS NOT NULL AND ${resultsTable.rank} = 1 THEN 1 ELSE 0 END), 0)`,
+      total_sessions: sql<number>`COUNT(DISTINCT ${sessionsTable.id})`,
+      win_rate: sql<number>`CASE WHEN COUNT(DISTINCT ${sessionsTable.id}) = 0 THEN 0
+        ELSE ROUND(SUM(CASE WHEN ${sessionsTable.id} IS NOT NULL AND ${resultsTable.rank} = 1 THEN 1.0 ELSE 0 END) / COUNT(DISTINCT ${sessionsTable.id}) * 100)
         END`,
     })
       .from(playersTable)
@@ -35,7 +35,7 @@ router.get('/leaderboard', (_req: Request, res: Response, next: NextFunction) =>
       )
       .where(isNull(playersTable.deleted_at))
       .groupBy(playersTable.id)
-      .orderBy(desc(sql`COALESCE(SUM(sr.points_awarded), 0)`))
+      .orderBy(desc(sql`COALESCE(SUM(CASE WHEN ${sessionsTable.id} IS NOT NULL THEN ${resultsTable.points_awarded} END), 0)`))
       .all();
 
     res.json(rows);
@@ -53,9 +53,9 @@ router.get('/leaderboard/game/:gameId', (req: Request, res: Response, next: Next
       player_id: playersTable.id,
       player_name: playersTable.name,
       avatar_path: playersTable.avatar_path,
-      total_points: sql<number>`COALESCE(SUM(sr.points_awarded), 0)`,
-      wins: sql<number>`COALESCE(SUM(CASE WHEN sr.rank = 1 THEN 1 ELSE 0 END), 0)`,
-      total_sessions: sql<number>`COUNT(DISTINCT sr.session_id)`,
+      total_points: sql<number>`COALESCE(SUM(${resultsTable.points_awarded}), 0)`,
+      wins: sql<number>`COALESCE(SUM(CASE WHEN ${resultsTable.rank} = 1 THEN 1 ELSE 0 END), 0)`,
+      total_sessions: sql<number>`COUNT(DISTINCT ${sessionsTable.id})`,
     })
       .from(playersTable)
       .innerJoin(
@@ -72,7 +72,7 @@ router.get('/leaderboard/game/:gameId', (req: Request, res: Response, next: Next
       )
       .where(isNull(playersTable.deleted_at))
       .groupBy(playersTable.id)
-      .orderBy(desc(sql`COALESCE(SUM(sr.points_awarded), 0)`))
+      .orderBy(desc(sql`COALESCE(SUM(${resultsTable.points_awarded}), 0)`))
       .all();
 
     res.json(rows);
@@ -88,8 +88,8 @@ router.get('/most-played', (_req: Request, res: Response, next: NextFunction) =>
       id: gamesTable.id,
       name: gamesTable.name,
       cover_image_path: gamesTable.cover_image_path,
-      session_count: sql<number>`COUNT(DISTINCT s.id)`,
-      unique_players: sql<number>`COUNT(DISTINCT sr.player_id)`,
+      session_count: sql<number>`COUNT(DISTINCT ${sessionsTable.id})`,
+      unique_players: sql<number>`COUNT(DISTINCT ${resultsTable.player_id})`,
     })
       .from(gamesTable)
       .leftJoin(
@@ -102,7 +102,7 @@ router.get('/most-played', (_req: Request, res: Response, next: NextFunction) =>
       )
       .where(isNull(gamesTable.deleted_at))
       .groupBy(gamesTable.id)
-      .orderBy(desc(sql`COUNT(DISTINCT s.id)`))
+      .orderBy(desc(sql`COUNT(DISTINCT ${sessionsTable.id})`))
       .all();
 
     res.json(rows);

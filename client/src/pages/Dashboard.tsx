@@ -26,7 +26,7 @@ export default function Dashboard() {
 
   return (
     <div className="p-8 space-y-10 max-w-5xl">
-      <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+      <h1 className="text-2xl font-bold text-foreground">Home</h1>
 
       {/* Leaderboard snippet */}
       <section>

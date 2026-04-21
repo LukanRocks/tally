@@ -123,7 +123,7 @@ export default function SessionLogger() {
         notes: notes || undefined,
         results: ranked.map((p, i) => ({ player_id: p.id, rank: i + 1 })),
       });
-      navigate(id ? `/library/${id}` : '/dashboard');
+      navigate(id ? `/library/${id}` : '/home');
     } catch (err: any) {
       setError(err.message);
       setSubmitting(false);

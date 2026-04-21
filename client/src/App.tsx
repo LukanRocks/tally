@@ -15,8 +15,8 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route index element={<Navigate to="/dashboard" replace />} />
-          <Route path="dashboard" element={<Dashboard />} />
+          <Route index element={<Navigate to="/home" replace />} />
+          <Route path="home" element={<Dashboard />} />
           <Route path="library" element={<Library />} />
           <Route path="library/new" element={<GameForm />} />
           <Route path="library/:id" element={<GameDetail />} />
