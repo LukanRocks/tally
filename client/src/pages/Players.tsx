@@ -12,6 +12,7 @@ export default function Players() {
   const [editName, setEditName] = useState('');
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [error, setError] = useState('');
+  const [nameInvalid, setNameInvalid] = useState(false);
   const avatarRefs = useRef<Record<number, HTMLInputElement | null>>({});
 
   useEffect(() => {
@@ -20,7 +21,8 @@ export default function Players() {
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
-    if (!newName.trim()) return;
+    if (!newName.trim()) { setNameInvalid(true); return; }
+    setNameInvalid(false);
     try {
       const p = await api.players.create(newName.trim());
       setPlayers(ps => [...ps, p]);
@@ -41,9 +43,11 @@ export default function Players() {
   }
 
   async function handleDelete(id: number) {
+    const name = players.find(p => p.id === id)?.name;
     await api.players.delete(id);
     setPlayers(ps => ps.filter(p => p.id !== id));
     setDeleteId(null);
+    toast.success(`${name} deleted`);
   }
 
   async function handleAvatar(id: number, e: React.ChangeEvent<HTMLInputElement>) {
@@ -65,11 +69,11 @@ export default function Players() {
 
       {/* Add player */}
       <form onSubmit={handleCreate} className="flex gap-2 mb-8">
-        <input type="text" value={newName} onChange={e => setNewName(e.target.value)}
+        <input type="text" value={newName} onChange={e => { setNewName(e.target.value); if (nameInvalid) setNameInvalid(false); }}
           placeholder="New player name…"
-          className="flex-1 border border-border rounded-lg px-3 py-2 text-sm bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+          className={`flex-1 border rounded-lg px-3 py-2 text-sm bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 ${nameInvalid ? 'border-destructive focus:ring-destructive/50' : 'border-border focus:ring-ring'}`} />
         <button type="submit"
-          className="flex items-center gap-1.5 px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700">
+          className="flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90">
           <UserPlus size={14} /> Add Player
         </button>
       </form>
