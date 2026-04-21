@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { api, Player } from '../lib/api'
-import { useTheme, ThemeSetting } from '../hooks/useTheme'
+import { ThemeSetting } from '../hooks/useTheme'
 import { useSettings } from '../contexts/SettingsContext'
 
 type FormState = {
@@ -13,7 +13,6 @@ type FormState = {
 
 export default function SettingsPage() {
   const { settings: ctxSettings, updateSetting, isLoading: settingsLoading } = useSettings()
-  const { set: setTheme } = useTheme()
   const [form, setForm] = useState<FormState>({
     currency: 'USD',
     language: 'en',
@@ -22,7 +21,6 @@ export default function SettingsPage() {
   })
   const [players, setPlayers] = useState<Player[]>([])
   const [playersLoading, setPlayersLoading] = useState(true)
-  const [submitting, setSubmitting] = useState(false)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [resetConfirmText, setResetConfirmText] = useState('')
   const [resetting, setResetting] = useState(false)
@@ -47,10 +45,17 @@ export default function SettingsPage() {
     })
   }, [])
 
-  function set<K extends keyof FormState>(field: K, value: FormState[K]) {
+  async function set<K extends keyof FormState>(field: K, value: FormState[K]) {
     setForm((f) => ({ ...f, [field]: value }))
-    if (field === 'theme') {
-      setTheme(value as ThemeSetting)
+    const patch =
+      field === 'default_owner_id'
+        ? { default_owner_id: value ? Number(value) : null }
+        : { [field]: value }
+    try {
+      await updateSetting(patch as Parameters<typeof updateSetting>[0])
+      toast.success('Settings saved')
+    } catch (err: any) {
+      toast.error(err.message)
     }
   }
 
@@ -70,24 +75,6 @@ export default function SettingsPage() {
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setSubmitting(true)
-    try {
-      await updateSetting({
-        currency: form.currency,
-        language: form.language,
-        theme: form.theme,
-        default_owner_id: form.default_owner_id ? Number(form.default_owner_id) : null,
-      })
-      toast.success('Settings saved')
-    } catch (err: any) {
-      toast.error(err.message)
-    } finally {
-      setSubmitting(false)
-    }
-  }
-
   if (settingsLoading || playersLoading) {
     return <div className='p-8 text-sm text-muted-foreground'>Loading…</div>
   }
@@ -96,7 +83,7 @@ export default function SettingsPage() {
     <div className='max-w-lg p-4 md:p-8'>
       <h1 className='mb-8 text-2xl font-bold text-foreground'>Settings</h1>
 
-      <form onSubmit={handleSubmit} className='space-y-6'>
+      <div className='space-y-6'>
         <Field label='Default Owner' htmlFor='default_owner_id'>
           <select
             id='default_owner_id'
@@ -150,17 +137,7 @@ export default function SettingsPage() {
             <option value='dark'>Dark</option>
           </select>
         </Field>
-
-        <div className='pt-2'>
-          <button
-            type='submit'
-            disabled={submitting}
-            className='rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50'
-          >
-            {submitting ? 'Saving…' : 'Save Settings'}
-          </button>
-        </div>
-      </form>
+      </div>
 
       <div className='mt-12 border-t border-border pt-8'>
         <h2 className='mb-1 text-sm font-semibold text-destructive'>Danger Zone</h2>
