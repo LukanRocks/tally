@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { api, Player } from '../lib/api'
 import { useTheme, ThemeSetting } from '../hooks/useTheme'
+import { useSettings } from '../contexts/SettingsContext'
 
 type FormState = {
   currency: 'USD' | 'BRL'
@@ -11,6 +12,7 @@ type FormState = {
 }
 
 export default function SettingsPage() {
+  const { settings: ctxSettings, updateSetting, isLoading: settingsLoading } = useSettings()
   const { set: setTheme } = useTheme()
   const [form, setForm] = useState<FormState>({
     currency: 'USD',
@@ -19,22 +21,29 @@ export default function SettingsPage() {
     default_owner_id: '',
   })
   const [players, setPlayers] = useState<Player[]>([])
-  const [loading, setLoading] = useState(true)
+  const [playersLoading, setPlayersLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [resetConfirmText, setResetConfirmText] = useState('')
   const [resetting, setResetting] = useState(false)
+  const formInitialized = useRef(false)
 
   useEffect(() => {
-    Promise.all([api.settings.get(), api.players.list()]).then(([settings, playerList]) => {
+    if (ctxSettings && !formInitialized.current) {
+      formInitialized.current = true
       setForm({
-        currency: settings.currency,
-        language: settings.language,
-        theme: settings.theme,
-        default_owner_id: settings.default_owner_id != null ? String(settings.default_owner_id) : '',
+        currency: ctxSettings.currency,
+        language: ctxSettings.language,
+        theme: ctxSettings.theme,
+        default_owner_id: ctxSettings.default_owner_id != null ? String(ctxSettings.default_owner_id) : '',
       })
+    }
+  }, [ctxSettings])
+
+  useEffect(() => {
+    api.players.list().then((playerList) => {
       setPlayers(playerList)
-      setLoading(false)
+      setPlayersLoading(false)
     })
   }, [])
 
@@ -65,7 +74,7 @@ export default function SettingsPage() {
     e.preventDefault()
     setSubmitting(true)
     try {
-      await api.settings.update({
+      await updateSetting({
         currency: form.currency,
         language: form.language,
         theme: form.theme,
@@ -79,7 +88,7 @@ export default function SettingsPage() {
     }
   }
 
-  if (loading) {
+  if (settingsLoading || playersLoading) {
     return <div className='p-8 text-sm text-muted-foreground'>Loading…</div>
   }
 

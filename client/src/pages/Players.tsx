@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom'
 import { UserRound, Camera, Pencil, Trash2, UserPlus } from 'lucide-react'
 import { toast } from 'sonner'
 import { api, Player } from '../lib/api'
+import { useSettings } from '../contexts/SettingsContext'
 
 export default function Players() {
+  const { settings } = useSettings()
   const [players, setPlayers] = useState<Player[]>([])
-  const [defaultOwnerId, setDefaultOwnerId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [newName, setNewName] = useState('')
   const [editId, setEditId] = useState<number | null>(null)
@@ -17,9 +18,8 @@ export default function Players() {
   const avatarRefs = useRef<Record<number, HTMLInputElement | null>>({})
 
   useEffect(() => {
-    Promise.all([api.players.list(), api.settings.get()]).then(([data, settings]) => {
+    api.players.list().then((data) => {
       setPlayers(data)
-      setDefaultOwnerId(settings.default_owner_id)
       setLoading(false)
     })
   }, [])
@@ -172,8 +172,8 @@ export default function Players() {
                   </button>
                   <button
                     onClick={() => setDeleteId(p.id)}
-                    disabled={p.id === defaultOwnerId}
-                    title={p.id === defaultOwnerId ? 'Default owner — change in Settings first' : undefined}
+                    disabled={p.id === settings?.default_owner_id}
+                    title={p.id === settings?.default_owner_id ? 'Default owner — change in Settings first' : undefined}
                     className='flex items-center gap-1 rounded-lg border border-destructive/30 px-3 py-1 text-xs text-destructive hover:bg-destructive/10 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent'
                   >
                     <Trash2 size={11} /> Delete

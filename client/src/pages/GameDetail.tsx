@@ -2,8 +2,15 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Camera, Dices, Paperclip, Plus, Trash2, Pencil } from 'lucide-react'
 import { api, Game, Session } from '../lib/api'
+import { useSettings } from '../contexts/SettingsContext'
+
+function formatPrice(price: number, currency: 'USD' | 'BRL' = 'USD') {
+  const locale = currency === 'BRL' ? 'pt-BR' : 'en-US'
+  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(price)
+}
 
 export default function GameDetail() {
+  const { settings } = useSettings()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [game, setGame] = useState<Game | null>(null)
@@ -117,7 +124,7 @@ export default function GameDetail() {
               </span>
             )}
             {game.purchase_at && <span>Purchased {game.purchase_at}</span>}
-            {game.price != null && <span>${game.price.toFixed(2)}</span>}
+            {game.price != null && <span>{formatPrice(game.price, settings?.currency)}</span>}
           </div>
 
           {game.description && <p className='mt-4 text-sm leading-relaxed text-foreground/80'>{game.description}</p>}

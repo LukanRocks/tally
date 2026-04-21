@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { api, Player } from '../lib/api'
+import { useSettings } from '../contexts/SettingsContext'
 
 type FormData = {
   name: string
@@ -25,6 +26,7 @@ const empty: FormData = {
 }
 
 export default function GameForm() {
+  const { settings } = useSettings()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const isEdit = Boolean(id)
@@ -49,9 +51,9 @@ export default function GameForm() {
         setPlayers(playerList)
       })
     } else {
-      Promise.all([api.players.list(), api.settings.get()]).then(([playerList, settings]) => {
+      api.players.list().then((playerList) => {
         setPlayers(playerList)
-        setForm((f) => ({ ...f, owner_id: settings.default_owner_id != null ? String(settings.default_owner_id) : '' }))
+        setForm((f) => ({ ...f, owner_id: settings?.default_owner_id != null ? String(settings.default_owner_id) : '' }))
       })
     }
   }, [id, isEdit])
