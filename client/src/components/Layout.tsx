@@ -4,8 +4,8 @@ import { useTheme } from '../hooks/useTheme'
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', Icon: LayoutDashboard },
-  { to: '/library', label: 'Library', Icon: Library },
   { to: '/leaderboard', label: 'Leaderboard', Icon: Trophy },
+  { to: '/library', label: 'Library', Icon: Library },
   { to: '/players', label: 'Players', Icon: Users },
 ]
 
@@ -26,9 +26,9 @@ export default function Layout() {
               to={to}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-sidebar-primary/15 text-sidebar-primary'
-                    : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                  isActive ?
+                    'bg-sidebar-primary/15 text-sidebar-primary'
+                  : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                 }`
               }
             >
@@ -42,7 +42,9 @@ export default function Layout() {
             onClick={toggle}
             className='flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors'
           >
-            {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            {theme === 'dark' ?
+              <Sun size={16} />
+            : <Moon size={16} />}
             {theme === 'dark' ? 'Light mode' : 'Dark mode'}
           </button>
         </div>

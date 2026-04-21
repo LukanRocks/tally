@@ -112,12 +112,12 @@ export default function Players() {
                   <form onSubmit={e => { e.preventDefault(); handleUpdate(p.id); }} className="flex gap-2">
                     <input type="text" value={editName} onChange={e => setEditName(e.target.value)} autoFocus
                       className="border border-border rounded-lg px-2 py-1 text-sm flex-1 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
-                    <button type="submit" className="text-xs text-brand-600 hover:underline">Save</button>
+                    <button type="submit" className="text-xs text-primary hover:underline">Save</button>
                     <button type="button" onClick={() => setEditId(null)} className="text-xs text-muted-foreground hover:underline">Cancel</button>
                   </form>
                 ) : (
                   <>
-                    <Link to={`/players/${p.id}`} className="font-semibold text-sm text-foreground hover:text-brand-600">{p.name}</Link>
+                    <Link to={`/players/${p.id}`} className="font-semibold text-sm text-foreground hover:text-primary">{p.name}</Link>
                     <p className="text-xs text-muted-foreground mt-0.5">{p.total_points ?? 0} pts · {p.total_sessions ?? 0} sessions</p>
                   </>
                 )}

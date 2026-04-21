@@ -82,16 +82,16 @@ export default function GameForm() {
 
   return (
     <div className="p-8 max-w-2xl">
-      <div className="flex items-center gap-2 mb-6 text-sm text-gray-500">
-        <Link to="/library" className="hover:text-gray-700">Library</Link>
+      <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground">
+        <Link to="/library" className="hover:text-foreground">Library</Link>
         <span>/</span>
-        <span className="text-gray-900 font-medium">{isEdit ? 'Edit Game' : 'Add Game'}</span>
+        <span className="text-foreground font-medium">{isEdit ? 'Edit Game' : 'Add Game'}</span>
       </div>
 
-      <h1 className="text-2xl font-bold text-gray-900 mb-8">{isEdit ? 'Edit Game' : 'Add Game'}</h1>
+      <h1 className="text-2xl font-bold text-foreground mb-8">{isEdit ? 'Edit Game' : 'Add Game'}</h1>
 
       {error && (
-        <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">{error}</div>
+        <div className="mb-4 px-4 py-3 bg-destructive/10 border border-destructive/30 rounded-lg text-sm text-destructive">{error}</div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -134,11 +134,11 @@ export default function GameForm() {
 
         <div className="flex gap-3 pt-2">
           <button type="submit" disabled={submitting}
-            className="px-6 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 disabled:opacity-50">
+            className="px-6 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 disabled:opacity-50">
             {submitting ? 'Saving…' : isEdit ? 'Save Changes' : 'Add Game'}
           </button>
           <Link to={isEdit ? `/library/${id}` : '/library'}
-            className="px-6 py-2 border border-gray-200 text-sm font-medium rounded-lg hover:bg-gray-50">
+            className="px-6 py-2 border border-border text-sm font-medium rounded-lg hover:bg-accent hover:text-accent-foreground">
             Cancel
           </Link>
         </div>
@@ -150,7 +150,7 @@ export default function GameForm() {
 function Field({ label, htmlFor, children }: { label: string; htmlFor: string; children: React.ReactNode }) {
   return (
     <div>
-      <label htmlFor={htmlFor} className="block text-sm font-medium text-gray-700 mb-1.5">{label}</label>
+      <label htmlFor={htmlFor} className="block text-sm font-medium text-foreground mb-1.5">{label}</label>
       {children}
     </div>
   );
