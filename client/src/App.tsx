@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from '@/shadcn/components/ui/sonner';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Library from './pages/Library';
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="leaderboard" element={<Leaderboard />} />
         </Route>
       </Routes>
+      <Toaster />
     </BrowserRouter>
   );
 }
