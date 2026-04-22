@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api, Game, HeadToHead, LeaderboardEntry, MostPlayedGame, Player } from '../lib/api'
+import { useSettings } from '../contexts/SettingsContext'
 
 export default function Leaderboard() {
+  const { settings } = useSettings()
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
   const [mostPlayed, setMostPlayed] = useState<MostPlayedGame[]>([])
   const [games, setGames] = useState<Game[]>([])
@@ -12,7 +14,7 @@ export default function Leaderboard() {
   const [p1, setP1] = useState<number>(0)
   const [p2, setP2] = useState<number>(0)
   const [h2h, setH2H] = useState<HeadToHead | null>(null)
-  const [h2hLoading, setH2hLoading] = useState(false)
+
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -22,6 +24,16 @@ export default function Leaderboard() {
         setMostPlayed(mp)
         setGames(g)
         setPlayers(p)
+        if (g.length > 0) setSelectedGame(g[Math.floor(Math.random() * g.length)].id)
+
+        const ownerId = settings?.default_owner_id ?? null
+        const ownerExists = ownerId && p.some((pl) => pl.id === ownerId)
+        const defaultP1 = ownerExists ? ownerId! : 0
+        const others = p.filter((pl) => pl.id !== defaultP1)
+        const randomP2 = others.length > 0 ? others[Math.floor(Math.random() * others.length)].id : 0
+        setP1(defaultP1)
+        setP2(randomP2)
+
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -35,13 +47,15 @@ export default function Leaderboard() {
     api.stats.leaderboardByGame(selectedGame).then(setGameLeaderboard)
   }, [selectedGame])
 
-  async function fetchH2H() {
-    if (!p1 || !p2 || p1 === p2) return
-    setH2hLoading(true)
-    const data = await api.stats.headToHead(p1, p2).catch(() => null)
-    setH2H(data)
-    setH2hLoading(false)
-  }
+  useEffect(() => {
+    if (!p1 || !p2 || p1 === p2) {
+      setH2H(null)
+      return
+    }
+    api.stats.headToHead(p1, p2)
+      .then(setH2H)
+      .catch(() => setH2H(null))
+  }, [p1, p2])
 
   if (loading) return <div className='p-4 text-muted-foreground md:p-8'>Loading…</div>
 
@@ -139,7 +153,7 @@ export default function Leaderboard() {
           onChange={(e) => setSelectedGame(Number(e.target.value))}
           className='mb-4 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none'
         >
-          <option value={0}>Select a game…</option>
+          <option value={0} disabled hidden>Select a game…</option>
           {games.map((g) => (
             <option key={g.id} value={g.id}>
               {g.name}
@@ -192,12 +206,14 @@ export default function Leaderboard() {
             onChange={(e) => setP1(Number(e.target.value))}
             className='rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none'
           >
-            <option value={0}>Player 1…</option>
-            {players.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
-            ))}
+            <option value={0} disabled hidden>Player 1…</option>
+            {players
+              .filter((p) => p.id !== p2)
+              .map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
           </select>
           <span className='flex items-center font-bold text-muted-foreground'>vs</span>
           <select
@@ -205,7 +221,7 @@ export default function Leaderboard() {
             onChange={(e) => setP2(Number(e.target.value))}
             className='rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none'
           >
-            <option value={0}>Player 2…</option>
+            <option value={0} disabled hidden>Player 2…</option>
             {players
               .filter((p) => p.id !== p1)
               .map((p) => (
@@ -214,13 +230,6 @@ export default function Leaderboard() {
                 </option>
               ))}
           </select>
-          <button
-            onClick={fetchH2H}
-            disabled={!p1 || !p2 || h2hLoading}
-            className='rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50'
-          >
-            Compare
-          </button>
         </div>
 
         {h2h && (
