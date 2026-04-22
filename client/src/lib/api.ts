@@ -125,13 +125,14 @@ export interface HeadToHead {
 
 export const api = {
   games: {
-    list: (params?: { search?: string; sort?: string; order?: 'asc' | 'desc'; minPlayers?: number; maxPlayers?: number }) => {
+    list: (params?: { search?: string; sort?: string; order?: 'asc' | 'desc'; minPlayers?: number; maxPlayers?: number; ownerId?: number }) => {
       const qs = new URLSearchParams()
       if (params?.search) qs.set('search', params.search)
       if (params?.sort) qs.set('sort', params.sort)
       if (params?.order) qs.set('order', params.order)
       if (params?.minPlayers) qs.set('minPlayers', String(params.minPlayers))
       if (params?.maxPlayers) qs.set('maxPlayers', String(params.maxPlayers))
+      if (params?.ownerId) qs.set('ownerId', String(params.ownerId))
       return req<Game[]>(`/games?${qs}`)
     },
     get: (id: number) => req<Game>(`/games/${id}`),

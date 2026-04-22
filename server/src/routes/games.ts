@@ -11,7 +11,7 @@ const router = Router()
 // GET /api/v1/games
 router.get('/', (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { search, sort = 'name', order = 'asc', minPlayers, maxPlayers } = req.query
+    const { search, sort = 'name', order = 'asc', minPlayers, maxPlayers, ownerId } = req.query
 
     const sessionCount = sql<number>`(SELECT COUNT(*) FROM sessions WHERE sessions.game_id = games.id AND sessions.deleted_at IS NULL)`
 
@@ -44,6 +44,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
           search ? like(gamesTable.name, `%${search as string}%`) : undefined,
           minPlayers ? gte(gamesTable.min_players, Number(minPlayers)) : undefined,
           maxPlayers ? lte(gamesTable.max_players, Number(maxPlayers)) : undefined,
+          ownerId ? eq(gamesTable.owner_id, Number(ownerId)) : undefined,
         ),
       )
       .orderBy(sortMap[sort as string] ?? asc(gamesTable.name))

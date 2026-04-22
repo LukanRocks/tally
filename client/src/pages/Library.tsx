@@ -1,16 +1,32 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dices, Plus } from 'lucide-react'
-import { api, Game } from '../lib/api'
+import { api, Game, Player } from '../lib/api'
+import { useSettings } from '../contexts/SettingsContext'
 
 export default function Library() {
+  const { settings } = useSettings()
   const [games, setGames] = useState<Game[]>([])
+  const [players, setPlayers] = useState<Player[]>([])
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState('name')
   const [order, setOrder] = useState<'asc' | 'desc'>('asc')
   const [minPlayers, setMinPlayers] = useState('')
   const [maxPlayers, setMaxPlayers] = useState('')
+  const [ownerId, setOwnerId] = useState('')
   const [loading, setLoading] = useState(true)
+  const ownerInitialized = useRef(false)
+
+  useEffect(() => {
+    if (settings && !ownerInitialized.current) {
+      ownerInitialized.current = true
+      if (settings.default_owner_id != null) setOwnerId(String(settings.default_owner_id))
+    }
+  }, [settings])
+
+  useEffect(() => {
+    api.players.list().then(setPlayers)
+  }, [])
 
   useEffect(() => {
     setLoading(true)
@@ -21,13 +37,14 @@ export default function Library() {
         order,
         minPlayers: minPlayers ? Number(minPlayers) : undefined,
         maxPlayers: maxPlayers ? Number(maxPlayers) : undefined,
+        ownerId: ownerId ? Number(ownerId) : undefined,
       })
       .then((data) => {
         setGames(data)
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }, [search, sort, order, minPlayers, maxPlayers])
+  }, [search, sort, order, minPlayers, maxPlayers, ownerId])
 
   return (
     <div className='p-4 md:p-8'>
@@ -67,6 +84,16 @@ export default function Library() {
         >
           <option value='asc'>Ascending</option>
           <option value='desc'>Descending</option>
+        </select>
+        <select
+          value={ownerId}
+          onChange={(e) => setOwnerId(e.target.value)}
+          className='rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+        >
+          <option value=''>All owners</option>
+          {players.map((p) => (
+            <option key={p.id} value={String(p.id)}>{p.name}</option>
+          ))}
         </select>
         <input
           type='number'
