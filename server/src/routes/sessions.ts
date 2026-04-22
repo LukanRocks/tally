@@ -11,7 +11,8 @@ interface ResultInput {
 }
 
 function calcPoints(n: number, rank: number): number {
-  return n - rank + (rank === 1 ? 1 : 0)
+  if (n < 2) return 0
+  return n - (rank - 1) + (rank === 1 ? 1 : 0)
 }
 
 // GET /api/v1/sessions

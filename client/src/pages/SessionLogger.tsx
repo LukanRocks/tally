@@ -12,7 +12,8 @@ interface RankedPlayer {
 }
 
 function calcPoints(n: number, rank: number) {
-  return n - rank + (rank === 1 ? 1 : 0)
+  if (n < 2) return 0
+  return n - (rank - 1) + (rank === 1 ? 1 : 0)
 }
 
 function SortableItem({ player, rank, n }: { player: RankedPlayer; rank: number; n: number }) {
