@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Camera, Dices, Paperclip, Plus, Trash2, Pencil } from 'lucide-react'
-import { api, Game, Session } from '../lib/api'
+import { api, Game, LeaderboardEntry, Session } from '../lib/api'
 import { useSettings } from '../contexts/SettingsContext'
 
 function formatPrice(price: number, currency: 'USD' | 'BRL' = 'USD') {
@@ -15,6 +15,7 @@ export default function GameDetail() {
   const navigate = useNavigate()
   const [game, setGame] = useState<Game | null>(null)
   const [sessions, setSessions] = useState<Session[]>([])
+  const [gameLeaderboard, setGameLeaderboard] = useState<LeaderboardEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [deleteConfirm, setDeleteConfirm] = useState(false)
   const [attachLabel, setAttachLabel] = useState('')
@@ -24,10 +25,11 @@ export default function GameDetail() {
   const gid = Number(id)
 
   useEffect(() => {
-    Promise.all([api.games.get(gid), api.sessions.list()])
-      .then(([g, ss]) => {
+    Promise.all([api.games.get(gid), api.sessions.list(), api.stats.leaderboardByGame(gid)])
+      .then(([g, ss, lb]) => {
         setGame(g)
         setSessions(ss.filter((s) => s.game_id === gid))
+        setGameLeaderboard(lb)
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -173,6 +175,45 @@ export default function GameDetail() {
         </form>
       </div>
 
+      {/* Leaderboard */}
+      <div className='mt-8'>
+        <h2 className='mb-3 text-base font-semibold text-foreground'>Leaderboard</h2>
+        {gameLeaderboard.length === 0 ? (
+          <p className='text-sm text-muted-foreground'>No sessions logged for this game.</p>
+        ) : (
+          <div className='overflow-hidden rounded-xl border border-border bg-card'>
+            <div className='overflow-x-auto'>
+              <table className='w-full text-sm'>
+                <thead className='bg-muted/50 text-xs tracking-wide text-muted-foreground uppercase'>
+                  <tr>
+                    <th className='px-4 py-3 text-left'>#</th>
+                    <th className='px-4 py-3 text-left'>Player</th>
+                    <th className='px-4 py-3 text-right'>Points</th>
+                    <th className='px-4 py-3 text-right'>Wins</th>
+                    <th className='px-4 py-3 text-right'>Sessions</th>
+                  </tr>
+                </thead>
+                <tbody className='divide-y divide-border'>
+                  {gameLeaderboard.map((e, i) => (
+                    <tr key={e.player_id} className='hover:bg-muted/50'>
+                      <td className='px-4 py-3 text-muted-foreground'>{i + 1}</td>
+                      <td className='px-4 py-3 font-medium'>
+                        <Link to={`/players/${e.player_id}`} className='hover:text-primary'>
+                          {e.player_name}
+                        </Link>
+                      </td>
+                      <td className='px-4 py-3 text-right font-semibold'>{e.total_points}</td>
+                      <td className='px-4 py-3 text-right'>{e.wins}</td>
+                      <td className='px-4 py-3 text-right text-muted-foreground'>{e.total_sessions}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Session history */}
       <div className='mt-8'>
         <h2 className='mb-3 text-base font-semibold text-foreground'>Session History</h2>
@@ -192,7 +233,7 @@ export default function GameDetail() {
                 <tbody className='divide-y divide-border'>
                   {sessions.map((s) => (
                     <tr key={s.id} className='hover:bg-muted/50'>
-                      <td className='px-4 py-3 font-medium'>{s.played_at}</td>
+                      <td className='px-4 py-3 font-medium'>{s.played_at.slice(0, 10)}</td>
                       <td className='px-4 py-3 text-muted-foreground'>{s.player_count} players</td>
                       <td className='px-4 py-3 text-muted-foreground'>{s.notes ?? '—'}</td>
                     </tr>

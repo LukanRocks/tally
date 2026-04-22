@@ -111,9 +111,11 @@ export default function SessionLogger() {
     setSubmitting(true)
 
     try {
+      const now = new Date()
+      const timeStr = now.toTimeString().slice(0, 8)
       await api.sessions.create({
         game_id: gameId,
-        played_at: playedAt,
+        played_at: `${playedAt}T${timeStr}`,
         notes: notes || undefined,
         results: ranked.map((p, i) => ({ player_id: p.id, rank: i + 1 })),
       })

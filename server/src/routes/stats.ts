@@ -25,7 +25,11 @@ router.get('/leaderboard', (_req: Request, res: Response, next: NextFunction) =>
       .leftJoin(sessionsTable, and(eq(sessionsTable.id, resultsTable.session_id), isNull(sessionsTable.deleted_at)))
       .where(isNull(playersTable.deleted_at))
       .groupBy(playersTable.id)
-      .orderBy(desc(sql`COALESCE(SUM(CASE WHEN ${sessionsTable.id} IS NOT NULL THEN ${resultsTable.points_awarded} END), 0)`))
+      .orderBy(
+        desc(sql`COALESCE(SUM(CASE WHEN ${sessionsTable.id} IS NOT NULL THEN ${resultsTable.points_awarded} END), 0)`),
+        desc(sql`COALESCE(SUM(CASE WHEN ${sessionsTable.id} IS NOT NULL AND ${resultsTable.rank} = 1 THEN 1 ELSE 0 END), 0)`),
+        sql`COALESCE(MIN(CASE WHEN ${resultsTable.rank} = 1 THEN ${sessionsTable.played_at} END), '9999-12-31T23:59:59') ASC`,
+      )
       .all()
 
     res.json(rows)
@@ -53,7 +57,11 @@ router.get('/leaderboard/game/:gameId', (req: Request, res: Response, next: Next
       .innerJoin(sessionsTable, and(eq(sessionsTable.id, resultsTable.session_id), eq(sessionsTable.game_id, gameId), isNull(sessionsTable.deleted_at)))
       .where(isNull(playersTable.deleted_at))
       .groupBy(playersTable.id)
-      .orderBy(desc(sql`COALESCE(SUM(${resultsTable.points_awarded}), 0)`))
+      .orderBy(
+        desc(sql`COALESCE(SUM(${resultsTable.points_awarded}), 0)`),
+        desc(sql`COALESCE(SUM(CASE WHEN ${resultsTable.rank} = 1 THEN 1 ELSE 0 END), 0)`),
+        sql`COALESCE(MIN(CASE WHEN ${resultsTable.rank} = 1 THEN ${sessionsTable.played_at} END), '9999-12-31T23:59:59') ASC`,
+      )
       .all()
 
     res.json(rows)

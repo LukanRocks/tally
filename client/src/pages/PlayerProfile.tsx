@@ -74,7 +74,7 @@ export default function PlayerProfile() {
                 <tbody className='divide-y divide-border'>
                   {sessions.slice(0, 20).map((s) => (
                     <tr key={s.id} className='hover:bg-muted/50'>
-                      <td className='px-4 py-3 font-medium'>{s.played_at}</td>
+                      <td className='px-4 py-3 font-medium'>{s.played_at.slice(0, 10)}</td>
                       <td className='px-4 py-3 text-foreground/80'>
                         <Link to={`/library/${s.game_id}`} className='hover:text-primary'>
                           {s.game_name}

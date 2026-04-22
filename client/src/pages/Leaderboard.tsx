@@ -1,30 +1,27 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api, Game, HeadToHead, LeaderboardEntry, MostPlayedGame, Player } from '../lib/api'
+import { Crown } from 'lucide-react'
+import { api, HeadToHead, LeaderboardEntry, MostPlayedGame, Player } from '../lib/api'
 import { useSettings } from '../contexts/SettingsContext'
 
 export default function Leaderboard() {
   const { settings } = useSettings()
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
   const [mostPlayed, setMostPlayed] = useState<MostPlayedGame[]>([])
-  const [games, setGames] = useState<Game[]>([])
   const [players, setPlayers] = useState<Player[]>([])
-  const [selectedGame, setSelectedGame] = useState<number>(0)
-  const [gameLeaderboard, setGameLeaderboard] = useState<LeaderboardEntry[]>([])
   const [p1, setP1] = useState<number>(0)
   const [p2, setP2] = useState<number>(0)
   const [h2h, setH2H] = useState<HeadToHead | null>(null)
 
   const [loading, setLoading] = useState(true)
+  const [podiumReady, setPodiumReady] = useState(false)
 
   useEffect(() => {
-    Promise.all([api.stats.leaderboard(), api.stats.mostPlayed(), api.games.list(), api.players.list()])
-      .then(([lb, mp, g, p]) => {
+    Promise.all([api.stats.leaderboard(), api.stats.mostPlayed(), api.players.list()])
+      .then(([lb, mp, p]) => {
         setLeaderboard(lb)
         setMostPlayed(mp)
-        setGames(g)
         setPlayers(p)
-        if (g.length > 0) setSelectedGame(g[Math.floor(Math.random() * g.length)].id)
 
         const ownerId = settings?.default_owner_id ?? null
         const ownerExists = ownerId && p.some((pl) => pl.id === ownerId)
@@ -35,24 +32,18 @@ export default function Leaderboard() {
         setP2(randomP2)
 
         setLoading(false)
+        setTimeout(() => setPodiumReady(true), 50)
       })
       .catch(() => setLoading(false))
   }, [])
-
-  useEffect(() => {
-    if (!selectedGame) {
-      setGameLeaderboard([])
-      return
-    }
-    api.stats.leaderboardByGame(selectedGame).then(setGameLeaderboard)
-  }, [selectedGame])
 
   useEffect(() => {
     if (!p1 || !p2 || p1 === p2) {
       setH2H(null)
       return
     }
-    api.stats.headToHead(p1, p2)
+    api.stats
+      .headToHead(p1, p2)
       .then(setH2H)
       .catch(() => setH2H(null))
   }, [p1, p2])
@@ -60,12 +51,85 @@ export default function Leaderboard() {
   if (loading) return <div className='p-4 text-muted-foreground md:p-8'>Loading…</div>
 
   return (
-    <div className='max-w-5xl space-y-12 p-4 md:p-8'>
-      <h1 className='text-2xl font-bold text-foreground'>Leaderboard</h1>
+    <div className='mx-auto max-w-5xl space-y-12 p-4 pt-16 md:p-8 md:pt-20'>
+      {/* Podium */}
+      {leaderboard.length >= 2 && (
+        <section>
+          {(() => {
+            const [first, second, third] = leaderboard
+            const rankStyle: Record<number, { step: string; text: string; ring: string; spotlight: string }> = {
+              1: {
+                step: 'bg-linear-to-b from-yellow-400/25 to-transparent',
+                text: 'text-yellow-500',
+                ring: 'ring-yellow-400/60',
+                spotlight: 'from-yellow-400/30 via-yellow-400/10 to-transparent',
+              },
+              2: {
+                step: 'bg-linear-to-b from-slate-400/25 to-transparent',
+                text: 'text-slate-400',
+                ring: 'ring-slate-400/60',
+                spotlight: 'from-slate-400/25 via-slate-400/10 to-transparent',
+              },
+              3: {
+                step: 'bg-linear-to-b from-amber-700/25 to-transparent',
+                text: 'text-amber-700',
+                ring: 'ring-amber-700/60',
+                spotlight: 'from-amber-700/25 via-amber-700/10 to-transparent',
+              },
+            }
+            const enterDelay: Record<number, string> = { 1: '400ms', 2: '200ms', 3: '0ms' }
+            const steps: { entry: LeaderboardEntry; rank: number; height: string; label: string }[] = [
+              { entry: second, rank: 2, height: 'h-28', label: '2' },
+              { entry: first, rank: 1, height: 'h-36', label: '1' },
+              ...(third ? [{ entry: third, rank: 3, height: 'h-20', label: '3' }] : []),
+            ]
+            return (
+              <div className='flex items-end justify-center gap-2'>
+                {steps.map(({ entry, rank, height, label }) => {
+                  const style = rankStyle[rank]
+                  return (
+                    <div
+                      key={entry.player_id}
+                      className='relative flex flex-col items-center gap-2 transition-all duration-700 ease-out'
+                      style={{ transitionDelay: enterDelay[rank], opacity: podiumReady ? 1 : 0, transform: podiumReady ? 'translateY(0)' : 'translateY(32px)' }}
+                    >
+                      <div className={`absolute -top-4 h-32 w-32 animate-pulse rounded-full bg-radial ${style.spotlight} blur-2xl`} />
+                      {rank === 1 && <Crown size={18} className='relative text-yellow-500' />}
+                      <Link to={`/players/${entry.player_id}`} className='relative'>
+                        {entry.avatar_path ? (
+                          <img
+                            src={entry.avatar_path}
+                            alt={entry.player_name}
+                            className={`${rank === 1 ? 'h-16 w-16' : 'h-12 w-12'} rounded-full object-cover ring-2 ${style.ring}`}
+                          />
+                        ) : (
+                          <div
+                            className={`${rank === 1 ? 'h-16 w-16 text-xl' : 'h-12 w-12 text-lg'} flex items-center justify-center rounded-full bg-muted font-bold ring-2 ${style.text} ${style.ring}`}
+                          >
+                            {entry.player_name[0].toUpperCase()}
+                          </div>
+                        )}
+                      </Link>
+                      <Link to={`/players/${entry.player_id}`} className='relative max-w-20 truncate text-center text-sm font-semibold hover:text-primary'>
+                        {entry.player_name}
+                      </Link>
+                      <p className='relative text-xs text-muted-foreground'>
+                        {entry.wins} wins · {entry.win_rate}%
+                      </p>
+                      <div className={`relative flex w-24 ${height} items-start justify-center rounded-t-lg pt-3 ${style.step}`}>
+                        <span className={`text-2xl font-black ${style.text}`}>{label}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })()}
+        </section>
+      )}
 
       {/* Global rankings */}
       <section>
-        <h2 className='mb-4 text-lg font-semibold text-foreground'>Global Rankings</h2>
         {leaderboard.length === 0 ? (
           <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
         ) : (
@@ -109,7 +173,6 @@ export default function Leaderboard() {
 
       {/* Most played */}
       <section>
-        <h2 className='mb-4 text-lg font-semibold text-foreground'>Most Played Games</h2>
         {mostPlayed.length === 0 ? (
           <p className='text-sm text-muted-foreground'>No sessions yet.</p>
         ) : (
@@ -118,14 +181,16 @@ export default function Leaderboard() {
               <table className='w-full text-sm'>
                 <thead className='bg-muted/50 text-xs tracking-wide text-muted-foreground uppercase'>
                   <tr>
-                    <th className='px-4 py-3 text-left'>Game</th>
+                    <th className='px-4 py-3 text-left'>#</th>
+                    <th className='px-4 py-3 text-left'>Most Played Games</th>
                     <th className='px-4 py-3 text-right'>Sessions</th>
                     <th className='px-4 py-3 text-right'>Unique Players</th>
                   </tr>
                 </thead>
                 <tbody className='divide-y divide-border'>
-                  {mostPlayed.map((g) => (
+                  {mostPlayed.map((g, i) => (
                     <tr key={g.id} className='hover:bg-muted/50'>
+                      <td className='px-4 py-3 font-medium text-muted-foreground'>{i + 1}</td>
                       <td className='px-4 py-3'>
                         <div className='flex items-center gap-3'>
                           {g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-10 w-8 rounded object-cover' />}
@@ -145,58 +210,6 @@ export default function Leaderboard() {
         )}
       </section>
 
-      {/* Per-game leaderboard */}
-      <section>
-        <h2 className='mb-4 text-lg font-semibold text-foreground'>Per-Game Leaderboard</h2>
-        <select
-          value={selectedGame}
-          onChange={(e) => setSelectedGame(Number(e.target.value))}
-          className='mb-4 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none'
-        >
-          <option value={0} disabled hidden>Select a game…</option>
-          {games.map((g) => (
-            <option key={g.id} value={g.id}>
-              {g.name}
-            </option>
-          ))}
-        </select>
-        {selectedGame > 0 &&
-          (gameLeaderboard.length === 0 ? (
-            <p className='text-sm text-muted-foreground'>No sessions for this game.</p>
-          ) : (
-            <div className='overflow-hidden rounded-xl border border-border bg-card'>
-              <div className='overflow-x-auto'>
-                <table className='w-full text-sm'>
-                  <thead className='bg-muted/50 text-xs tracking-wide text-muted-foreground uppercase'>
-                    <tr>
-                      <th className='px-4 py-3 text-left'>#</th>
-                      <th className='px-4 py-3 text-left'>Player</th>
-                      <th className='px-4 py-3 text-right'>Points</th>
-                      <th className='px-4 py-3 text-right'>Wins</th>
-                      <th className='px-4 py-3 text-right'>Sessions</th>
-                    </tr>
-                  </thead>
-                  <tbody className='divide-y divide-border'>
-                    {gameLeaderboard.map((e, i) => (
-                      <tr key={e.player_id} className='hover:bg-muted/50'>
-                        <td className='px-4 py-3 text-muted-foreground'>{i + 1}</td>
-                        <td className='px-4 py-3 font-medium'>
-                          <Link to={`/players/${e.player_id}`} className='hover:text-primary'>
-                            {e.player_name}
-                          </Link>
-                        </td>
-                        <td className='px-4 py-3 text-right font-semibold'>{e.total_points}</td>
-                        <td className='px-4 py-3 text-right'>{e.wins}</td>
-                        <td className='px-4 py-3 text-right text-muted-foreground'>{e.total_sessions}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          ))}
-      </section>
-
       {/* Head-to-head */}
       <section>
         <h2 className='mb-4 text-lg font-semibold text-foreground'>Head-to-Head</h2>
@@ -206,7 +219,9 @@ export default function Leaderboard() {
             onChange={(e) => setP1(Number(e.target.value))}
             className='rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none'
           >
-            <option value={0} disabled hidden>Player 1…</option>
+            <option value={0} disabled hidden>
+              Player 1…
+            </option>
             {players
               .filter((p) => p.id !== p2)
               .map((p) => (
@@ -221,7 +236,9 @@ export default function Leaderboard() {
             onChange={(e) => setP2(Number(e.target.value))}
             className='rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none'
           >
-            <option value={0} disabled hidden>Player 2…</option>
+            <option value={0} disabled hidden>
+              Player 2…
+            </option>
             {players
               .filter((p) => p.id !== p1)
               .map((p) => (
@@ -263,7 +280,7 @@ export default function Leaderboard() {
                   <tbody className='divide-y divide-border'>
                     {h2h.sessions.map((s) => (
                       <tr key={s.session_id}>
-                        <td className='py-2'>{s.played_at}</td>
+                        <td className='py-2'>{s.played_at.slice(0, 10)}</td>
                         <td className='py-2 text-foreground/80'>{s.game_name}</td>
                         <td className='py-2 text-center'>
                           <span className={s.p1_rank < s.p2_rank ? 'font-bold text-green-600' : 'text-muted-foreground'}>
