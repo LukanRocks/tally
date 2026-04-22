@@ -48,18 +48,7 @@ export default function Library() {
 
   return (
     <div className='p-4 md:p-8'>
-      <div className='mb-6 flex items-center justify-between'>
-        <h1 className='text-2xl font-bold text-foreground'>Game Library</h1>
-        <Link
-          to='/library/new'
-          className='flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90'
-        >
-          <Plus size={14} /> Add Game
-        </Link>
-      </div>
-
-      {/* Filters */}
-      <div className='mb-6 flex flex-wrap gap-3'>
+      <div className='mb-6 flex flex-wrap items-center gap-3'>
         <input
           type='text'
           placeholder='Search games…'
@@ -109,6 +98,12 @@ export default function Library() {
           onChange={(e) => setMaxPlayers(e.target.value)}
           className='w-28 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
         />
+        <Link
+          to='/library/new'
+          className='ml-auto flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90'
+        >
+          <Plus size={14} /> Add Game
+        </Link>
       </div>
 
       {loading ? (
