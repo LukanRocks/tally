@@ -14,7 +14,7 @@ type FormState = {
 
 export default function SettingsPage() {
   const navigate = useNavigate()
-  const { settings: ctxSettings, updateSetting, isLoading: settingsLoading } = useSettings()
+  const { settings: ctxSettings, updateSetting, refreshSettings, isLoading: settingsLoading } = useSettings()
   const [form, setForm] = useState<FormState>({
     currency: 'USD',
     language: 'en',
@@ -65,10 +65,11 @@ export default function SettingsPage() {
     setResetting(true)
     try {
       await api.settings.reset()
+      await refreshSettings()
       setShowResetConfirm(false)
       setResetConfirmText('')
       toast.success('All data deleted')
-      navigate('/home')
+      navigate('/onboarding', { replace: true })
     } catch (err: any) {
       toast.error(err.message)
     } finally {

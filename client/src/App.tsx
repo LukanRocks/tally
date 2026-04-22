@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from '@/shadcn/components/ui/sonner'
 import { SettingsProvider } from './contexts/SettingsContext'
+import { useSettings } from './contexts/SettingsContext'
 import Layout from './components/Layout'
 import Dashboard from './pages/Home'
 import Library from './pages/Library'
@@ -11,13 +12,35 @@ import Players from './pages/Players'
 import PlayerProfile from './pages/PlayerProfile'
 import Leaderboard from './pages/Leaderboard'
 import SettingsPage from './pages/Settings'
+import Onboarding from './pages/Onboarding'
+
+function OnboardingGuard({ children }: { children: React.ReactNode }) {
+  const { settings, isLoading } = useSettings()
+  if (isLoading) return <div className='flex min-h-screen items-center justify-center text-sm text-muted-foreground'>Loading…</div>
+  if (!settings || settings.onboarded === 0) return <Navigate to='/onboarding' replace />
+  return <>{children}</>
+}
+
+function OnboardingRoute() {
+  const { settings, isLoading } = useSettings()
+  if (isLoading) return <div className='flex min-h-screen items-center justify-center text-sm text-muted-foreground'>Loading…</div>
+  if (settings?.onboarded === 1) return <Navigate to='/home' replace />
+  return <Onboarding />
+}
 
 export default function App() {
   return (
     <SettingsProvider>
       <BrowserRouter>
         <Routes>
-          <Route element={<Layout />}>
+          <Route path='onboarding' element={<OnboardingRoute />} />
+          <Route
+            element={
+              <OnboardingGuard>
+                <Layout />
+              </OnboardingGuard>
+            }
+          >
             <Route index element={<Navigate to='/home' replace />} />
             <Route path='home' element={<Dashboard />} />
             <Route path='library' element={<Library />} />

@@ -40,6 +40,7 @@ export interface Game {
 
 export interface Settings {
   id: 1
+  onboarded: 0 | 1
   currency: 'USD' | 'BRL'
   language: 'en' | 'pt'
   default_owner_id: number | null

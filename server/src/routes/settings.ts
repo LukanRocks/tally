@@ -20,7 +20,7 @@ router.get('/', (_req: Request, res: Response, next: NextFunction) => {
 // PUT /api/v1/settings
 router.put('/', (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { currency, language, default_owner_id, theme } = req.body
+    const { currency, language, default_owner_id, theme, onboarded } = req.body
     const patch: Record<string, any> = { updated_at: new Date().toISOString() }
 
     if (currency !== undefined) {
@@ -34,6 +34,10 @@ router.put('/', (req: Request, res: Response, next: NextFunction) => {
     if (theme !== undefined) {
       if (!['light', 'dark', 'system'].includes(theme)) return res.status(400).json({ error: 'Invalid theme' })
       patch.theme = theme
+    }
+    if (onboarded !== undefined) {
+      if (onboarded !== 0 && onboarded !== 1) return res.status(400).json({ error: 'Invalid onboarded value' })
+      patch.onboarded = onboarded
     }
     if (default_owner_id !== undefined) {
       if (default_owner_id !== null) {
