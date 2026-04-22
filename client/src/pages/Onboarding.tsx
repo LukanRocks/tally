@@ -228,7 +228,8 @@ async function handleAddFriend(e: React.FormEvent) {
 
             <button
               onClick={() => setStep(3)}
-              className='mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90'
+              disabled={!!friendName.trim()}
+              className='mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed'
             >
               Continue <ChevronRight size={15} />
             </button>
@@ -274,8 +275,8 @@ async function handleAddFriend(e: React.FormEvent) {
 
             <button
               onClick={handleComplete}
-              disabled={completing}
-              className='mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60'
+              disabled={completing || !!gameName.trim()}
+              className='mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed'
             >
               {completing ? 'Finishing up…' : <>Done — Let's go! <ChevronRight size={15} /></>}
             </button>
