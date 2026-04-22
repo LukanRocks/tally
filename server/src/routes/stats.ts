@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express'
-import { eq, isNull, and, desc, sql } from 'drizzle-orm'
+import { eq, isNull, and, desc, asc, sql } from 'drizzle-orm'
 import { db } from '../db'
 import { players as playersTable, session_results as resultsTable, sessions as sessionsTable, games as gamesTable } from '../db/schema'
 
@@ -87,6 +87,31 @@ router.get('/most-played', (_req: Request, res: Response, next: NextFunction) =>
       .where(isNull(gamesTable.deleted_at))
       .groupBy(gamesTable.id)
       .orderBy(desc(sql`COUNT(DISTINCT ${sessionsTable.id})`))
+      .all()
+
+    res.json(rows)
+  } catch (err) {
+    next(err)
+  }
+})
+
+// GET /api/v1/stats/least-played
+router.get('/least-played', (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const rows = db
+      .select({
+        id: gamesTable.id,
+        name: gamesTable.name,
+        cover_image_path: gamesTable.cover_image_path,
+        session_count: sql<number>`COUNT(DISTINCT ${sessionsTable.id})`,
+        unique_players: sql<number>`COUNT(DISTINCT ${resultsTable.player_id})`,
+      })
+      .from(gamesTable)
+      .leftJoin(sessionsTable, and(eq(sessionsTable.game_id, gamesTable.id), isNull(sessionsTable.deleted_at)))
+      .leftJoin(resultsTable, and(eq(resultsTable.session_id, sessionsTable.id), isNull(resultsTable.deleted_at)))
+      .where(isNull(gamesTable.deleted_at))
+      .groupBy(gamesTable.id)
+      .orderBy(asc(sql`COUNT(DISTINCT ${sessionsTable.id})`))
       .all()
 
     res.json(rows)

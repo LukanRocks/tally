@@ -177,6 +177,7 @@ export const api = {
     leaderboard: () => req<LeaderboardEntry[]>('/stats/leaderboard'),
     leaderboardByGame: (gameId: number) => req<LeaderboardEntry[]>(`/stats/leaderboard/game/${gameId}`),
     mostPlayed: () => req<MostPlayedGame[]>('/stats/most-played'),
+    leastPlayed: () => req<MostPlayedGame[]>('/stats/least-played'),
     headToHead: (player1: number, player2: number) => req<HeadToHead>(`/stats/head-to-head?player1=${player1}&player2=${player2}`),
   },
 

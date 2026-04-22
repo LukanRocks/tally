@@ -7,14 +7,16 @@ export default function Dashboard() {
   const [recentGames, setRecentGames] = useState<Game[]>([])
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
   const [mostPlayed, setMostPlayed] = useState<MostPlayedGame[]>([])
+  const [leastPlayed, setLeastPlayed] = useState<MostPlayedGame[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    Promise.all([api.games.list({ sort: 'date_added', order: 'desc' }), api.stats.leaderboard(), api.stats.mostPlayed()])
-      .then(([games, lb, mp]) => {
+    Promise.all([api.games.list({ sort: 'date_added', order: 'desc' }), api.stats.leaderboard(), api.stats.mostPlayed(), api.stats.leastPlayed()])
+      .then(([games, lb, mp, lp]) => {
         setRecentGames(games.slice(0, 5))
         setLeaderboard(lb.slice(0, 5))
         setMostPlayed(mp.slice(0, 5))
+        setLeastPlayed(lp.slice(0, 5))
         setLoading(false)
       })
       .catch(() => setLoading(false))
@@ -23,9 +25,7 @@ export default function Dashboard() {
   if (loading) return <div className='p-4 text-muted-foreground md:p-8'>Loading…</div>
 
   return (
-    <div className='max-w-5xl space-y-10 p-4 md:p-8'>
-      <h1 className='text-2xl font-bold text-foreground'>Home</h1>
-
+    <div className='mx-auto max-w-5xl space-y-10 p-4 md:p-8'>
       {/* Leaderboard snippet */}
       <section>
         <div className='mb-4 flex items-center justify-between'>
@@ -68,25 +68,46 @@ export default function Dashboard() {
         )}
       </section>
 
-      {/* Most played */}
-      <section>
-        <h2 className='mb-4 text-lg font-semibold text-foreground'>Most Played</h2>
-        {mostPlayed.length === 0 ? (
-          <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
-        ) : (
-          <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5'>
-            {mostPlayed.map((g) => (
-              <Link key={g.id} to={`/library/${g.id}`} className='overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md'>
-                <div className='aspect-[3/4] bg-muted'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
-                <div className='p-3'>
-                  <p className='truncate text-sm font-medium'>{g.name}</p>
-                  <p className='mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </section>
+      {/* Most played / Least played */}
+      <div className='grid gap-10 md:grid-cols-2'>
+        <section>
+          <h2 className='mb-4 text-lg font-semibold text-foreground'>Most Played</h2>
+          {mostPlayed.length === 0 ? (
+            <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
+          ) : (
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
+              {mostPlayed.map((g) => (
+                <Link key={g.id} to={`/library/${g.id}`} className='overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md'>
+                  <div className='aspect-3/4 bg-muted'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
+                  <div className='p-3'>
+                    <p className='truncate text-sm font-medium'>{g.name}</p>
+                    <p className='mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section>
+          <h2 className='mb-4 text-lg font-semibold text-foreground'>Least Played</h2>
+          {leastPlayed.length === 0 ? (
+            <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
+          ) : (
+            <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
+              {leastPlayed.map((g) => (
+                <Link key={g.id} to={`/library/${g.id}`} className='overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md'>
+                  <div className='aspect-3/4 bg-muted'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
+                  <div className='p-3'>
+                    <p className='truncate text-sm font-medium'>{g.name}</p>
+                    <p className='mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+      </div>
 
       {/* Recently added */}
       <section>
@@ -118,7 +139,7 @@ export default function Dashboard() {
 function GameCard({ game }: { game: Game }) {
   return (
     <Link to={`/library/${game.id}`} className='overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md'>
-      <div className='flex aspect-[3/4] items-center justify-center bg-muted'>
+      <div className='flex aspect-3/4 items-center justify-center bg-muted'>
         {game.cover_image_path ? (
           <img src={game.cover_image_path} alt={game.name} className='h-full w-full object-cover' />
         ) : (
