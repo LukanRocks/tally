@@ -1,11 +1,11 @@
 version: '3.8'
 services:
   tally:
-    build: .
+    image: ghcr.io/lukanrocks/tally:latest
     ports:
       - '3000:3000'
     volumes:
-      - ./data:/app/data
+      - tally_data:/app/data
     restart: unless-stopped
     environment:
       - PORT=3000
