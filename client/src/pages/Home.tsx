@@ -15,8 +15,8 @@ export default function Dashboard() {
       .then(([games, lb, mp, lp]) => {
         setRecentGames(games.slice(0, 5))
         setLeaderboard(lb.slice(0, 5))
-        setMostPlayed(mp.slice(0, 5))
-        setLeastPlayed(lp.slice(0, 5))
+        setMostPlayed(mp.slice(0, 3))
+        setLeastPlayed(lp.slice(0, 3))
         setLoading(false)
       })
       .catch(() => setLoading(false))
