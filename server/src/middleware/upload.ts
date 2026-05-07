@@ -55,3 +55,17 @@ export const avatarUpload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: imageFilter,
 })
+
+const csvFilter = (_req: Request, file: Express.Multer.File, cb: FileFilterCallback) => {
+  if (file.mimetype === 'text/csv' || file.originalname.toLowerCase().endsWith('.csv')) {
+    cb(null, true)
+  } else {
+    cb(new Error('Only CSV files are allowed'))
+  }
+}
+
+export const csvUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
+  fileFilter: csvFilter,
+})

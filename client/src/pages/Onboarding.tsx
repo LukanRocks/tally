@@ -86,6 +86,8 @@ async function handleAddFriend(e: React.FormEvent) {
         cover_image_path: null,
         owner_id: settings?.default_owner_id ?? null,
         owner_name: null,
+        bgg_id: null,
+        year_published: null,
       })
       setGames((gs) => [...gs, g])
       setGameName('')

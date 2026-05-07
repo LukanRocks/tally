@@ -12,6 +12,8 @@ export const games = sqliteTable('games', {
   price: real('price'),
   cover_image_path: text('cover_image_path'),
   owner_id: integer('owner_id'),
+  bgg_id: integer('bgg_id'),
+  year_published: integer('year_published'),
   created_at: text('created_at')
     .notNull()
     .default(sql`(datetime('now'))`),
@@ -80,7 +82,14 @@ export const settings = sqliteTable('settings', {
   language: text('language').notNull().default('en'),
   default_owner_id: integer('default_owner_id'),
   theme: text('theme').notNull().default('system'),
+  bgg_last_updated: text('bgg_last_updated'),
   updated_at: text('updated_at')
     .notNull()
     .default(sql`(datetime('now'))`),
+})
+
+export const bgg_games = sqliteTable('bgg_games', {
+  bgg_id: integer('bgg_id').primaryKey(),
+  name: text('name').notNull(),
+  year_published: integer('year_published'),
 })

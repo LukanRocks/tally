@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { api, Player } from '../lib/api'
+import { api, BggGame, Player } from '../lib/api'
 import { useSettings } from '../contexts/SettingsContext'
 
 type FormData = {
@@ -12,6 +12,8 @@ type FormData = {
   purchase_at: string
   price: string
   owner_id: string
+  year_published: string
+  bgg_id: number | null
 }
 
 const empty: FormData = {
@@ -23,6 +25,8 @@ const empty: FormData = {
   purchase_at: '',
   price: '',
   owner_id: '',
+  year_published: '',
+  bgg_id: null,
 }
 
 export default function GameForm() {
@@ -32,6 +36,9 @@ export default function GameForm() {
   const isEdit = Boolean(id)
   const [form, setForm] = useState<FormData>(empty)
   const [players, setPlayers] = useState<Player[]>([])
+  const [bggResults, setBggResults] = useState<BggGame[]>([])
+  const [highlightedIndex, setHighlightedIndex] = useState(-1)
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -47,6 +54,8 @@ export default function GameForm() {
           purchase_at: g.purchase_at ?? '',
           price: g.price != null ? String(g.price) : '',
           owner_id: g.owner_id != null ? String(g.owner_id) : '',
+          year_published: g.year_published != null ? String(g.year_published) : '',
+          bgg_id: g.bgg_id ?? null,
         })
         setPlayers(playerList)
       })
@@ -60,6 +69,52 @@ export default function GameForm() {
 
   function set(field: keyof FormData) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setForm((f) => ({ ...f, [field]: e.target.value }))
+  }
+
+  function handleNameChange(value: string) {
+    setForm((f) => ({ ...f, name: value, bgg_id: null }))
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    if (value.length < 2) {
+      setBggResults([])
+      return
+    }
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const results = await api.bgg.search(value)
+        setBggResults(results)
+        setHighlightedIndex(-1)
+      } catch {
+        // silently ignore — autocomplete failure must not block the form
+      }
+    }, 300)
+  }
+
+  function handleBggSelect(game: BggGame) {
+    setForm((f) => ({
+      ...f,
+      name: game.name,
+      year_published: game.year_published != null ? String(game.year_published) : '',
+      bgg_id: game.bgg_id,
+    }))
+    setBggResults([])
+    setHighlightedIndex(-1)
+  }
+
+  function handleNameKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (bggResults.length === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setHighlightedIndex((i) => Math.min(i + 1, bggResults.length - 1))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setHighlightedIndex((i) => Math.max(i - 1, 0))
+    } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+      e.preventDefault()
+      handleBggSelect(bggResults[highlightedIndex])
+    } else if (e.key === 'Escape') {
+      setBggResults([])
+      setHighlightedIndex(-1)
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -80,6 +135,8 @@ export default function GameForm() {
       purchase_at: form.purchase_at || null,
       price: form.price ? Number(form.price) : null,
       owner_id: form.owner_id ? Number(form.owner_id) : null,
+      year_published: form.year_published ? Number(form.year_published) : null,
+      bgg_id: form.bgg_id ?? null,
     }
 
     try {
@@ -112,7 +169,57 @@ export default function GameForm() {
 
       <form onSubmit={handleSubmit} className='space-y-5'>
         <Field label='Name *' htmlFor='name'>
-          <input id='name' type='text' value={form.name} onChange={set('name')} required className='input' placeholder='Wingspan' />
+          <div className='relative'>
+            <input
+              id='name'
+              type='text'
+              value={form.name}
+              onChange={(e) => handleNameChange(e.target.value)}
+              onKeyDown={handleNameKeyDown}
+              onBlur={() => setTimeout(() => setBggResults([]), 150)}
+              required
+              className='input w-full'
+              placeholder='Wingspan'
+              autoComplete='off'
+              data-1p-ignore
+              data-lpignore='true'
+              data-form-type='other'
+            />
+            {bggResults.length > 0 && (
+              <div className='absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-border bg-popover shadow-lg'>
+                {bggResults.map((g, i) => (
+                  <button
+                    key={g.bgg_id}
+                    type='button'
+                    onMouseDown={(e) => {
+                      e.preventDefault()
+                      handleBggSelect(g)
+                    }}
+                    onMouseEnter={() => setHighlightedIndex(i)}
+                    className={`flex w-full items-center px-3 py-2 text-left text-sm ${i === highlightedIndex ? 'bg-accent text-accent-foreground' : 'hover:bg-accent hover:text-accent-foreground'}`}
+                  >
+                    {g.name}
+                    {g.year_published != null && (
+                      <span className='ml-1.5 text-xs text-muted-foreground'>({g.year_published})</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </Field>
+
+        <Field label='Year Published' htmlFor='year_published'>
+          <input
+            id='year_published'
+            type='number'
+            min={1900}
+            max={new Date().getFullYear() + 2}
+            value={form.year_published}
+            onChange={set('year_published')}
+            className='input'
+            placeholder='2019'
+          />
         </Field>
 
         <Field label='Description' htmlFor='description'>

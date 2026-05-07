@@ -64,6 +64,7 @@ router.delete('/reset', (_req: Request, res: Response, next: NextFunction) => {
     const reset = sqlite.transaction(() => {
       // 1. Clear settings FK before players are removed
       sqlite.prepare('DELETE FROM settings').run()
+      sqlite.prepare('DELETE FROM bgg_games').run()
       // 2-5. Clear dependent tables before their parents
       sqlite.prepare('DELETE FROM session_results').run()
       sqlite.prepare('DELETE FROM sessions').run()
