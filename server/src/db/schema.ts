@@ -36,11 +36,14 @@ export const game_attachments = sqliteTable('game_attachments', {
 
 export const players = sqliteTable('players', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  name: text('name').notNull().unique(),
+  name: text('name').notNull(),
   avatar_path: text('avatar_path'),
+  player_type: text('player_type', { enum: ['person', 'shop'] })
+    .notNull()
+    .default('person'),
   created_at: text('created_at')
     .notNull()
-    .default(sql`(datetime('now'))`),
+    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
   deleted_at: text('deleted_at'),
 })
 

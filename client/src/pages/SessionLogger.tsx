@@ -127,7 +127,9 @@ export default function SessionLogger() {
     }
   }
 
-  const filteredPlayers = players.filter((p) => p.name.toLowerCase().includes(playerSearch.toLowerCase()) && !ranked.some((r) => r.id === p.id))
+  const filteredPlayers = players.filter(
+    (p) => p.player_type === 'person' && p.name.toLowerCase().includes(playerSearch.toLowerCase()) && !ranked.some((r) => r.id === p.id),
+  )
 
   return (
     <div className='max-w-2xl p-4 md:p-8'>

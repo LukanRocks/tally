@@ -24,9 +24,10 @@ export default function Leaderboard() {
         setPlayers(p)
 
         const ownerId = settings?.default_owner_id ?? null
-        const ownerExists = ownerId && p.some((pl) => pl.id === ownerId)
+        const personPlayers = p.filter((pl) => pl.player_type === 'person')
+        const ownerExists = ownerId && personPlayers.some((pl) => pl.id === ownerId)
         const defaultP1 = ownerExists ? ownerId! : 0
-        const others = p.filter((pl) => pl.id !== defaultP1)
+        const others = personPlayers.filter((pl) => pl.id !== defaultP1)
         const randomP2 = others.length > 0 ? others[Math.floor(Math.random() * others.length)].id : 0
         setP1(defaultP1)
         setP2(randomP2)
@@ -228,7 +229,7 @@ export default function Leaderboard() {
               Player 1…
             </option>
             {players
-              .filter((p) => p.id !== p2)
+              .filter((p) => p.player_type === 'person' && p.id !== p2)
               .map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -245,7 +246,7 @@ export default function Leaderboard() {
               Player 2…
             </option>
             {players
-              .filter((p) => p.id !== p1)
+              .filter((p) => p.player_type === 'person' && p.id !== p1)
               .map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
