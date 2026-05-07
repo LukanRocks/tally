@@ -42,6 +42,38 @@ The original idea was a pure "players you beat" model, but that left last place 
 
 Scores are stored at log time, so historical results are unaffected by any future formula changes.
 
+## BoardGameGeek data (optional)
+
+Tally supports importing the [BGG board game rankings CSV](https://boardgamegeek.com/data_dumps/bg_ranks) to power name autocomplete when adding games to your library. This is entirely optional — the app works without it, and any game not in the dataset can always be entered manually.
+
+**To set it up:**
+
+1. Download the CSV from [boardgamegeek.com/data_dumps/bg_ranks](https://boardgamegeek.com/data_dumps/bg_ranks) (free account required).
+2. Go to **Settings → BGG Data** in the app and upload the file.
+3. The dataset is imported locally — no BGG API calls are ever made at runtime.
+
+**What it does:**
+
+- When adding or editing a game, typing in the name field shows matching suggestions from the BGG catalog.
+- Selecting a suggestion fills in the game name and publication year; all other data (cover image, description, player count, etc.) still needs to be added manually.
+- The data is stored in your local SQLite database. You can delete it or re-import an updated CSV at any time from Settings.
+
+**A note on the BGG dataset:** The CSV data is provided by BoardGameGeek under their [Terms of Use](https://boardgamegeek.com/terms) and [XML API & Data Terms of Use](https://boardgamegeek.com/wiki/page/XML_API_Terms_of_Use#). Use is permitted for non-commercial purposes. Tally does not modify or redistribute the data — it is imported and stored locally by the user.
+
+## About this project
+
+Tally is being built entirely with the aid of AI (Claude) as a deliberate learning exercise. The goal is to observe and understand the qualities, patterns, and failure modes of AI-assisted development on a relatively low-risk personal project — where experimenting freely is safe and the feedback loop is fast.
+
+The development follows a structured process designed to keep AI-generated code intentional and maintainable:
+
+1. **PRD** — a new context window collaborates with the developer to write a Product Requirements Document, stored in `changes/vN/`.
+2. **ERD** — a separate context reads the PRD and produces an Engineering Requirements Document for the same version.
+3. **Implementation** — another agent reads both documents and implements the feature against those definitions.
+
+Each major change gets its own version folder under `changes/`, creating a clear record of what was planned and why. The separation between planning contexts is intentional: it forces decisions to be made explicitly rather than letting the implementation agent run wild and make choices that are bug-prone or hard to maintain.
+
+The code isn't perfect — but every part of it was written with deliberate intent.
+
 ## Tech stack
 
 | Layer | Technology |
