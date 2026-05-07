@@ -60,6 +60,7 @@ export interface Player {
   id: number
   name: string
   avatar_path: string | null
+  player_type: 'person' | 'shop'
   created_at: string
   total_points?: number
   total_sessions?: number
@@ -156,8 +157,10 @@ export const api = {
   players: {
     list: () => req<Player[]>('/players'),
     get: (id: number) => req<Player>(`/players/${id}`),
-    create: (name: string) => req<Player>('/players', json('POST', { name })),
-    update: (id: number, name: string) => req<Player>(`/players/${id}`, json('PUT', { name })),
+    create: (name: string, playerType?: 'person' | 'shop') =>
+      req<Player>('/players', json('POST', { name, player_type: playerType })),
+    update: (id: number, name: string, playerType?: 'person' | 'shop') =>
+      req<Player>(`/players/${id}`, json('PUT', { name, player_type: playerType })),
     delete: (id: number) => req<void>(`/players/${id}`, { method: 'DELETE' }),
     uploadAvatar: (id: number, file: File) => {
       const fd = new FormData()

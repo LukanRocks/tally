@@ -16,6 +16,7 @@ router.get('/', (_req: Request, res: Response, next: NextFunction) => {
         id: playersTable.id,
         name: playersTable.name,
         avatar_path: playersTable.avatar_path,
+        player_type: playersTable.player_type,
         created_at: playersTable.created_at,
         total_points: sql<number>`(
         SELECT COALESCE(SUM(sr.points_awarded), 0)
@@ -78,10 +79,17 @@ router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
 // POST /api/v1/players
 router.post('/', (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name } = req.body
+    const { name, player_type } = req.body
     if (!name?.trim()) return res.status(400).json({ error: 'Name is required' })
+    if (player_type && !['person', 'shop'].includes(player_type)) {
+      return res.status(400).json({ error: 'player_type must be "person" or "shop"' })
+    }
 
-    const [player] = db.insert(playersTable).values({ name: name.trim() }).returning().all()
+    const [player] = db
+      .insert(playersTable)
+      .values({ name: name.trim(), player_type: player_type ?? 'person' })
+      .returning()
+      .all()
     res.status(201).json(player)
   } catch (err) {
     next(err)
@@ -100,10 +108,16 @@ router.put('/:id', (req: Request, res: Response, next: NextFunction) => {
 
     if (!existing) return res.status(404).json({ error: 'Player not found' })
 
-    const { name } = req.body
+    const { name, player_type } = req.body
     if (!name?.trim()) return res.status(400).json({ error: 'Name is required' })
+    if (player_type && !['person', 'shop'].includes(player_type)) {
+      return res.status(400).json({ error: 'player_type must be "person" or "shop"' })
+    }
 
-    const [updated] = db.update(playersTable).set({ name: name.trim() }).where(eq(playersTable.id, id)).returning().all()
+    const patch: { name: string; player_type?: 'person' | 'shop' } = { name: name.trim() }
+    if (player_type) patch.player_type = player_type
+
+    const [updated] = db.update(playersTable).set(patch).where(eq(playersTable.id, id)).returning().all()
 
     res.json(updated)
   } catch (err) {

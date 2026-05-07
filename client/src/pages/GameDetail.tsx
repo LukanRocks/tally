@@ -66,7 +66,7 @@ export default function GameDetail() {
   if (!game) return <div className='p-4 text-muted-foreground md:p-8'>Game not found.</div>
 
   return (
-    <div className='max-w-4xl p-4 md:p-8'>
+    <div className='mx-auto max-w-4xl p-4 md:p-8'>
       <div className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'>
         <Link to='/library' className='hover:text-foreground'>
           Library
