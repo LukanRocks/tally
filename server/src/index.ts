@@ -7,6 +7,7 @@ import playersRouter from './routes/players'
 import sessionsRouter from './routes/sessions'
 import statsRouter from './routes/stats'
 import settingsRouter from './routes/settings'
+import bggRouter from './routes/bgg'
 
 const app = express()
 const PORT = Number(process.env.PORT ?? 3001)
@@ -24,6 +25,7 @@ app.use('/api/v1/players', playersRouter)
 app.use('/api/v1/sessions', sessionsRouter)
 app.use('/api/v1/stats', statsRouter)
 app.use('/api/v1/settings', settingsRouter)
+app.use('/api/v1/bgg', bggRouter)
 
 // Serve React app in production
 if (process.env.NODE_ENV === 'production') {

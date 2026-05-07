@@ -125,6 +125,7 @@ export default function GameDetail() {
                 {game.min_players}–{game.max_players} players
               </span>
             )}
+            {game.year_published != null && <span>{game.year_published}</span>}
             {game.purchase_at && <span>Purchased {game.purchase_at}</span>}
             {game.price != null && <span>{formatPrice(game.price, settings?.currency)}</span>}
           </div>

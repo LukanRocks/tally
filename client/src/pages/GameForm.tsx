@@ -1,7 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { api, Player } from '../lib/api'
+import { api, BggGame, Player } from '../lib/api'
 import { useSettings } from '../contexts/SettingsContext'
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from '@/shadcn/components/ui/combobox'
 
 type FormData = {
   name: string
@@ -12,6 +19,8 @@ type FormData = {
   purchase_at: string
   price: string
   owner_id: string
+  year_published: string
+  bgg_id: number | null
 }
 
 const empty: FormData = {
@@ -23,6 +32,8 @@ const empty: FormData = {
   purchase_at: '',
   price: '',
   owner_id: '',
+  year_published: '',
+  bgg_id: null,
 }
 
 export default function GameForm() {
@@ -32,6 +43,8 @@ export default function GameForm() {
   const isEdit = Boolean(id)
   const [form, setForm] = useState<FormData>(empty)
   const [players, setPlayers] = useState<Player[]>([])
+  const [bggResults, setBggResults] = useState<BggGame[]>([])
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
@@ -47,6 +60,8 @@ export default function GameForm() {
           purchase_at: g.purchase_at ?? '',
           price: g.price != null ? String(g.price) : '',
           owner_id: g.owner_id != null ? String(g.owner_id) : '',
+          year_published: g.year_published != null ? String(g.year_published) : '',
+          bgg_id: g.bgg_id ?? null,
         })
         setPlayers(playerList)
       })
@@ -60,6 +75,36 @@ export default function GameForm() {
 
   function set(field: keyof FormData) {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => setForm((f) => ({ ...f, [field]: e.target.value }))
+  }
+
+  function handleNameChange(value: string) {
+    setForm((f) => ({ ...f, name: value, bgg_id: null }))
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    if (value.length < 2) {
+      setBggResults([])
+      return
+    }
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const results = await api.bgg.search(value)
+        setBggResults(results)
+      } catch {
+        // silently ignore — autocomplete failure must not block the form
+      }
+    }, 300)
+  }
+
+  function handleBggSelect(bggId: string | null) {
+    if (!bggId) return
+    const game = bggResults.find((g) => String(g.bgg_id) === bggId)
+    if (!game) return
+    setForm((f) => ({
+      ...f,
+      name: game.name,
+      year_published: game.year_published != null ? String(game.year_published) : '',
+      bgg_id: game.bgg_id,
+    }))
+    setBggResults([])
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -80,6 +125,8 @@ export default function GameForm() {
       purchase_at: form.purchase_at || null,
       price: form.price ? Number(form.price) : null,
       owner_id: form.owner_id ? Number(form.owner_id) : null,
+      year_published: form.year_published ? Number(form.year_published) : null,
+      bgg_id: form.bgg_id ?? null,
     }
 
     try {
@@ -112,7 +159,50 @@ export default function GameForm() {
 
       <form onSubmit={handleSubmit} className='space-y-5'>
         <Field label='Name *' htmlFor='name'>
-          <input id='name' type='text' value={form.name} onChange={set('name')} required className='input' placeholder='Wingspan' />
+          <Combobox
+            value={form.bgg_id != null ? String(form.bgg_id) : ''}
+            onValueChange={handleBggSelect}
+            inputValue={form.name}
+            onInputValueChange={handleNameChange}
+            filter={() => true}
+          >
+            <ComboboxInput
+              id='name'
+              placeholder='Wingspan'
+              required
+              showTrigger={false}
+              showClear={false}
+              autoComplete='off'
+              className='w-full'
+            />
+            {bggResults.length > 0 && (
+              <ComboboxContent>
+                <ComboboxList>
+                  {bggResults.map((g) => (
+                    <ComboboxItem key={g.bgg_id} value={String(g.bgg_id)}>
+                      {g.name}
+                      {g.year_published != null && (
+                        <span className='ml-1 text-muted-foreground'>({g.year_published})</span>
+                      )}
+                    </ComboboxItem>
+                  ))}
+                </ComboboxList>
+              </ComboboxContent>
+            )}
+          </Combobox>
+        </Field>
+
+        <Field label='Year Published' htmlFor='year_published'>
+          <input
+            id='year_published'
+            type='number'
+            min={1900}
+            max={new Date().getFullYear() + 2}
+            value={form.year_published}
+            onChange={set('year_published')}
+            className='input'
+            placeholder='2019'
+          />
         </Field>
 
         <Field label='Description' htmlFor='description'>

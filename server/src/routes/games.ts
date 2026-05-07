@@ -94,7 +94,7 @@ router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
 // POST /api/v1/games
 router.post('/', (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, description, quick_rules, min_players, max_players, purchase_at, price, owner_id } = req.body
+    const { name, description, quick_rules, min_players, max_players, purchase_at, price, owner_id, bgg_id, year_published } = req.body
 
     if (!name?.trim()) return res.status(400).json({ error: 'Name is required' })
 
@@ -109,6 +109,8 @@ router.post('/', (req: Request, res: Response, next: NextFunction) => {
         purchase_at: purchase_at || null,
         price: price != null ? Number(price) : null,
         owner_id: owner_id ? Number(owner_id) : null,
+        bgg_id: bgg_id ? Number(bgg_id) : null,
+        year_published: year_published ? Number(year_published) : null,
       })
       .returning()
       .all()
@@ -141,6 +143,8 @@ router.put('/:id', (req: Request, res: Response, next: NextFunction) => {
     if (body.purchase_at !== undefined) patch.purchase_at = body.purchase_at || null
     if (body.price !== undefined) patch.price = body.price != null ? Number(body.price) : null
     if (body.owner_id !== undefined) patch.owner_id = body.owner_id ? Number(body.owner_id) : null
+    if (body.bgg_id !== undefined) patch.bgg_id = body.bgg_id ? Number(body.bgg_id) : null
+    if (body.year_published !== undefined) patch.year_published = body.year_published ? Number(body.year_published) : null
 
     const [updated] = db.update(gamesTable).set(patch).where(eq(gamesTable.id, id)).returning().all()
     res.json(updated)

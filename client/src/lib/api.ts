@@ -33,6 +33,8 @@ export interface Game {
   cover_image_path: string | null
   owner_id: number | null
   owner_name: string | null
+  bgg_id: number | null
+  year_published: number | null
   created_at: string
   session_count?: number
   attachments?: GameAttachment[]
@@ -45,7 +47,18 @@ export interface Settings {
   language: 'en' | 'pt'
   default_owner_id: number | null
   theme: 'light' | 'dark' | 'system'
+  bgg_last_updated: string | null
   updated_at: string
+}
+
+export interface BggGame {
+  bgg_id: number
+  name: string
+  year_published: number | null
+}
+
+export interface BggImportResult {
+  imported: number
 }
 
 export interface GameAttachment {
@@ -188,5 +201,15 @@ export const api = {
     get: () => req<Settings>('/settings'),
     update: (data: Partial<Omit<Settings, 'id' | 'updated_at'>>) => req<Settings>('/settings', json('PUT', data)),
     reset: () => req<void>('/settings/reset', { method: 'DELETE' }),
+  },
+
+  bgg: {
+    import: (file: File) => {
+      const fd = new FormData()
+      fd.append('file', file)
+      return req<BggImportResult>('/bgg/import', { method: 'POST', body: fd })
+    },
+    delete: () => req<void>('/bgg', { method: 'DELETE' }),
+    search: (q: string) => req<BggGame[]>(`/bgg/search?q=${encodeURIComponent(q)}`),
   },
 }
