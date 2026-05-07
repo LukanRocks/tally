@@ -56,10 +56,7 @@ export default function SettingsPage() {
 
   async function set<K extends keyof FormState>(field: K, value: FormState[K]) {
     setForm((f) => ({ ...f, [field]: value }))
-    const patch =
-      field === 'default_owner_id'
-        ? { default_owner_id: value ? Number(value) : null }
-        : { [field]: value }
+    const patch = field === 'default_owner_id' ? { default_owner_id: value ? Number(value) : null } : { [field]: value }
     try {
       await updateSetting(patch as Parameters<typeof updateSetting>[0])
       toast.success('Settings saved')
@@ -124,12 +121,7 @@ export default function SettingsPage() {
 
       <div className='space-y-6'>
         <Field label='Default Owner' htmlFor='default_owner_id'>
-          <select
-            id='default_owner_id'
-            value={form.default_owner_id}
-            onChange={(e) => set('default_owner_id', e.target.value)}
-            className='input'
-          >
+          <select id='default_owner_id' value={form.default_owner_id} onChange={(e) => set('default_owner_id', e.target.value)} className='input'>
             <option value=''>— None —</option>
             {players.map((p) => (
               <option key={p.id} value={String(p.id)}>
@@ -141,36 +133,21 @@ export default function SettingsPage() {
         </Field>
 
         <Field label='Currency' htmlFor='currency'>
-          <select
-            id='currency'
-            value={form.currency}
-            onChange={(e) => set('currency', e.target.value as 'USD' | 'BRL')}
-            className='input'
-          >
+          <select id='currency' value={form.currency} onChange={(e) => set('currency', e.target.value as 'USD' | 'BRL')} className='input'>
             <option value='USD'>USD — US Dollar</option>
             <option value='BRL'>BRL — Brazilian Real</option>
           </select>
         </Field>
 
         <Field label='Language' htmlFor='language'>
-          <select
-            id='language'
-            value={form.language}
-            onChange={(e) => set('language', e.target.value as 'en' | 'pt')}
-            className='input'
-          >
+          <select id='language' value={form.language} onChange={(e) => set('language', e.target.value as 'en' | 'pt')} className='input'>
             <option value='en'>English</option>
             <option value='pt'>Português</option>
           </select>
         </Field>
 
         <Field label='Theme' htmlFor='theme'>
-          <select
-            id='theme'
-            value={form.theme}
-            onChange={(e) => set('theme', e.target.value as ThemeSetting)}
-            className='input'
-          >
+          <select id='theme' value={form.theme} onChange={(e) => set('theme', e.target.value as ThemeSetting)} className='input'>
             <option value='system'>System</option>
             <option value='light'>Light</option>
             <option value='dark'>Dark</option>
@@ -181,7 +158,7 @@ export default function SettingsPage() {
       {/* BGG Data section */}
       <div className='mt-12 border-t border-border pt-8'>
         <div className='mb-4 flex items-center gap-3'>
-          <h2 className='text-sm font-semibold text-foreground'>BGG Data</h2>
+          <h2 className='text-sm font-semibold text-foreground'>BGG Games Dataset</h2>
           <a href='https://boardgamegeek.com' target='_blank' rel='noopener noreferrer'>
             <img src='/bgg-logo.png' alt='BoardGameGeek' className='h-6' />
           </a>
@@ -195,14 +172,12 @@ export default function SettingsPage() {
           .{' '}
           <a href='https://boardgamegeek.com/data_dumps/bg_ranks' target='_blank' rel='noopener noreferrer' className='underline hover:text-foreground'>
             Download the data dump
-          </a>
-          {' '}and import it here.
+          </a>{' '}
+          and import it here.
         </p>
 
         <p className='mb-4 text-xs text-muted-foreground'>
-          {bggLastUpdated
-            ? `Last updated: ${new Date(bggLastUpdated).toLocaleString(ctxSettings?.language === 'pt' ? 'pt-BR' : 'en-US')}`
-            : 'No BGG data loaded.'}
+          {bggLastUpdated ? `Last updated: ${new Date(bggLastUpdated).toLocaleString(ctxSettings?.language === 'pt' ? 'pt-BR' : 'en-US')}` : 'No BGG data loaded.'}
         </p>
 
         <div className='flex items-center gap-2'>
@@ -223,7 +198,10 @@ export default function SettingsPage() {
 
         <div className='mt-4'>
           <button
-            onClick={() => { setShowBggDeleteConfirm(true); setBggDeleteText('') }}
+            onClick={() => {
+              setShowBggDeleteConfirm(true)
+              setBggDeleteText('')
+            }}
             className='rounded-lg border border-destructive/40 px-4 py-2 text-sm font-medium text-destructive hover:bg-destructive/10'
           >
             Delete BGG data
@@ -235,7 +213,10 @@ export default function SettingsPage() {
         <h2 className='mb-1 text-sm font-semibold text-destructive'>Danger Zone</h2>
         <p className='mb-4 text-xs text-muted-foreground'>Permanently deletes all games, sessions, players, and uploaded files. This cannot be undone.</p>
         <button
-          onClick={() => { setShowResetConfirm(true); setResetConfirmText('') }}
+          onClick={() => {
+            setShowResetConfirm(true)
+            setResetConfirmText('')
+          }}
           className='rounded-lg border border-destructive/40 px-4 py-2 text-sm font-medium text-destructive hover:bg-destructive/10'
         >
           Delete all data
@@ -246,23 +227,17 @@ export default function SettingsPage() {
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
           <div className='w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-xl'>
             <h3 className='mb-2 text-lg font-semibold text-foreground'>Delete BGG data?</h3>
-            <p className='mb-4 text-sm text-muted-foreground'>
-              All BoardGameGeek catalog data will be removed. Your library games are not affected.
-            </p>
+            <p className='mb-4 text-sm text-muted-foreground'>All BoardGameGeek catalog data will be removed. Your library games are not affected.</p>
             <p className='mb-2 text-sm font-medium text-foreground'>
               Type <span className='font-mono text-destructive'>DELETE</span> to confirm
             </p>
-            <input
-              type='text'
-              value={bggDeleteText}
-              onChange={(e) => setBggDeleteText(e.target.value)}
-              placeholder='DELETE'
-              className='input mb-6'
-              autoFocus
-            />
+            <input type='text' value={bggDeleteText} onChange={(e) => setBggDeleteText(e.target.value)} placeholder='DELETE' className='input mb-6' autoFocus />
             <div className='flex justify-end gap-3'>
               <button
-                onClick={() => { setShowBggDeleteConfirm(false); setBggDeleteText('') }}
+                onClick={() => {
+                  setShowBggDeleteConfirm(false)
+                  setBggDeleteText('')
+                }}
                 disabled={bggDeleting}
                 className='rounded-lg border border-border px-4 py-2 text-sm hover:bg-accent hover:text-accent-foreground disabled:opacity-50'
               >
@@ -288,17 +263,13 @@ export default function SettingsPage() {
             <p className='mb-2 text-sm font-medium text-foreground'>
               Type <span className='font-mono text-destructive'>DELETE</span> to confirm
             </p>
-            <input
-              type='text'
-              value={resetConfirmText}
-              onChange={(e) => setResetConfirmText(e.target.value)}
-              placeholder='DELETE'
-              className='input mb-6'
-              autoFocus
-            />
+            <input type='text' value={resetConfirmText} onChange={(e) => setResetConfirmText(e.target.value)} placeholder='DELETE' className='input mb-6' autoFocus />
             <div className='flex justify-end gap-3'>
               <button
-                onClick={() => { setShowResetConfirm(false); setResetConfirmText('') }}
+                onClick={() => {
+                  setShowResetConfirm(false)
+                  setResetConfirmText('')
+                }}
                 disabled={resetting}
                 className='rounded-lg border border-border px-4 py-2 text-sm hover:bg-accent hover:text-accent-foreground disabled:opacity-50'
               >
