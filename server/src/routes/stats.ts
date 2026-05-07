@@ -23,7 +23,7 @@ router.get('/leaderboard', (_req: Request, res: Response, next: NextFunction) =>
       .from(playersTable)
       .leftJoin(resultsTable, and(eq(resultsTable.player_id, playersTable.id), isNull(resultsTable.deleted_at)))
       .leftJoin(sessionsTable, and(eq(sessionsTable.id, resultsTable.session_id), isNull(sessionsTable.deleted_at)))
-      .where(isNull(playersTable.deleted_at))
+      .where(and(isNull(playersTable.deleted_at), eq(playersTable.player_type, 'person')))
       .groupBy(playersTable.id)
       .orderBy(
         desc(sql`COALESCE(SUM(CASE WHEN ${sessionsTable.id} IS NOT NULL THEN ${resultsTable.points_awarded} END), 0)`),
@@ -55,7 +55,7 @@ router.get('/leaderboard/game/:gameId', (req: Request, res: Response, next: Next
       .from(playersTable)
       .innerJoin(resultsTable, and(eq(resultsTable.player_id, playersTable.id), isNull(resultsTable.deleted_at)))
       .innerJoin(sessionsTable, and(eq(sessionsTable.id, resultsTable.session_id), eq(sessionsTable.game_id, gameId), isNull(sessionsTable.deleted_at)))
-      .where(isNull(playersTable.deleted_at))
+      .where(and(isNull(playersTable.deleted_at), eq(playersTable.player_type, 'person')))
       .groupBy(playersTable.id)
       .orderBy(
         desc(sql`COALESCE(SUM(${resultsTable.points_awarded}), 0)`),
@@ -141,6 +141,9 @@ router.get('/head-to-head', (req: Request, res: Response, next: NextFunction) =>
       .get()
 
     if (!player1 || !player2) return res.status(404).json({ error: 'Player not found' })
+    if (player1.player_type !== 'person' || player2.player_type !== 'person') {
+      return res.status(400).json({ error: 'Head-to-head is only available for person-type players' })
+    }
 
     const sharedSessions = db
       .select({

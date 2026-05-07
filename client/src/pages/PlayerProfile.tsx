@@ -21,6 +21,7 @@ export default function PlayerProfile() {
 
   if (loading) return <div className='p-4 text-muted-foreground md:p-8'>Loading…</div>
   if (!player) return <div className='p-4 text-muted-foreground md:p-8'>Player not found.</div>
+  if (player.player_type === 'shop') return <div className='p-4 text-muted-foreground md:p-8'>Profiles are only available for person-type players.</div>
 
   return (
     <div className='max-w-4xl p-4 md:p-8'>
