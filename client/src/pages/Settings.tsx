@@ -192,7 +192,11 @@ export default function SettingsPage() {
           <a href='https://boardgamegeek.com' target='_blank' rel='noopener noreferrer' className='underline hover:text-foreground'>
             BoardGameGeek
           </a>
-          . Download the data dump from the BGG website and import it here.
+          .{' '}
+          <a href='https://boardgamegeek.com/data_dumps/bg_ranks' target='_blank' rel='noopener noreferrer' className='underline hover:text-foreground'>
+            Download the data dump
+          </a>
+          {' '}and import it here.
         </p>
 
         <p className='mb-4 text-xs text-muted-foreground'>

@@ -2,13 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { api, BggGame, Player } from '../lib/api'
 import { useSettings } from '../contexts/SettingsContext'
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-} from '@/shadcn/components/ui/combobox'
 
 type FormData = {
   name: string
@@ -44,6 +37,7 @@ export default function GameForm() {
   const [form, setForm] = useState<FormData>(empty)
   const [players, setPlayers] = useState<Player[]>([])
   const [bggResults, setBggResults] = useState<BggGame[]>([])
+  const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -88,16 +82,14 @@ export default function GameForm() {
       try {
         const results = await api.bgg.search(value)
         setBggResults(results)
+        setHighlightedIndex(-1)
       } catch {
         // silently ignore — autocomplete failure must not block the form
       }
     }, 300)
   }
 
-  function handleBggSelect(bggId: string | null) {
-    if (!bggId) return
-    const game = bggResults.find((g) => String(g.bgg_id) === bggId)
-    if (!game) return
+  function handleBggSelect(game: BggGame) {
     setForm((f) => ({
       ...f,
       name: game.name,
@@ -105,6 +97,24 @@ export default function GameForm() {
       bgg_id: game.bgg_id,
     }))
     setBggResults([])
+    setHighlightedIndex(-1)
+  }
+
+  function handleNameKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (bggResults.length === 0) return
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      setHighlightedIndex((i) => Math.min(i + 1, bggResults.length - 1))
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      setHighlightedIndex((i) => Math.max(i - 1, 0))
+    } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+      e.preventDefault()
+      handleBggSelect(bggResults[highlightedIndex])
+    } else if (e.key === 'Escape') {
+      setBggResults([])
+      setHighlightedIndex(-1)
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -159,37 +169,44 @@ export default function GameForm() {
 
       <form onSubmit={handleSubmit} className='space-y-5'>
         <Field label='Name *' htmlFor='name'>
-          <Combobox
-            value={form.bgg_id != null ? String(form.bgg_id) : ''}
-            onValueChange={handleBggSelect}
-            inputValue={form.name}
-            onInputValueChange={handleNameChange}
-            filter={() => true}
-          >
-            <ComboboxInput
+          <div className='relative'>
+            <input
               id='name'
-              placeholder='Wingspan'
+              type='text'
+              value={form.name}
+              onChange={(e) => handleNameChange(e.target.value)}
+              onKeyDown={handleNameKeyDown}
+              onBlur={() => setTimeout(() => setBggResults([]), 150)}
               required
-              showTrigger={false}
-              showClear={false}
+              className='input w-full'
+              placeholder='Wingspan'
               autoComplete='off'
-              className='w-full'
+              data-1p-ignore
+              data-lpignore='true'
+              data-form-type='other'
             />
             {bggResults.length > 0 && (
-              <ComboboxContent>
-                <ComboboxList>
-                  {bggResults.map((g) => (
-                    <ComboboxItem key={g.bgg_id} value={String(g.bgg_id)}>
-                      {g.name}
-                      {g.year_published != null && (
-                        <span className='ml-1 text-muted-foreground'>({g.year_published})</span>
-                      )}
-                    </ComboboxItem>
-                  ))}
-                </ComboboxList>
-              </ComboboxContent>
+              <div className='absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-border bg-popover shadow-lg'>
+                {bggResults.map((g, i) => (
+                  <button
+                    key={g.bgg_id}
+                    type='button'
+                    onMouseDown={(e) => {
+                      e.preventDefault()
+                      handleBggSelect(g)
+                    }}
+                    onMouseEnter={() => setHighlightedIndex(i)}
+                    className={`flex w-full items-center px-3 py-2 text-left text-sm ${i === highlightedIndex ? 'bg-accent text-accent-foreground' : 'hover:bg-accent hover:text-accent-foreground'}`}
+                  >
+                    {g.name}
+                    {g.year_published != null && (
+                      <span className='ml-1.5 text-xs text-muted-foreground'>({g.year_published})</span>
+                    )}
+                  </button>
+                ))}
+              </div>
             )}
-          </Combobox>
+          </div>
         </Field>
 
         <Field label='Year Published' htmlFor='year_published'>
