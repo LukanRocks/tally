@@ -1,5 +1,17 @@
+import React, { useState } from 'react'
+
+function CheckboxRow({ label, ...props }: { label: string } & React.ComponentProps<typeof Checkbox>) {
+  const [checked, setChecked] = useState(!!props.defaultChecked)
+  return (
+    <label className='flex cursor-pointer items-center gap-2 text-sm'>
+      <Checkbox checked={checked} onCheckedChange={(v) => setChecked(v === true)} {...props} />
+      {label}
+    </label>
+  )
+}
 import Page from '../components/Page'
 import Badge from '../components/badge'
+import Checkbox from '../components/checkbox'
 import { useTheme, type ThemeSetting } from '../hooks/useTheme'
 import { cn } from '../lib/utils'
 
@@ -33,6 +45,17 @@ export default function DesignSystem() {
           ))}
         </div>
       </div>
+
+      {/* Checkboxes */}
+      <section className='space-y-4'>
+        <h2 className='text-lg font-semibold'>Checkbox</h2>
+        <div className='flex flex-wrap gap-6 rounded-xl border border-border bg-ds-surface-elevated px-6 py-5'>
+          <CheckboxRow label='Unchecked' />
+          <CheckboxRow label='Checked' defaultChecked />
+          <CheckboxRow label='Disabled' disabled />
+          <CheckboxRow label='Disabled checked' disabled defaultChecked />
+        </div>
+      </section>
 
       {/* Badges */}
       <section className='space-y-4'>
