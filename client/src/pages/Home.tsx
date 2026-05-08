@@ -28,6 +28,7 @@ export default () => {
   return (
     <Page loading={loading}>
       <GreetingBanner />
+
       {/* Leaderboard snippet */}
       <section>
         <div className='mb-4 flex items-center justify-between'>

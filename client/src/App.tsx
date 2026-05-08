@@ -13,6 +13,7 @@ import PlayerProfile from './pages/PlayerProfile'
 import Leaderboard from './pages/Leaderboard'
 import SettingsPage from './pages/Settings'
 import Onboarding from './pages/Onboarding'
+import DesignSystem from './pages/DesignSystem'
 
 function OnboardingGuard({ children }: { children: React.ReactNode }) {
   const { settings, isLoading } = useSettings()
@@ -53,6 +54,7 @@ export default function App() {
             <Route path='players/:id' element={<PlayerProfile />} />
             <Route path='leaderboard' element={<Leaderboard />} />
             <Route path='settings' element={<SettingsPage />} />
+            <Route path='design-system' element={<DesignSystem />} />
           </Route>
         </Routes>
         <Toaster />
