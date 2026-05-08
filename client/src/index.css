@@ -5,7 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(1 0 0);
+  /* ── Shadcn tokens ──────────────────────────────────────── */
+  --background: oklch(1 0 0); 
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -19,7 +20,7 @@
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(0.577 0.245 27.325); // ok
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -37,8 +38,32 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* ── Tally DS tokens ──────────────────────────────────────── */
+  /* Rank medals */
+  --ds-rank-gold:   oklch(0.82 0.17 87);
+  --ds-rank-silver: oklch(0.72 0.02 240);
+  --ds-rank-bronze: oklch(0.66 0.12 50);
+
+  /* Surfaces */
+  --ds-background:       oklch(0.972 0.008 85);  /* warm paper — #f7f4ec equivalent */
+  --ds-surface-elevated: oklch(1 0 0);
+  --ds-surface-sunken:   oklch(0.955 0.006 85);
+
+  /* Player status */
+  --ds-status-own:    oklch(0.85 0.18 90);
+  --ds-status-friend: oklch(0.65 0.15 250);
+  --ds-status-rented: oklch(0.72 0.18 0);
+
+  /* Feedback */
+  --ds-success: oklch(0.68 0.18 145);
+  --ds-warning: oklch(0.78 0.18 70);
+  --ds-info:    oklch(0.65 0.15 250);
+  --ds-destructive: oklch(0.577 0.245 27.325);
 }
+
 .dark {
+  /* ── Shadcn tokens ──────────────────────────────────────── */
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -70,6 +95,28 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* ── Tally DS tokens ──────────────────────────────────────── */
+  /* Rank medals — slightly desaturated for dark backgrounds */
+  --ds-rank-gold:   oklch(0.78 0.15 87);
+  --ds-rank-silver: oklch(0.65 0.02 240);
+  --ds-rank-bronze: oklch(0.60 0.10 50);
+
+  /* Surfaces */
+  --ds-background:       oklch(0.17 0.012 85);
+  --ds-surface-elevated: oklch(0.23 0.010 85);
+  --ds-surface-sunken:   oklch(0.13 0.008 85);
+
+  /* Player status */
+  --ds-status-own:    oklch(0.78 0.16 90);
+  --ds-status-friend: oklch(0.60 0.14 250);
+  --ds-status-rented: oklch(0.68 0.16 0);
+
+  /* Feedback */
+  --ds-success: oklch(0.62 0.16 145);
+  --ds-warning: oklch(0.72 0.16 70);
+  --ds-info:    oklch(0.60 0.14 250);
+  --ds-destructive: oklch(0.704 0.191 22.216);
 }
 
 @theme inline {
@@ -113,13 +160,28 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* Our own theme */
-  --color-primary: var(--primary);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-danger: var(--danger);
-  --color-info: var(--info);
-  --color-disabled: var(--disabled);
+  /* Tally DS tokens */
+  --color-ds-rank-gold:   var(--ds-rank-gold);
+  --color-ds-rank-silver: var(--ds-rank-silver);
+  --color-ds-rank-bronze: var(--ds-rank-bronze);
+
+  --color-ds-background:       var(--ds-background);
+  --color-ds-surface-elevated: var(--ds-surface-elevated);
+  --color-ds-surface-sunken:   var(--ds-surface-sunken);
+
+  --color-ds-status-own:    var(--ds-status-own);
+  --color-ds-status-friend: var(--ds-status-friend);
+  --color-ds-status-rented: var(--ds-status-rented);
+
+  --color-ds-success:     var(--ds-success);
+  --color-ds-warning:     var(--ds-warning);
+  --color-ds-info:        var(--ds-info);
+  --color-ds-destructive: var(--ds-destructive);
+
+  /* DS typography families */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-hand: 'Kalam', cursive;
 }
 
 /* Default ShadCN theme */
@@ -127,6 +189,7 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
   body {
     @apply bg-background text-foreground;
   }
@@ -135,5 +198,27 @@
 @layer components {
   .input {
     @apply w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  .hand {
+    font-family: var(--font-hand);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    rotate: -2deg;
+    color: var(--primary);
   }
 }
