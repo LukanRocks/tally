@@ -103,9 +103,9 @@
   --ds-rank-bronze: oklch(0.66 0.12 50);
 
   /* Surfaces */
-  --ds-background:       oklch(0.972 0.008 85);  /* warm paper — #f7f4ec equivalent */
-  --ds-surface-elevated: oklch(1 0 0);
-  --ds-surface-sunken:   oklch(0.955 0.006 85);
+  --ds-background:       oklch(0.955 0.006 85);
+  --ds-surface-elevated: oklch(0.972 0.008 85);  /* warm paper — #f7f4ec equivalent */
+  --ds-surface-sunken:   oklch(1 0 0);
 
   /* Player status */
   --ds-status-own:    oklch(0.85 0.18 90);
@@ -113,9 +113,9 @@
   --ds-status-rented: oklch(0.72 0.18 0);
 
   /* Feedback */
-  --ds-success: oklch(0.68 0.18 145);
-  --ds-warning: oklch(0.78 0.18 70);
-  --ds-info:    oklch(0.65 0.15 250);
+  --ds-success:     oklch(0.68 0.18 145);
+  --ds-warning:     oklch(0.78 0.18 70);
+  --ds-info:        oklch(0.65 0.15 250);
   --ds-destructive: oklch(0.577 0.245 27.325);
 
   /* Base aliases — start identical to shadcn, diverge over time */
