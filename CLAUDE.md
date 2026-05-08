@@ -38,6 +38,7 @@ Promoted components import from `../lib/utils`, not `@/shadcn/lib/utils`.
 ### Promoted components (so far)
 - `components/badge.tsx` — two-axis CVA: `variant` (default/outline/ghost) × `color` (medal/status/feedback/primary)
 - `components/checkbox.tsx`
+- `components/sonner.tsx` — Toaster wrapper; maps sonner's `--normal-*` vars to `--ds-surface-elevated`, `--ds-foreground`, `--ds-border`
 
 ## Slash commands
 - `/promote` — step-by-step checklist for graduating a shadcn component into `components/`

@@ -3,7 +3,7 @@ import './index.css'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { Toaster } from '@/shadcn/components/ui/sonner'
+import { Toaster } from './components/sonner'
 import { SettingsProvider } from './contexts/SettingsContext'
 import { useSettings } from './contexts/SettingsContext'
 
