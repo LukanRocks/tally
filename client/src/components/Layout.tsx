@@ -59,7 +59,7 @@ const MobileNav = () => {
   )
 }
 
-export default () => {
+export const Layout = () => {
   useTheme()
 
   return (

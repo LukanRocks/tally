@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Camera, Dices, Paperclip, Plus, Trash2, Pencil } from 'lucide-react'
 import { api, Game, LeaderboardEntry, Session } from '../lib/api'
-import { useSettings } from '../contexts/SettingsContext'
+import { useSettings } from '../contexts/settings-context'
 
 function formatPrice(price: number, currency: 'USD' | 'BRL' = 'USD') {
   const locale = currency === 'BRL' ? 'pt-BR' : 'en-US'

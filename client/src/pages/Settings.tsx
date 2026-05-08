@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { api, Player } from '../lib/api'
 import { ThemeSetting } from '../hooks/useTheme'
-import { useSettings } from '../contexts/SettingsContext'
+import { useSettings } from '../contexts/settings-context'
 
 type FormState = {
   currency: 'USD' | 'BRL'

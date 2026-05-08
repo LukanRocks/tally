@@ -67,7 +67,7 @@ const badgeVariants = cva(
 
 export type BadgeVariants = VariantProps<typeof badgeVariants>
 
-export default ({ className, variant, color, asChild = false, ...props }: ComponentProps<'span'> & BadgeVariants & { asChild?: boolean }) => {
+export const Badge = ({ className, variant, color, asChild = false, ...props }: ComponentProps<'span'> & BadgeVariants & { asChild?: boolean }) => {
   const Comp = asChild ? Slot.Root : 'span'
 
   return <Comp data-slot='badge' className={cn(badgeVariants({ variant, color }), className)} {...props} />

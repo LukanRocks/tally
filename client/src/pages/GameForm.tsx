@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { api, BggGame, Player } from '../lib/api'
-import { useSettings } from '../contexts/SettingsContext'
+import { useSettings } from '../contexts/settings-context'
 
 type FormData = {
   name: string
@@ -199,9 +199,7 @@ export default function GameForm() {
                     className={`flex w-full items-center px-3 py-2 text-left text-sm ${i === highlightedIndex ? 'bg-accent text-accent-foreground' : 'hover:bg-accent hover:text-accent-foreground'}`}
                   >
                     {g.name}
-                    {g.year_published != null && (
-                      <span className='ml-1.5 text-xs text-muted-foreground'>({g.year_published})</span>
-                    )}
+                    {g.year_published != null && <span className='ml-1.5 text-xs text-muted-foreground'>({g.year_published})</span>}
                   </button>
                 ))}
               </div>

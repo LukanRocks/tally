@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSettings } from '../contexts/SettingsContext'
+import { useSettings } from '../contexts/settings-context'
 
 export type ThemeSetting = 'light' | 'dark' | 'system'
 type AppliedTheme = 'light' | 'dark'

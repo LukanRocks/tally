@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dices, Plus } from 'lucide-react'
 import { api, Game, Player } from '../lib/api'
-import { useSettings } from '../contexts/SettingsContext'
+import { useSettings } from '../contexts/settings-context'
 
 export default function Library() {
   const { settings } = useSettings()
@@ -81,7 +81,9 @@ export default function Library() {
         >
           <option value=''>All owners</option>
           {players.map((p) => (
-            <option key={p.id} value={String(p.id)}>{p.name}</option>
+            <option key={p.id} value={String(p.id)}>
+              {p.name}
+            </option>
           ))}
         </select>
         <input

@@ -19,7 +19,7 @@ function useIsMobile() {
   return isMobile
 }
 
-const Toaster = ({ ...props }: ToasterProps) => {
+export const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme()
   const isMobile = useIsMobile()
 
@@ -65,5 +65,3 @@ const Toaster = ({ ...props }: ToasterProps) => {
     />
   )
 }
-
-export { Toaster }

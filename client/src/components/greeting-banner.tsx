@@ -13,7 +13,7 @@ function greeting() {
   return 'Good evening'
 }
 
-export default () => {
+export const GreetingBanner = () => {
   const [ownerName, setOwnerName] = useState<string | null>(null)
 
   useEffect(() => {

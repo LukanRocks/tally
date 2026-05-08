@@ -7,7 +7,7 @@ interface PageProps {
   className?: string
 }
 
-export default function Page({ children, loading, className }: PageProps) {
+export const Page = ({ children, loading, className }: PageProps) => {
   const [showLoader, setShowLoader] = useState(false)
 
   useEffect(() => {
