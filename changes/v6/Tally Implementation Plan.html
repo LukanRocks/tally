@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Tally — Implementation Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f7f4ec;
+    --ink:#1a1a1a;
+    --ink-soft:#3b3b3b;
+    --muted:#6f6a5d;
+    --rule:#1a1a1a;
+    --accent:#f1b400;
+    --accent-soft:#fde699;
+    --green:#2e7d4f;
+    --red:#b53a3a;
+    --blue:#3a6bb5;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,sans-serif;font-size:16px;line-height:1.55;}
+  body{
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(0,0,0,.04) 0 1px, transparent 2px),
+      radial-gradient(circle at 87% 22%, rgba(0,0,0,.03) 0 1px, transparent 2px);
+  }
+  .doc{max-width:980px;margin:0 auto;padding:48px 56px 120px;}
+  h1{font-family:'Kalam',cursive;font-size:56px;line-height:1;letter-spacing:-1px;margin:0;}
+  h1 small{font-family:'JetBrains Mono',monospace;font-weight:400;font-size:13px;color:var(--muted);display:block;margin-top:14px;letter-spacing:0;}
+  h2{font-family:'Kalam',cursive;font-size:30px;margin:48px 0 8px;display:flex;align-items:baseline;gap:14px;}
+  h2 .num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);font-weight:400;letter-spacing:1px;text-transform:uppercase;}
+  h3{font-size:18px;font-weight:700;margin:28px 0 8px;}
+  h4{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600;margin:22px 0 8px;}
+  p{color:var(--ink-soft);margin:0 0 12px;}
+  ul,ol{margin:0 0 16px;padding-left:22px;color:var(--ink-soft);}
+  li{margin-bottom:6px;}
+  code,kbd{font-family:'JetBrains Mono',monospace;font-size:13px;background:#fffaf0;border:1px solid #e6dfca;border-radius:4px;padding:1px 6px;color:var(--ink);}
+  pre{background:#1a1a1a;color:#f7f4ec;padding:18px 20px;border-radius:10px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.55;border:2px solid #1a1a1a;box-shadow:5px 5px 0 var(--accent);margin:14px 0 22px;}
+  pre .c{color:#7a7568;}
+  pre .k{color:#f1b400;}
+  pre .s{color:#9bd1a4;}
+  pre .v{color:#cfe6f7;}
+  hr.scribble{border:0;height:14px;margin:28px 0;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 14' preserveAspectRatio='none'><path d='M0 7 Q 30 1 60 7 T 120 7 T 180 7 T 240 7 T 300 7 T 360 7 T 420 7 T 480 7 T 540 7 T 600 7 T 660 7 T 720 7 T 780 7 T 840 7 T 900 7 T 960 7 T 1020 7 T 1080 7 T 1140 7 T 1200 7' stroke='%231a1a1a' stroke-width='2' fill='none' stroke-linecap='round'/></svg>") center/100% 100% no-repeat;}
+  .intro{border:2px solid var(--ink);border-radius:18px;padding:22px 28px;background:#fffaf0;box-shadow:6px 6px 0 var(--ink);transform:rotate(-.2deg);margin:24px 0 36px;}
+  .intro p{margin:0 0 8px;color:var(--ink);font-size:17px;}
+  .intro p:last-child{margin:0;}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+
+  .phase{border:2px solid var(--ink);border-radius:14px;padding:20px 24px;background:#fff;margin:14px 0;box-shadow:4px 4px 0 var(--ink);}
+  .phase .head{display:flex;align-items:center;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+  .phase .badge{background:var(--accent);border:2px solid var(--ink);border-radius:999px;padding:3px 12px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+  .phase .meta{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+  .phase h3{margin:0;font-size:20px;}
+  .checklist{list-style:none;padding:0;margin:8px 0 0;}
+  .checklist li{padding-left:28px;position:relative;margin-bottom:8px;color:var(--ink-soft);}
+  .checklist li::before{content:"";position:absolute;left:0;top:4px;width:18px;height:18px;border:2px solid var(--ink);border-radius:5px;background:#fff;}
+  .checklist li.done::before{background:var(--accent);}
+  .checklist li.done::after{content:"✓";position:absolute;left:3px;top:1px;font-weight:700;color:var(--ink);font-family:'JetBrains Mono',monospace;font-size:14px;}
+
+  table{width:100%;border-collapse:collapse;margin:8px 0 18px;font-size:14px;}
+  table th,table td{text-align:left;padding:10px 12px;border-bottom:1px dashed #c7bfa8;}
+  table th{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:600;}
+  table tr:last-child td{border-bottom:none;}
+  table code{font-size:12px;}
+
+  .callout{border-left:4px solid var(--accent);background:#fffaf0;padding:14px 18px;border-radius:0 10px 10px 0;margin:14px 0;}
+  .callout.warn{border-color:var(--red);background:#fff2f2;}
+  .callout.info{border-color:var(--blue);background:#f0f6ff;}
+  .callout p:last-child{margin:0;}
+  .callout strong{color:var(--ink);}
+
+  .file-tree{font-family:'JetBrains Mono',monospace;font-size:13px;background:#fffaf0;border:1px solid #e6dfca;border-radius:8px;padding:14px 18px;color:var(--ink-soft);white-space:pre;overflow-x:auto;}
+  .file-tree b{color:var(--ink);font-weight:600;}
+  .file-tree .add{color:var(--green);}
+
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border:1.5px solid var(--ink);border-radius:999px;font-size:12px;font-family:'JetBrains Mono',monospace;background:#fff;}
+  .pill.fill{background:var(--accent);}
+  .pill.soft{background:var(--accent-soft);}
+
+  .legend-row{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 16px;}
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <h1>Implementation plan
+    <small>// adopting brainstorm UI on top of shadcn + tailwind v4</small>
+  </h1>
+
+  <div class="intro">
+    <div class="tag">tldr</div>
+    <p><b>Layer, don't replace.</b> Your shadcn primitives (Button, Card, Input, Dialog, Sheet, etc.) stay exactly as they are. We add a thin Tally-flavoured layer on top: a few extra design tokens, a small set of <i>composed</i> components (LeaderboardRow, GameCard, SessionCard, PodiumCarousel, FAB, BottomNav), and a responsive shell.</p>
+    <p>The brainstorm proposes <i>patterns</i>, not a brand-new design system. Your tokens are already 80% of the way there — the primary colour is yellow, dark/light is wired, sidebar tokens exist. We just need a few semantic additions and a component library that uses them.</p>
+  </div>
+
+  <!-- ============== STRATEGY ============== -->
+  <h2><span class="num">01</span> strategy in three bullets</h2>
+  <hr class="scribble"/>
+  <ul>
+    <li><b>Don't fork shadcn.</b> Keep <code>ui/button.tsx</code>, <code>ui/card.tsx</code>, etc. untouched so future <code>shadcn add</code> upgrades keep working. Build new components in a sibling folder.</li>
+    <li><b>Extend tokens via CSS variables.</b> Your <code>:root</code> + <code>.dark</code> blocks already define design tokens. Add a handful of semantic ones (<code>--rank-gold</code>, <code>--rank-silver</code>, <code>--rank-bronze</code>, <code>--surface-elevated</code>, <code>--ring-strong</code>). No JS, no theme provider rewrite.</li>
+    <li><b>Restyle only via promote.</b> Don't reach into <code>shadcn/ui/*</code> and tweak it in place. If a primitive needs Tally-specific styling, <i>graduate</i> it (copy to <code>components/</code>, swap to <code>--ds-*</code> tokens, delete the shadcn import) — and only do that when (a) it's actually used in the app and (b) there's a clear, concrete reason the shadcn defaults don't fit. No speculative promotion.</li>
+  </ul>
+
+  <!-- ============== NAMESPACE ============== -->
+  <h2><span class="num">02</span> namespace strategy: <code>ds-*</code></h2>
+  <hr class="scribble"/>
+  <p>Two parallel registries, never mixed:</p>
+  <ul>
+    <li><b>shadcn tokens</b> (<code>--background</code>, <code>--primary</code>, <code>--accent</code>, …) — left exactly as the CLI ships them. Used only by files inside <code>src/shadcn/</code>.</li>
+    <li><b>DS tokens</b> (<code>--ds-background</code>, <code>--ds-rank-gold</code>, <code>--ds-status-friend</code>, …) — owned by you. Used by everything in <code>src/components/</code>.</li>
+  </ul>
+
+  <p><b>Day-one trick:</b> every <code>--ds-*</code> token starts as an alias of its shadcn counterpart. Zero visual change, full freedom to diverge later.</p>
+
+<pre><span class="c">/* :root */</span>
+<span class="c">/* mirror — start identical, diverge over time */</span>
+<span class="k">--ds-background</span>:        <span class="v">var(--background)</span>;
+<span class="k">--ds-foreground</span>:        <span class="v">var(--foreground)</span>;
+<span class="k">--ds-card</span>:              <span class="v">var(--card)</span>;
+<span class="k">--ds-muted</span>:             <span class="v">var(--muted)</span>;
+<span class="k">--ds-muted-foreground</span>:  <span class="v">var(--muted-foreground)</span>;
+<span class="k">--ds-border</span>:            <span class="v">var(--border)</span>;
+<span class="k">--ds-primary</span>:           <span class="v">var(--primary)</span>;
+<span class="k">--ds-destructive</span>:       <span class="v">var(--destructive)</span>;
+
+<span class="c">/* purely DS — no shadcn equivalent */</span>
+<span class="k">--ds-rank-gold</span>:         <span class="v">oklch(0.852 0.199 91.936)</span>;
+<span class="k">--ds-rank-silver</span>:       <span class="v">oklch(0.78 0 0)</span>;
+<span class="k">--ds-rank-bronze</span>:       <span class="v">oklch(0.62 0.13 50)</span>;
+<span class="k">--ds-surface-elevated</span>:  <span class="v">oklch(0.985 0 0)</span>;
+<span class="k">--ds-surface-sunken</span>:    <span class="v">oklch(0.96 0 0)</span>;
+<span class="k">--ds-status-own</span>:         <span class="v">var(--ds-primary)</span>;
+<span class="k">--ds-status-friend</span>:      <span class="v">oklch(0.7 0.13 230)</span>;
+<span class="k">--ds-status-rented</span>:      <span class="v">oklch(0.7 0.16 350)</span>;
+<span class="k">--ds-success</span>:            <span class="v">oklch(0.62 0.16 145)</span>;
+<span class="k">--ds-warning</span>:            <span class="v">oklch(0.78 0.17 75)</span>;
+</pre>
+
+  <p>Then expose only the <code>--ds-*</code> family through <code>@theme inline</code> with a matching prefix:</p>
+
+<pre><span class="k">--color-ds-background</span>:        <span class="v">var(--ds-background)</span>;
+<span class="k">--color-ds-rank-gold</span>:         <span class="v">var(--ds-rank-gold)</span>;
+<span class="k">--color-ds-status-friend</span>:     <span class="v">var(--ds-status-friend)</span>;
+<span class="c">/* … etc */</span>
+</pre>
+
+  <p>Now <code>bg-ds-background</code>, <code>text-ds-rank-gold</code>, <code>border-ds-border</code> all work in JSX. Anything <i>not</i> prefixed comes from shadcn — instantly readable.</p>
+
+  <h3>What stays shadcn-only (don't namespace)</h3>
+  <p>Mechanical scales aren't semantic to your product, so they don't benefit from a prefix. Keep these shared:</p>
+  <ul>
+    <li>Radius scale (<code>--radius</code>, <code>--radius-sm</code>, <code>--radius-md</code>, …)</li>
+    <li>Animation durations / easings (when you add them)</li>
+    <li>Typography ramp if/when you add one</li>
+  </ul>
+  <p>Only <b>semantic</b> tokens (colour, surface, status, rank, success/warning) get the <code>--ds-</code> prefix.</p>
+
+  <h3>Component-graduation flow</h3>
+  <ol>
+    <li>You run <code>npx shadcn add button</code>. File lands in <code>src/shadcn/ui/button.tsx</code>, drinks from <code>--primary</code>, <code>--background</code>, etc. Use as-is.</li>
+    <li>You need a Tally-flavoured Button (extra <code>fab</code> variant, custom hover). Move file → <code>src/components/button.tsx</code>.</li>
+    <li><b>While moving, swap tokens</b>: every <code>bg-primary</code> → <code>bg-ds-primary</code>, every <code>text-foreground</code> → <code>text-ds-foreground</code>. This is the discipline that makes the namespace work.</li>
+    <li>Update import paths in your app code from <code>@/shadcn/ui/button</code> → <code>@/components/ui/button</code>.</li>
+    <li>If a future <code>shadcn add dialog</code> internally imports <code>./button</code>, the CLI redownloads a fresh Button into <code>src/shadcn/ui/</code>. Your customized one is untouched.</li>
+  </ol>
+
+  <h3>Folder layout, updated</h3>
+<div class="file-tree">src/
+├── shadcn/                       <b>← vendor, drinks from --* (untouched)</b>
+│   └── ui/
+│       ├── button.tsx
+│       ├── card.tsx
+│       └── …
+├── components/                   <b>← ours, drinks from --ds-*</b>
+│   <span class="add">├── button.tsx               ← graduated shadcn primitive</span>
+│   <span class="add">├── card.tsx</span>
+│   <span class="add">├── leaderboard-row.tsx      ← composed Tally pieces</span>
+│   <span class="add">├── game-card.tsx</span>
+│   <span class="add">├── session-card.tsx</span>
+│   <span class="add">└── …</span>
+├── hooks/
+└── contexts/
+</div>
+
+  <!-- ============== TOKENS ============== -->
+  <h2><span class="num">03</span> token additions</h2>
+  <hr class="scribble"/>
+  <p>Add these to your existing <code>:root</code> and <code>.dark</code> blocks. They cover the new visual concepts the brainstorm introduces (rank medals, status badges, elevated surfaces for podium / sheets).</p>
+
+<pre><span class="c">/* :root — light */</span>
+<span class="k">--rank-gold</span>:        <span class="v">oklch(0.852 0.199 91.936)</span>;  <span class="c">/* same as --primary */</span>
+<span class="k">--rank-silver</span>:      <span class="v">oklch(0.78 0 0)</span>;
+<span class="k">--rank-bronze</span>:      <span class="v">oklch(0.62 0.13 50)</span>;
+<span class="k">--surface-elevated</span>: <span class="v">oklch(0.985 0 0)</span>;          <span class="c">/* podium card / sheet */</span>
+<span class="k">--surface-sunken</span>:   <span class="v">oklch(0.96 0 0)</span>;           <span class="c">/* nested cards */</span>
+<span class="k">--status-own</span>:        <span class="v">var(--primary)</span>;
+<span class="k">--status-friend</span>:     <span class="v">oklch(0.7 0.13 230)</span>;
+<span class="k">--status-rented</span>:     <span class="v">oklch(0.7 0.16 350)</span>;
+<span class="k">--success</span>:           <span class="v">oklch(0.62 0.16 145)</span>;
+<span class="k">--warning</span>:           <span class="v">oklch(0.78 0.17 75)</span>;
+<span class="k">--info</span>:              <span class="v">oklch(0.7 0.13 230)</span>;
+
+<span class="c">/* .dark — adjusted lightness */</span>
+<span class="k">--surface-elevated</span>: <span class="v">oklch(0.24 0 0)</span>;
+<span class="k">--surface-sunken</span>:   <span class="v">oklch(0.18 0 0)</span>;
+<span class="k">--rank-bronze</span>:      <span class="v">oklch(0.7 0.14 50)</span>;
+<span class="c">/* …same status hues, slightly brighter */</span>
+</pre>
+
+  <p>Then expose them through <code>@theme inline</code> exactly like you already do — that gives you Tailwind utilities for free:</p>
+
+<pre><span class="c">/* in your @theme inline block */</span>
+<span class="k">--color-rank-gold</span>:        <span class="v">var(--rank-gold)</span>;
+<span class="k">--color-rank-silver</span>:      <span class="v">var(--rank-silver)</span>;
+<span class="k">--color-rank-bronze</span>:      <span class="v">var(--rank-bronze)</span>;
+<span class="k">--color-surface-elevated</span>: <span class="v">var(--surface-elevated)</span>;
+<span class="k">--color-surface-sunken</span>:   <span class="v">var(--surface-sunken)</span>;
+<span class="k">--color-status-own</span>:        <span class="v">var(--status-own)</span>;
+<span class="k">--color-status-friend</span>:     <span class="v">var(--status-friend)</span>;
+<span class="k">--color-status-rented</span>:     <span class="v">var(--status-rented)</span>;
+</pre>
+
+  <p>Now <code>bg-rank-gold</code>, <code>text-status-friend</code>, <code>bg-surface-elevated</code> all work in JSX. No Tailwind config changes needed in v4.</p>
+
+  <div class="callout info">
+    <p><strong>Why semantic, not raw:</strong> calling it <code>--rank-gold</code> rather than <code>--yellow-400</code> means dark mode, accessibility tweaks, and future rebrands all have one knob to turn. Same pattern as <code>--primary</code> / <code>--destructive</code> in shadcn.</p>
+  </div>
+
+  <h3 style="margin-top:36px;">3.1 typography</h3>
+  <p>The brainstorm leans on a clear two-family split: a humanist sans for prose &amp; UI, and a mono for labels, ranks, scores, and "data" moments (uppercase chip captions like <code>PLAY TONIGHT</code>, score lines, leaderboard numerals). Kalam in the brainstorm is wireframe chrome — <em>do not</em> ship it. The app's voice is <b>Inter</b> (or Geist if you'd rather) + <b>JetBrains Mono</b>.</p>
+
+<pre><span class="c">/* fonts — load once in app/layout */</span>
+<span class="c">/* import { Inter, JetBrains_Mono } from "next/font/google" */</span>
+
+<span class="c">/* :root — same in light &amp; dark */</span>
+<span class="k">--font-sans</span>:    <span class="v">"Inter", ui-sans-serif, system-ui, sans-serif</span>;
+<span class="k">--font-mono</span>:    <span class="v">"JetBrains Mono", ui-monospace, monospace</span>;
+<span class="k">--font-display</span>: <span class="v">var(--font-sans)</span>;  <span class="c">/* display = sans, just heavier */</span>
+<span class="k">--font-hand</span>:    <span class="v">"Kalam", cursive</span>;       <span class="c">/* playful accent — sparingly */</span>
+
+<span class="c">/* type scale — tight, modular, mobile-first */</span>
+<span class="k">--text-xs</span>:   <span class="v">0.75rem</span>;   <span class="c">/* 12 — chip captions, table headers */</span>
+<span class="k">--text-sm</span>:   <span class="v">0.875rem</span>;  <span class="c">/* 14 — secondary copy, meta */</span>
+<span class="k">--text-base</span>: <span class="v">1rem</span>;      <span class="c">/* 16 — body, list rows */</span>
+<span class="k">--text-lg</span>:   <span class="v">1.125rem</span>;  <span class="c">/* 18 — card titles */</span>
+<span class="k">--text-xl</span>:   <span class="v">1.375rem</span>;  <span class="c">/* 22 — section heads */</span>
+<span class="k">--text-2xl</span>:  <span class="v">1.75rem</span>;   <span class="c">/* 28 — page titles */</span>
+<span class="k">--text-3xl</span>:  <span class="v">2.25rem</span>;   <span class="c">/* 36 — hero scores, podium numerals */</span>
+
+<span class="c">/* expose to Tailwind */</span>
+@theme inline {
+  <span class="k">--font-sans</span>:    <span class="v">var(--font-sans)</span>;
+  <span class="k">--font-mono</span>:    <span class="v">var(--font-mono)</span>;
+  <span class="k">--font-display</span>: <span class="v">var(--font-display)</span>;
+  <span class="k">--font-hand</span>:    <span class="v">var(--font-hand)</span>;
+}
+</pre>
+
+  <h4>roles &amp; usage</h4>
+  <table>
+    <thead><tr><th>Role</th><th>Family</th><th>Size / weight</th><th>Where it shows up</th></tr></thead>
+    <tbody>
+      <tr><td>Page title</td><td>sans</td><td>2xl / 700</td><td><code>Players</code>, <code>Settings</code> headings</td></tr>
+      <tr><td>Section head</td><td>sans</td><td>xl / 600</td><td><code>Most Played Games</code>, <code>Head-to-Head</code></td></tr>
+      <tr><td>Card title</td><td>sans</td><td>lg / 600</td><td>Game-card name, player name on row</td></tr>
+      <tr><td>Body</td><td>sans</td><td>base / 400</td><td>Descriptions, settings copy, table cells</td></tr>
+      <tr><td>Meta / muted</td><td>sans</td><td>sm / 400, <code>text-muted-foreground</code></td><td><code>2 pts · 2 sessions</code>, timestamps</td></tr>
+      <tr><td><b>Eyebrow / label</b></td><td><b>mono</b></td><td>xs / 600, uppercase, <code>tracking-[0.12em]</code></td><td>Table headers (<code>POINTS · WINS · WIN RATE</code>), chip captions (<code>PLAY TONIGHT</code>, <code>WHO</code>, <code>TIME</code>)</td></tr>
+      <tr><td><b>Tabular numerals</b></td><td><b>mono</b></td><td>varies, <code>tabular-nums</code></td><td>Scores, ranks (<code>2 — 1</code>), points columns, podium numbers</td></tr>
+      <tr><td>Display numeral</td><td>mono, 700</td><td>3xl</td><td>Big podium numbers, hero stats on player profile</td></tr>
+      <tr><td><b>Hand accent</b></td><td><b>hand (Kalam)</b></td><td>lg–2xl / 700</td><td>Sparingly: empty-state encouragement (<i>"add your first session →"</i>), the celebratory "🥇" caption on the podium, achievement toasts (<i>"3 in a row!"</i>), section eyebrows on Player profile (<i>"reigning champion"</i>). One or two per screen, max.</td></tr>
+    </tbody>
+  </table>
+
+  <p>Two tiny utility classes earn their keep. Add them once in <code>globals.css</code>:</p>
+
+<pre><span class="c">/* eyebrow label — mono, uppercase, spaced */</span>
+<span class="k">.eyebrow</span> { font: 600 var(--text-xs)/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-foreground); }
+
+<span class="c">/* numeric — always tabular, mono optional via --num-mono */</span>
+<span class="k">.num</span>     { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+<span class="k">.num-mono</span>{ font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+
+<span class="c">/* hand accent — playful, slightly tilted, warm tone */</span>
+<span class="k">.hand</span>    { font-family: var(--font-hand); font-weight: 700; transform: rotate(-1.5deg); display: inline-block; color: var(--primary); }
+</pre>
+
+  <div class="callout info">
+    <p><strong>Why mono for labels &amp; numbers:</strong> the brainstorm's "data feel" comes almost entirely from uppercase mono captions and tabular numerals — they signal <em>this is information, not prose</em>, and they keep columns aligned without manual width hacks. Using mono <em>everywhere</em> would feel like a terminal; using it only on labels + numerals gives you the analog-scoreboard vibe without the cosplay.</p>
+  </div>
+
+  <p><b>Don't:</b> use Kalam for body copy, table cells, or anywhere it'd interrupt a reading rhythm; mix more than these three families; lean on it as personality (it's seasoning, not the dish); set sizes outside the scale.</p>
+
+  <!-- ============== FILE STRUCTURE ============== -->
+  <h2><span class="num">04</span> file structure</h2>
+  <hr class="scribble"/>
+  <p>Everything new lives flat in <code>src/components/</code>, alongside the hooks and contexts you already have. <code>src/shadcn/</code> stays untouched as the vendor folder.</p>
+
+<div class="file-tree">src/
+├── shadcn/                    <b>← vendor, untouched</b>
+│   └── ui/
+│       ├── button.tsx
+│       ├── card.tsx
+│       └── …
+├── components/                <b>← ours, drinks from --ds-*</b>
+│   <span class="add">├── button.tsx           ← graduated shadcn primitives</span>
+│   <span class="add">├── card.tsx</span>
+│   <span class="add">├── avatar-rank.tsx      ← Tally components</span>
+│   <span class="add">├── status-badge.tsx</span>
+│   <span class="add">├── stat-pill.tsx</span>
+│   <span class="add">├── leaderboard-row.tsx</span>
+│   <span class="add">├── podium.tsx</span>
+│   <span class="add">├── game-card.tsx</span>
+│   <span class="add">├── session-card.tsx</span>
+│   <span class="add">├── fab.tsx</span>
+│   <span class="add">└── bottom-nav.tsx</span>
+├── hooks/
+├── contexts/
+└── styles/
+    └── globals.css            <b>← tokens live here</b>
+</div>
+
+  <!-- ============== SHADCN GUARDRAILS ============== -->
+  <h2><span class="num">05</span> guardrails (so shadcn stays clean)</h2>
+  <hr class="scribble"/>
+  <ul>
+    <li><b>Never edit files in <code>components/ui/</code>.</b> If you need a variant of <code>Button</code>, add it via <code>buttonVariants()</code> extension in a sibling file, not by mutating the source.</li>
+    <li><b>One token registry.</b> If you find yourself writing a hex inline, stop and add a token instead. The brainstorm explicitly avoids hex sprawl.</li>
+    <li><b>Don't add a second color framework.</b> No <code>tailwind.config.js</code> color extensions in v4 — go through <code>@theme inline</code> only.</li>
+    <li>
+</li>
+    <li><b>Mobile-first className order.</b> Default = phone, <code>md:</code> = desktop. Matches the brainstorm direction (mobile is the real venue).</li>
+  </ul>
+
+  <div class="callout warn">
+    <p><strong>Watch out:</strong> your current <code>--accent</code> in dark mode is <code>oklch(0.269 0 0)</code> — a near-black grey, not yellow. shadcn uses <code>--accent</code> as a hover/highlight surface, distinct from <code>--primary</code>. Don't repurpose it for the brand yellow or you'll break every shadcn hover state. Use <code>--primary</code> for brand accents.</p>
+  </div>
+
+  <!-- ============== DARK/LIGHT ============== -->
+  <h2><span class="num">06</span> dark &amp; light mode</h2>
+  <hr class="scribble"/>
+  <p>You already have <code>.dark</code> wired with full token pairs and a Theme picker in Settings (System / Light / Dark). Treat that as the contract — every new pattern below has to look right in both. Most of the work is making sure each <i>new</i> token, ring, and shadow is defined in both blocks.</p>
+
+  <h3>Switching mechanism (keep what you have)</h3>
+  <ul>
+    <li>Toggle <code>document.documentElement.classList.toggle('dark', isDark)</code>. No theme provider, no React context for the value itself.</li>
+    <li><b>System mode</b> = listen to <code>matchMedia('(prefers-color-scheme: dark)')</code> and apply on change. Persist the user's explicit pick (light / dark / system) in <code>localStorage</code>.</li>
+    <li>Apply the class <b>before</b> first paint (small inline script in <code>&lt;head&gt;</code>) to avoid a flash. shadcn docs cover the snippet.</li>
+  </ul>
+
+  <h3>Token pairing — every new token defined in both modes</h3>
+  <p>The rule: if a token only appears in one block, it's a bug. Use this as a quick checklist:</p>
+  <table>
+    <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>--rank-gold</code></td><td><code>oklch(.852 .199 91.9)</code></td><td><code>oklch(.795 .184 86)</code></td><td>matches your existing <code>--primary</code> pair</td></tr>
+      <tr><td><code>--rank-silver</code></td><td><code>oklch(.78 0 0)</code></td><td><code>oklch(.7 0 0)</code></td><td>greys read differently on dark</td></tr>
+      <tr><td><code>--rank-bronze</code></td><td><code>oklch(.62 .13 50)</code></td><td><code>oklch(.7 .14 50)</code></td><td>bump lightness in dark</td></tr>
+      <tr><td><code>--surface-elevated</code></td><td><code>oklch(.985 0 0)</code></td><td><code>oklch(.24 0 0)</code></td><td>card-on-card feel</td></tr>
+      <tr><td><code>--surface-sunken</code></td><td><code>oklch(.96 0 0)</code></td><td><code>oklch(.18 0 0)</code></td><td>nested / inset</td></tr>
+      <tr><td><code>--status-own</code></td><td><code>var(--primary)</code></td><td><code>var(--primary)</code></td><td>same alias both modes</td></tr>
+      <tr><td><code>--status-friend</code></td><td><code>oklch(.7 .13 230)</code></td><td><code>oklch(.78 .13 230)</code></td><td>blue, brighter dark</td></tr>
+      <tr><td><code>--status-rented</code></td><td><code>oklch(.7 .16 350)</code></td><td><code>oklch(.78 .16 350)</code></td><td>pink, brighter dark</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout info">
+    <p><strong>Lightness rule of thumb:</strong> in light mode foreground swatches sit around L=0.5–0.7. In dark mode the <i>same hue</i> wants L=0.7–0.85 to keep contrast on a dark surface. Hue + chroma stay constant; only L moves. This is what shadcn's pairs already do.</p>
+  </div>
+
+  <hr class="scribble"/>
+  <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);text-align:right;">// next: open <code>Tally Brainstorm.html</code> for the visual targets each phase is building toward.</p>
+
+</div>
+</body>
+</html>
