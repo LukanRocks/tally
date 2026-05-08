@@ -12,9 +12,7 @@ export function useTheme() {
   const { settings, updateSetting } = useSettings()
   const setting: ThemeSetting = settings?.theme ?? 'system'
 
-  const [applied, setApplied] = useState<AppliedTheme>(
-    setting === 'system' ? getSystemTheme() : setting
-  )
+  const [applied, setApplied] = useState<AppliedTheme>(setting === 'system' ? getSystemTheme() : setting)
 
   // Sync resolved theme whenever the setting changes
   useEffect(() => {
@@ -33,9 +31,12 @@ export function useTheme() {
   // Track OS preference changes when in system mode
   useEffect(() => {
     if (setting !== 'system') return
+
     const mq = window.matchMedia('(prefers-color-scheme: dark)')
     const handler = (e: MediaQueryListEvent) => setApplied(e.matches ? 'dark' : 'light')
+
     mq.addEventListener('change', handler)
+
     return () => mq.removeEventListener('change', handler)
   }, [setting])
 

@@ -25,18 +25,21 @@ export function runMigrations(): void {
     )
   `)
 
-  const applied = new Set<string>((sqlite.prepare('SELECT name FROM _migrations').all() as { name: string }[]).map((r) => r.name))
+  const applied = new Set<string>((sqlite.prepare('SELECT name FROM _migrations').all() as { name: string }[]).map((row) => row.name))
 
   const migrationsDir = join(__dirname, 'migrations')
+
   const files = readdirSync(migrationsDir)
-    .filter((f) => f.endsWith('.sql'))
+    .filter((file) => file.endsWith('.sql'))
     .sort()
 
   for (const file of files) {
     if (!applied.has(file)) {
       const sql = readFileSync(join(migrationsDir, file), 'utf-8')
+
       sqlite.exec(sql)
       sqlite.prepare('INSERT INTO _migrations (name) VALUES (?)').run(file)
+
       console.log(`Applied migration: ${file}`)
     }
   }
