@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dices } from 'lucide-react'
 import { api, Game, LeaderboardEntry, MostPlayedGame } from '../lib/api'
+import Page from '../components/Page'
 
-export default function Dashboard() {
+export default () => {
   const [recentGames, setRecentGames] = useState<Game[]>([])
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
   const [mostPlayed, setMostPlayed] = useState<MostPlayedGame[]>([])
@@ -22,10 +23,8 @@ export default function Dashboard() {
       .catch(() => setLoading(false))
   }, [])
 
-  if (loading) return <div className='p-4 text-muted-foreground md:p-8'>Loading…</div>
-
   return (
-    <div className='mx-auto max-w-5xl space-y-10 p-4 md:p-8'>
+    <Page loading={loading}>
       {/* Leaderboard snippet */}
       <section>
         <div className='mb-4 flex items-center justify-between'>
@@ -132,7 +131,7 @@ export default function Dashboard() {
           </div>
         )}
       </section>
-    </div>
+    </Page>
   )
 }
 

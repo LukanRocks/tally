@@ -2,11 +2,15 @@ const BASE = '/api/v1'
 
 async function req<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${url}`, options)
+
   if (!res.ok) {
     const body = await res.json().catch(() => ({ error: res.statusText }))
+
     throw new Error(body.error ?? 'Request failed')
   }
+
   if (res.status === 204) return undefined as T
+
   return res.json()
 }
 
@@ -170,10 +174,8 @@ export const api = {
   players: {
     list: () => req<Player[]>('/players'),
     get: (id: number) => req<Player>(`/players/${id}`),
-    create: (name: string, playerType?: 'person' | 'shop') =>
-      req<Player>('/players', json('POST', { name, player_type: playerType })),
-    update: (id: number, name: string, playerType?: 'person' | 'shop') =>
-      req<Player>(`/players/${id}`, json('PUT', { name, player_type: playerType })),
+    create: (name: string, playerType?: 'person' | 'shop') => req<Player>('/players', json('POST', { name, player_type: playerType })),
+    update: (id: number, name: string, playerType?: 'person' | 'shop') => req<Player>(`/players/${id}`, json('PUT', { name, player_type: playerType })),
     delete: (id: number) => req<void>(`/players/${id}`, { method: 'DELETE' }),
     uploadAvatar: (id: number, file: File) => {
       const fd = new FormData()

@@ -16,6 +16,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
   async function fetchSettings() {
     const s = await api.settings.get()
+
     setSettings(s)
     setIsLoading(false)
   }
@@ -26,6 +27,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
   async function updateSetting(patch: Partial<Omit<Settings, 'id' | 'updated_at'>>) {
     const updated = await api.settings.update(patch)
+
     setSettings(updated)
   }
 
@@ -33,15 +35,13 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     await fetchSettings()
   }
 
-  return (
-    <SettingsContext.Provider value={{ settings, updateSetting, refreshSettings, isLoading }}>
-      {children}
-    </SettingsContext.Provider>
-  )
+  return <SettingsContext.Provider value={{ settings, updateSetting, refreshSettings, isLoading }}>{children}</SettingsContext.Provider>
 }
 
 export function useSettings() {
   const ctx = useContext(SettingsContext)
+
   if (!ctx) throw new Error('useSettings must be used within SettingsProvider')
+
   return ctx
 }
