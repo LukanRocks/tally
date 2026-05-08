@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { Home, Library, Settings, Swords, Trophy, Users } from 'lucide-react'
+import { Home, Library, Settings, Trophy, Users } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
 import { cn } from '../lib/utils'
 
@@ -21,8 +21,14 @@ const DesktopNav = () => {
   return (
     <aside className='hidden w-56 shrink-0 border-r border-border bg-ds-surface-elevated text-sidebar-foreground md:flex md:flex-col'>
       <NavLink to={navItems[0].to} className='flex items-center gap-2 border-b border-border px-6 py-5 transition-colors hover:bg-sidebar-accent'>
-        <Swords size={20} className='text-primary' />
-        <span className='text-xl font-bold tracking-tight text-primary'>Tally</span>
+        <svg width='28' height='28' viewBox='0 0 64 64' className='text-foreground dark:text-primary' aria-hidden='true'>
+          <rect x='13' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
+          <rect x='22' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
+          <rect x='31' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
+          <rect x='40' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
+          <path d='M9 49 L52 15' stroke='currentColor' strokeWidth='6' strokeLinecap='round' />
+        </svg>
+        <span className='text-xl font-bold tracking-tight text-foreground dark:text-primary'>Tally</span>
       </NavLink>
 
       <nav className='flex-1 space-y-1 px-3 py-4'>
