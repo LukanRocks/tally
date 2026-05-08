@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTimer, TimerState } from '../hooks/useTimer'
 import { Button } from '@/shadcn/components/ui/button'
 
@@ -21,6 +21,13 @@ interface TimerDisplayProps {
 function TimerDisplay({ remaining, pct, state, resetting }: TimerDisplayProps) {
   const colorClass = state === 'expired' ? 'bg-red-500' : bgColor(pct)
   const fillHeight = state === 'expired' ? '100%' : `${(1 - pct) * 100}%`
+  const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    if (state !== 'expired') { setVisible(true); return }
+    const id = setInterval(() => setVisible(v => !v), 500)
+    return () => clearInterval(id)
+  }, [state])
 
   return (
     <div className='relative flex-1 w-full'>
@@ -34,7 +41,10 @@ function TimerDisplay({ remaining, pct, state, resetting }: TimerDisplayProps) {
         }}
       />
       <div className='relative z-10 flex h-full items-center justify-center'>
-        <span className='text-[18vw] font-bold tabular-nums text-white drop-shadow-lg select-none'>
+        <span
+          className='text-[18vw] font-bold tabular-nums text-white drop-shadow-lg select-none transition-opacity duration-100'
+          style={{ opacity: visible ? 1 : 0 }}
+        >
           {fmt(remaining)}
         </span>
       </div>
