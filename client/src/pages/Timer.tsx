@@ -33,7 +33,7 @@ function TimerDisplay({ remaining, pct, state, resetting }: TimerDisplayProps) {
   }, [state])
 
   return (
-    <div className='relative w-full flex-1'>
+    <div className='relative w-full h-full'>
       <div
         className={`absolute top-0 left-0 w-full ${colorClass}`}
         style={{
@@ -42,7 +42,7 @@ function TimerDisplay({ remaining, pct, state, resetting }: TimerDisplayProps) {
         }}
       />
       <div className='relative z-10 flex h-full items-center justify-center'>
-        <span className='text-[18vw] font-bold text-white tabular-nums drop-shadow-lg transition-opacity duration-100 select-none' style={{ opacity: visible ? 1 : 0 }}>
+        <span className='text-[18vw] font-bold text-foreground tabular-nums drop-shadow-lg transition-opacity duration-100 select-none' style={{ opacity: visible ? 1 : 0 }}>
           {fmt(remaining)}
         </span>
       </div>
@@ -185,8 +185,10 @@ export default function TimerPage() {
   }
 
   return (
-    <div className='flex h-[calc(100vh-6rem)] flex-col md:h-screen'>
-      <TimerDisplay remaining={timer.remaining} pct={timer.pct} state={timer.state} resetting={resetting} />
+    <div className='flex h-[calc(100vh-6rem)] flex-col gap-4 p-4 md:h-screen'>
+      <div className='flex-1 overflow-hidden rounded-2xl'>
+        <TimerDisplay remaining={timer.remaining} pct={timer.pct} state={timer.state} resetting={resetting} />
+      </div>
       <TimerControls state={timer.state} onStop={timer.stop} onRestart={handleRestart} onPauseResume={handlePauseResume} onAdd={timer.addSeconds} />
     </div>
   )
