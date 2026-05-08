@@ -9,7 +9,7 @@ function CheckboxRow({ label, ...props }: { label: string } & React.ComponentPro
     </label>
   )
 }
-import Page from '../components/Page'
+import Page from '../components/page'
 import Badge from '../components/badge'
 import Checkbox from '../components/checkbox'
 import { useTheme, type ThemeSetting } from '../hooks/useTheme'
@@ -35,10 +35,7 @@ export default function DesignSystem() {
             <button
               key={t}
               onClick={() => set(t)}
-              className={cn(
-                'eyebrow px-3 py-1.5 transition-colors',
-                t === setting ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted',
-              )}
+              className={cn('eyebrow px-3 py-1.5 transition-colors', t === setting ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:bg-muted')}
             >
               {t}
             </button>

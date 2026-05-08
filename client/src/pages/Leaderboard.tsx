@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api, HeadToHead, LeaderboardEntry, MostPlayedGame, Player } from '../lib/api'
 import { useSettings } from '../contexts/SettingsContext'
-import Podium from '../components/Podium'
+import Podium from '../components/podium'
 
 export default function Leaderboard() {
   const { settings } = useSettings()

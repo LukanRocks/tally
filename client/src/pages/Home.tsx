@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom'
 import { Dices } from 'lucide-react'
 import { api, Game, LeaderboardEntry, MostPlayedGame } from '../lib/api'
 import { cn } from '../lib/utils'
-import Page from '../components/Page'
-import GreetingBanner from '../components/GreetingBanner'
+import Page from '../components/page'
+import GreetingBanner from '../components/greeting-banner'
 
 export default () => {
   const [recentGames, setRecentGames] = useState<Game[]>([])
@@ -54,7 +54,11 @@ export default () => {
                 <tbody className='divide-y divide-border'>
                   {leaderboard.map((e, i) => (
                     <tr key={e.player_id} className='hover:bg-muted/50'>
-                      <td className={cn('num px-4 py-3', i === 0 ? 'text-ds-rank-gold' : i === 1 ? 'text-ds-rank-silver' : i === 2 ? 'text-ds-rank-bronze' : 'text-muted-foreground')}>{i + 1}</td>
+                      <td
+                        className={cn('num px-4 py-3', i === 0 ? 'text-ds-rank-gold' : i === 1 ? 'text-ds-rank-silver' : i === 2 ? 'text-ds-rank-bronze' : 'text-muted-foreground')}
+                      >
+                        {i + 1}
+                      </td>
                       <td className='px-4 py-3 font-medium'>
                         <Link to={`/players/${e.player_id}`} className='hover:text-primary'>
                           {e.player_name}
@@ -81,7 +85,9 @@ export default () => {
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
               {mostPlayed.map((g) => (
                 <Link key={g.id} to={`/library/${g.id}`} className='overflow-hidden rounded-xl border border-border bg-ds-surface-elevated transition-shadow hover:shadow-md'>
-                  <div className='aspect-3/4 bg-ds-surface-sunken'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
+                  <div className='aspect-3/4 bg-ds-surface-sunken'>
+                    {g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}
+                  </div>
                   <div className='p-3'>
                     <p className='truncate text-sm font-medium'>{g.name}</p>
                     <p className='num mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
@@ -100,7 +106,9 @@ export default () => {
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
               {leastPlayed.map((g) => (
                 <Link key={g.id} to={`/library/${g.id}`} className='overflow-hidden rounded-xl border border-border bg-ds-surface-elevated transition-shadow hover:shadow-md'>
-                  <div className='aspect-3/4 bg-ds-surface-sunken'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
+                  <div className='aspect-3/4 bg-ds-surface-sunken'>
+                    {g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}
+                  </div>
                   <div className='p-3'>
                     <p className='truncate text-sm font-medium'>{g.name}</p>
                     <p className='num mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
