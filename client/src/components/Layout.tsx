@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { Home, Library, Settings, Swords, Trophy, Users } from 'lucide-react'
+import { House, Library, Settings, Swords, Trophy, Users, Wrench } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
 import { cn } from '../lib/utils'
 
@@ -7,7 +7,8 @@ const navItems = [
   { to: '/home', label: 'Home', Icon: Home },
   { to: '/leaderboard', label: 'Leaderboard', Icon: Trophy },
   { to: '/library', label: 'Library', Icon: Library },
-  { to: '/players', label: 'Players', Icon: Users },
+  { to: '/players',  label: 'Players',  Icon: Users },
+  { to: '/tools',    label: 'Tools',    Icon: Wrench },
   { to: '/settings', label: 'Settings', Icon: Settings },
 ]
 

@@ -13,6 +13,8 @@ import PlayerProfile from './pages/PlayerProfile'
 import Leaderboard from './pages/Leaderboard'
 import SettingsPage from './pages/Settings'
 import Onboarding from './pages/Onboarding'
+import ToolsPage from './pages/Tools'
+import TimerPage from './pages/Timer'
 
 function OnboardingGuard({ children }: { children: React.ReactNode }) {
   const { settings, isLoading } = useSettings()
@@ -52,6 +54,8 @@ export default function App() {
             <Route path='players' element={<Players />} />
             <Route path='players/:id' element={<PlayerProfile />} />
             <Route path='leaderboard' element={<Leaderboard />} />
+            <Route path='tools' element={<ToolsPage />} />
+            <Route path='tools/timer' element={<TimerPage />} />
             <Route path='settings' element={<SettingsPage />} />
           </Route>
         </Routes>
