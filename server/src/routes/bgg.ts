@@ -19,23 +19,28 @@ router.post('/import', csvUpload.single('file'), (req: Request, res: Response, n
     })
 
     const valid: { bgg_id: number; name: string; year_published: number | null }[] = []
+
     for (const row of records) {
       const id = parseInt(row['id'] ?? row['objectid'] ?? '', 10)
       const name = (row['name'] ?? '').trim()
+
       if (!name || isNaN(id)) continue
+
       const year = parseInt(row['yearpublished'] ?? '', 10)
+
       valid.push({ bgg_id: id, name, year_published: isNaN(year) ? null : year })
     }
 
     const importFn = sqlite.transaction(() => {
       sqlite.prepare('DELETE FROM bgg_games').run()
+
       const stmt = sqlite.prepare('INSERT INTO bgg_games (bgg_id, name, year_published) VALUES (?, ?, ?)')
-      for (const g of valid) {
-        stmt.run(g.bgg_id, g.name, g.year_published)
+
+      for (const game of valid) {
+        stmt.run(game.bgg_id, game.name, game.year_published)
       }
-      sqlite
-        .prepare('UPDATE settings SET bgg_last_updated = ? WHERE id = 1')
-        .run(new Date().toISOString())
+
+      sqlite.prepare('UPDATE settings SET bgg_last_updated = ? WHERE id = 1').run(new Date().toISOString())
     })
 
     importFn()
@@ -53,7 +58,9 @@ router.delete('/', (_req: Request, res: Response, next: NextFunction) => {
       sqlite.prepare('DELETE FROM bgg_games').run()
       sqlite.prepare('UPDATE settings SET bgg_last_updated = NULL WHERE id = 1').run()
     })
+
     deleteFn()
+
     res.status(204).send()
   } catch (err) {
     next(err)
@@ -63,8 +70,9 @@ router.delete('/', (_req: Request, res: Response, next: NextFunction) => {
 // GET /api/v1/bgg/search?q=
 router.get('/search', (req: Request, res: Response, next: NextFunction) => {
   try {
-    const q = String(req.query.q ?? '').trim()
-    if (q.length < 2) return res.json([])
+    const query = String(req.query.q ?? '').trim()
+
+    if (query.length < 2) return res.json([])
 
     const rows = db
       .select({
@@ -73,7 +81,7 @@ router.get('/search', (req: Request, res: Response, next: NextFunction) => {
         year_published: bggTable.year_published,
       })
       .from(bggTable)
-      .where(like(bggTable.name, `%${q}%`))
+      .where(like(bggTable.name, `%${query}%`))
       .limit(10)
       .all()
 
