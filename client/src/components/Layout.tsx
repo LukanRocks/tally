@@ -1,10 +1,10 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { Library, Settings, Swords, Trophy, Users } from 'lucide-react'
+import { Home, Library, Settings, Swords, Trophy, Users } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
 import { cn } from '../lib/utils'
 
 const navItems = [
-  { to: '/home', label: 'Home', Icon: Trophy },
+  { to: '/home', label: 'Home', Icon: Home },
   { to: '/leaderboard', label: 'Leaderboard', Icon: Trophy },
   { to: '/library', label: 'Library', Icon: Library },
   { to: '/players', label: 'Players', Icon: Users },
