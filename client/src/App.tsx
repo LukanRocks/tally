@@ -15,6 +15,7 @@ import SettingsPage from './pages/Settings'
 import Onboarding from './pages/Onboarding'
 import ToolsPage from './pages/Tools'
 import TimerPage from './pages/Timer'
+import FirstPlayerPage from './pages/FirstPlayer'
 
 function OnboardingGuard({ children }: { children: React.ReactNode }) {
   const { settings, isLoading } = useSettings()
@@ -56,6 +57,7 @@ export default function App() {
             <Route path='leaderboard' element={<Leaderboard />} />
             <Route path='tools' element={<ToolsPage />} />
             <Route path='tools/timer' element={<TimerPage />} />
+            <Route path='tools/first-player' element={<FirstPlayerPage />} />
             <Route path='settings' element={<SettingsPage />} />
           </Route>
         </Routes>
