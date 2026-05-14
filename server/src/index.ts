@@ -3,6 +3,7 @@ import path from 'path'
 import { runMigrations, DATA_DIR } from './db'
 import { errorHandler } from './middleware/errorHandler'
 import gamesRouter from './routes/games'
+import healthRouter from './routes/health'
 import playersRouter from './routes/players'
 import sessionsRouter from './routes/sessions'
 import statsRouter from './routes/stats'
@@ -18,6 +19,9 @@ app.use(express.json())
 app.use('/files/covers', express.static(path.join(DATA_DIR, 'covers')))
 app.use('/files/attachments', express.static(path.join(DATA_DIR, 'attachments')))
 app.use('/files/avatars', express.static(path.join(DATA_DIR, 'avatars')))
+
+// Health check (unversioned — used by mobile for connectivity probe)
+app.use('/api/health', healthRouter)
 
 // API routes
 app.use('/api/v1/games', gamesRouter)
