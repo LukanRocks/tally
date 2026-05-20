@@ -71,8 +71,7 @@
 
   /* Accent Brand Color */
   --yellow-primary:   oklch(0.852 0.1990 91.936);
-  --yellow-secondary: oklch(0.927 0.0993 93.400);
-  --yellow-tertiary:  oklch(0.710 0.1392 86.000);
+  --yellow-secondary: oklch(0.710 0.1392 86.000);
 
   /* Player/Team identity (10 generated colors given most games are up to 9 players) */
   --player-a: oklch(0.725 0.1131   6.800); /* pink   */
@@ -131,7 +130,6 @@
   /* Accent Brand Color */
   --yellow-primary:   oklch(0.842 0.1515 87.400);
   --yellow-secondary: oklch(0.408 0.0694 86.900);
-  --yellow-tertiary:  oklch(0.892 0.1405 90.200);
 
   /* Player/Team identity (10 generated colors given most games are up to 9 players) */
   --player-a: oklch(60.9% 0.1404   8.500); /* pink   */
@@ -178,7 +176,7 @@
   /* Shadcn backward compatibility */
   --color-primary: var(--yellow-primary);
   --color-sidebar-primary: var(--yellow-secondary);
-  --color-primary-foreground: var(--yellow-tertiary);
+  --color-primary-foreground: var(--color-yellow-secondary);
   
   --color-chart-1: var(--player-a);
   --color-chart-2: var(--player-b);
@@ -220,7 +218,6 @@
 
   --color-yellow-primary:   var(--yellow-primary);
   --color-yellow-secondary: var(--yellow-secondary);
-  --color-yellow-tertiary:  var(--yellow-tertiary);
 
   --color-player-a: var(--player-a);
   --color-player-b: var(--player-b);
@@ -274,7 +271,7 @@
     @apply border-paper-muted outline-ring/50;
   }
   
-  /* todo: move from shadcn defaults to ours */
+  /* todo: move from shadcn defaults to */
   body {
     @apply bg-background text-foreground;
   }
