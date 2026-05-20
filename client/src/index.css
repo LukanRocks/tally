@@ -114,12 +114,6 @@
   --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
   --shadow-stamp: 4px 4px 0 var(--ink-primary);
   
-  /* Motion */
-  --ease: cubic-bezier(.2, .7, .2, 1);
-  --dur-fast: 120ms;
-  --dur:      180ms;
-  --dur-slow: 280ms;
-  
   /* Others */
   --focus-ring: rgba(245, 196, 65, 0.45);
   --radius: 0.625rem;
@@ -267,6 +261,12 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-stamp: var(--shadow-stamp);
 }
 
 @layer base {
