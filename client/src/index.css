@@ -1,4 +1,7 @@
-/* ── Local fonts ────────────────────────────────────────────── */
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
 @font-face {
   font-family: 'Inter';
   font-style: normal;
@@ -55,182 +58,208 @@
   src: url('/fonts/Kalam/Kalam-Bold.ttf') format('truetype');
 }
 
-@import 'tailwindcss';
-@import 'tw-animate-css';
-@import 'shadcn/tailwind.css';
-
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* ── Shadcn tokens ──────────────────────────────────────── */
-  --background: oklch(1 0 0); 
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.852 0.199 91.936);
-  --primary-foreground: oklch(0.421 0.095 57.708);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.681 0.162 75.834);
-  --sidebar-primary-foreground: oklch(0.987 0.026 102.212);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Surfaces: Paper / Ink */
+  --paper-primary:   oklch(0.976 0.0123 91.500);
+  --paper-secondary: oklch(0.937 0.0260 92.400);
+  --paper-muted:     oklch(0.904 0.0290 91.700);
+  --ink-primary:     oklch(0.218 0.0000 89.900);
+  --ink-secondary:   oklch(0.352 0.0000 89.900);
+  --ink-muted:       oklch(0.553 0.0116 58.100);
 
-  /* ── Tally DS tokens ──────────────────────────────────────── */
+  /* Accent Brand Color */
+  --yellow-primary:   oklch(0.852 0.1990 91.936);
+  --yellow-secondary: oklch(0.927 0.0993 93.400);
+  --yellow-tertiary:  oklch(0.710 0.1392 86.000);
+
+  /* Player/Team identity (10 generated colors given most games are up to 9 players) */
+  --player-a: oklch(0.725 0.1131   6.800); /* pink   */
+  --player-b: oklch(0.756 0.0903 245.700); /* blue   */
+  --player-c: oklch(0.776 0.0941 153.400); /* green  */
+  --player-d: oklch(0.780 0.0882 310.200); /* purple */
+  --player-e: oklch(0.822 0.1048  70.600); /* peach  */
+  --player-f: oklch(0.785 0.0435 196.300); /* teal   */
+  --player-g: oklch(0.730 0.1166  26.800); /* red    */
+  --player-h: oklch(0.870 0.1165 103.200); /* yellow */
+  --player-i: oklch(0.658 0.1121 282.900); /* indigo */
+  --player-j: oklch(0.823 0.1233 126.800); /* lime   */
+
   /* Rank medals */
-  --ds-rank-gold:   oklch(0.82 0.17 87);
-  --ds-rank-silver: oklch(0.72 0.02 240);
-  --ds-rank-bronze: oklch(0.66 0.12 50);
-
-  /* Surfaces */
-  --ds-background:       oklch(0.955 0.006 85);
-  --ds-surface-elevated: oklch(0.972 0.008 85);  /* warm paper — #f7f4ec equivalent */
-  --ds-surface-sunken:   oklch(1 0 0);
+  --rank-gold:     var(--yellow-primary);
+  --rank-silver: oklch(0.720 0.0200 240.000);
+  --rank-bronze: oklch(0.660 0.1200  50.000);
+  
+  /* Status */
+  --win:  oklch(0.529 0.1061 154.600);
+  --loss: oklch(0.528 0.1592  24.400);
+  --tie:  oklch(0.531 0.1284 258.500);
 
   /* Player status */
-  --ds-status-own:    oklch(0.85 0.18 90);
-  --ds-status-friend: oklch(0.65 0.15 250);
-  --ds-status-rented: oklch(0.72 0.18 0);
+  --status-self:  var(--yellow-primary);
+  --status-friend:oklch(0.652 0.1590 250.000);
+  --status-store: oklch(0.722 0.1890   0.000);
 
   /* Feedback */
-  --ds-success:     oklch(0.68 0.18 145);
-  --ds-warning:     oklch(0.78 0.18 70);
-  --ds-info:        oklch(0.65 0.15 250);
-  --ds-destructive: oklch(0.577 0.245 27.325);
+  --success:     oklch(0.680 0.180 145.000);
+  --warning:     oklch(0.780 0.180  70.000);
+  --info:        oklch(0.650 0.150 250.000);
+  --destructive: oklch(0.577 0.245  27.325);
 
-  /* Base aliases — start identical to shadcn, diverge over time */
-  --ds-primary:             var(--primary);
-  --ds-primary-foreground:  var(--primary-foreground);
-  --ds-secondary:           var(--secondary);
-  --ds-secondary-foreground:var(--secondary-foreground);
-  --ds-foreground:          var(--foreground);
-  --ds-muted:               var(--muted);
-  --ds-muted-foreground:    var(--muted-foreground);
-  --ds-border:              var(--border);
-  --ds-ring:                var(--ring);
+  /* Elevation */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
+  --shadow-stamp: 4px 4px 0 var(--ink-primary);
+  
+  /* Motion */
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --dur-fast: 120ms;
+  --dur:      180ms;
+  --dur-slow: 280ms;
+  
+  /* Others */
+  --focus-ring: rgba(245, 196, 65, 0.45);
+  --radius: 0.625rem;
 }
 
 .dark {
-  /* ── Shadcn tokens ──────────────────────────────────────── */
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.795 0.184 86.047);
-  --primary-foreground: oklch(0.421 0.095 57.708);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.795 0.184 86.047);
-  --sidebar-primary-foreground: oklch(0.987 0.026 102.212);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Surfaces: Paper / Ink */
+  --paper-primary:   oklch(0.186 0.0080 95.500);
+  --paper-secondary: oklch(0.219 0.0082 84.600);
+  --paper-muted:     oklch(0.274 0.0100 80.600);
+  --ink-secondary:   oklch(0.834 0.0232 87.200);
+  --ink-primary:     oklch(0.952 0.0234 90.800);
+  --ink-muted:       oklch(0.618 0.0191 84.600);
 
-  /* ── Tally DS tokens ──────────────────────────────────────── */
-  /* Rank medals — slightly desaturated for dark backgrounds */
-  --ds-rank-gold:   oklch(0.78 0.15 87);
-  --ds-rank-silver: oklch(0.65 0.02 240);
-  --ds-rank-bronze: oklch(0.60 0.10 50);
+  /* Accent Brand Color */
+  --yellow-primary:   oklch(0.842 0.1515 87.400);
+  --yellow-secondary: oklch(0.408 0.0694 86.900);
+  --yellow-tertiary:  oklch(0.892 0.1405 90.200);
 
-  /* Surfaces */
-  --ds-background:       oklch(0.17 0.012 85);
-  --ds-surface-elevated: oklch(0.23 0.010 85);
-  --ds-surface-sunken:   oklch(0.13 0.008 85);
+  /* Player/Team identity (10 generated colors given most games are up to 9 players) */
+  --player-a: oklch(60.9% 0.1404   8.500); /* pink   */
+  --player-b: oklch(63.1% 0.1085 246.200); /* blue   */
+  --player-c: oklch(66.5% 0.1017 153.200); /* green  */
+  --player-d: oklch(65.3% 0.1118 304.900); /* purple */
+  --player-e: oklch(71.5% 0.1055  65.700); /* peach  */
+  --player-f: oklch(68.1% 0.0578 195.900); /* teal   */
+  --player-g: oklch(61.5% 0.1316  26.800); /* red    */
+  --player-h: oklch(75.5% 0.1315 103.200); /* yellow */
+  --player-i: oklch(54.3% 0.1271 282.900); /* indigo */
+  --player-j: oklch(70.8% 0.1383 126.800); /* lime   */
+
+  /* Rank medals */
+  --rank-gold:     var(--yellow-primary);
+  --rank-silver: oklch(0.65 0.02 240.000);
+  --rank-bronze: oklch(0.60 0.10  50.000);
+
+  /* Status */
+  --win:  oklch(0.689 0.1282 154.800);
+  --loss: oklch(0.652 0.1522  22.200);
+  --tie:  oklch(0.531 0.1284 258.500);
 
   /* Player status */
-  --ds-status-own:    oklch(0.78 0.16 90);
-  --ds-status-friend: oklch(0.60 0.14 250);
-  --ds-status-rented: oklch(0.68 0.16 0);
+  --status-self:   oklch(0.78 0.16  90.000);
+  --status-friend: oklch(0.60 0.14 250.000);
+  --status-store:  oklch(0.68 0.16   0.000);
 
   /* Feedback */
-  --ds-success: oklch(0.62 0.16 145);
-  --ds-warning: oklch(0.72 0.16 70);
-  --ds-info:    oklch(0.60 0.14 250);
-  --ds-destructive: oklch(0.704 0.191 22.216);
+  --success:     oklch(0.620 0.160 145.000);
+  --warning:     oklch(0.720 0.160  70.000);
+  --info:        oklch(0.600 0.140 250.000);
+  --destructive: oklch(0.704 0.191  22.216);
 
-  /* Base aliases */
-  --ds-primary:             var(--primary);
-  --ds-primary-foreground:  var(--primary-foreground);
-  --ds-secondary:           var(--secondary);
-  --ds-secondary-foreground:var(--secondary-foreground);
-  --ds-foreground:          var(--foreground);
-  --ds-muted:               var(--muted);
-  --ds-muted-foreground:    var(--muted-foreground);
-  --ds-border:              var(--border);
-  --ds-ring:                var(--ring);
+  /* Elevation */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.5);
+  --shadow-md: 0 6px 16px rgba(0,0,0,0.5);
+  --shadow-lg: 0 16px 40px rgba(0,0,0,0.6);
+  --shadow-stamp: 4px 4px 0 var(--ink-primary);
 }
 
 @theme inline {
-  /* Default ShadCN theme */
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
+  /* Shadcn backward compatibility */
+  --color-primary: var(--yellow-primary);
+  --color-sidebar-primary: var(--yellow-secondary);
+  --color-primary-foreground: var(--yellow-tertiary);
+  
+  --color-chart-1: var(--player-a);
+  --color-chart-2: var(--player-b);
+  --color-chart-3: var(--player-c);
+  --color-chart-4: var(--player-d);
+  --color-chart-5: var(--player-e);
+  
+  --color-card: var(--paper-primary);
+  --color-background: var(--paper-primary);
+  --color-popover: var(--paper-primary);
+  --color-secondary: var(--paper-secondary);
+  --color-sidebar-primary-foreground: var(--paper-secondary);
+  --color-sidebar: var(--paper-secondary);
+  --color-sidebar-accent: var(--paper-muted);
+  --color-accent: var(--paper-muted);
+  --color-muted: var(--paper-muted);
+  --color-sidebar-border: var(--paper-muted);
+  --color-input: var(--paper-muted);
+  --color-border: var(--paper-muted);
+  --color-foreground: var(--ink-primary);
+  --color-card-foreground: var(--ink-primary);
+  --color-sidebar-foreground: var(--ink-primary);
+  --color-popover-foreground: var(--ink-primary);
+  --color-sidebar-accent-foreground: var(--ink-primary);
+  --color-accent-foreground: var(--ink-primary);
+  --color-secondary-foreground: var(--ink-secondary);
+  --color-muted-foreground: var(--ink-muted);
+
+  --color-ring: var(--focus-ring);
+  --color-sidebar-ring: var(--focus-ring);
+
+  /* Tally Design System tokens */
+  --color-paper-primary:   var(--paper-primary);
+  --color-paper-secondary: var(--paper-secondary);
+  --color-paper-muted:     var(--paper-muted);
+  --color-ink-primary:     var(--ink-primary);
+  --color-ink-secondary:   var(--ink-secondary);
+  --color-ink-muted:       var(--ink-muted);
+
+  --color-yellow-primary:   var(--yellow-primary);
+  --color-yellow-secondary: var(--yellow-secondary);
+  --color-yellow-tertiary:  var(--yellow-tertiary);
+
+  --color-player-a: var(--player-a);
+  --color-player-b: var(--player-b);
+  --color-player-c: var(--player-c);
+  --color-player-d: var(--player-d);
+  --color-player-e: var(--player-e);
+  --color-player-f: var(--player-f);
+  --color-player-g: var(--player-g);
+  --color-player-h: var(--player-h);
+  --color-player-i: var(--player-i);
+  --color-player-j: var(--player-j);
+
+  --color-rank-gold:   var(--rank-gold);
+  --color-rank-silver: var(--rank-silver);
+  --color-rank-bronze: var(--rank-bronze);
+
+  --color-win:  var(--win);
+  --color-loss: var(--loss);
+  --color-tie:  var(--tie);
+
+  --color-status-self:   var(--status-self);
+  --color-status-friend: var(--status-friend);
+  --color-status-store:  var(--status-store);
+
+  --color-success:     var(--success);
+  --color-warning:     var(--warning);
+  --color-info:        var(--info);
   --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-foreground: var(--foreground);
-  --color-background: var(--background);
+
+  --font-default: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  --font-monospace: 'JetBrains Mono', ui-monospace, monospace;
+  --font-callout: 'Kalam', 'Inter', cursive;
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -238,42 +267,8 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
-
-  /* Tally DS tokens */
-  --color-ds-rank-gold:   var(--ds-rank-gold);
-  --color-ds-rank-silver: var(--ds-rank-silver);
-  --color-ds-rank-bronze: var(--ds-rank-bronze);
-
-  --color-ds-background:       var(--ds-background);
-  --color-ds-surface-elevated: var(--ds-surface-elevated);
-  --color-ds-surface-sunken:   var(--ds-surface-sunken);
-
-  --color-ds-status-own:    var(--ds-status-own);
-  --color-ds-status-friend: var(--ds-status-friend);
-  --color-ds-status-rented: var(--ds-status-rented);
-
-  --color-ds-success:     var(--ds-success);
-  --color-ds-warning:     var(--ds-warning);
-  --color-ds-info:        var(--ds-info);
-  --color-ds-destructive: var(--ds-destructive);
-
-  --color-ds-primary:              var(--ds-primary);
-  --color-ds-primary-foreground:   var(--ds-primary-foreground);
-  --color-ds-secondary:            var(--ds-secondary);
-  --color-ds-secondary-foreground: var(--ds-secondary-foreground);
-  --color-ds-foreground:           var(--ds-foreground);
-  --color-ds-muted:                var(--ds-muted);
-  --color-ds-muted-foreground:     var(--ds-muted-foreground);
-  --color-ds-border:               var(--ds-border);
-  --color-ds-ring:                 var(--ds-ring);
-
-  /* DS typography families */
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-  --font-hand: 'Kalam', cursive;
 }
 
-/* Default ShadCN theme */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -290,24 +285,24 @@
   }
 
   .eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-monospace);
     font-size: var(--text-xs);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.12em;
   }
 
-  .num {
-    font-family: var(--font-mono);
+  .monospace {
+    font-family: var(--font-monospace);
     font-variant-numeric: tabular-nums;
     font-weight: 700;
   }
 
-  .hand {
-    font-family: var(--font-hand);
+  .callout {
+    font-family: var(--font-callout);
     font-size: var(--text-xl);
     font-weight: 700;
     rotate: -2deg;
-    color: var(--primary);
+    color: var(--yellow-primary);
   }
 }
