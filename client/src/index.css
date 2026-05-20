@@ -85,10 +85,10 @@
   --player-i: oklch(0.658 0.1121 282.900); /* indigo */
   --player-j: oklch(0.823 0.1233 126.800); /* lime   */
 
-  /* Rank medals */
-  --rank-gold:     var(--yellow-primary);
-  --rank-silver: oklch(0.720 0.0200 240.000);
-  --rank-bronze: oklch(0.660 0.1200  50.000);
+  /* Medal medals */
+  --medal-gold:     var(--yellow-primary);
+  --medal-silver: oklch(0.720 0.0200 240.000);
+  --medal-bronze: oklch(0.660 0.1200  50.000);
   
   /* Status */
   --win:  oklch(0.529 0.1061 154.600);
@@ -143,10 +143,10 @@
   --player-i: oklch(54.3% 0.1271 282.900); /* indigo */
   --player-j: oklch(70.8% 0.1383 126.800); /* lime   */
 
-  /* Rank medals */
-  --rank-gold:     var(--yellow-primary);
-  --rank-silver: oklch(0.65 0.02 240.000);
-  --rank-bronze: oklch(0.60 0.10  50.000);
+  /* Medal medals */
+  --medal-gold:     var(--yellow-primary);
+  --medal-silver: oklch(0.65 0.02 240.000);
+  --medal-bronze: oklch(0.60 0.10  50.000);
 
   /* Status */
   --win:  oklch(0.689 0.1282 154.800);
@@ -230,9 +230,9 @@
   --color-player-i: var(--player-i);
   --color-player-j: var(--player-j);
 
-  --color-rank-gold:   var(--rank-gold);
-  --color-rank-silver: var(--rank-silver);
-  --color-rank-bronze: var(--rank-bronze);
+  --color-1st-place:   var(--medal-gold);
+  --color-2nd-place: var(--medal-silver);
+  --color-3rd-place: var(--medal-bronze);
 
   --color-win:  var(--win);
   --color-loss: var(--loss);

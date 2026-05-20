@@ -22,9 +22,9 @@ const badgeVariants = cva(
       // ── Color ───────────────────────────────────────────────
       color: {
         // Medals
-        gold: 'text-rank-gold',
-        silver: 'text-rank-silver',
-        bronze: 'text-rank-bronze',
+        gold: 'text-1st-place',
+        silver: 'text-2nd-place',
+        bronze: 'text-3rd-place',
         // Player status
         self: 'text-status-self',
         friend: 'text-status-friend',
@@ -40,9 +40,9 @@ const badgeVariants = cva(
     },
     compoundVariants: [
       // filled bg
-      { variant: 'default', color: 'gold', className: 'bg-rank-gold/20' },
-      { variant: 'default', color: 'silver', className: 'bg-rank-silver/20' },
-      { variant: 'default', color: 'bronze', className: 'bg-rank-bronze/20' },
+      { variant: 'default', color: 'gold', className: 'bg-1st-place/20' },
+      { variant: 'default', color: 'silver', className: 'bg-2nd-place/20' },
+      { variant: 'default', color: 'bronze', className: 'bg-3rd-place/20' },
       { variant: 'default', color: 'self', className: 'bg-status-self/20' },
       { variant: 'default', color: 'friend', className: 'bg-status-friend/20' },
       { variant: 'default', color: 'store', className: 'bg-status-store/20' },
@@ -52,9 +52,9 @@ const badgeVariants = cva(
       { variant: 'default', color: 'destructive', className: 'bg-destructive/20' },
       { variant: 'default', color: 'primary', className: 'bg-primary/20' },
       // outline border
-      { variant: 'outline', color: 'gold', className: 'border-rank-gold' },
-      { variant: 'outline', color: 'silver', className: 'border-rank-silver' },
-      { variant: 'outline', color: 'bronze', className: 'border-rank-bronze' },
+      { variant: 'outline', color: 'gold', className: 'border-1st-place' },
+      { variant: 'outline', color: 'silver', className: 'border-2nd-place' },
+      { variant: 'outline', color: 'bronze', className: 'border-3rd-place' },
       { variant: 'outline', color: 'self', className: 'border-status-self' },
       { variant: 'outline', color: 'friend', className: 'border-status-friend' },
       { variant: 'outline', color: 'store', className: 'border-status-store' },
