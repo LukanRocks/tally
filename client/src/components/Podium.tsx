@@ -30,7 +30,7 @@ const rankStyle: Record<number, { step: string; text: string; ring: string; spot
 
 const enterDelay: Record<number, string> = { 1: '400ms', 2: '200ms', 3: '0ms' }
 
-export default ({ entries, ready }: PodiumProps) => {
+export const Podium = ({ entries, ready }: PodiumProps) => {
   const [first, second, third] = entries
 
   const steps: { entry: LeaderboardEntry | undefined; rank: number; height: string; label: string }[] = [

@@ -7,7 +7,7 @@ interface PageProps {
   className?: string
 }
 
-export default function Page({ children, loading, className }: PageProps) {
+export const Page = ({ children, loading, className }: PageProps) => {
   const [showLoader, setShowLoader] = useState(false)
 
   useEffect(() => {
@@ -16,6 +16,7 @@ export default function Page({ children, loading, className }: PageProps) {
 
       return
     }
+
     const timer = setTimeout(() => setShowLoader(true), 200)
 
     return () => clearTimeout(timer)
@@ -24,5 +25,5 @@ export default function Page({ children, loading, className }: PageProps) {
   if (loading && showLoader) return <div className='p-4 text-muted-foreground md:p-8'>Loading…</div>
   if (loading) return null
 
-  return <div className={cn('mx-auto max-w-5xl space-y-12 p-4 md:p-8', className)}>{children}</div>
+  return <div className={cn('mx-auto max-w-5xl p-4 md:p-8', className)}>{children}</div>
 }

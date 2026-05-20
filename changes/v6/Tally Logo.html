@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Tally — Logo & Icon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&family=Kalam:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --yellow: oklch(0.852 0.199 91.936);
+    --ink: #1a1a1a;
+    --paper: #faf7ee;
+    --muted: #78716c;
+    --line: #e6dfca;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;}
+  .doc{max-width:1280px;margin:0 auto;padding:48px 56px 120px;}
+  h1{font-family:'Inter',sans-serif;font-size:48px;line-height:1;letter-spacing:-1.5px;margin:0 0 8px;font-weight:800;}
+  h1 .accent{font-family:'Kalam',cursive;color:var(--yellow);font-weight:700;font-size:42px;display:inline-block;transform:rotate(-3deg);margin-left:8px;}
+  .lede{color:var(--muted);font-size:17px;max-width:680px;margin:0 0 8px;}
+  .tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+  hr.scribble{border:0;height:6px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 6' preserveAspectRatio='none'><path d='M0 3 Q 25 0 50 3 T 100 3 T 150 3 T 200 3' fill='none' stroke='%231a1a1a' stroke-width='1.6' stroke-linecap='round'/></svg>");background-size:200px 6px;background-repeat:repeat-x;margin:36px 0 28px;}
+
+  h2{font-size:26px;margin:48px 0 4px;font-weight:700;letter-spacing:-0.5px;display:flex;align-items:baseline;gap:14px;}
+  h2 .num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);font-weight:400;letter-spacing:2px;text-transform:uppercase;}
+  h2 + p{color:var(--muted);font-size:15px;margin:0 0 24px;}
+
+  /* logo grid */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+  .grid.cols-3{grid-template-columns:repeat(3,1fr);}
+  .grid.cols-4{grid-template-columns:repeat(4,1fr);}
+  .card{
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:#fff;
+    padding:32px 28px 22px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card.dark{background:#0f0f0f;color:#fff;border-color:#222;}
+  .card .name{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;
+  }
+  .card.dark .name{color:#888;}
+  .card .name .pin{
+    background:var(--yellow);color:var(--ink);
+    border-radius:999px;padding:2px 9px;font-size:10px;letter-spacing:1px;
+  }
+  .stage{display:flex;align-items:center;justify-content:center;min-height:180px;padding:8px 0;}
+  .stage-row{display:flex;align-items:center;gap:18px;justify-content:center;flex-wrap:wrap;}
+  .desc{font-size:13px;color:var(--muted);margin:18px 0 0;line-height:1.5;border-top:1px dashed var(--line);padding-top:14px;}
+  .card.dark .desc{color:#999;border-color:#222;}
+
+  /* sizes scale */
+  .sizes{display:flex;align-items:center;gap:24px;justify-content:center;padding:24px 0;border:1px dashed var(--line);border-radius:12px;background:#fff;}
+  .sizes > div{display:flex;flex-direction:column;align-items:center;gap:8px;}
+  .sizes .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;}
+
+  /* favicon row */
+  .fav-row{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+  .browser-tab{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#fff;border:1px solid var(--line);border-bottom:none;
+    border-radius:10px 10px 0 0;padding:8px 14px 10px;
+    font-size:13px;color:var(--ink);
+    box-shadow:0 -2px 0 0 #f0ead7;
+  }
+  .browser-tab.dark{background:#1a1a1a;color:#eee;border-color:#333;box-shadow:0 -2px 0 0 #0a0a0a;}
+  .home-tile{
+    width:84px;height:84px;border-radius:20px;
+    background:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  }
+  .home-tile.yellow{background:var(--yellow);}
+  .home-tile.paper{background:#fff;border:1px solid var(--line);}
+
+  .swatch{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,0.15);vertical-align:middle;margin-right:5px;}
+  code{font-family:'JetBrains Mono',monospace;font-size:13px;background:#fffaf0;border:1px solid var(--line);border-radius:4px;padding:1px 6px;}
+
+  /* wordmark size demos */
+  .word-stack{display:flex;flex-direction:column;align-items:flex-start;gap:14px;}
+</style>
+</head>
+<body>
+<div class="doc">
+
+  <p class="tag">Logo · Icon · Favicon · v1</p>
+  <h1>Tally <span class="accent">— a mark made.</span></h1>
+  <p class="lede">Five concepts built around the obvious: a <b>tally mark</b> is the most literal possible logo for a session-tracking app. Each is shown in light + dark, on its own and inside a wordmark. Pick a direction — I'll cut a final SVG, app icons, and favicon.</p>
+
+  <hr class="scribble"/>
+
+  <!-- ============================================ -->
+  <h2><span class="num">01</span> the concepts</h2>
+  <p>Concept A is the recommended direction — it's literal, scales, works at 16px, and the diagonal stroke is a crown wink.</p>
+
+  <div class="grid cols-2">
+
+    <!-- A — TALLY MARKS -->
+    <div class="card">
+      <div class="name"><span>A · Five-bar tally</span><span class="pin">RECOMMENDED</span></div>
+      <div class="stage stage-row">
+
+        <!-- icon -->
+        <svg width="120" height="120" viewBox="0 0 64 64" aria-label="Tally mark icon">
+          <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+          <!-- four vertical bars -->
+          <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+          <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+          <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+          <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+          <!-- the fifth, diagonal, in yellow -->
+          <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+
+        <!-- wordmark -->
+        <div class="word-stack">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <svg width="40" height="40" viewBox="0 0 64 64">
+              <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+              <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+              <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+              <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+              <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+              <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+            </svg>
+            <span style="font-family:'Inter';font-weight:800;font-size:32px;letter-spacing:-1px;">Tally</span>
+          </div>
+        </div>
+      </div>
+      <p class="desc"><b>Concept:</b> the universal "5" tally — four bars and a slash. The slash is the brand yellow. Reads as a board-game scoreboard at a glance, and the diagonal almost forms a crown when squinted at. Best at 16px because the bars stay distinct.</p>
+    </div>
+
+    <!-- B — DICE FORMING T -->
+    <div class="card">
+      <div class="name"><span>B · Dice "T"</span></div>
+      <div class="stage stage-row">
+
+        <svg width="120" height="120" viewBox="0 0 64 64">
+          <rect x="0" y="0" width="64" height="64" rx="14" fill="oklch(0.852 0.199 91.936)"/>
+          <!-- T shape from pips -->
+          <!-- top row -->
+          <circle cx="16" cy="20" r="3.4" fill="#1a1a1a"/>
+          <circle cx="32" cy="20" r="3.4" fill="#1a1a1a"/>
+          <circle cx="48" cy="20" r="3.4" fill="#1a1a1a"/>
+          <!-- stem -->
+          <circle cx="32" cy="32" r="3.4" fill="#1a1a1a"/>
+          <circle cx="32" cy="44" r="3.4" fill="#1a1a1a"/>
+        </svg>
+
+        <div style="display:flex;align-items:center;gap:12px;">
+          <svg width="40" height="40" viewBox="0 0 64 64">
+            <rect x="0" y="0" width="64" height="64" rx="14" fill="oklch(0.852 0.199 91.936)"/>
+            <circle cx="16" cy="20" r="3.4" fill="#1a1a1a"/>
+            <circle cx="32" cy="20" r="3.4" fill="#1a1a1a"/>
+            <circle cx="48" cy="20" r="3.4" fill="#1a1a1a"/>
+            <circle cx="32" cy="32" r="3.4" fill="#1a1a1a"/>
+            <circle cx="32" cy="44" r="3.4" fill="#1a1a1a"/>
+          </svg>
+          <span style="font-family:'Inter';font-weight:800;font-size:32px;letter-spacing:-1px;">Tally</span>
+        </div>
+      </div>
+      <p class="desc"><b>Concept:</b> dice pips arranged as the letter T. Playful, immediately reads "board game". Slightly riskier at small sizes — pips can mush at 16×16.</p>
+    </div>
+
+    <!-- C — CROWN + TALLY -->
+    <div class="card">
+      <div class="name"><span>C · Crown + tally</span></div>
+      <div class="stage stage-row">
+
+        <svg width="120" height="120" viewBox="0 0 64 64">
+          <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+          <!-- crown -->
+          <path d="M14 24 L14 14 L22 22 L32 12 L42 22 L50 14 L50 24 Z"
+                fill="oklch(0.852 0.199 91.936)" stroke="oklch(0.852 0.199 91.936)" stroke-width="1.5" stroke-linejoin="round"/>
+          <rect x="14" y="26" width="36" height="3" fill="oklch(0.852 0.199 91.936)"/>
+          <!-- tally bars below -->
+          <rect x="17" y="36" width="3" height="14" rx="1" fill="#faf7ee"/>
+          <rect x="23" y="36" width="3" height="14" rx="1" fill="#faf7ee"/>
+          <rect x="29" y="36" width="3" height="14" rx="1" fill="#faf7ee"/>
+          <rect x="35" y="36" width="3" height="14" rx="1" fill="#faf7ee"/>
+          <path d="M15 50 L41 36" stroke="oklch(0.852 0.199 91.936)" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+
+        <div style="display:flex;align-items:center;gap:12px;">
+          <svg width="40" height="40" viewBox="0 0 64 64">
+            <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+            <path d="M14 24 L14 14 L22 22 L32 12 L42 22 L50 14 L50 24 Z" fill="oklch(0.852 0.199 91.936)"/>
+            <rect x="14" y="26" width="36" height="3" fill="oklch(0.852 0.199 91.936)"/>
+            <rect x="17" y="36" width="3" height="14" fill="#faf7ee"/>
+            <rect x="23" y="36" width="3" height="14" fill="#faf7ee"/>
+            <rect x="29" y="36" width="3" height="14" fill="#faf7ee"/>
+            <rect x="35" y="36" width="3" height="14" fill="#faf7ee"/>
+            <path d="M15 50 L41 36" stroke="oklch(0.852 0.199 91.936)" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+          <span style="font-family:'Inter';font-weight:800;font-size:32px;letter-spacing:-1px;">Tally</span>
+        </div>
+      </div>
+      <p class="desc"><b>Concept:</b> tally marks topped by a crown — connects to the leaderboard / "champion" surface. Richer story but busier; smallest size suffers.</p>
+    </div>
+
+    <!-- D — MEEPLE + TALLY -->
+    <div class="card">
+      <div class="name"><span>D · Wordmark + slash</span></div>
+      <div class="stage stage-row">
+
+        <!-- big wordmark only -->
+        <div style="display:flex;align-items:baseline;gap:0;">
+          <span style="font-family:'Inter';font-weight:900;font-size:88px;letter-spacing:-4px;line-height:1;">Tall</span>
+          <span style="position:relative;font-family:'Inter';font-weight:900;font-size:88px;letter-spacing:-4px;line-height:1;">y
+            <span style="position:absolute;top:-8px;left:-2px;right:-2px;bottom:-8px;border-bottom:6px solid var(--yellow);transform:rotate(-12deg);transform-origin:center;"></span>
+          </span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;justify-content:center;margin-top:8px;">
+        <span style="font-family:'Inter';font-weight:800;font-size:32px;letter-spacing:-1px;position:relative;">Tally
+          <span style="position:absolute;top:-3px;left:-2px;right:-2px;bottom:-3px;border-bottom:3px solid var(--yellow);transform:rotate(-12deg);"></span>
+        </span>
+        <span style="color:var(--muted);font-family:'JetBrains Mono';font-size:11px;letter-spacing:1.5px;">— wordmark only</span>
+      </div>
+      <p class="desc"><b>Concept:</b> just the word, struck through by a single tally slash. Most "designy", least friendly as an app icon. Pairs well with concept A as icon.</p>
+    </div>
+
+  </div>
+
+  <hr class="scribble"/>
+
+  <!-- ============================================ -->
+  <h2><span class="num">02</span> Concept A at every size</h2>
+  <p>The recommended mark, from favicon to splash. The diagonal yellow stroke survives all the way down to 16×16.</p>
+
+  <div class="sizes">
+    <div>
+      <svg width="16" height="16" viewBox="0 0 64 64">
+        <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+        <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      <span class="lbl">16</span>
+    </div>
+    <div>
+      <svg width="24" height="24" viewBox="0 0 64 64">
+        <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+        <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      <span class="lbl">24</span>
+    </div>
+    <div>
+      <svg width="32" height="32" viewBox="0 0 64 64">
+        <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+        <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      <span class="lbl">32</span>
+    </div>
+    <div>
+      <svg width="48" height="48" viewBox="0 0 64 64">
+        <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+        <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      <span class="lbl">48</span>
+    </div>
+    <div>
+      <svg width="80" height="80" viewBox="0 0 64 64">
+        <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+        <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      <span class="lbl">80</span>
+    </div>
+    <div>
+      <svg width="128" height="128" viewBox="0 0 64 64">
+        <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+        <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+        <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      <span class="lbl">128</span>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <h2><span class="num">03</span> color variants</h2>
+  <p>Three lockups for different surfaces.</p>
+
+  <div class="grid cols-3">
+    <div class="card">
+      <div class="name"><span>Dark on paper</span></div>
+      <div class="stage">
+        <svg width="120" height="120" viewBox="0 0 64 64">
+          <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+          <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+          <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+          <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+          <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+          <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p class="desc"><span class="swatch" style="background:#1a1a1a"></span>ink ground · <span class="swatch" style="background:#faf7ee"></span>paper bars · <span class="swatch" style="background:oklch(0.852 0.199 91.936)"></span>yellow slash</p>
+    </div>
+
+    <div class="card dark">
+      <div class="name"><span>Yellow on dark</span></div>
+      <div class="stage">
+        <svg width="120" height="120" viewBox="0 0 64 64">
+          <rect x="0" y="0" width="64" height="64" rx="14" fill="oklch(0.852 0.199 91.936)"/>
+          <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+          <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+          <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+          <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+          <path d="M9 49 L52 15" stroke="#1a1a1a" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p class="desc">For app icons, splash screens. Inverted palette — yellow ground, ink bars + slash.</p>
+    </div>
+
+    <div class="card">
+      <div class="name"><span>Mono — single colour</span></div>
+      <div class="stage">
+        <svg width="120" height="120" viewBox="0 0 64 64">
+          <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+          <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+          <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+          <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+          <path d="M9 49 L52 15" stroke="#1a1a1a" stroke-width="6" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p class="desc">For embosses, single-colour print, footer marks. <code>currentColor</code>-friendly so it inherits in any context.</p>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <h2><span class="num">04</span> in-context</h2>
+  <p>Browser tabs, dock tiles, sidebar — how it actually shows up.</p>
+
+  <div class="grid cols-2">
+    <div class="card">
+      <div class="name"><span>Browser tabs</span></div>
+      <div class="stage" style="background:#f0ead7;border-radius:12px;padding:24px 12px 0;">
+        <div style="display:flex;gap:0;align-items:flex-end;">
+          <span class="browser-tab">
+            <svg width="14" height="14" viewBox="0 0 64 64">
+              <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+              <rect x="13" y="16" width="5" height="32" fill="#faf7ee"/>
+              <rect x="22" y="16" width="5" height="32" fill="#faf7ee"/>
+              <rect x="31" y="16" width="5" height="32" fill="#faf7ee"/>
+              <rect x="40" y="16" width="5" height="32" fill="#faf7ee"/>
+              <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="7" stroke-linecap="round"/>
+            </svg>
+            Tally — Home
+          </span>
+          <span class="browser-tab" style="opacity:0.6;">
+            <span style="width:14px;height:14px;background:#ddd;border-radius:3px;display:inline-block;"></span>
+            Other tab
+          </span>
+        </div>
+      </div>
+      <p class="desc">16×16 favicon — the diagonal yellow stroke is the recognisable bit, even when squeezed.</p>
+    </div>
+
+    <div class="card dark">
+      <div class="name"><span>Home-screen tiles</span></div>
+      <div class="stage stage-row" style="gap:18px;">
+        <div class="home-tile">
+          <svg width="56" height="56" viewBox="0 0 64 64">
+            <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+            <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+            <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+            <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+            <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/>
+            <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="home-tile yellow">
+          <svg width="56" height="56" viewBox="0 0 64 64">
+            <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+            <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+            <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+            <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+            <path d="M9 49 L52 15" stroke="#1a1a1a" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="home-tile paper">
+          <svg width="56" height="56" viewBox="0 0 64 64">
+            <rect x="13" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+            <rect x="22" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+            <rect x="31" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+            <rect x="40" y="16" width="5" height="32" rx="1.5" fill="#1a1a1a"/>
+            <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <p class="desc">Three valid tile fills — pick whichever your install context prefers.</p>
+    </div>
+
+    <div class="card">
+      <div class="name"><span>App sidebar — light</span></div>
+      <div class="stage" style="background:#fbf9f1;border-radius:12px;padding:0;justify-content:flex-start;">
+        <div style="display:flex;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid var(--line);width:100%;">
+          <svg width="28" height="28" viewBox="0 0 64 64">
+            <rect x="0" y="0" width="64" height="64" rx="14" fill="#1a1a1a"/>
+            <rect x="13" y="16" width="5" height="32" fill="#faf7ee"/>
+            <rect x="22" y="16" width="5" height="32" fill="#faf7ee"/>
+            <rect x="31" y="16" width="5" height="32" fill="#faf7ee"/>
+            <rect x="40" y="16" width="5" height="32" fill="#faf7ee"/>
+            <path d="M9 49 L52 15" stroke="oklch(0.852 0.199 91.936)" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+          <span style="font-family:'Inter';font-weight:800;font-size:22px;letter-spacing:-0.5px;">Tally</span>
+        </div>
+      </div>
+      <p class="desc">Replaces the current crossed-swords mark. Same yellow accent, same weight, more on-brand.</p>
+    </div>
+
+    <div class="card dark">
+      <div class="name"><span>App sidebar — dark</span></div>
+      <div class="stage" style="background:#0a0a0a;border-radius:12px;padding:0;justify-content:flex-start;">
+        <div style="display:flex;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid #222;width:100%;">
+          <svg width="28" height="28" viewBox="0 0 64 64">
+            <rect x="0" y="0" width="64" height="64" rx="14" fill="oklch(0.852 0.199 91.936)"/>
+            <rect x="13" y="16" width="5" height="32" fill="#1a1a1a"/>
+            <rect x="22" y="16" width="5" height="32" fill="#1a1a1a"/>
+            <rect x="31" y="16" width="5" height="32" fill="#1a1a1a"/>
+            <rect x="40" y="16" width="5" height="32" fill="#1a1a1a"/>
+            <path d="M9 49 L52 15" stroke="#1a1a1a" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+          <span style="font-family:'Inter';font-weight:800;font-size:22px;letter-spacing:-0.5px;color:#fff;">Tally</span>
+        </div>
+      </div>
+      <p class="desc">In dark mode, the inverted (yellow ground) variant carries more energy than ink-on-ink.</p>
+    </div>
+
+  </div>
+
+  <!-- ============================================ -->
+  <h2><span class="num">05</span> drop-in assets</h2>
+  <p>Once you pick a concept I'll save these as separate files. Below: paste-ready snippets for the recommended (A) mark.</p>
+
+  <div class="grid cols-2">
+    <div class="card">
+      <div class="name"><span>icon.svg</span><span class="pin">VECTOR</span></div>
+      <pre style="background:#1a1a1a;color:#f7f4ec;padding:18px 20px;border-radius:10px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.5;margin:0;">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"&gt;
+  &lt;rect width="64" height="64" rx="14" fill="#1a1a1a"/&gt;
+  &lt;rect x="13" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/&gt;
+  &lt;rect x="22" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/&gt;
+  &lt;rect x="31" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/&gt;
+  &lt;rect x="40" y="16" width="5" height="32" rx="1.5" fill="#faf7ee"/&gt;
+  &lt;path d="M9 49 L52 15" stroke="#f7c24a"
+        stroke-width="6" stroke-linecap="round"/&gt;
+&lt;/svg&gt;</pre>
+      <p class="desc">Self-contained. Inline directly in your sidebar component to keep colours theme-aware via <code>currentColor</code> if you swap fills to that.</p>
+    </div>
+
+    <div class="card">
+      <div class="name"><span>favicon.svg</span><span class="pin">16PX</span></div>
+      <pre style="background:#1a1a1a;color:#f7f4ec;padding:18px 20px;border-radius:10px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.5;margin:0;">&lt;link rel="icon" type="image/svg+xml"
+      href="/favicon.svg" /&gt;
+&lt;link rel="apple-touch-icon"
+      href="/apple-touch-icon.png" /&gt;
+&lt;meta name="theme-color"
+      content="#1a1a1a"
+      media="(prefers-color-scheme: light)" /&gt;
+&lt;meta name="theme-color"
+      content="#f7c24a"
+      media="(prefers-color-scheme: dark)" /&gt;</pre>
+      <p class="desc">Modern browsers prefer SVG favicons. Pair with a <code>180×180</code> PNG for iOS home-screen and you're done.</p>
+    </div>
+  </div>
+
+  <hr class="scribble"/>
+  <p style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);text-align:right;">// pick A, B, C, or D — I'll cut final <code>icon.svg</code>, <code>favicon.svg</code>, and <code>apple-touch-icon.png</code> and update the implementation plan.</p>
+
+</div>
+</body>
+</html>

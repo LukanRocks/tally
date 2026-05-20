@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserRound, Plus, Gamepad2, Users, ChevronRight, Check } from 'lucide-react'
 import { api, Player, Game } from '../lib/api'
-import { useSettings } from '../contexts/SettingsContext'
+import { useSettings } from '../contexts/settings-context'
 
 type Step = 1 | 2 | 3
 
@@ -31,18 +31,24 @@ export default function Onboarding() {
   useEffect(() => {
     if (!settings) return
     if (settings.default_owner_id != null) {
-      api.players.get(settings.default_owner_id).then((p) => {
-        setHostPlayer(p)
-        setStep(2)
-      }).catch(() => {
-        // player was soft-deleted, stay on step 1
-      })
+      api.players
+        .get(settings.default_owner_id)
+        .then((p) => {
+          setHostPlayer(p)
+          setStep(2)
+        })
+        .catch(() => {
+          // player was soft-deleted, stay on step 1
+        })
     }
   }, [settings])
 
   async function handleHostContinue(e: React.FormEvent) {
     e.preventDefault()
-    if (!hostName.trim()) { setHostError('Name is required'); return }
+    if (!hostName.trim()) {
+      setHostError('Name is required')
+      return
+    }
     setHostSubmitting(true)
     setHostError('')
     try {
@@ -57,7 +63,7 @@ export default function Onboarding() {
     }
   }
 
-async function handleAddFriend(e: React.FormEvent) {
+  async function handleAddFriend(e: React.FormEvent) {
     e.preventDefault()
     if (!friendName.trim()) return
     setFriendError('')
@@ -117,7 +123,6 @@ async function handleAddFriend(e: React.FormEvent) {
   return (
     <div className='flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12'>
       <div className='w-full max-w-md'>
-
         {/* Header */}
         <div className='mb-10 text-center'>
           <h1 className='text-3xl font-bold text-foreground'>Welcome to Tally</h1>
@@ -140,11 +145,9 @@ async function handleAddFriend(e: React.FormEvent) {
                 >
                   {step > s.n ? <Check size={13} /> : s.n}
                 </div>
-                <span className={`text-xs ${step === s.n ? 'text-primary font-medium' : 'text-muted-foreground'}`}>{s.label}</span>
+                <span className={`text-xs ${step === s.n ? 'font-medium text-primary' : 'text-muted-foreground'}`}>{s.label}</span>
               </div>
-              {i < steps.length - 1 && (
-                <div className={`mb-5 mx-3 h-px w-12 transition-colors ${step > s.n ? 'bg-primary' : 'bg-border'}`} />
-              )}
+              {i < steps.length - 1 && <div className={`mx-3 mb-5 h-px w-12 transition-colors ${step > s.n ? 'bg-primary' : 'bg-border'}`} />}
             </div>
           ))}
         </div>
@@ -168,10 +171,13 @@ async function handleAddFriend(e: React.FormEvent) {
                 <input
                   type='text'
                   value={hostName}
-                  onChange={(e) => { setHostName(e.target.value); setHostError('') }}
+                  onChange={(e) => {
+                    setHostName(e.target.value)
+                    setHostError('')
+                  }}
                   placeholder='e.g. Alex'
                   autoFocus
-                  className={`w-full rounded-lg border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 ${hostError ? 'border-destructive focus:ring-destructive/50' : 'border-border focus:ring-ring'}`}
+                  className={`w-full rounded-lg border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:outline-none ${hostError ? 'border-destructive focus:ring-destructive/50' : 'border-border focus:ring-ring'}`}
                 />
                 {hostError && <p className='mt-1 text-xs text-destructive'>{hostError}</p>}
               </div>
@@ -179,9 +185,15 @@ async function handleAddFriend(e: React.FormEvent) {
               <button
                 type='submit'
                 disabled={hostSubmitting || !hostName.trim()}
-                className='flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed'
+                className='flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60'
               >
-                {hostSubmitting ? 'Creating…' : <>Continue <ChevronRight size={15} /></>}
+                {hostSubmitting ? (
+                  'Creating…'
+                ) : (
+                  <>
+                    Continue <ChevronRight size={15} />
+                  </>
+                )}
               </button>
             </form>
           </div>
@@ -203,9 +215,11 @@ async function handleAddFriend(e: React.FormEvent) {
             {friends.map((p) => (
               <div key={p.id} className='mb-2 flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2'>
                 <div className='flex h-8 w-8 items-center justify-center rounded-full bg-muted'>
-                  {p.avatar_path
-                    ? <img src={p.avatar_path} alt={p.name} className='h-full w-full object-cover rounded-full' />
-                    : <UserRound size={15} className='text-muted-foreground' />}
+                  {p.avatar_path ? (
+                    <img src={p.avatar_path} alt={p.name} className='h-full w-full rounded-full object-cover' />
+                  ) : (
+                    <UserRound size={15} className='text-muted-foreground' />
+                  )}
                 </div>
                 <span className='text-sm text-foreground'>{p.name}</span>
               </div>
@@ -215,14 +229,14 @@ async function handleAddFriend(e: React.FormEvent) {
               <input
                 type='text'
                 value={friendName}
-                onChange={(e) => { setFriendName(e.target.value); setFriendError('') }}
+                onChange={(e) => {
+                  setFriendName(e.target.value)
+                  setFriendError('')
+                }}
                 placeholder="Friend's name..."
-                className='flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring'
+                className='flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
               />
-              <button
-                type='submit'
-                className='flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-accent'
-              >
+              <button type='submit' className='flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-accent'>
                 <Plus size={14} /> Add
               </button>
             </form>
@@ -231,7 +245,7 @@ async function handleAddFriend(e: React.FormEvent) {
             <button
               onClick={() => setStep(3)}
               disabled={!!friendName.trim()}
-              className='mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed'
+              className='mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60'
             >
               Continue <ChevronRight size={15} />
             </button>
@@ -262,14 +276,14 @@ async function handleAddFriend(e: React.FormEvent) {
               <input
                 type='text'
                 value={gameName}
-                onChange={(e) => { setGameName(e.target.value); setGameError('') }}
+                onChange={(e) => {
+                  setGameName(e.target.value)
+                  setGameError('')
+                }}
                 placeholder='Game name…'
-                className='flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring'
+                className='flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
               />
-              <button
-                type='submit'
-                className='flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-accent'
-              >
+              <button type='submit' className='flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-accent'>
                 <Plus size={14} /> Add
               </button>
             </form>
@@ -278,9 +292,15 @@ async function handleAddFriend(e: React.FormEvent) {
             <button
               onClick={handleComplete}
               disabled={completing || !!gameName.trim()}
-              className='mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed'
+              className='mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60'
             >
-              {completing ? 'Finishing up…' : <>Done — Let's go! <ChevronRight size={15} /></>}
+              {completing ? (
+                'Finishing up…'
+              ) : (
+                <>
+                  Done — Let's go! <ChevronRight size={15} />
+                </>
+              )}
             </button>
           </div>
         )}

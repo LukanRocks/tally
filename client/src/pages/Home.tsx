@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dices } from 'lucide-react'
 import { api, Game, LeaderboardEntry, MostPlayedGame } from '../lib/api'
-import Page from '../components/Page'
+import { cn } from '../lib/utils'
+import { Page } from '../components/page'
+import { GreetingBanner } from '../components/greeting-banner'
 
 export default () => {
   const [recentGames, setRecentGames] = useState<Game[]>([])
@@ -25,6 +27,8 @@ export default () => {
 
   return (
     <Page loading={loading}>
+      <GreetingBanner />
+
       {/* Leaderboard snippet */}
       <section>
         <div className='mb-4 flex items-center justify-between'>
@@ -36,28 +40,30 @@ export default () => {
         {leaderboard.length === 0 ? (
           <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
         ) : (
-          <div className='overflow-hidden rounded-xl border border-border bg-card'>
+          <div className='bg-surface-elevated overflow-hidden rounded-xl border border-border'>
             <div className='overflow-x-auto'>
               <table className='w-full text-sm'>
-                <thead className='bg-muted/50 text-xs tracking-wide text-muted-foreground uppercase'>
+                <thead className='bg-muted/50'>
                   <tr>
-                    <th className='px-4 py-3 text-left'>#</th>
-                    <th className='px-4 py-3 text-left'>Player</th>
-                    <th className='px-4 py-3 text-right'>Points</th>
-                    <th className='px-4 py-3 text-right'>Wins</th>
+                    <th className='eyebrow px-4 py-3 text-left text-muted-foreground'>#</th>
+                    <th className='eyebrow px-4 py-3 text-left text-muted-foreground'>Player</th>
+                    <th className='eyebrow px-4 py-3 text-right text-muted-foreground'>Points</th>
+                    <th className='eyebrow px-4 py-3 text-right text-muted-foreground'>Wins</th>
                   </tr>
                 </thead>
                 <tbody className='divide-y divide-border'>
                   {leaderboard.map((e, i) => (
                     <tr key={e.player_id} className='hover:bg-muted/50'>
-                      <td className='px-4 py-3 font-medium text-muted-foreground'>{i + 1}</td>
+                      <td className={cn('num px-4 py-3', i === 0 ? 'text-rank-gold' : i === 1 ? 'text-rank-silver' : i === 2 ? 'text-rank-bronze' : 'text-muted-foreground')}>
+                        {i + 1}
+                      </td>
                       <td className='px-4 py-3 font-medium'>
                         <Link to={`/players/${e.player_id}`} className='hover:text-primary'>
                           {e.player_name}
                         </Link>
                       </td>
-                      <td className='px-4 py-3 text-right font-semibold'>{e.total_points}</td>
-                      <td className='px-4 py-3 text-right text-muted-foreground'>{e.wins}</td>
+                      <td className='num px-4 py-3 text-right'>{e.total_points}</td>
+                      <td className='num px-4 py-3 text-right text-muted-foreground'>{e.wins}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -76,11 +82,11 @@ export default () => {
           ) : (
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
               {mostPlayed.map((g) => (
-                <Link key={g.id} to={`/library/${g.id}`} className='overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md'>
-                  <div className='aspect-3/4 bg-muted'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
+                <Link key={g.id} to={`/library/${g.id}`} className='bg-surface-elevated overflow-hidden rounded-xl border border-border transition-shadow hover:shadow-md'>
+                  <div className='bg-surface-sunken aspect-3/4'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
                   <div className='p-3'>
                     <p className='truncate text-sm font-medium'>{g.name}</p>
-                    <p className='mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
+                    <p className='num mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
                   </div>
                 </Link>
               ))}
@@ -95,11 +101,11 @@ export default () => {
           ) : (
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
               {leastPlayed.map((g) => (
-                <Link key={g.id} to={`/library/${g.id}`} className='overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md'>
-                  <div className='aspect-3/4 bg-muted'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
+                <Link key={g.id} to={`/library/${g.id}`} className='bg-surface-elevated overflow-hidden rounded-xl border border-border transition-shadow hover:shadow-md'>
+                  <div className='bg-surface-sunken aspect-3/4'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
                   <div className='p-3'>
                     <p className='truncate text-sm font-medium'>{g.name}</p>
-                    <p className='mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
+                    <p className='num mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
                   </div>
                 </Link>
               ))}
@@ -137,8 +143,8 @@ export default () => {
 
 function GameCard({ game }: { game: Game }) {
   return (
-    <Link to={`/library/${game.id}`} className='overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md'>
-      <div className='flex aspect-3/4 items-center justify-center bg-muted'>
+    <Link to={`/library/${game.id}`} className='bg-surface-elevated overflow-hidden rounded-xl border border-border transition-shadow hover:shadow-md'>
+      <div className='bg-surface-sunken flex aspect-3/4 items-center justify-center'>
         {game.cover_image_path ? (
           <img src={game.cover_image_path} alt={game.name} className='h-full w-full object-cover' />
         ) : (
