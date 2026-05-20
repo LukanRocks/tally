@@ -28,7 +28,7 @@ const DesktopNav = () => {
           <rect x='40' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
           <path d='M9 49 L52 15' stroke='currentColor' strokeWidth='6' strokeLinecap='round' />
         </svg>
-        <span className='hand text-2xl tracking-tight text-foreground'>Tally</span>
+        <span className='text-2xl font-callout tracking-tight text-foreground'>Tally</span>
       </NavLink>
 
       <nav className='flex-1 space-y-1 px-3 py-4'>

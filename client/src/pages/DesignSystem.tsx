@@ -1,14 +1,5 @@
 import React, { useState } from 'react'
 
-function CheckboxRow({ label, ...props }: { label: string } & React.ComponentProps<typeof Checkbox>) {
-  const [checked, setChecked] = useState(!!props.defaultChecked)
-  return (
-    <label className='flex cursor-pointer items-center gap-2 text-sm'>
-      <Checkbox checked={checked} onCheckedChange={(v) => setChecked(v === true)} {...props} />
-      {label}
-    </label>
-  )
-}
 import { Page } from '../components/page'
 import { Badge, badgeColorKeys, badgeVariantKeys } from '../components/badge'
 import { Checkbox } from '../components/checkbox'
@@ -20,6 +11,15 @@ const COLORS = badgeColorKeys
 const VARIANTS = badgeVariantKeys
 
 const THEMES: ThemeSetting[] = ['light', 'dark', 'system']
+function CheckboxRow({ label, ...props }: { label: string } & React.ComponentProps<typeof Checkbox>) {
+  const [checked, setChecked] = useState(!!props.defaultChecked)
+  return (
+    <label className='flex cursor-pointer items-center gap-2 text-sm'>
+      <Checkbox checked={checked} onCheckedChange={(v) => setChecked(v === true)} {...props} />
+      {label}
+    </label>
+  )
+}
 
 export default function DesignSystem() {
   const { setting, set } = useTheme()
@@ -113,6 +113,8 @@ export default function DesignSystem() {
           </button>
         </div>
       </section>
+
+      {/* ----- */}
     </Page>
   )
 }
