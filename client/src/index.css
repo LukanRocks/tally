@@ -271,9 +271,10 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-paper-muted outline-ring/50;
   }
   
+  /* todo: move from shadcn defaults to ours */
   body {
     @apply bg-background text-foreground;
   }

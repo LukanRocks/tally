@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react'
 import { useSettings } from '../contexts/settings-context'
 
 export type ThemeSetting = 'light' | 'dark' | 'system'
+
+export const THEMES: ThemeSetting[] = ['light', 'dark', 'system']
+
 type AppliedTheme = 'light' | 'dark'
 
 function getSystemTheme(): AppliedTheme {

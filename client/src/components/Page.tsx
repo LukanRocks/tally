@@ -16,6 +16,7 @@ export const Page = ({ children, loading, className }: PageProps) => {
 
       return
     }
+
     const timer = setTimeout(() => setShowLoader(true), 200)
 
     return () => clearTimeout(timer)
