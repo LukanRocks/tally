@@ -47,7 +47,7 @@ export default function DesignSystem() {
       {/* Checkboxes */}
       <section className='space-y-4'>
         <h2 className='text-lg font-semibold'>Checkbox</h2>
-        <div className='bg-ds-surface-elevated flex flex-wrap gap-6 rounded-xl border border-border px-6 py-5'>
+        <div className='bg-surface-elevated flex flex-wrap gap-6 rounded-xl border border-border px-6 py-5'>
           <CheckboxRow label='Unchecked' />
           <CheckboxRow label='Checked' defaultChecked />
           <CheckboxRow label='Disabled' disabled />
@@ -59,7 +59,7 @@ export default function DesignSystem() {
       <section className='space-y-4'>
         <h2 className='text-lg font-semibold'>Badges</h2>
 
-        <div className='bg-ds-surface-elevated overflow-auto rounded-xl border border-border'>
+        <div className='bg-surface-elevated overflow-auto rounded-xl border border-border'>
           <table className='w-full text-sm'>
             <thead className='bg-muted/50'>
               <tr>
@@ -92,23 +92,23 @@ export default function DesignSystem() {
       {/* Toaster */}
       <section className='space-y-4'>
         <h2 className='text-lg font-semibold'>Toaster</h2>
-        <div className='bg-ds-surface-elevated flex flex-wrap gap-3 rounded-xl border border-border px-6 py-5'>
-          <button className='bg-ds-primary text-ds-primary-foreground rounded-md px-3 py-1.5 text-sm' onClick={() => toast('Default toast')}>
+        <div className='bg-surface-elevated flex flex-wrap gap-3 rounded-xl border border-border px-6 py-5'>
+          <button className='rounded-md bg-primary px-3 py-1.5 text-sm text-primary-foreground' onClick={() => toast('Default toast')}>
             Default
           </button>
-          <button className='bg-ds-success rounded-md px-3 py-1.5 text-sm text-white' onClick={() => toast.success('Success toast')}>
+          <button className='rounded-md bg-success px-3 py-1.5 text-sm text-white' onClick={() => toast.success('Success toast')}>
             Success
           </button>
-          <button className='bg-ds-warning rounded-md px-3 py-1.5 text-sm text-white' onClick={() => toast.warning('Warning toast')}>
+          <button className='rounded-md bg-warning px-3 py-1.5 text-sm text-white' onClick={() => toast.warning('Warning toast')}>
             Warning
           </button>
-          <button className='bg-ds-destructive rounded-md px-3 py-1.5 text-sm text-white' onClick={() => toast.error('Error toast')}>
+          <button className='rounded-md bg-destructive px-3 py-1.5 text-sm text-white' onClick={() => toast.error('Error toast')}>
             Error
           </button>
-          <button className='bg-ds-info rounded-md px-3 py-1.5 text-sm text-white' onClick={() => toast.info('Info toast')}>
+          <button className='rounded-md bg-info px-3 py-1.5 text-sm text-white' onClick={() => toast.info('Info toast')}>
             Info
           </button>
-          <button className='bg-ds-muted text-ds-foreground rounded-md px-3 py-1.5 text-sm' onClick={() => toast.loading('Loading…')}>
+          <button className='rounded-md bg-muted px-3 py-1.5 text-sm text-foreground' onClick={() => toast.loading('Loading…')}>
             Loading
           </button>
         </div>
