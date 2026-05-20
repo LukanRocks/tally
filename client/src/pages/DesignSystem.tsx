@@ -10,14 +10,14 @@ function CheckboxRow({ label, ...props }: { label: string } & React.ComponentPro
   )
 }
 import { Page } from '../components/page'
-import { Badge } from '../components/badge'
+import { Badge, badgeColorKeys, badgeVariantKeys } from '../components/badge'
 import { Checkbox } from '../components/checkbox'
 import { toast } from 'sonner'
 import { useTheme, type ThemeSetting } from '../hooks/useTheme'
 import { cn } from '../lib/utils'
 
-const COLORS = ['gold', 'silver', 'bronze', 'self', 'friend', 'rented', 'success', 'warning', 'info', 'destructive', 'primary'] as const
-const VARIANTS = ['default', 'outline', 'ghost'] as const
+const COLORS = badgeColorKeys
+const VARIANTS = badgeVariantKeys
 
 const THEMES: ThemeSetting[] = ['light', 'dark', 'system']
 

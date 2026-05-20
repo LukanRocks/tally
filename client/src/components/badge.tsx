@@ -3,6 +3,12 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { Slot } from 'radix-ui'
 import { cn } from '../lib/utils'
 
+export const badgeColorKeys = ['gold', 'silver', 'bronze', 'self', 'friend', 'store', 'success', 'warning', 'info', 'destructive', 'primary'] as const
+export const badgeVariantKeys = ['default', 'outline', 'ghost'] as const
+
+export type BadgeColor = (typeof badgeColorKeys)[number]
+export type BadgeVariant = (typeof badgeVariantKeys)[number]
+
 const badgeVariants = cva(
   'inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-all focus-visible:ring-[3px] focus-visible:ring-ring/50 [&>svg]:pointer-events-none [&>svg]:size-3!',
   {
@@ -22,7 +28,7 @@ const badgeVariants = cva(
         // Player status
         self: 'text-status-self',
         friend: 'text-status-friend',
-        rented: 'text-status-rented',
+        store: 'text-status-store',
         // Feedback
         success: 'text-success',
         warning: 'text-warning',
@@ -39,7 +45,7 @@ const badgeVariants = cva(
       { variant: 'default', color: 'bronze', className: 'bg-rank-bronze/20' },
       { variant: 'default', color: 'self', className: 'bg-status-self/20' },
       { variant: 'default', color: 'friend', className: 'bg-status-friend/20' },
-      { variant: 'default', color: 'rented', className: 'bg-status-rented/20' },
+      { variant: 'default', color: 'store', className: 'bg-status-store/20' },
       { variant: 'default', color: 'success', className: 'bg-success/20' },
       { variant: 'default', color: 'warning', className: 'bg-warning/20' },
       { variant: 'default', color: 'info', className: 'bg-info/20' },
@@ -51,7 +57,7 @@ const badgeVariants = cva(
       { variant: 'outline', color: 'bronze', className: 'border-rank-bronze' },
       { variant: 'outline', color: 'self', className: 'border-status-self' },
       { variant: 'outline', color: 'friend', className: 'border-status-friend' },
-      { variant: 'outline', color: 'rented', className: 'border-status-rented' },
+      { variant: 'outline', color: 'store', className: 'border-status-store' },
       { variant: 'outline', color: 'success', className: 'border-success' },
       { variant: 'outline', color: 'warning', className: 'border-warning' },
       { variant: 'outline', color: 'info', className: 'border-info' },
