@@ -1,13 +1,14 @@
 import { NavLink, Outlet } from 'react-router-dom'
-import { Home, Library, Settings, Trophy, Users } from 'lucide-react'
+import { House, Library, Settings, Trophy, Users, Wrench } from 'lucide-react'
 import { useTheme } from '../hooks/useTheme'
 import { cn } from '../lib/utils'
 
 const navItems = [
-  { to: '/home', label: 'Home', Icon: Home },
+  { to: '/home', label: 'Home', Icon: House },
   { to: '/leaderboard', label: 'Leaderboard', Icon: Trophy },
   { to: '/library', label: 'Library', Icon: Library },
   { to: '/players', label: 'Players', Icon: Users },
+  { to: '/tools', label: 'Tools', Icon: Wrench },
   { to: '/settings', label: 'Settings', Icon: Settings },
 ]
 
@@ -28,7 +29,7 @@ const DesktopNav = () => {
           <rect x='40' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
           <path d='M9 49 L52 15' stroke='currentColor' strokeWidth='6' strokeLinecap='round' />
         </svg>
-        <span className='text-2xl font-callout tracking-tight text-foreground'>Tally</span>
+        <span className='font-callout text-2xl tracking-tight text-foreground'>Tally</span>
       </NavLink>
 
       <nav className='flex-1 space-y-1 px-3 py-4'>

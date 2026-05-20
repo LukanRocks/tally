@@ -1,0 +1,203 @@
+id;prompt;category
+2;Player with the longest beard;appearance
+3;Shortest player at the table;appearance
+8;Player wearing the most colors;appearance
+12;Player with the longest hair;appearance
+21;Last player who had a haircut;appearance
+58;Player whose shoe size is largest;appearance
+101;Last player who talked to themselves and got caught;chaos
+102;Player who most recently Googled something embarrassing;chaos
+103;Last player who tripped over nothing;chaos
+104;Player who most recently sent a message to the wrong person;chaos
+105;Last player who laughed at their own joke before finishing it;chaos
+106;Player who most recently forgot why they walked into a room;chaos
+107;Last player who waved back at someone who wasn't waving at them;chaos
+108;Player who most recently said 'you too' when told to enjoy their meal;chaos
+109;Last player who called a teacher 'mom' or 'dad';chaos
+110;Player with the most expired items in their bag right now;chaos
+111;Last player who confidently walked in the wrong direction and kept going anyway;chaos
+112;Player who most recently dropped their phone on their face in bed;chaos
+113;Last player who replied 'I'm on my way' while still at home;chaos
+114;Player who pushed a 'pull' door the hardest before reading the sign;chaos
+115;Last player who auto-corrected into something mortifying;chaos
+116;Player who most recently fell asleep somewhere weird;chaos
+117;Last player who tried to unlock someone else's car by mistake;chaos
+118;Player who most recently talked during a movie they'd already seen;chaos
+119;Last player who Googled a word they definitely should know;chaos
+120;Player who most recently walked into a glass door or window;chaos
+121;Last player who accidentally liked an old photo while stalking someone's profile;chaos
+122;Player who most recently set an alarm and slept through it anyway;chaos
+123;Last player who forgot a name mid-introduction;chaos
+124;Player who most recently said goodbye and then walked the same direction as the other person;chaos
+125;Last player who tried to pay with an empty card;chaos
+126;Player who most recently wore something inside out all day without noticing;chaos
+127;Last player who yelled at a buffering screen;chaos
+128;Player who most recently ordered the wrong thing and ate it anyway out of shame;chaos
+129;Last player who gave extremely confident directions that were completely wrong;chaos
+130;Player who most recently searched for their phone while it was in their hand;chaos
+131;Last player who started a story and completely forgot the point;chaos
+132;Player who most recently rehearsed an argument in the shower;chaos
+133;Last player who apologized to furniture they bumped into;chaos
+135;Last player who put the milk in the cabinet and the cereal in the fridge;chaos
+137;Last player who confidently answered a question and was spectacularly wrong;chaos
+139;Last player who read a whole page and absorbed absolutely nothing;chaos
+140;Player who most recently had a full conversation and couldn't remember a word of it;chaos
+141;Last player who bought something 'on sale' they didn't need and called it saving money;chaos
+142;Player who most recently looked for something while someone else found it immediately;chaos
+165;Last player who checked the time and immediately forgot what it was;chaos
+166;Player who most recently had a full debate with a self-checkout machine;chaos
+169;Last player who said 'I'll remember that' and did not remember that;chaos
+170;Player who most recently fell asleep while replying to a message;chaos
+171;Last player who used 'I was just about to do that' as a defence;chaos
+172;Player who most recently opened an app forgot why closed it and reopened it;chaos
+174;Player who most recently took a nap that became a full sleep;chaos
+175;Last player who tried to parallel park and gave up;chaos
+176;Player who most recently called something 'basically the same thing' when it clearly wasn't;chaos
+178;Player who most recently said 'I'm almost ready' and wasn't even close;chaos
+179;Last player who made a bold prediction in front of witnesses and was catastrophically wrong;chaos
+181;Last player who watched a tutorial and still couldn't figure it out;chaos
+182;Player who most recently said 'I'll start fresh on Monday' on a Thursday;chaos
+187;Last player who convinced themselves they'd remember something without writing it down — and didn't;chaos
+189;Last player who dramatically said 'I'm going to bed' and was back 10 minutes later;chaos
+190;Player who most recently used 'I meant to do that' after clearly not meaning to;chaos
+192;Player who most recently discovered food in their pocket they had forgotten about;chaos
+193;Last player who looked at the time on their phone and immediately picked it up again to check;chaos
+196;Player who most recently narrated their own actions out loud while alone;chaos
+199;Last player who said 'let me check real quick' and disappeared for 20 minutes;chaos
+13;Last person who visited a museum;culture
+15;Last player who read a book;culture
+47;Last player who learned something new;culture
+51;Last player who painted or drew something;culture
+88;Player who most recently visited a library;culture
+89;Last player who bought a book;culture
+10;Player who woke up earliest today;daily life
+14;Player who most recently bought something online;daily life
+18;Player with the most steps today;daily life
+19;Last player who took a photo;daily life
+22;Player who most recently stayed up past midnight;daily life
+34;Player with the oldest item in their pocket or bag;daily life
+38;Player with the most unread messages;daily life
+43;Last player who fixed something broken;daily life
+44;Player with the most apps on their phone;daily life
+46;Player who woke up latest today;daily life
+57;Last player who climbed stairs instead of taking the elevator;daily life
+61;Last player who overslept;daily life
+62;Player with the most keys on their keychain;daily life
+66;Player who has the most photos on their phone;daily life
+70;Player with the earliest alarm set for tomorrow;daily life
+76;Player with the most tabs open in their browser;daily life
+82;Player who most recently had a nightmare;daily life
+86;Player with the fewest social media accounts;daily life
+90;Player who most recently got a parking ticket;daily life
+93;Last player who made a phone call (not a message);daily life
+95;Last player who sat on the floor;daily life
+97;Last player who went to bed after 2am;daily life
+7;Last player who watched a movie;entertainment
+25;Last player who cried at a movie;entertainment
+84;Player who watched the most episodes of a show this week;entertainment
+134;Player who most recently binge-watched something they weren't even enjoying;entertainment
+138;Player who most recently fell asleep during a movie they chose;entertainment
+143;Last player who asked 'what are we watching?' and then stared at their phone the whole time;entertainment
+167;Last player who gave an overly confident opinion on a film they watched on 1.5x speed;entertainment
+198;Player who most recently spent longer choosing what to watch than actually watching anything;entertainment
+30;Player with the most siblings;family
+54;Player with the most pets;family
+68;Player who most recently visited their grandparents;family
+5;Last player who cooked a meal;food
+11;Last player who ate pizza;food
+23;Last player who ate breakfast;food
+29;Last player who drank coffee;food
+31;Last player who tried a new restaurant;food
+39;Last player who baked something;food
+53;Last player who ordered food delivery;food
+73;Last player who burned food while cooking;food
+75;Last player who went to a farmer's market;food
+91;Last player who tried a food they had never eaten before;food
+136;Player who most recently stress-ate something from the back of the fridge;food
+156;Player who most recently ate something off the floor after the 3-second rule expired;food
+157;Last player who made a recipe 'their own' by ignoring all the instructions;food
+158;Player who most recently called cereal a legitimate dinner;food
+159;Last player who finished someone else's leftovers and pretended not to know what happened;food
+160;Player who most recently ate snacks in bed and denied it;food
+161;Last player who confidently mispronounced a menu item at a restaurant;food
+162;Player who most recently burnt toast and ate it anyway;food
+163;Last player who said 'I'm not even hungry' and then ate the most;food
+164;Player who most recently looked in the fridge found nothing and checked again 3 minutes later;food
+9;Last player who lost a game;gaming
+28;Player who owns the most board games;gaming
+48;Player who has played this game the most times;gaming
+55;Last player who played a video game;gaming
+71;Last player who played a card game;gaming
+92;Player with the most board game losses this month;gaming
+144;Player who most recently rage-quit a game and immediately asked for a rematch;gaming
+145;Last player who said 'one more game' and meant it the least;gaming
+146;Player who most recently blamed their bad play on game balance;gaming
+147;Last player who offered to teach the rules and then got them wrong;gaming
+148;Player who has the most house rules memorized that nobody else agreed to;gaming
+149;Last player who went all-in on a strategy and never recovered;gaming
+150;Player who most recently asked 'wait whose turn is it?' when it was obviously theirs;gaming
+151;Last player who pretended to understand the rules and hoped for the best;gaming
+152;Player who most recently made a confident move and immediately regretted it;gaming
+153;Last player who kept score wrong and blamed the pen;gaming
+154;Player who most recently spent 10 minutes on their turn and still made the worst possible move;gaming
+155;Last player who pulled the 'I was going easy on you' card after losing;gaming
+50;Player with the most plants at home;home
+79;Last player who changed a light bulb;home
+80;Player with the most items in their fridge;home
+87;Last player who tried to fix something with tape;home
+98;Player with the most stickers on their laptop or notebook;home
+168;Player who most recently panic-cleaned before guests arrived and hid things in a closet;home
+177;Last player who aggressively reorganized something that was already fine;home
+180;Player who most recently bought something 'for the house' that was clearly just for them;home
+200;Player who most recently had strong feelings about the correct way to load a dishwasher;home
+4;Most recent birthday;life events
+32;Player who most recently changed jobs;life events
+36;Player who most recently moved home;life events
+40;Player whose birthday is coming up soonest;life events
+72;Player who most recently went to a wedding;life events
+17;Last player who sang out loud;music
+41;Last player who attended a concert;music
+67;Last player who whistled;music
+16;Player whose name comes first alphabetically;names
+1;Last player who went hiking;outdoors
+26;Player who most recently rode a bike;outdoors
+33;Last player who went swimming;outdoors
+35;Last player who played a sport;outdoors
+52;Player who most recently got rained on;outdoors
+60;Player who most recently visited a beach;outdoors
+78;Player who most recently ran;outdoors
+27;Last player who made someone laugh;social
+37;Last player who got a gift;social
+45;Last player who went to a party;social
+49;Last player who made a mistake and admitted it;social
+56;Player who most recently cried from laughing;social
+59;Last player who sent a handwritten note;social
+63;Last player who hugged someone;social
+64;Player who most recently bought flowers;social
+69;Last player who donated something;social
+77;Last player who got a compliment;social
+83;Last player who argued about something and was wrong;social
+85;Last player who helped a stranger;social
+94;Player who most recently changed their mind about something;social
+99;Last player who got surprised;social
+100;Player who would win in a staring contest — everyone stares and last one to blink goes first;social
+183;Last player who replied to a group chat 10 hours late as if the conversation was still live;social
+184;Player who most recently tried to be subtle and completely failed;social
+185;Last player who gave unsolicited advice that backfired immediately;social
+186;Player who most recently forgot a name moments after being introduced;social
+188;Player who most recently pretended to be busy to avoid a phone call;social
+191;Last player who held a door open for someone who was way too far away;social
+194;Player who most recently let the 'typing...' bubble appear and then said nothing;social
+197;Last player who tried to explain a meme and killed it;social
+6;Player who traveled farthest to get here;travel
+20;Player who most recently visited a foreign country;travel
+24;Player who traveled the longest distance this year;travel
+42;Player who most recently stayed in a hotel;travel
+65;Last player who got lost;travel
+74;Player who lives farthest from here;travel
+81;Last player who stayed somewhere with no Wi-Fi;travel
+96;Player who most recently took public transport;travel
+173;Last player who confidently said 'I know a shortcut' and made things worse;travel
+195;Last player who planned an entire trip in their head and then didn't go;travel
+201;Last player who pet a cat;daily life
+202;Last player who played with a dog;daily life
