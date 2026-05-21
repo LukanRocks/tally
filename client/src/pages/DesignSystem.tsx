@@ -1,6 +1,6 @@
-import { Page } from '../components/page'
+import { Page } from '../component/page'
 import { cn } from '../lib/utils'
-import { ThemeToggle } from '../components/theme-toggle'
+import { ThemeToggle } from '../component/theme-toggle'
 
 // import React, { useState } from 'react'
 // import { Badge, badgeColorKeys, badgeVariantKeys } from '../components/badge'
