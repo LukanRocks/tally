@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/shadcn/components/ui/button'
-import { PROMPTS, type Prompt } from '../data/firstPlayerPrompts'
+import { PROMPTS, type Prompt } from '../lib/prompts'
 
 type Phase = 'idle' | 'animating' | 'revealed'
 
@@ -55,15 +55,13 @@ export default function FirstPlayerPage() {
   return (
     <div className='flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center gap-8 p-6 md:min-h-screen'>
       <div className='flex flex-col items-center justify-center gap-4 px-4'>
-        {phase === 'revealed' && finalPrompt && (
-          <span className='rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary capitalize'>
-            {finalPrompt.category}
-          </span>
-        )}
+        {phase === 'revealed' && finalPrompt && <span className='rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary capitalize'>{finalPrompt.category}</span>}
         <p className='text-center text-4xl font-bold'>{displayText}</p>
       </div>
       {phase === 'revealed' && (
-        <Button size='lg' onClick={handleDraw}>Re-roll</Button>
+        <Button size='lg' onClick={handleDraw}>
+          Re-roll
+        </Button>
       )}
     </div>
   )
