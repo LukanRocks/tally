@@ -3,8 +3,8 @@
   "version": "0.6.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"pnpm -C server dev\" \"pnpm -C client dev\"",
-    "build": "pnpm -C server build && pnpm -C client build",
+    "dev": "concurrently \"pnpm -C backend dev\" \"pnpm -C client dev\"",
+    "build": "pnpm -C backend build && pnpm -C client build",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
