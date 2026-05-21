@@ -1,5 +1,5 @@
 packages:
-  - 'client'
+  - 'web'
   - 'backend'
 overrides:
   '@types/express': '5.0.6'

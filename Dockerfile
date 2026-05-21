@@ -4,16 +4,16 @@ RUN corepack enable
 FROM base AS client-build
 WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
-COPY client/package.json ./client/package.json
+COPY web/package.json ./web/package.json
 COPY backend/package.json ./backend/package.json
 RUN pnpm install --frozen-lockfile --filter tally-client
-COPY client/ ./client/
-RUN pnpm -C client build
+COPY web/ ./web/
+RUN pnpm -C web build
 
 FROM base AS server-build
 WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
-COPY client/package.json ./client/package.json
+COPY web/package.json ./web/package.json
 COPY backend/package.json ./backend/package.json
 RUN pnpm install --frozen-lockfile --filter tally-server
 COPY backend/ ./backend/
@@ -23,11 +23,11 @@ FROM base AS production
 WORKDIR /app
 RUN apk add --no-cache python3 make g++
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
-COPY client/package.json ./client/package.json
+COPY web/package.json ./web/package.json
 COPY backend/package.json ./backend/package.json
 RUN pnpm install --frozen-lockfile --filter tally-server --prod
 COPY --from=server-build /app/backend/dist ./backend/dist
-COPY --from=client-build /app/client/dist ./backend/public
+COPY --from=client-build /app/web/dist ./backend/public
 RUN mkdir -p /app/data/covers /app/data/attachments /app/data/avatars
 
 ENV NODE_ENV=production
