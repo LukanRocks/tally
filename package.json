@@ -3,16 +3,15 @@
   "version": "0.6.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
-    "build": "npm run build --prefix server && npm run build --prefix client",
-    "install:all": "npm install && npm install --prefix server && npm install --prefix client",
+    "dev": "concurrently \"pnpm -C server dev\" \"pnpm -C client dev\"",
+    "build": "pnpm -C server build && pnpm -C client build",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "prettier": "^3.8.1",
-    "prettier-plugin-tailwindcss": "^0.7.2",
-    "shadcn": "^4.4.0"
+    "concurrently": "9.2.1",
+    "prettier": "3.8.3",
+    "prettier-plugin-tailwindcss": "0.8.0",
+    "shadcn": "4.7.0"
   }
 }

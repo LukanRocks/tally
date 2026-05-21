@@ -44,7 +44,7 @@ interface DieCellProps {
 
 function DieCell({ value, animating }: DieCellProps) {
   return (
-    <div className={`rounded-xl border border-border bg-card flex items-center justify-center aspect-square text-2xl font-bold tabular-nums${animating ? ' animate-pulse' : ''}`}>
+    <div className={`flex aspect-square items-center justify-center rounded-xl border border-border bg-card text-2xl font-bold tabular-nums${animating ? 'animate-pulse' : ''}`}>
       {value}
     </div>
   )
@@ -57,7 +57,7 @@ interface DiceGridProps {
 
 function DiceGrid({ displayValues, animating }: DiceGridProps) {
   return (
-    <div className='w-full max-w-sm mx-auto'>
+    <div className='mx-auto w-full max-w-sm'>
       <div className={`grid gap-2 ${getGridCols(displayValues.length)}`}>
         {displayValues.map((v, i) => (
           <DieCell key={i} value={v} animating={animating} />
@@ -67,7 +67,8 @@ function DiceGrid({ displayValues, animating }: DiceGridProps) {
   )
 }
 
-const inputClass = 'w-20 rounded-lg border border-border bg-background p-2 text-center text-4xl font-bold tabular-nums focus:ring-2 focus:ring-primary focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+const inputClass =
+  'w-20 rounded-lg border border-border bg-background p-2 text-center text-4xl font-bold tabular-nums focus:ring-2 focus:ring-primary focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
 
 interface SetupViewProps {
   count: number
@@ -86,14 +87,7 @@ function SetupView({ count, sides, onCountChange, onSidesChange, onRoll }: Setup
           <Button variant='secondary' className='w-20' onClick={() => onCountChange(Math.min(10, count + 1))}>
             <Plus size={16} />
           </Button>
-          <input
-            type='number'
-            min={1}
-            max={10}
-            value={count}
-            onChange={(e) => onCountChange(Math.min(10, Math.max(1, Number(e.target.value))))}
-            className={inputClass}
-          />
+          <input type='number' min={1} max={10} value={count} onChange={(e) => onCountChange(Math.min(10, Math.max(1, Number(e.target.value))))} className={inputClass} />
           <Button variant='secondary' className='w-20' onClick={() => onCountChange(Math.max(1, count - 1))}>
             <Minus size={16} />
           </Button>
@@ -103,14 +97,7 @@ function SetupView({ count, sides, onCountChange, onSidesChange, onRoll }: Setup
           <Button variant='secondary' className='w-20' onClick={() => onSidesChange(Math.min(999, sides + 1))}>
             <Plus size={16} />
           </Button>
-          <input
-            type='number'
-            min={2}
-            max={999}
-            value={sides}
-            onChange={(e) => onSidesChange(Math.min(999, Math.max(2, Number(e.target.value))))}
-            className={inputClass}
-          />
+          <input type='number' min={2} max={999} value={sides} onChange={(e) => onSidesChange(Math.min(999, Math.max(2, Number(e.target.value))))} className={inputClass} />
           <Button variant='secondary' className='w-20' onClick={() => onSidesChange(Math.max(2, sides - 1))}>
             <Minus size={16} />
           </Button>
@@ -148,10 +135,14 @@ function ResultsView({ results, onRollAgain, onNewRoll }: ResultsViewProps) {
   return (
     <div className='flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center gap-6 p-6 md:min-h-screen'>
       <DiceGrid displayValues={results} />
-      <p className='text-[min(20vw,8rem)] font-bold tabular-nums leading-none'>{total(results)}</p>
-      <div className='flex flex-col gap-3 w-full max-w-xs'>
-        <Button size='lg' onClick={onRollAgain}>Roll Again</Button>
-        <Button size='lg' variant='outline' onClick={onNewRoll}>New Roll</Button>
+      <p className='text-[min(20vw,8rem)] leading-none font-bold tabular-nums'>{total(results)}</p>
+      <div className='flex w-full max-w-xs flex-col gap-3'>
+        <Button size='lg' onClick={onRollAgain}>
+          Roll Again
+        </Button>
+        <Button size='lg' variant='outline' onClick={onNewRoll}>
+          New Roll
+        </Button>
       </div>
     </div>
   )
@@ -166,7 +157,9 @@ export default function DicePage() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
   }, [])
 
   function startRolling() {
@@ -197,30 +190,20 @@ export default function DicePage() {
 
       if (now - lastDisplayUpdate >= throttleMs) {
         lastDisplayUpdate = now
-        setDisplayValues(Array(count).fill(0).map(() => rollDie(sides)))
+        setDisplayValues(
+          Array(count)
+            .fill(0)
+            .map(() => rollDie(sides)),
+        )
       }
     }, 16)
   }
 
   return (
     <>
-      {phase === 'setup' && (
-        <SetupView
-          count={count}
-          sides={sides}
-          onCountChange={setCount}
-          onSidesChange={setSides}
-          onRoll={startRolling}
-        />
-      )}
+      {phase === 'setup' && <SetupView count={count} sides={sides} onCountChange={setCount} onSidesChange={setSides} onRoll={startRolling} />}
       {phase === 'rolling' && <RollingView displayValues={displayValues} />}
-      {phase === 'results' && (
-        <ResultsView
-          results={results}
-          onRollAgain={startRolling}
-          onNewRoll={() => setPhase('setup')}
-        />
-      )}
+      {phase === 'results' && <ResultsView results={results} onRollAgain={startRolling} onNewRoll={() => setPhase('setup')} />}
     </>
   )
 }
