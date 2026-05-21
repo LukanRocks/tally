@@ -1,24 +1,33 @@
-FROM node:20-alpine AS client-build
-WORKDIR /app/client
-COPY client/package*.json ./
-RUN npm ci
-COPY client/ ./
-RUN npm run build
+FROM node:20-alpine AS base
+RUN corepack enable
 
-FROM node:20-alpine AS server-build
-WORKDIR /app/server
-COPY server/package*.json ./
-RUN npm ci
-COPY server/ ./
-RUN npm run build
+FROM base AS client-build
+WORKDIR /app
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY client/package.json ./client/package.json
+COPY server/package.json ./server/package.json
+RUN pnpm install --frozen-lockfile --filter tally-client
+COPY client/ ./client/
+RUN pnpm -C client build
 
-FROM node:20-alpine
+FROM base AS server-build
+WORKDIR /app
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY client/package.json ./client/package.json
+COPY server/package.json ./server/package.json
+RUN pnpm install --frozen-lockfile --filter tally-server
+COPY server/ ./server/
+RUN pnpm -C server build
+
+FROM base AS production
 WORKDIR /app
 RUN apk add --no-cache python3 make g++
-COPY server/package*.json ./
-RUN npm ci --omit=dev
-COPY --from=server-build /app/server/dist ./dist
-COPY --from=client-build /app/client/dist ./public
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY client/package.json ./client/package.json
+COPY server/package.json ./server/package.json
+RUN pnpm install --frozen-lockfile --filter tally-server --prod
+COPY --from=server-build /app/server/dist ./server/dist
+COPY --from=client-build /app/client/dist ./server/public
 RUN mkdir -p /app/data/covers /app/data/attachments /app/data/avatars
 
 ENV NODE_ENV=production
@@ -26,4 +35,5 @@ ENV PORT=3000
 ENV DATA_DIR=/app/data
 
 EXPOSE 3000
+WORKDIR /app/server
 CMD ["node", "dist/index.js"]
