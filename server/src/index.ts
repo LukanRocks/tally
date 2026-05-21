@@ -1,5 +1,6 @@
 import express from 'express'
 import path from 'path'
+import rateLimit from 'express-rate-limit'
 import { runMigrations, DATA_DIR } from './db'
 import { errorHandler } from './middleware/errorHandler'
 import gamesRouter from './routes/games'
@@ -12,6 +13,7 @@ import bggRouter from './routes/bgg'
 const app = express()
 const PORT = Number(process.env.PORT ?? 3001)
 
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 500 }))
 app.use(express.json())
 
 // Serve uploaded files
