@@ -1,6 +1,9 @@
 packages:
   - 'client'
   - 'server'
+overrides:
+  '@types/express': '5.0.6'
+
 allowBuilds:
   better-sqlite3: true
   esbuild: true
