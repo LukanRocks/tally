@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { Camera, Dices, Paperclip, Plus, Trash2, Pencil } from 'lucide-react'
+import { Camera, Paperclip, Plus, Trash2, Pencil } from 'lucide-react'
 import { api, Game, LeaderboardEntry, Session } from '@/lib/api'
+import { getBackgroundFallback } from '@/lib/backgrounds'
 import { useSettings } from '@/contexts/settings-context'
 
 function formatPrice(price: number, currency: 'USD' | 'BRL' = 'USD') {
@@ -82,9 +83,7 @@ export default function GameDetail() {
             {game.cover_image_path ? (
               <img src={game.cover_image_path} alt={game.name} className='h-full w-full object-cover' />
             ) : (
-              <div className='flex h-full items-center justify-center'>
-                <Dices size={40} className='text-muted-foreground/40' />
-              </div>
+              <img src={getBackgroundFallback(game.id)} alt='' className='h-full w-full object-cover' />
             )}
             <div className='absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100'>
               <Camera size={20} className='text-white' />

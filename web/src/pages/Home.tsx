@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Dices } from 'lucide-react'
 import { api, Game, LeaderboardEntry, MostPlayedGame } from '@/lib/api'
+import { GameCard } from '@/components/game-card'
 import { cn } from '@/lib/utils'
 import { Page } from '@/components/page'
 import { GreetingBanner } from '@/components/greeting-banner'
@@ -82,13 +82,7 @@ export default () => {
           ) : (
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
               {mostPlayed.map((g) => (
-                <Link key={g.id} to={`/library/${g.id}`} className='bg-surface-elevated overflow-hidden rounded-xl border border-border transition-shadow hover:shadow-md'>
-                  <div className='bg-surface-sunken aspect-3/4'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
-                  <div className='p-3'>
-                    <p className='truncate text-sm font-medium'>{g.name}</p>
-                    <p className='num mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
-                  </div>
-                </Link>
+                <GameCard key={g.id} {...g} />
               ))}
             </div>
           )}
@@ -101,13 +95,7 @@ export default () => {
           ) : (
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
               {leastPlayed.map((g) => (
-                <Link key={g.id} to={`/library/${g.id}`} className='bg-surface-elevated overflow-hidden rounded-xl border border-border transition-shadow hover:shadow-md'>
-                  <div className='bg-surface-sunken aspect-3/4'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
-                  <div className='p-3'>
-                    <p className='truncate text-sm font-medium'>{g.name}</p>
-                    <p className='num mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
-                  </div>
-                </Link>
+                <GameCard key={g.id} {...g} />
               ))}
             </div>
           )}
@@ -132,33 +120,11 @@ export default () => {
         ) : (
           <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5'>
             {recentGames.map((g) => (
-              <GameCard key={g.id} game={g} />
+              <GameCard key={g.id} {...g} />
             ))}
           </div>
         )}
       </section>
     </Page>
-  )
-}
-
-function GameCard({ game }: { game: Game }) {
-  return (
-    <Link to={`/library/${game.id}`} className='bg-surface-elevated overflow-hidden rounded-xl border border-border transition-shadow hover:shadow-md'>
-      <div className='bg-surface-sunken flex aspect-3/4 items-center justify-center'>
-        {game.cover_image_path ? (
-          <img src={game.cover_image_path} alt={game.name} className='h-full w-full object-cover' />
-        ) : (
-          <Dices size={32} className='text-muted-foreground/40' />
-        )}
-      </div>
-      <div className='p-3'>
-        <p className='truncate text-sm font-medium'>{game.name}</p>
-        {game.min_players && game.max_players && (
-          <p className='mt-1 text-xs text-muted-foreground'>
-            {game.min_players}–{game.max_players} players
-          </p>
-        )}
-      </div>
-    </Link>
   )
 }
