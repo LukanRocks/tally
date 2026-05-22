@@ -1,6 +1,7 @@
 import { Page } from '@/components/page'
 import { cn } from '@/lib/utils'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { GameCard } from '@/components/game-card'
 
 // import React, { useState } from 'react'
 // import { Badge, badgeColorKeys, badgeVariantKeys } from '@/components/badge'
@@ -1186,6 +1187,78 @@ export default () => (
         <p className='mt-1 text-sm text-ink-secondary'>
           Two density modes. The rich card carries cover art and ownership; the row variant earns its place when there are 20+ games.
         </p>
+      </div>
+
+      <div>
+        <p className='eyebrow mb-3 text-ink-muted'>Current Card · grid</p>
+        <div className='grid grid-cols-4 gap-3.5'>
+          {(
+            [
+              {
+                id: 1,
+                name: 'Hearthstone',
+                session_count: 0,
+              },
+              {
+                id: 2,
+                name: 'Catan',
+                session_count: 14,
+              },
+              {
+                id: 3,
+                name: 'Ticket to Ride',
+                session_count: 7,
+              },
+              {
+                id: 4,
+                name: 'Wingspan',
+                session_count: 23,
+              },
+              {
+                id: 5,
+                name: 'Pandemic',
+                session_count: 5,
+              },
+              {
+                id: 6,
+                name: 'Codenames',
+                session_count: 31,
+              },
+              {
+                id: 7,
+                name: 'Azul',
+                session_count: 9,
+              },
+              {
+                id: 8,
+                name: 'Gloomhaven',
+                session_count: 2,
+              },
+              {
+                id: 9,
+                name: 'Terraforming Mars',
+                session_count: 18,
+              },
+              {
+                id: 10,
+                name: 'Betrayal at House on the Hill',
+                session_count: 4,
+              },
+              {
+                id: 11,
+                name: 'Dominion',
+                session_count: 11,
+              },
+              {
+                id: 12,
+                name: '7 Wonders',
+                session_count: 16,
+              },
+            ] as const
+          ).map((game, index) => (
+            <GameCard key={index} {...game} />
+          ))}
+        </div>
       </div>
 
       <div>
