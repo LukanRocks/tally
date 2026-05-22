@@ -56,7 +56,6 @@ export interface Game {
 }
 
 export interface Settings {
-  id: 1
   onboarded: 0 | 1
   currency: 'USD' | 'BRL'
   language: 'en' | 'pt'
@@ -221,7 +220,7 @@ export const api = {
 
   settings: {
     get: () => request<Settings>('/settings'),
-    update: (data: Partial<Omit<Settings, 'id' | 'updated_at'>>) => request<Settings>('/settings', buildJsonRequest('PUT', data)),
+    update: (data: Partial<Omit<Settings, 'updated_at'>>) => request<Settings>('/settings', buildJsonRequest('PUT', data)),
     reset: () => request<void>('/settings/reset', { method: 'DELETE' }),
   },
 

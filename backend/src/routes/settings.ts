@@ -5,13 +5,17 @@ import { join } from 'path'
 import { db, sqlite, DATA_DIR } from '../db'
 import { settings as settingsTable, players as playersTable } from '../db/schema'
 
+// #DOCS: Migration 0002_settings_and_owner.sql seeds DB by default creating a singleton
+const SETTINGS_SINGLETON = 1
+const stripId = <T extends { id: number }>({ id: _id, ...rest }: T) => rest
 const router = Router()
 
 // GET /api/v1/settings
 router.get('/', (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const row = db.select().from(settingsTable).where(eq(settingsTable.id, 1)).get()
-    res.json(row)
+    const row = db.select().from(settingsTable).where(eq(settingsTable.id, SETTINGS_SINGLETON)).get()!
+
+    res.json(stripId(row))
   } catch (err) {
     next(err)
   }
@@ -51,8 +55,9 @@ router.put('/', (req: Request, res: Response, next: NextFunction) => {
       patch.default_owner_id = default_owner_id || null
     }
 
-    const [updated] = db.update(settingsTable).set(patch).where(eq(settingsTable.id, 1)).returning().all()
-    res.json(updated)
+    const [updated] = db.update(settingsTable).set(patch).where(eq(settingsTable.id, SETTINGS_SINGLETON)).returning().all()
+
+    res.json(stripId(updated))
   } catch (err) {
     next(err)
   }
@@ -73,7 +78,7 @@ router.delete('/reset', (_req: Request, res: Response, next: NextFunction) => {
       // 6. Players
       sqlite.prepare('DELETE FROM players').run()
       // 7. Re-seed settings with defaults
-      sqlite.prepare('INSERT INTO settings (id) VALUES (1)').run()
+      sqlite.prepare('INSERT INTO settings (id) VALUES (?)').run(SETTINGS_SINGLETON)
     })
 
     reset()

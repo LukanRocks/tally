@@ -2,9 +2,11 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { api, Settings } from '@/lib/api'
 import { Loading } from '@/components/loading'
 
+export type { Settings }
+
 type SettingsContextValue = {
   settings?: Settings
-  updateSetting: (patch: Partial<Omit<Settings, 'id' | 'updated_at'>>) => Promise<void>
+  updateSetting: (patch: Partial<Omit<Settings, 'updated_at'>>) => Promise<void>
   refreshSettings: () => Promise<void>
 }
 
@@ -21,7 +23,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     setIsLoading(false)
   }
 
-  const updateSetting = async (patch: Partial<Omit<Settings, 'id' | 'updated_at'>>) => {
+  const updateSetting = async (patch: Partial<Omit<Settings, 'updated_at'>>) => {
     const updated = await api.settings.update(patch)
 
     setSettings(updated)
