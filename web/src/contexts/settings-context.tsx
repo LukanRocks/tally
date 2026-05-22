@@ -1,47 +1,45 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { api, Settings } from '@/lib/api'
 
 type SettingsContextValue = {
-  settings: Settings | null
+  settings?: Settings
   updateSetting: (patch: Partial<Omit<Settings, 'id' | 'updated_at'>>) => Promise<void>
   refreshSettings: () => Promise<void>
   isLoading: boolean
 }
 
-const SettingsContext = createContext<SettingsContextValue | null>(null)
+const SettingsContext = createContext<SettingsContextValue | undefined>(undefined)
 
-export function SettingsProvider({ children }: { children: React.ReactNode }) {
-  const [settings, setSettings] = useState<Settings | null>(null)
+export const SettingsProvider = ({ children }: { children: ReactNode }) => {
+  const [settings, setSettings] = useState<Settings | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
 
-  async function fetchSettings() {
-    const s = await api.settings.get()
+  const fetchSettings = async () => {
+    const settings = await api.settings.get()
 
-    setSettings(s)
+    setSettings(settings)
     setIsLoading(false)
   }
 
-  useEffect(() => {
-    fetchSettings()
-  }, [])
-
-  async function updateSetting(patch: Partial<Omit<Settings, 'id' | 'updated_at'>>) {
+  const updateSetting = async (patch: Partial<Omit<Settings, 'id' | 'updated_at'>>) => {
     const updated = await api.settings.update(patch)
 
     setSettings(updated)
   }
 
-  async function refreshSettings() {
-    await fetchSettings()
-  }
+  const refreshSettings = async () => await fetchSettings()
+
+  useEffect(() => {
+    fetchSettings()
+  }, [])
 
   return <SettingsContext.Provider value={{ settings, updateSetting, refreshSettings, isLoading }}>{children}</SettingsContext.Provider>
 }
 
-export function useSettings() {
-  const ctx = useContext(SettingsContext)
+export const useSettings = () => {
+  const context = useContext(SettingsContext)
 
-  if (!ctx) throw new Error('useSettings must be used within SettingsProvider')
+  if (!context) throw new Error('useSettings must be used within SettingsProvider')
 
-  return ctx
+  return context
 }
