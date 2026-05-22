@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { api, Settings } from '@/lib/api'
+import { Loading } from '@/components/loading'
 
 type SettingsContextValue = {
   settings?: Settings
   updateSetting: (patch: Partial<Omit<Settings, 'id' | 'updated_at'>>) => Promise<void>
   refreshSettings: () => Promise<void>
-  isLoading: boolean
 }
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined)
@@ -33,7 +33,9 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     fetchSettings()
   }, [])
 
-  return <SettingsContext.Provider value={{ settings, updateSetting, refreshSettings, isLoading }}>{children}</SettingsContext.Provider>
+  if (isLoading) return <Loading />
+
+  return <SettingsContext.Provider value={{ settings, updateSetting, refreshSettings }}>{children}</SettingsContext.Provider>
 }
 
 export const useSettings = () => {
