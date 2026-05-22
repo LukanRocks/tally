@@ -54,7 +54,7 @@ A helper module at `web/src/lib/backgrounds/index.ts` (co-located with the SVG a
 **Requirements:**
 
 - Statically imports all 12 SVGs (`bg-0.svg` through `bg-11.svg`) from the same directory using Vite's static asset import.
-- Exports a single function: `getGameFallbackBackground(gameId: number): string` that returns the resolved asset URL.
+- Exports a single function: `getBackgroundFallback(gameId: number): string` that returns the resolved asset URL.
 - Selection formula: `backgrounds[gameId % backgrounds.length]` — uses `backgrounds.length`, not the hardcoded number `12`, so adding a new SVG is a one-import change.
 - No runtime asset fetching, no dynamic `import()`, no CDN.
 
@@ -68,7 +68,7 @@ A new `<GameCard>` component at `web/src/components/game-card.tsx` that encapsul
 
 - Accepts a minimal shared interface rather than the full `Game` type, so it can be used with both `Game` and `MostPlayedGame`: `{ id: number; name: string; cover_image_path: string | null; min_players?: number | null; max_players?: number | null; session_count?: number | null }`.
 - Renders: cover image (uploaded or fallback), game name (truncated), player count range (if present), session count (if present).
-- Uses `getGameFallbackBackground(game.id)` when `game.cover_image_path` is null.
+- Uses `getBackgroundFallback(game.id)` when `game.cover_image_path` is null.
 - The fallback image renders as an `<img>` element with `object-cover`, identical in treatment to an uploaded cover.
 - The entire card is a `<Link>` to `/library/{game.id}`, matching current behaviour.
 - Applies the same hover shadow and scale-on-image effects currently in Library.
@@ -82,7 +82,7 @@ The cover area on the game detail page shows the SVG fallback when no uploaded i
 
 **Requirements:**
 
-- When `game.cover_image_path` is null, render `<img src={getGameFallbackBackground(game.id)} className="h-full w-full object-cover" />` in place of the current `<Dices>` icon.
+- When `game.cover_image_path` is null, render `<img src={getBackgroundFallback(game.id)} className="h-full w-full object-cover" />` in place of the current `<Dices>` icon.
 - The camera-icon overlay (triggered on hover, `absolute`-positioned) remains unchanged and renders on top of both uploaded images and the SVG fallback.
 - The `onClick` handler that triggers the hidden file input is unchanged.
 - Games with an uploaded cover continue to render that cover — no change to the existing `<img>` branch.
@@ -128,7 +128,7 @@ No new data models. No schema changes. The helper derives its output entirely fr
 #### Business Logic — Background Selection
 
 ```
-getGameFallbackBackground(gameId) → backgrounds[gameId % backgrounds.length]
+getBackgroundFallback(gameId) → backgrounds[gameId % backgrounds.length]
 ```
 
 `backgrounds` is a statically-typed array of resolved Vite asset URLs, built from the 12 static imports in `index.ts`. The formula is pure and has no side effects.
@@ -139,18 +139,18 @@ getGameFallbackBackground(gameId) → backgrounds[gameId % backgrounds.length]
 
 - Static imports only — Vite fingerprints and caches SVGs at build time; no runtime resolution needed.
 - `backgrounds.length` used in the formula (not the literal `12`) to keep the asset set extensible without touching logic.
-- `<GameCard>` has no upload affordance — the GameDetail cover is structurally different (clickable area, hidden file input) and stays as bespoke markup, consuming `getGameFallbackBackground` directly.
+- `<GameCard>` has no upload affordance — the GameDetail cover is structurally different (clickable area, hidden file input) and stays as bespoke markup, consuming `getBackgroundFallback` directly.
 - `<GameCard>` accepts a minimal interface `{ id, name, cover_image_path, min_players?, max_players?, session_count? }` rather than the full `Game` type. Both `Game` and `MostPlayedGame` satisfy this interface, enabling reuse across Library and Home without type casts.
 
 ### 5.4 Modules to Build or Modify
 
 | Module | New / Modify | Notes |
 |---|---|---|
-| `web/src/lib/backgrounds/index.ts` | New | Helper module co-located with SVGs; exports `getGameFallbackBackground` |
+| `web/src/lib/backgrounds/index.ts` | New | Helper module co-located with SVGs; exports `getBackgroundFallback` |
 | `web/src/components/game-card.tsx` | New | Shared card component for Library and Home |
 | `web/src/pages/Library.tsx` | Modify | Replace inline card block with `<GameCard>` |
 | `web/src/pages/Home.tsx` | Modify | Replace all inline card instances with `<GameCard>` |
-| `web/src/pages/GameDetail.tsx` | Modify | Use `getGameFallbackBackground` for cover fallback; no structural change to upload UX |
+| `web/src/pages/GameDetail.tsx` | Modify | Use `getBackgroundFallback` for cover fallback; no structural change to upload UX |
 
 ---
 

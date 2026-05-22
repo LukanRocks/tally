@@ -56,7 +56,7 @@ import bg11 from './bg-11.svg'
 
 const backgrounds = [bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11]
 
-export function getGameFallbackBackground(gameId: number): string {
+export function getBackgroundFallback(gameId: number): string {
   return backgrounds[gameId % backgrounds.length]
 }
 ```
@@ -92,7 +92,7 @@ Both `Game` and `MostPlayedGame` from `@/lib/api` satisfy this interface structu
 <Link to={`/library/${game.id}`} className="group overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md">
   <div className="flex aspect-[3/4] items-center justify-center bg-muted">
     <img
-      src={game.cover_image_path ?? getGameFallbackBackground(game.id)}
+      src={game.cover_image_path ?? getBackgroundFallback(game.id)}
       alt={game.cover_image_path ? game.name : ''}
       className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
     />
@@ -124,7 +124,7 @@ Both `Game` and `MostPlayedGame` from `@/lib/api` satisfy this interface structu
 **Imports required:**
 ```typescript
 import { Link } from 'react-router-dom'
-import { getGameFallbackBackground } from '@/lib/backgrounds'
+import { getBackgroundFallback } from '@/lib/backgrounds'
 ```
 
 No `Dices` import — this component never renders the icon.
@@ -191,7 +191,7 @@ Before:
 After:
 ```tsx
 ) : (
-  <img src={getGameFallbackBackground(game.id)} alt='' className='h-full w-full object-cover' />
+  <img src={getBackgroundFallback(game.id)} alt='' className='h-full w-full object-cover' />
 )}
 ```
 
@@ -202,7 +202,7 @@ After:
 
 **Additions to imports:**
 ```typescript
-import { getGameFallbackBackground } from '@/lib/backgrounds'
+import { getBackgroundFallback } from '@/lib/backgrounds'
 ```
 
 ---
