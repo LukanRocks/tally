@@ -1,11 +1,12 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { api, Settings } from '@/lib/api'
 import { Loading } from '@/components/loading'
+import { ErrorScreen } from '@/components/error-screen'
 
 export type { Settings }
 
 type SettingsContextValue = {
-  settings?: Settings
+  settings: Settings
   updateSetting: (patch: Partial<Omit<Settings, 'updated_at'>>) => Promise<void>
   refreshSettings: () => Promise<void>
 }
@@ -15,12 +16,20 @@ const SettingsContext = createContext<SettingsContextValue | undefined>(undefine
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [settings, setSettings] = useState<Settings | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState(false)
 
   const fetchSettings = async () => {
-    const settings = await api.settings.get()
+    try {
+      setError(false)
 
-    setSettings(settings)
-    setIsLoading(false)
+      const settings = await api.settings.get()
+
+      setSettings(settings)
+    } catch {
+      setError(true)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const updateSetting = async (patch: Partial<Omit<Settings, 'updated_at'>>) => {
@@ -36,8 +45,9 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   if (isLoading) return <Loading />
+  if (error) return <ErrorScreen onRetry={fetchSettings} />
 
-  return <SettingsContext.Provider value={{ settings, updateSetting, refreshSettings }}>{children}</SettingsContext.Provider>
+  return <SettingsContext.Provider value={{ settings: settings!, updateSetting, refreshSettings }}>{children}</SettingsContext.Provider>
 }
 
 export const useSettings = () => {
