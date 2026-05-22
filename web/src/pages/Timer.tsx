@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useTimer, TimerState } from '../hooks/useTimer'
+import { useTimer, TimerState } from '@/hooks/useTimer'
 import { Button } from '@/shadcn/components/ui/button'
 import { Plus, Minus } from 'lucide-react'
 

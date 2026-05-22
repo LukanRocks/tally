@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Crown } from 'lucide-react'
-import { LeaderboardEntry } from '../lib/api'
+import { LeaderboardEntry } from '@/lib/api'
 
 interface PodiumProps {
   entries: LeaderboardEntry[]

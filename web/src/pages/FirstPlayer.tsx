@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/shadcn/components/ui/button'
-import { PROMPTS, type Prompt } from '../lib/prompts'
+import { PROMPTS, type Prompt } from '@/lib/prompts'
 
 type Phase = 'idle' | 'animating' | 'revealed'
 

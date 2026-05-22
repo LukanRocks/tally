@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { api, Settings } from '../lib/api'
+import { api, Settings } from '@/lib/api'
 
 type SettingsContextValue = {
   settings: Settings | null

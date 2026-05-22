@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dices, Plus } from 'lucide-react'
-import { api, Game, Player } from '../lib/api'
-import { useSettings } from '../contexts/settings-context'
+import { api, Game, Player } from '@/lib/api'
+import { useSettings } from '@/contexts/settings-context'
 
 export default function Library() {
   const { settings } = useSettings()

@@ -1,5 +1,5 @@
 import { Moon, Sun, SunMoon } from 'lucide-react'
-import { useTheme, THEMES, ThemeSetting } from '../hooks/useTheme'
+import { useTheme, THEMES, ThemeSetting } from '@/hooks/useTheme'
 
 const ThemeIcon = ({ setting }: { setting: ThemeSetting }) => {
   if (setting === 'dark') return <Moon size={18} />

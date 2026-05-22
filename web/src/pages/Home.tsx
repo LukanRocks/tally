@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dices } from 'lucide-react'
-import { api, Game, LeaderboardEntry, MostPlayedGame } from '../lib/api'
-import { cn } from '../lib/utils'
-import { Page } from '../components/page'
-import { GreetingBanner } from '../components/greeting-banner'
+import { api, Game, LeaderboardEntry, MostPlayedGame } from '@/lib/api'
+import { cn } from '@/lib/utils'
+import { Page } from '@/components/page'
+import { GreetingBanner } from '@/components/greeting-banner'
 
 export default () => {
   const [recentGames, setRecentGames] = useState<Game[]>([])

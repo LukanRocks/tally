@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserRound, Plus, Gamepad2, Users, ChevronRight, Check } from 'lucide-react'
-import { api, Player, Game } from '../lib/api'
-import { useSettings } from '../contexts/settings-context'
+import { api, Player, Game } from '@/lib/api'
+import { useSettings } from '@/contexts/settings-context'
 
 type Step = 1 | 2 | 3
 

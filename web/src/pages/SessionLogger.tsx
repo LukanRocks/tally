@@ -4,7 +4,7 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, X } from 'lucide-react'
-import { api, Game, Player } from '../lib/api'
+import { api, Game, Player } from '@/lib/api'
 
 interface RankedPlayer {
   id: number

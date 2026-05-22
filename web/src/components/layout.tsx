@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { House, Library, Settings, Trophy, Users, Wrench } from 'lucide-react'
-import { useTheme } from '../hooks/useTheme'
-import { cn } from '../lib/utils'
+import { useTheme } from '@/hooks/useTheme'
+import { cn } from '@/lib/utils'
 
 const navItems = [
   { to: '/home', label: 'Home', Icon: House },

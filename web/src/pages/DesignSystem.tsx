@@ -1,10 +1,10 @@
-import { Page } from '../components/page'
-import { cn } from '../lib/utils'
-import { ThemeToggle } from '../components/theme-toggle'
+import { Page } from '@/components/page'
+import { cn } from '@/lib/utils'
+import { ThemeToggle } from '@/components/theme-toggle'
 
 // import React, { useState } from 'react'
-// import { Badge, badgeColorKeys, badgeVariantKeys } from '../components/badge'
-// import { Checkbox } from '../components/checkbox'
+// import { Badge, badgeColorKeys, badgeVariantKeys } from '@/components/badge'
+// import { Checkbox } from '@/components/checkbox'
 // import { toast } from 'sonner'
 
 // const COLORS = badgeColorKeys

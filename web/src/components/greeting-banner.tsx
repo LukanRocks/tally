@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Plus } from 'lucide-react'
-import { api } from '../lib/api'
+import { api } from '@/lib/api'
 
 function greeting() {
   const hours = new Date().getHours()

@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Slot } from 'radix-ui'
-import { cn } from '../lib/utils'
+import { cn } from '@/lib/utils'
 
 export const badgeColorKeys = ['gold', 'silver', 'bronze', 'self', 'friend', 'store', 'success', 'warning', 'info', 'destructive', 'primary'] as const
 export const badgeVariantKeys = ['default', 'outline', 'ghost'] as const
