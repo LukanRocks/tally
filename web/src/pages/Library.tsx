@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dices, Plus } from 'lucide-react'
-import { api, Game, Player } from '@/lib/api'
+import { api, Game, Player } from '@/lib/http-transport/api'
 import { GameCard } from '@/components/game-card'
 import { useSettings } from '@/contexts/settings-context'
 

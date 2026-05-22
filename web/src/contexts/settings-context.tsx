@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
-import { api, Settings } from '@/lib/api'
+import { settingsTransport, Settings } from '@/lib/http-transport/private/settings'
 import { Loading } from '@/components/loading'
 import { ErrorScreen } from '@/components/error-screen'
 
@@ -21,7 +21,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const fetchSettings = async () => {
     try {
       setError(false)
-      setSettings(await api.settings.get())
+      setSettings(await settingsTransport.get())
     } catch {
       setError(true)
     } finally {
@@ -29,11 +29,11 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  const updateSetting = async (patch: Partial<Omit<Settings, 'updated_at'>>) => setSettings(await api.settings.update(patch))
+  const updateSetting = async (patch: Partial<Omit<Settings, 'updated_at'>>) => setSettings(await settingsTransport.update(patch))
 
   // maybe we return new settings after reset
   const resetSettings = async () => {
-    await api.settings.reset()
+    await settingsTransport.reset()
     await fetchSettings()
   }
 
