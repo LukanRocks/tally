@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { api } from '@/lib/api'
+import { useSettings } from '@/contexts/settings-context'
 
 function greeting() {
   const hours = new Date().getHours()
@@ -14,18 +15,18 @@ function greeting() {
 }
 
 export const GreetingBanner = () => {
+  const { settings } = useSettings()
   const [ownerName, setOwnerName] = useState<string | null>(null)
 
   useEffect(() => {
-    api.settings.get().then(async (settings) => {
-      if (!settings.default_owner_id) return
+    if (!settings.default_owner_id) return
 
-      const players = await api.players.list()
+    api.players.list().then((players) => {
       const owner = players.find((p) => p.id === settings.default_owner_id)
 
       if (owner) setOwnerName(owner.name)
     })
-  }, [])
+  }, [settings.default_owner_id])
 
   return (
     <div className='bg-surface-elevated flex items-center justify-between rounded-xl border border-border px-4 py-3'>

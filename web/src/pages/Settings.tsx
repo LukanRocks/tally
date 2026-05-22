@@ -14,7 +14,7 @@ type FormState = {
 
 export default function SettingsPage() {
   const navigate = useNavigate()
-  const { settings: ctxSettings, updateSetting, refreshSettings } = useSettings()
+  const { settings: ctxSettings, updateSetting, resetSettings } = useSettings()
   const [form, setForm] = useState<FormState>({
     currency: 'USD',
     language: 'en',
@@ -98,8 +98,7 @@ export default function SettingsPage() {
   async function handleReset() {
     setResetting(true)
     try {
-      await api.settings.reset()
-      await refreshSettings()
+      await resetSettings()
       setShowResetConfirm(false)
       setResetConfirmText('')
       toast.success('All data deleted')

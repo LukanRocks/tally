@@ -8,46 +8,43 @@ export type { Settings }
 type SettingsContextValue = {
   settings: Settings
   updateSetting: (patch: Partial<Omit<Settings, 'updated_at'>>) => Promise<void>
-  refreshSettings: () => Promise<void>
+  resetSettings: () => Promise<void>
 }
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined)
 
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [settings, setSettings] = useState<Settings | undefined>(undefined)
-  const [isLoading, setIsLoading] = useState(true)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
   const fetchSettings = async () => {
     try {
       setError(false)
-
-      const settings = await api.settings.get()
-
-      setSettings(settings)
+      setSettings(await api.settings.get())
     } catch {
       setError(true)
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   }
 
-  const updateSetting = async (patch: Partial<Omit<Settings, 'updated_at'>>) => {
-    const updated = await api.settings.update(patch)
+  const updateSetting = async (patch: Partial<Omit<Settings, 'updated_at'>>) => setSettings(await api.settings.update(patch))
 
-    setSettings(updated)
+  // maybe we return new settings after reset
+  const resetSettings = async () => {
+    await api.settings.reset()
+    await fetchSettings()
   }
-
-  const refreshSettings = async () => await fetchSettings()
 
   useEffect(() => {
     fetchSettings()
   }, [])
 
-  if (isLoading) return <Loading />
+  if (loading) return <Loading />
   if (error) return <ErrorScreen onRetry={fetchSettings} />
 
-  return <SettingsContext.Provider value={{ settings: settings!, updateSetting, refreshSettings }}>{children}</SettingsContext.Provider>
+  return <SettingsContext.Provider value={{ settings: settings!, updateSetting, resetSettings }}>{children}</SettingsContext.Provider>
 }
 
 export const useSettings = () => {
