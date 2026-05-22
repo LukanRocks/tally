@@ -1,0 +1,26 @@
+{
+  "name": "tally-backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc && cp -r src/db/migrations dist/db/",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "11.9.1",
+    "csv-parse": "6.2.1",
+    "drizzle-orm": "0.45.2",
+    "express": "5.2.1",
+    "express-rate-limit": "8.5.2",
+    "multer": "2.1.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "7.6.12",
+    "@types/express": "5.0.6",
+    "@types/multer": "2.1.0",
+    "@types/node": "25.9.1",
+    "tsx": "4.19.4",
+    "typescript": "6.0.3"
+  }
+}
