@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dices, Plus } from 'lucide-react'
 import { api, Game, Player } from '@/lib/api'
+import { GameCard } from '@/components/game-card'
 import { useSettings } from '@/contexts/settings-context'
 
 export default function Library() {
@@ -123,24 +124,7 @@ export default function Library() {
       ) : (
         <div className='grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
           {games.map((game) => (
-            <Link key={game.id} to={`/library/${game.id}`} className='group overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md'>
-              <div className='flex aspect-[3/4] items-center justify-center bg-muted'>
-                {game.cover_image_path ? (
-                  <img src={game.cover_image_path} alt={game.name} className='h-full w-full object-cover transition-transform duration-200 group-hover:scale-105' />
-                ) : (
-                  <Dices size={36} className='text-muted-foreground/40' />
-                )}
-              </div>
-              <div className='p-3'>
-                <p className='truncate text-sm leading-tight font-semibold'>{game.name}</p>
-                {game.min_players && game.max_players && (
-                  <p className='mt-1 text-xs text-muted-foreground'>
-                    {game.min_players}–{game.max_players} players
-                  </p>
-                )}
-                <p className='mt-0.5 text-xs text-muted-foreground'>{game.session_count ?? 0} sessions</p>
-              </div>
-            </Link>
+            <GameCard key={game.id} {...game} />
           ))}
         </div>
       )}
