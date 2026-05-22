@@ -13,6 +13,7 @@ import bggRouter from './routes/bgg'
 const app = express()
 const PORT = Number(process.env.PORT ?? 3001)
 
+app.set('trust proxy', 1)
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 500 }))
 app.use(express.json())
 
@@ -33,7 +34,7 @@ app.use('/api/v1/bgg', bggRouter)
 if (process.env.NODE_ENV === 'production') {
   const clientDist = path.join(__dirname, '..', 'public')
   app.use(express.static(clientDist))
-  app.get('*', (_req, res) => res.sendFile(path.join(clientDist, 'index.html')))
+  app.get('/{*path}', (_req, res) => res.sendFile(path.join(clientDist, 'index.html')))
 }
 
 app.use(errorHandler)

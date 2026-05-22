@@ -15,7 +15,7 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY web/package.json ./web/package.json
 COPY backend/package.json ./backend/package.json
-RUN pnpm install --frozen-lockfile --filter tally-server
+RUN pnpm install --frozen-lockfile --filter tally-backend
 COPY backend/ ./backend/
 RUN pnpm -C backend build
 
@@ -25,7 +25,7 @@ RUN apk add --no-cache python3 make g++
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY web/package.json ./web/package.json
 COPY backend/package.json ./backend/package.json
-RUN pnpm install --frozen-lockfile --filter tally-server --prod
+RUN pnpm install --frozen-lockfile --filter tally-backend --prod
 COPY --from=server-build /app/backend/dist ./backend/dist
 COPY --from=client-build /app/web/dist ./backend/public
 RUN mkdir -p /app/data/covers /app/data/attachments /app/data/avatars
