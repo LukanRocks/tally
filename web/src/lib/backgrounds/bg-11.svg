@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 270" preserveAspectRatio="xMidYMid slice">
+  
+  <rect width="200" height="270" fill="oklch(0.48 0.10 200)"></rect>
+  <g color="oklch(0.90 0.05 200)">
+    <path d="M-10 20 Q 35 6, 75 20 T 155 20 T 235 20" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.15"></path>
+    <path d="M-10 52 Q 35 38, 75 52 T 155 52 T 235 52" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.19"></path>
+    <path d="M-10 84 Q 35 70, 75 84 T 155 84 T 235 84" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.23"></path>
+    <path d="M-10 116 Q 35 102, 75 116 T 155 116 T 235 116" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.15"></path>
+    <path d="M-10 148 Q 35 134, 75 148 T 155 148 T 235 148" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.19"></path>
+    <path d="M-10 180 Q 35 166, 75 180 T 155 180 T 235 180" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.23"></path>
+    <path d="M-10 212 Q 35 198, 75 212 T 155 212 T 235 212" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.15"></path>
+    <path d="M-10 244 Q 35 230, 75 244 T 155 244 T 235 244" fill="none" stroke="currentColor" stroke-width="2.5" opacity="0.19"></path>
+  </g>
+  <defs>
+    <linearGradient id="foil-tide" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="white" stop-opacity="0.18"></stop>
+      <stop offset="35%" stop-color="white" stop-opacity="0"></stop>
+      <stop offset="65%" stop-color="white" stop-opacity="0"></stop>
+      <stop offset="100%" stop-color="black" stop-opacity="0.1"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="270" fill="url(#foil-tide)"></rect>
+</svg>
