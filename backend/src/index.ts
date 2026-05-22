@@ -13,6 +13,7 @@ import bggRouter from './routes/bgg'
 const app = express()
 const PORT = Number(process.env.PORT ?? 3001)
 
+app.set('trust proxy', 1)
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 500 }))
 app.use(express.json())
 
