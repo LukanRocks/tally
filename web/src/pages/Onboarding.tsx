@@ -4,6 +4,9 @@ import { UserRound, Plus, Gamepad2, Users, ChevronRight, Check } from 'lucide-re
 import { api, Player, Game } from '@/lib/http-transport/api'
 import { useSettings } from '@/contexts/settings-context'
 
+// 3. Onboarding resume effect re-runs on every settings change
+// The useEffect on line 31 has [settings] as its dependency — the entire settings object. This means any settings update during onboarding (e.g. step 1 calls updateSetting) triggers the resume check again, potentially re-fetching the player and resetting the step unexpectedly.
+
 type Step = 1 | 2 | 3
 
 export default function Onboarding() {
@@ -83,17 +86,7 @@ export default function Onboarding() {
     try {
       const g = await api.games.create({
         name: gameName.trim(),
-        description: null,
-        quick_rules: null,
-        min_players: null,
-        max_players: null,
-        purchase_at: null,
-        price: null,
-        cover_image_path: null,
-        owner_id: settings?.default_owner_id ?? null,
-        owner_name: null,
-        bgg_id: null,
-        year_published: null,
+        owner_id: settings?.default_owner_id,
       })
       setGames((gs) => [...gs, g])
       setGameName('')
@@ -105,7 +98,7 @@ export default function Onboarding() {
   async function handleComplete() {
     setCompleting(true)
     try {
-      await updateSetting({ onboarded: 1 })
+      await updateSetting({ onboarded: true })
       navigate('/home', { replace: true })
     } catch (err: any) {
       setGameError(err.message)
