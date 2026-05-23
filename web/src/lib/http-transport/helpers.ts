@@ -22,8 +22,11 @@ export const perform = async <T>(endpoint: string, options?: RequestInit): Promi
 
   if (!response.ok) {
     const body = await response.json().catch(() => ({ error: response.statusText }))
+    const error = new Error(body.error ?? 'Request failed') as Error & { code: number }
 
-    throw new Error(body.error ?? 'Request failed')
+    error.code = response.status
+
+    throw error
   }
 
   if (response.status === 204) return undefined as T // 204 No Content
