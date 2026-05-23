@@ -8,7 +8,7 @@ export type { Settings }
 type SettingsContextValue = {
   settings: Settings
   updateSetting: (patch: Partial<Omit<Settings, 'updated_at'>>) => Promise<void>
-  resetSettings: () => Promise<void>
+  DELETE_ALL_DATA: () => Promise<void>
 }
 
 const SettingsContext = createContext<SettingsContextValue | undefined>(undefined)
@@ -31,11 +31,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const updateSetting = async (patch: Partial<Omit<Settings, 'updated_at'>>) => setSettings(await settingsTransport.update(patch))
 
-  // maybe we return new settings after reset
-  const resetSettings = async () => {
-    await settingsTransport.reset()
-    await fetchSettings()
-  }
+  const DELETE_ALL_DATA = async () => settingsTransport.reset()
 
   useEffect(() => {
     fetchSettings()
@@ -44,7 +40,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   if (loading) return <Loading />
   if (error) return <ErrorScreen onRetry={fetchSettings} />
 
-  return <SettingsContext.Provider value={{ settings: settings!, updateSetting, resetSettings }}>{children}</SettingsContext.Provider>
+  return <SettingsContext.Provider value={{ settings: settings!, updateSetting, DELETE_ALL_DATA }}>{children}</SettingsContext.Provider>
 }
 
 export const useSettings = () => {

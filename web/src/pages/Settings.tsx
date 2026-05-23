@@ -5,9 +5,36 @@ import { api, Player } from '@/lib/http-transport/api'
 import { ThemeSetting } from '@/hooks/useTheme'
 import { useSettings } from '@/contexts/settings-context'
 
+// 1. DELETE_ALL_DATA doesn't show the loading gate during refetch
+
+// After reset, fetchSettings is called internally but isLoading stays false — the context re-renders the children immediately while the fetch is in-flight. Since settings in state still holds the old value momentarily before setSettings updates it, this is a brief inconsistency. If fetchSettings throws during reset, error gets set but the app has already navigated to /onboarding.
+
+// Two options:
+
+// A — Set isLoading to true before calling fetchSettings in DELETE_ALL_DATA
+// The loading gate kicks in during the refetch, children are unmounted, and when settings come back the app re-renders cleanly. Simple one-liner addition.
+
+// const DELETE_ALL_DATA = async () => {
+//   await api.settings.reset()
+//   setIsLoading(true)
+//   await fetchSettings()
+// }
+// Pros: reuses the existing gate, no new state. Cons: the loading spinner briefly flashes before navigation — may look like a glitch since the page is about to navigate to /onboarding anyway.
+
+// B — Don't refetch in the context at all, let the caller navigate and let the app re-initialize naturally
+// Since DELETE_ALL_DATA always ends with navigate('/onboarding', { replace: true }), the entire app re-mounts under the provider, which triggers the useEffect and fetches fresh settings from scratch. The context doesn't need to refetch — the navigation does it for free.
+
+// // context — just do the API call
+// const DELETE_ALL_DATA = async () => {
+//   await api.settings.reset()
+// }
+// Pros: no timing issue, no flash, the natural app lifecycle handles re-initialization. Cons: assumes reset always leads to a full re-mount, which is true today but could break if reset is ever called from somewhere that doesn't navigate away.
+
+// Recommendation: B. Reset is a destructive, navigate-away action by nature — the provider re-initializes on its own. Refetching inside the context after reset is doing work the navigation already does, which is what created the inconsistency in the first place. Which would you like?
+
 export default function SettingsPage() {
   const navigate = useNavigate()
-  const { settings, updateSetting, resetSettings } = useSettings()
+  const { settings, updateSetting, DELETE_ALL_DATA } = useSettings()
   const [players, setPlayers] = useState<Player[]>([])
   const [playersLoading, setPlayersLoading] = useState(true)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
@@ -66,7 +93,7 @@ export default function SettingsPage() {
   async function handleReset() {
     setResetting(true)
     try {
-      await resetSettings()
+      await DELETE_ALL_DATA()
       setShowResetConfirm(false)
       setResetConfirmText('')
       toast.success('All data deleted')
