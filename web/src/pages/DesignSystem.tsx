@@ -326,7 +326,7 @@ export default () => (
             ] as const
           ).map(({ name, desc, cls }) => (
             <div key={name} className='flex flex-col items-center gap-2 rounded-xl border border-border bg-card p-4'>
-              <div className={`h-14 w-[72px] border-[1.5px] border-ink-primary bg-yellow-secondary ${cls}`} />
+              <div className={`h-14 w-18 border-[1.5px] border-ink-primary bg-yellow-secondary ${cls}`} />
               <code className='font-mono text-[11px] text-ink-primary'>{name}</code>
               <span className='text-center text-[11px] text-ink-muted'>{desc}</span>
             </div>
@@ -621,7 +621,7 @@ export default () => (
 
         <label className='flex flex-col gap-1.5'>
           <span className='eyebrow text-ink-muted'>Notes</span>
-          <textarea className='input min-h-[72px] resize-y py-2.5 leading-relaxed' rows={3} placeholder='What happened?' />
+          <textarea className='input min-h-18 resize-y py-2.5 leading-relaxed' rows={3} placeholder='What happened?' />
         </label>
 
         <div className='flex flex-col gap-1.5'>
@@ -721,16 +721,16 @@ export default () => (
 
         <p className='eyebrow text-ink-muted'>Status badge — ownership</p>
         <div className='flex flex-wrap items-center gap-2'>
-          <span className='border-yellow-tertiary inline-flex items-center rounded-[4px] border bg-yellow-primary px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>
+          <span className='border-yellow-tertiary inline-flex items-center rounded-lg border bg-yellow-primary px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>
             OWN
           </span>
-          <span className='inline-flex items-center rounded-[4px] border border-player-b/60 bg-player-b px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>
+          <span className='inline-flex items-center rounded-lg border border-player-b/60 bg-player-b px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>
             FRIEND
           </span>
-          <span className='inline-flex items-center rounded-[4px] border border-player-a/60 bg-player-a px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>
+          <span className='inline-flex items-center rounded-lg border border-player-a/60 bg-player-a px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>
             RENT
           </span>
-          <span className='inline-flex items-center rounded-[4px] border border-ink-primary bg-ink-primary px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] text-paper-primary uppercase'>
+          <span className='inline-flex items-center rounded-lg border border-ink-primary bg-ink-primary px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] text-paper-primary uppercase'>
             NEW
           </span>
         </div>
@@ -1158,7 +1158,7 @@ export default () => (
             </span>
             <span className='text-[15px] font-bold text-ink-primary'>Alyne</span>
             <span className='text-xs text-ink-muted'>9 pts · 🔥 3</span>
-            <div className='mt-1.5 flex h-[110px] w-full items-center justify-center rounded-t-lg border-[1.5px] border-ink-primary bg-yellow-primary font-mono text-xl font-bold text-ink-primary'>
+            <div className='mt-1.5 flex h-27.5 w-full items-center justify-center rounded-t-lg border-[1.5px] border-ink-primary bg-yellow-primary font-mono text-xl font-bold text-ink-primary'>
               1
             </div>
           </div>
@@ -1300,10 +1300,10 @@ export default () => (
               key={title}
               className='flex cursor-pointer flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-md'
             >
-              <div className='relative aspect-[3/4] border-b border-border'>
+              <div className='relative aspect-3/4 border-b border-border'>
                 <div className='h-full w-full' style={{ background: art }} />
                 <span
-                  className={`absolute top-2.5 left-2.5 inline-flex items-center rounded-[4px] border px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] uppercase ${badgeCls}`}
+                  className={`absolute top-2.5 left-2.5 inline-flex items-center rounded-lg border px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] uppercase ${badgeCls}`}
                 >
                   {badge}
                 </span>

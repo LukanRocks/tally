@@ -90,7 +90,7 @@ Both `Game` and `MostPlayedGame` from `@/lib/api` satisfy this interface structu
 
 ```tsx
 <Link to={`/library/${game.id}`} className="group overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md">
-  <div className="flex aspect-[3/4] items-center justify-center bg-muted">
+  <div className="flex aspect-3/4 items-center justify-center bg-muted">
     <img
       src={game.cover_image_path ?? getBackgroundFallback(game.id)}
       alt={game.cover_image_path ? game.name : ''}
@@ -117,7 +117,7 @@ Both `Game` and `MostPlayedGame` from `@/lib/api` satisfy this interface structu
 | Font weight | `font-semibold` | Library style wins |
 | Image hover effect | `group-hover:scale-105` | Library style wins |
 | SVG fallback alt | `""` (empty string) | Decorative — no informational value |
-| Uploaded image alt | `game.name` | Matches existing Library behaviour |
+| Uploaded image alt | `game.name` | Matches existing Library behavior |
 | Session count | Always rendered | `session_count ?? 0` — shown on all surfaces |
 | Upload affordance | None | GameDetail keeps its own bespoke cover area |
 
@@ -224,7 +224,7 @@ These must not be touched:
 - Grid layout classes in Home (`grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3` and `grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5`)
 - Library filter/sort/search controls
 - The `<Dices>` empty-state illustration in Library (line 115) — this is not a card; it stays
-- GameDetail cover `onClick`, `coverFileRef`, Camera overlay, file `<input>` — no behavioural change
+- GameDetail cover `onClick`, `coverFileRef`, Camera overlay, file `<input>` — no behavioral change
 - The image upload flow in GameDetail
 - All server/API code
 
