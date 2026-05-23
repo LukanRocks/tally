@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { settingsTransport, Settings } from '@/lib/http-transport/private/settings'
-import { Loading } from '@/components/loading'
-import { ErrorScreen } from '@/components/error-screen'
+import { Loading } from '@/components/state/loading'
+import { ErrorScreen } from '@/components/state/error-screen'
 
 export type { Settings }
 
@@ -16,14 +16,16 @@ const SettingsContext = createContext<SettingsContextValue | undefined>(undefine
 export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   const [settings, setSettings] = useState<Settings | undefined>(undefined)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
 
   const fetchSettings = async () => {
+    setLoading(true)
+    setError(null)
+
     try {
-      setError(false)
       setSettings(await settingsTransport.get())
-    } catch {
-      setError(true)
+    } catch (error) {
+      setError(error instanceof Error ? error : new Error('Unknown error :('))
     } finally {
       setLoading(false)
     }
@@ -38,7 +40,7 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   if (loading) return <Loading />
-  if (error) return <ErrorScreen onRetry={fetchSettings} />
+  if (error) return <ErrorScreen error={error} onRetry={fetchSettings} />
 
   return <SettingsContext.Provider value={{ settings: settings!, updateSetting, DELETE_ALL_DATA }}>{children}</SettingsContext.Provider>
 }
