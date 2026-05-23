@@ -10,17 +10,17 @@ const pulseDotVariants = cva('relative flex shrink-0', {
       lg: 'size-3',
     },
     color: {
-      gold: '[--pulse-color:theme(colors.1st-place)]',
-      silver: '[--pulse-color:theme(colors.2nd-place)]',
-      bronze: '[--pulse-color:theme(colors.3rd-place)]',
-      self: '[--pulse-color:theme(colors.status-self)]',
-      friend: '[--pulse-color:theme(colors.status-friend)]',
-      store: '[--pulse-color:theme(colors.status-store)]',
-      success: '[--pulse-color:theme(colors.success)]',
-      warning: '[--pulse-color:theme(colors.warning)]',
-      info: '[--pulse-color:theme(colors.info)]',
-      destructive: '[--pulse-color:theme(colors.destructive)]',
-      primary: '[--pulse-color:theme(colors.primary)]',
+      gold: '[--pulse-color:var(--color-1st-place)]',
+      silver: '[--pulse-color:var(--color-2nd-place)]',
+      bronze: '[--pulse-color:var(--color-3rd-place)]',
+      self: '[--pulse-color:var(--color-status-self)]',
+      friend: '[--pulse-color:var(--color-status-friend)]',
+      store: '[--pulse-color:var(--color-status-store)]',
+      success: '[--pulse-color:var(--color-success)]',
+      warning: '[--pulse-color:var(--color-warning)]',
+      info: '[--pulse-color:var(--color-info)]',
+      destructive: '[--pulse-color:var(--color-destructive)]',
+      primary: '[--pulse-color:var(--color-primary)]',
     } satisfies Record<ComponentColor, string>,
   },
   defaultVariants: {
@@ -33,7 +33,7 @@ export type PulseDotProps = VariantProps<typeof pulseDotVariants> & { className?
 
 export const PulseDot = ({ size, color, className }: PulseDotProps) => (
   <span className={cn(pulseDotVariants({ size, color }), className)}>
-    <span className='absolute inline-flex size-full animate-ping rounded-full bg-[--pulse-color] opacity-75' />
-    <span className='relative inline-flex size-full rounded-full bg-[--pulse-color]' />
+    <span className='absolute inline-flex size-full animate-ping rounded-full bg-(--pulse-color) opacity-75' />
+    <span className='relative inline-flex size-full rounded-full bg-(--pulse-color)' />
   </span>
 )
