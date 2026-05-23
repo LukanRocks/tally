@@ -3,7 +3,7 @@
   "version": "0.6.0",
   "private": true,
   "scripts": {
-    "dev": "pnpm --parallel --filter web --filter backend dev",
+    "dev": "pnpm --parallel --filter tally-web --filter tally-backend dev",
     "build": "pnpm -C backend build && pnpm -C web build",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
