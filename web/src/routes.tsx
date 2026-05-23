@@ -22,8 +22,8 @@ export const AppRoutes = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='onboarding' element={<RouteGuard redirectWhen={settings.onboarded === 1} redirectTo='/home' element={<Onboarding />} />} />
-        <Route element={<RouteGuard redirectWhen={settings.onboarded === 0} redirectTo='/onboarding' element={<Layout />} />}>
+        <Route path='onboarding' element={<RouteGuard redirectWhen={settings.onboarded} redirectTo='/home' element={<Onboarding />} />} />
+        <Route element={<RouteGuard redirectWhen={!settings.onboarded} redirectTo='/onboarding' element={<Layout />} />}>
           <Route index element={<Navigate to='/home' replace />} />
           <Route path='home' element={<Dashboard />} />
           <Route path='library' element={<Library />} />

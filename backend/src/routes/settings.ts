@@ -40,7 +40,7 @@ router.put('/', (req: Request, res: Response, next: NextFunction) => {
       patch.theme = theme
     }
     if (onboarded !== undefined) {
-      if (onboarded !== 0 && onboarded !== 1) return res.status(400).json({ error: 'Invalid onboarded value' })
+      if (typeof onboarded !== 'boolean') return res.status(400).json({ error: 'Invalid onboarded value' })
       patch.onboarded = onboarded
     }
     if (default_owner_id !== undefined) {

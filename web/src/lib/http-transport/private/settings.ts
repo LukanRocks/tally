@@ -1,7 +1,7 @@
 import { perform, request } from '../helpers'
 
 export interface Settings {
-  onboarded: 0 | 1
+  onboarded: boolean
   currency: 'USD' | 'BRL'
   language: 'en' | 'pt'
   default_owner_id?: number
