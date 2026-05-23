@@ -71,7 +71,7 @@ const MobileNav = () => {
     cn('flex flex-1 flex-col items-center justify-center gap-1 py-2 text-xs font-medium transition-colors', isActive ? 'bg-primary/20 text-foreground' : 'text-muted-foreground')
 
   return (
-    <nav className='bg-surface-elevated fixed right-4 bottom-4 left-4 z-50 flex overflow-hidden rounded-2xl border border-border shadow-lg md:hidden'>
+    <nav className='fixed right-4 bottom-4 left-4 z-50 flex overflow-hidden rounded-2xl border border-border bg-card md:hidden'>
       {navItems.map(({ to, label, Icon }) => (
         <NavLink key={to} to={to} className={navLinkClass}>
           <Icon size={20} />
