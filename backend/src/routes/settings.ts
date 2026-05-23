@@ -52,7 +52,7 @@ router.put('/', (req: Request, res: Response, next: NextFunction) => {
           .get()
         if (!player) return res.status(404).json({ error: 'Player not found' })
       }
-      patch.default_owner_id = default_owner_id || null
+      patch.default_owner_id = default_owner_id ?? null
     }
 
     const [updated] = db.update(settingsTable).set(patch).where(eq(settingsTable.id, SETTINGS_SINGLETON)).returning().all()
