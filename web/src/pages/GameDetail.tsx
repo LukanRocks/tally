@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Camera, Paperclip, Plus, Trash2, Pencil } from 'lucide-react'
-import { api, Game, LeaderboardEntry, Session } from '@/lib/api'
+import { api, Game, LeaderboardEntry, Session } from '@/lib/http-transport/api'
 import { getBackgroundFallback } from '@/lib/backgrounds'
 import { useSettings } from '@/contexts/settings-context'
 

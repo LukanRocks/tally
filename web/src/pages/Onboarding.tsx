@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserRound, Plus, Gamepad2, Users, ChevronRight, Check } from 'lucide-react'
-import { api, Player, Game } from '@/lib/api'
+import { api, Player, Game } from '@/lib/http-transport/api'
 import { useSettings } from '@/contexts/settings-context'
 
 type Step = 1 | 2 | 3
 
 export default function Onboarding() {
   const navigate = useNavigate()
-  const { settings, updateSetting, refreshSettings } = useSettings()
+  const { settings, updateSetting } = useSettings()
   const [step, setStep] = useState<Step>(1)
 
   // Step 1
@@ -106,7 +106,6 @@ export default function Onboarding() {
     setCompleting(true)
     try {
       await updateSetting({ onboarded: 1 })
-      await refreshSettings()
       navigate('/home', { replace: true })
     } catch (err: any) {
       setGameError(err.message)

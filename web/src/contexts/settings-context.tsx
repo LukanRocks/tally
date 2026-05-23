@@ -1,47 +1,54 @@
-import { createContext, useContext, useEffect, useState } from 'react'
-import { api, Settings } from '@/lib/api'
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
+import { settingsTransport, Settings } from '@/lib/http-transport/private/settings'
+import { Loading } from '@/components/state/loading-screen'
+import { ErrorScreen } from '@/components/state/error-screen'
+
+export type { Settings }
 
 type SettingsContextValue = {
-  settings: Settings | null
-  updateSetting: (patch: Partial<Omit<Settings, 'id' | 'updated_at'>>) => Promise<void>
-  refreshSettings: () => Promise<void>
-  isLoading: boolean
+  settings: Settings
+  updateSetting: (patch: Partial<Omit<Settings, 'updated_at'>>) => Promise<void>
+  DELETE_ALL_DATA: () => Promise<void>
 }
 
-const SettingsContext = createContext<SettingsContextValue | null>(null)
+const SettingsContext = createContext<SettingsContextValue | undefined>(undefined)
 
-export function SettingsProvider({ children }: { children: React.ReactNode }) {
-  const [settings, setSettings] = useState<Settings | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+export const SettingsProvider = ({ children }: { children: ReactNode }) => {
+  const [settings, setSettings] = useState<Settings | undefined>(undefined)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
 
-  async function fetchSettings() {
-    const s = await api.settings.get()
+  const fetchSettings = async () => {
+    setLoading(true)
+    setError(null)
 
-    setSettings(s)
-    setIsLoading(false)
+    try {
+      setSettings(await settingsTransport.get())
+    } catch (error) {
+      setError(error instanceof Error ? error : new Error('Unknown error :('))
+    } finally {
+      setLoading(false)
+    }
   }
+
+  const updateSetting = async (patch: Partial<Omit<Settings, 'updated_at'>>) => setSettings(await settingsTransport.update(patch))
+
+  const DELETE_ALL_DATA = async () => settingsTransport.reset()
 
   useEffect(() => {
     fetchSettings()
   }, [])
 
-  async function updateSetting(patch: Partial<Omit<Settings, 'id' | 'updated_at'>>) {
-    const updated = await api.settings.update(patch)
+  if (loading) return <Loading />
+  if (error) return <ErrorScreen error={error} onRetry={fetchSettings} />
 
-    setSettings(updated)
-  }
-
-  async function refreshSettings() {
-    await fetchSettings()
-  }
-
-  return <SettingsContext.Provider value={{ settings, updateSetting, refreshSettings, isLoading }}>{children}</SettingsContext.Provider>
+  return <SettingsContext.Provider value={{ settings: settings!, updateSetting, DELETE_ALL_DATA }}>{children}</SettingsContext.Provider>
 }
 
-export function useSettings() {
-  const ctx = useContext(SettingsContext)
+export const useSettings = () => {
+  const context = useContext(SettingsContext)
 
-  if (!ctx) throw new Error('useSettings must be used within SettingsProvider')
+  if (!context) throw new Error('useSettings must be used within SettingsProvider')
 
-  return ctx
+  return context
 }

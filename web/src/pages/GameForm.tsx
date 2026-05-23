@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { api, BggGame, Player } from '@/lib/api'
+import { api, BggGame, Player } from '@/lib/http-transport/api'
 import { useSettings } from '@/contexts/settings-context'
 
 type FormData = {
