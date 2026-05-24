@@ -18,7 +18,11 @@ import PlayerProfile from './pages/PlayerProfile'
 import Leaderboard from './pages/Leaderboard'
 import SettingsPage from './pages/Settings'
 import Onboarding from './pages/Onboarding'
-import DesignSystem from './pages/DesignSystem'
+import DesignSystem from '@/pages/DesignSystem'
+import Tools from '@/pages/Tools'
+import Dice from '@/pages/Dice'
+import FirstPlayer from '@/pages/FirstPlayer'
+import Timer from '@/pages/Timer'
 
 function App() {
   function OnboardingGuard({ children }: { children: React.ReactNode }) {
