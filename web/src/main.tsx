@@ -58,13 +58,17 @@ function App() {
               <Route path='library/new' element={<GameForm />} />
               <Route path='library/:id' element={<GameDetail />} />
               <Route path='library/:id/edit' element={<GameForm />} />
-              <Route path='library/:id/session/new' element={<SessionLogger />} />
-              <Route path='sessions/new' element={<SessionLogger />} />
-              <Route path='players' element={<Players />} />
-              <Route path='players/:id' element={<PlayerProfile />} />
-              <Route path='leaderboard' element={<Leaderboard />} />
-              <Route path='settings' element={<SettingsPage />} />
-              <Route path='design-system' element={<DesignSystem />} />
+          <Route path='library/:id/session/new' element={<SessionLogger />} />
+          <Route path='sessions/new' element={<SessionLogger />} />
+          <Route path='players' element={<Players />} />
+          <Route path='players/:id' element={<PlayerProfile />} />
+          <Route path='leaderboard' element={<Leaderboard />} />
+          <Route path='settings' element={<SettingsPage />} />
+          <Route path='design-system' element={<DesignSystem />} />
+          <Route path='tools' element={<Tools />} />
+          <Route path='tools/dice' element={<Dice />} />
+          <Route path='tools/first-player' element={<FirstPlayer />} />
+          <Route path='tools/timer' element={<Timer />} />
             </Route>
           </Routes>
           <Toaster />
