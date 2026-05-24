@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "concurrently \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
     "build": "npm run build --prefix server && npm run build --prefix client",
-    "install:all": "npm install && npm install --prefix server && npm install --prefix client",
+    "dev:mobile": "npm run start --prefix mobile",
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client && npm install --prefix mobile",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
