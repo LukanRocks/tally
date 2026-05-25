@@ -1,6 +1,6 @@
 import { Page } from '@/components/page'
 import { cn } from '@/lib/utils'
-import { ThemeToggle } from '@/components/layout/theme-toggle'
+import { ThemeToggle } from '@/components/theme/theme-toggle'
 import { GameCard } from '@/components/game-card'
 import { Button } from '@/components/atoms/button'
 import { componentColorKeys } from '@/lib/colors'
@@ -48,8 +48,8 @@ export default () => (
         <div className='rounded-xl border border-border bg-card p-5'>
           <p className='eyebrow mb-4 text-ink-muted'>Primary lockup</p>
           <div className='flex items-center gap-4 py-4'>
-            <img src='/logo-ink.svg' width={80} height={80} className='hidden dark:block rounded-xl' />
-            <img src='/logo-paper.svg' width={80} height={80} className='dark:hidden rounded-xl' />
+            <img src='/logo-ink.svg' width={80} height={80} className='hidden rounded-xl dark:block' />
+            <img src='/logo-paper.svg' width={80} height={80} className='rounded-xl dark:hidden' />
             <span className='text-5xl font-extrabold tracking-tight'>Tally</span>
           </div>
           <p className='text-xs text-ink-muted'>Four bars + a yellow slash. Reads as a scoreboard.</p>
@@ -65,8 +65,8 @@ export default () => (
               <strong>Stats with a wink.</strong> "Alyne wins again" beats "Alyne: 4 victories".
             </li>
             <li>
-              <strong>Verbs, not nouns.</strong> Buttons say <span className='text-yellow-tertiary font-semibold'>Play tonight</span>,{' '}
-              <span className='text-yellow-tertiary font-semibold'>Log</span>, <span className='text-yellow-tertiary font-semibold'>Add player</span> — never "Submit".
+              <strong>Verbs, not nouns.</strong> Buttons say <span className='font-semibold text-yellow-tertiary'>Play tonight</span>,{' '}
+              <span className='font-semibold text-yellow-tertiary'>Log</span>, <span className='font-semibold text-yellow-tertiary'>Add player</span> — never "Submit".
             </li>
           </ol>
         </div>
@@ -442,7 +442,7 @@ export default () => (
             key={label}
             className={cn(
               'flex flex-col items-center gap-2 rounded-lg border border-border p-3 text-ink-primary',
-              brand && 'border-yellow-tertiary/40 text-yellow-tertiary bg-yellow-secondary/40',
+              brand && 'border-yellow-tertiary/40 bg-yellow-secondary/40 text-yellow-tertiary',
             )}
           >
             <svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.75' strokeLinecap='round' strokeLinejoin='round'>
@@ -451,7 +451,7 @@ export default () => (
             <span className='font-mono text-[10px] text-ink-muted'>{label}</span>
           </div>
         ))}
-        <div className='border-yellow-tertiary/40 text-yellow-tertiary flex flex-col items-center gap-2 rounded-lg border bg-yellow-secondary/40 p-3'>
+        <div className='flex flex-col items-center gap-2 rounded-lg border border-yellow-tertiary/40 bg-yellow-secondary/40 p-3 text-yellow-tertiary'>
           <img src='/logo-ink.svg' width={22} height={22} className='rounded-sm' />
           <span className='font-mono text-[10px] text-ink-muted'>
             tally <em className='text-ink-muted/60 not-italic'>brand</em>
@@ -474,11 +474,13 @@ export default () => (
       <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
         <p className='eyebrow text-ink-muted'>Sizes</p>
         <div className='flex flex-wrap items-end gap-4'>
-          {([
-            { size: 'small', label: '+ Log' },
-            { size: 'default', label: '+ Log session' },
-            { size: 'big', label: '+ Log session tonight' },
-          ] as const).map(({ size, label }) => (
+          {(
+            [
+              { size: 'small', label: '+ Log' },
+              { size: 'default', label: '+ Log session' },
+              { size: 'big', label: '+ Log session tonight' },
+            ] as const
+          ).map(({ size, label }) => (
             <div key={size} className='flex flex-col items-center gap-1.5'>
               <Button size={size}>{label}</Button>
               <span className='eyebrow text-[10px] text-ink-muted'>{size}</span>
@@ -498,12 +500,22 @@ export default () => (
         <div className='flex flex-wrap items-center gap-2'>
           <Button>Active</Button>
           <Button disabled>Disabled</Button>
-          <Button variant='outline' color='secondary'>Active</Button>
-          <Button variant='outline' color='secondary' disabled>Disabled</Button>
-          <Button variant='ghost' color='secondary'>Active</Button>
-          <Button variant='ghost' color='secondary' disabled>Disabled</Button>
+          <Button variant='outline' color='secondary'>
+            Active
+          </Button>
+          <Button variant='outline' color='secondary' disabled>
+            Disabled
+          </Button>
+          <Button variant='ghost' color='secondary'>
+            Active
+          </Button>
+          <Button variant='ghost' color='secondary' disabled>
+            Disabled
+          </Button>
           <Button variant='link'>Active</Button>
-          <Button variant='link' disabled>Disabled</Button>
+          <Button variant='link' disabled>
+            Disabled
+          </Button>
         </div>
       </div>
 
@@ -526,16 +538,24 @@ export default () => (
                   <code className='font-mono text-xs text-ink-muted'>{color}</code>
                 </td>
                 <td className='px-4 py-2.5 text-center'>
-                  <Button color={color} size='small'>{color}</Button>
+                  <Button color={color} size='small'>
+                    {color}
+                  </Button>
                 </td>
                 <td className='px-4 py-2.5 text-center'>
-                  <Button variant='outline' color={color} size='small'>{color}</Button>
+                  <Button variant='outline' color={color} size='small'>
+                    {color}
+                  </Button>
                 </td>
                 <td className='px-4 py-2.5 text-center'>
-                  <Button variant='ghost' color={color} size='small'>{color}</Button>
+                  <Button variant='ghost' color={color} size='small'>
+                    {color}
+                  </Button>
                 </td>
                 <td className='px-4 py-2.5 text-center'>
-                  <Button variant='link' color={color} size='small'>{color}</Button>
+                  <Button variant='link' color={color} size='small'>
+                    {color}
+                  </Button>
                 </td>
               </tr>
             ))}
@@ -656,7 +676,7 @@ export default () => (
         <div className='flex flex-wrap items-center gap-2'>
           <span className='inline-flex h-7 items-center rounded-full border border-border bg-card px-3 text-sm font-medium text-ink-primary'>Default</span>
           <span className='inline-flex h-7 items-center rounded-full border border-ink-primary bg-ink-primary px-3 text-sm font-medium text-paper-primary'>Selected</span>
-          <span className='border-yellow-tertiary/35 inline-flex h-7 items-center rounded-full border bg-yellow-secondary px-3 text-sm font-medium text-ink-primary'>Soft</span>
+          <span className='inline-flex h-7 items-center rounded-full border border-yellow-tertiary/35 bg-yellow-secondary px-3 text-sm font-medium text-ink-primary'>Soft</span>
           <span className='inline-flex h-7 items-center rounded-full border border-dashed border-border bg-transparent px-3 text-sm font-medium text-ink-muted'>+ add</span>
           <span className='inline-flex h-7 items-center gap-1.5 rounded-full border border-border bg-card pr-1 pl-1.5 text-sm font-medium text-ink-primary'>
             <span
@@ -684,7 +704,7 @@ export default () => (
           <span className='inline-flex h-6 items-center rounded-sm border border-border bg-paper-secondary px-2 font-mono text-[11.5px] font-medium text-ink-primary'>
             strategy
           </span>
-          <span className='border-yellow-tertiary/40 inline-flex h-6 items-center rounded-sm border bg-yellow-secondary px-2 font-mono text-[11.5px] font-medium text-ink-primary'>
+          <span className='inline-flex h-6 items-center rounded-sm border border-yellow-tertiary/40 bg-yellow-secondary px-2 font-mono text-[11.5px] font-medium text-ink-primary'>
             ★ best for 3
           </span>
           <span className='inline-flex h-6 items-center rounded-sm border border-win/30 bg-win/14 px-2 font-mono text-[11.5px] font-medium text-ink-primary'>🥇 Alyne · 5</span>
@@ -694,7 +714,7 @@ export default () => (
 
         <p className='eyebrow text-ink-muted'>Status badge — ownership</p>
         <div className='flex flex-wrap items-center gap-2'>
-          <span className='border-yellow-tertiary inline-flex items-center rounded-lg border bg-yellow-primary px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>
+          <span className='inline-flex items-center rounded-lg border border-yellow-tertiary bg-yellow-primary px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>
             OWN
           </span>
           <span className='inline-flex items-center rounded-lg border border-player-b/60 bg-player-b px-2 py-0.5 font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>
@@ -840,7 +860,7 @@ export default () => (
           <p className='text-sm text-ink-muted'>Lifts on hover. Use for navigable cards.</p>
         </div>
 
-        <div className='border-yellow-tertiary rounded-xl border bg-yellow-primary p-5'>
+        <div className='rounded-xl border border-yellow-tertiary bg-yellow-primary p-5'>
           <p className='eyebrow text-ink-primary/70'>Accent · key moment</p>
           <h3 className='my-1.5 text-lg font-bold text-ink-primary'>Play tonight</h3>
           <p className='text-sm text-ink-primary'>Yellow ground — at most one per screen.</p>
@@ -987,7 +1007,7 @@ export default () => (
             <span className='inline-flex h-6 cursor-pointer items-center rounded-sm border border-border bg-paper-secondary px-2 font-mono text-[11.5px] text-ink-primary'>
               Sort: recent ▾
             </span>
-            <button className='border-yellow-tertiary hover:bg-yellow-tertiary inline-flex h-7.5 cursor-pointer items-center gap-1.5 rounded-md border bg-yellow-primary px-2.5 text-xs font-semibold text-ink-primary transition-colors'>
+            <button className='inline-flex h-7.5 cursor-pointer items-center gap-1.5 rounded-md border border-yellow-tertiary bg-yellow-primary px-2.5 text-xs font-semibold text-ink-primary transition-colors hover:bg-yellow-tertiary'>
               + Add game
             </button>
           </div>
@@ -1034,7 +1054,7 @@ export default () => (
 
       <div>
         <p className='eyebrow mb-3 text-ink-muted'>Banner</p>
-        <div className='border-yellow-tertiary/35 flex items-center justify-between gap-4 rounded-lg border bg-yellow-secondary px-4 py-3.5'>
+        <div className='flex items-center justify-between gap-4 rounded-lg border border-yellow-tertiary/35 bg-yellow-secondary px-4 py-3.5'>
           <div className='flex flex-col gap-0.5'>
             <span className='text-sm font-bold text-ink-primary'>BG3 is due back to Joy Joy in 2 days.</span>
             <span className='text-xs text-ink-secondary'>Renew rental or mark returned.</span>
@@ -1329,7 +1349,7 @@ export default () => (
               <h3 className='text-lg font-bold text-ink-primary'>Rumikubi</h3>
               <span className='text-xs text-ink-muted'>May 6 · 45 min · 4 players</span>
             </div>
-            <span className='border-yellow-tertiary/40 inline-flex h-6 shrink-0 items-center rounded-sm border bg-yellow-secondary px-2 font-mono text-[11.5px] text-ink-primary'>
+            <span className='inline-flex h-6 shrink-0 items-center rounded-sm border border-yellow-tertiary/40 bg-yellow-secondary px-2 font-mono text-[11.5px] text-ink-primary'>
               ★ best run
             </span>
           </header>
@@ -1420,10 +1440,10 @@ export default () => (
         </span>
         <div className='flex flex-col gap-2.5'>
           <h1 className='text-4xl leading-none font-extrabold tracking-tight text-ink-primary'>
-            Alyne <span className='text-yellow-tertiary font-callout text-3xl'>— champion.</span>
+            Alyne <span className='font-callout text-3xl text-yellow-tertiary'>— champion.</span>
           </h1>
           <div className='flex flex-wrap gap-1.5'>
-            <span className='border-yellow-tertiary/40 inline-flex h-6 items-center rounded-sm border bg-yellow-secondary px-2 font-mono text-[11.5px] text-ink-primary'>
+            <span className='inline-flex h-6 items-center rounded-sm border border-yellow-tertiary/40 bg-yellow-secondary px-2 font-mono text-[11.5px] text-ink-primary'>
               9 pts
             </span>
             <span className='inline-flex h-6 items-center rounded-sm border border-border bg-paper-secondary px-2 font-mono text-[11.5px] text-ink-primary'>3 sessions</span>
@@ -1435,7 +1455,7 @@ export default () => (
           <button className='inline-flex h-7.5 cursor-pointer items-center rounded-md border border-border bg-card px-2.5 text-xs font-semibold text-ink-primary transition-colors hover:border-ink-muted hover:bg-paper-secondary'>
             Head-to-head
           </button>
-          <button className='border-yellow-tertiary hover:bg-yellow-tertiary inline-flex h-7.5 cursor-pointer items-center rounded-md border bg-yellow-primary px-2.5 text-xs font-semibold text-ink-primary transition-colors'>
+          <button className='inline-flex h-7.5 cursor-pointer items-center rounded-md border border-yellow-tertiary bg-yellow-primary px-2.5 text-xs font-semibold text-ink-primary transition-colors hover:bg-yellow-tertiary'>
             + Log session
           </button>
         </div>
@@ -1464,7 +1484,7 @@ export default () => (
           </div>
           <h3 className='mt-1.5 text-lg font-bold text-ink-primary'>No sessions yet</h3>
           <p className='max-w-xs text-sm text-ink-muted'>Log your first game and the leaderboard starts filling in.</p>
-          <button className='border-yellow-tertiary hover:bg-yellow-tertiary mt-2.5 inline-flex h-9.5 cursor-pointer items-center rounded-md border bg-yellow-primary px-3.5 text-sm font-semibold text-ink-primary transition-colors'>
+          <button className='mt-2.5 inline-flex h-9.5 cursor-pointer items-center rounded-md border border-yellow-tertiary bg-yellow-primary px-3.5 text-sm font-semibold text-ink-primary transition-colors hover:bg-yellow-tertiary'>
             + Log first session
           </button>
         </div>
@@ -1481,7 +1501,7 @@ export default () => (
           <h3 className='mt-1.5 text-lg font-bold text-ink-primary'>Your library is empty</h3>
           <p className='max-w-xs text-sm text-ink-muted'>Add a game you own, or one you've played at a friend's place.</p>
           <div className='mt-2.5 flex gap-2'>
-            <button className='border-yellow-tertiary hover:bg-yellow-tertiary inline-flex h-7.5 cursor-pointer items-center rounded-md border bg-yellow-primary px-2.5 text-xs font-semibold text-ink-primary transition-colors'>
+            <button className='inline-flex h-7.5 cursor-pointer items-center rounded-md border border-yellow-tertiary bg-yellow-primary px-2.5 text-xs font-semibold text-ink-primary transition-colors hover:bg-yellow-tertiary'>
               + Add game
             </button>
             <button className='inline-flex h-7.5 cursor-pointer items-center rounded-md border border-transparent bg-transparent px-2.5 text-xs font-semibold text-ink-secondary transition-colors hover:bg-paper-secondary hover:text-ink-primary'>

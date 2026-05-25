@@ -6,7 +6,7 @@ import { StrictMode } from 'react'
 import { SettingsProvider } from '@/contexts/settings-context'
 import { Toaster } from '@/components/feedback/sonner'
 import { AppRoutes } from '@/routes'
-import { Theme } from '@/components/layout/theme'
+import { Theme } from '@/components/theme/theme'
 
 const App = () => (
   <StrictMode>
