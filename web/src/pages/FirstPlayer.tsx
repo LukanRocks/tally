@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Button } from '@/shadcn/components/ui/button'
+import { Button } from '@/components/atoms/button'
 import { PROMPTS, type Prompt } from '@/lib/prompts'
 
 type Phase = 'idle' | 'animating' | 'revealed'
@@ -45,7 +45,7 @@ export default function FirstPlayerPage() {
       <div className='flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center gap-6 p-6 md:min-h-screen'>
         <h1 className='text-2xl font-bold'>Who Goes First?</h1>
         <p className='text-sm text-muted-foreground'>Draw a prompt — whoever it fits goes first</p>
-        <Button size='lg' onClick={handleDraw}>
+        <Button size='big' onClick={handleDraw}>
           Draw
         </Button>
       </div>
@@ -59,7 +59,7 @@ export default function FirstPlayerPage() {
         <p className='text-center text-4xl font-bold'>{displayText}</p>
       </div>
       {phase === 'revealed' && (
-        <Button size='lg' onClick={handleDraw}>
+        <Button size='big' onClick={handleDraw}>
           Re-roll
         </Button>
       )}

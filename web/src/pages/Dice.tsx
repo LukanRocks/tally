@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Button } from '@/shadcn/components/ui/button'
+import { Button } from '@/components/atoms/button'
 import { Plus, Minus } from 'lucide-react'
 
 type Phase = 'setup' | 'rolling' | 'results'
@@ -84,21 +84,21 @@ function SetupView({ count, sides, onCountChange, onSidesChange, onRoll }: Setup
       <h1 className='text-2xl font-bold'>Dice Roller</h1>
       <div className='flex items-center gap-2'>
         <div className='flex flex-col items-center gap-1'>
-          <Button variant='secondary' className='w-20' onClick={() => onCountChange(Math.min(10, count + 1))}>
+          <Button color='secondary' className='w-20' onClick={() => onCountChange(Math.min(10, count + 1))}>
             <Plus size={16} />
           </Button>
           <input type='number' min={1} max={10} value={count} onChange={(e) => onCountChange(Math.min(10, Math.max(1, Number(e.target.value))))} className={inputClass} />
-          <Button variant='secondary' className='w-20' onClick={() => onCountChange(Math.max(1, count - 1))}>
+          <Button color='secondary' className='w-20' onClick={() => onCountChange(Math.max(1, count - 1))}>
             <Minus size={16} />
           </Button>
         </div>
         <span className='text-4xl font-bold'>d</span>
         <div className='flex flex-col items-center gap-1'>
-          <Button variant='secondary' className='w-20' onClick={() => onSidesChange(Math.min(999, sides + 1))}>
+          <Button color='secondary' className='w-20' onClick={() => onSidesChange(Math.min(999, sides + 1))}>
             <Plus size={16} />
           </Button>
           <input type='number' min={2} max={999} value={sides} onChange={(e) => onSidesChange(Math.min(999, Math.max(2, Number(e.target.value))))} className={inputClass} />
-          <Button variant='secondary' className='w-20' onClick={() => onSidesChange(Math.max(2, sides - 1))}>
+          <Button color='secondary' className='w-20' onClick={() => onSidesChange(Math.max(2, sides - 1))}>
             <Minus size={16} />
           </Button>
         </div>
@@ -110,7 +110,7 @@ function SetupView({ count, sides, onCountChange, onSidesChange, onRoll }: Setup
           </Button>
         ))}
       </div>
-      <Button size='lg' onClick={onRoll} disabled={count < 1 || sides < 2}>
+      <Button size='big' onClick={onRoll} disabled={count < 1 || sides < 2}>
         Roll
       </Button>
     </div>
@@ -137,10 +137,10 @@ function ResultsView({ results, onRollAgain, onNewRoll }: ResultsViewProps) {
       <DiceGrid displayValues={results} />
       <p className='text-[min(20vw,8rem)] leading-none font-bold tabular-nums'>{total(results)}</p>
       <div className='flex w-full max-w-xs flex-col gap-3'>
-        <Button size='lg' onClick={onRollAgain}>
+        <Button size='big' onClick={onRollAgain}>
           Roll Again
         </Button>
-        <Button size='lg' variant='outline' onClick={onNewRoll}>
+        <Button size='big' variant='outline' onClick={onNewRoll}>
           New Roll
         </Button>
       </div>

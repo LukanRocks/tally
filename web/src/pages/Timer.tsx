@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTimer, TimerState } from '@/hooks/useTimer'
-import { Button } from '@/shadcn/components/ui/button'
+import { Button } from '@/components/atoms/button'
 import { Plus, Minus } from 'lucide-react'
 
 const fmt = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`
@@ -33,7 +33,7 @@ function TimerDisplay({ remaining, pct, state, resetting }: TimerDisplayProps) {
   }, [state])
 
   return (
-    <div className='relative w-full h-full'>
+    <div className='relative h-full w-full'>
       <div
         className={`absolute top-0 left-0 w-full ${colorClass}`}
         style={{
@@ -64,10 +64,10 @@ function TimerControls({ state, onStop, onRestart, onPauseResume, onAdd }: Timer
   return (
     <div className='relative z-10 w-full space-y-2 p-4'>
       <div className='flex gap-2'>
-        <Button variant='secondary' className='flex-1' onClick={onStop}>
+        <Button color='secondary' className='flex-1' onClick={onStop}>
           Stop
         </Button>
-        <Button variant='secondary' className='flex-1' onClick={onRestart}>
+        <Button color='secondary' className='flex-1' onClick={onRestart}>
           Restart
         </Button>
         <Button className='flex-1' onClick={onPauseResume}>
@@ -126,7 +126,7 @@ export default function TimerPage() {
         <h1 className='text-2xl font-bold'>Turn Timer</h1>
         <div className='flex items-center gap-2'>
           <div className='flex flex-col items-center gap-1'>
-            <Button variant='secondary' className='w-20' onClick={() => setMinutes((m) => Math.min(99, m + 1))}>
+            <Button color='secondary' className='w-20' onClick={() => setMinutes((m) => Math.min(99, m + 1))}>
               <Plus size={16} />
             </Button>
             <input
@@ -135,15 +135,15 @@ export default function TimerPage() {
               max={99}
               value={minutes}
               onChange={(e) => setMinutes(Math.min(99, Math.max(0, Number(e.target.value))))}
-              className='w-20 rounded-lg border border-border bg-background p-2 text-center text-4xl font-bold tabular-nums focus:ring-2 focus:ring-primary focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+              className='w-20 [appearance:textfield] rounded-lg border border-border bg-background p-2 text-center text-4xl font-bold tabular-nums focus:ring-2 focus:ring-primary focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
             />
-            <Button variant='secondary' className='w-20' onClick={() => setMinutes((m) => Math.max(0, m - 1))}>
+            <Button color='secondary' className='w-20' onClick={() => setMinutes((m) => Math.max(0, m - 1))}>
               <Minus size={16} />
             </Button>
           </div>
           <span className='text-4xl font-bold'>:</span>
           <div className='flex flex-col items-center gap-1'>
-            <Button variant='secondary' className='w-20' onClick={() => setSeconds((s) => Math.min(59, s + 10))}>
+            <Button color='secondary' className='w-20' onClick={() => setSeconds((s) => Math.min(59, s + 10))}>
               <Plus size={16} />
             </Button>
             <input
@@ -153,12 +153,18 @@ export default function TimerPage() {
               value={String(seconds).padStart(2, '0')}
               onChange={(e) => setSeconds(Math.min(59, Math.max(0, Number(e.target.value))))}
               onKeyDown={(e) => {
-                if (e.key === 'ArrowUp') { e.preventDefault(); setSeconds(s => Math.min(59, s + 1)) }
-                if (e.key === 'ArrowDown') { e.preventDefault(); setSeconds(s => Math.max(0, s - 1)) }
+                if (e.key === 'ArrowUp') {
+                  e.preventDefault()
+                  setSeconds((s) => Math.min(59, s + 1))
+                }
+                if (e.key === 'ArrowDown') {
+                  e.preventDefault()
+                  setSeconds((s) => Math.max(0, s - 1))
+                }
               }}
               className='w-20 rounded-lg border border-border bg-background p-2 text-center text-4xl font-bold tabular-nums focus:ring-2 focus:ring-primary focus:outline-none'
             />
-            <Button variant='secondary' className='w-20' onClick={() => setSeconds((s) => Math.max(0, s - 10))}>
+            <Button color='secondary' className='w-20' onClick={() => setSeconds((s) => Math.max(0, s - 10))}>
               <Minus size={16} />
             </Button>
           </div>
@@ -177,7 +183,7 @@ export default function TimerPage() {
             </Button>
           ))}
         </div>
-        <Button size='lg' onClick={handleStart} disabled={minutes * 60 + seconds === 0}>
+        <Button size='big' onClick={handleStart} disabled={minutes * 60 + seconds === 0}>
           Start
         </Button>
       </div>
