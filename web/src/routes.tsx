@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 import { RouteGuard } from '@/components/routing/route-guard'
 import { useSettings } from '@/contexts/settings-context'
-import { Layout } from '@/components/layout/layout'
+import { Shell } from '@/components/layout/shell'
 
 import Onboarding from '@/pages/Onboarding'
 import Dashboard from '@/pages/Home'
@@ -27,7 +27,7 @@ export const AppRoutes = () => {
     <BrowserRouter>
       <Routes>
         <Route path='onboarding' element={<RouteGuard redirectWhen={settings.onboarded} redirectTo='/home' element={<Onboarding />} />} />
-        <Route element={<RouteGuard redirectWhen={!settings.onboarded} redirectTo='/onboarding' element={<Layout />} />}>
+        <Route element={<RouteGuard redirectWhen={!settings.onboarded} redirectTo='/onboarding' element={<Shell />} />}>
           <Route index element={<Navigate to='/home' replace />} />
           <Route path='home' element={<Dashboard />} />
           <Route path='library' element={<Library />} />

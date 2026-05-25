@@ -1,6 +1,6 @@
 import { Page } from '@/components/page'
 import { cn } from '@/lib/utils'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { GameCard } from '@/components/game-card'
 
 // import React, { useState } from 'react'
