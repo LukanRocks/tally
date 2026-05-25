@@ -50,7 +50,7 @@ export const DesktopNav = () => {
           to='/sessions/new'
           className='flex items-center gap-3 rounded-xl border border-ink-primary bg-card px-3 py-2.5 shadow-stamp transition-[transform,box-shadow] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_var(--ink-primary)] active:translate-x-px active:translate-y-px'
         >
-          <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow-primary text-ink-primary'>
+          <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow-primary text-ink-on-yellow'>
             <Plus size={16} strokeWidth={2.5} />
           </span>
           <span className='flex-1 text-sm font-semibold text-foreground'>Log a session</span>
