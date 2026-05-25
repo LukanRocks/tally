@@ -34,7 +34,7 @@ export default () => (
     </header>
 
     {/* Brand */}
-    <section>
+    <section className='space-y-6'>
       <div>
         <span className='eyebrow text-ink-muted'>01 — Foundations</span>
         <h2 className='mt-1 text-2xl font-bold'>Brand</h2>
@@ -48,14 +48,8 @@ export default () => (
         <div className='rounded-xl border border-border bg-card p-5'>
           <p className='eyebrow mb-4 text-ink-muted'>Primary lockup</p>
           <div className='flex items-center gap-4 py-4'>
-            <svg width='80' height='80' viewBox='0 0 64 64'>
-              <rect width='64' height='64' rx='14' style={{ fill: 'var(--ink-primary)' }} />
-              <rect x='13' y='16' width='5' height='32' rx='1.5' style={{ fill: 'var(--paper-primary)' }} />
-              <rect x='22' y='16' width='5' height='32' rx='1.5' style={{ fill: 'var(--paper-primary)' }} />
-              <rect x='31' y='16' width='5' height='32' rx='1.5' style={{ fill: 'var(--paper-primary)' }} />
-              <rect x='40' y='16' width='5' height='32' rx='1.5' style={{ fill: 'var(--paper-primary)' }} />
-              <path d='M9 49 L52 15' strokeWidth='6' strokeLinecap='round' fill='none' style={{ stroke: 'var(--yellow-primary)' }} />
-            </svg>
+            <img src='/logo-ink.svg' width={80} height={80} className='hidden dark:block rounded-xl' />
+            <img src='/logo-paper.svg' width={80} height={80} className='dark:hidden rounded-xl' />
             <span className='text-5xl font-extrabold tracking-tight'>Tally</span>
           </div>
           <p className='text-xs text-ink-muted'>Four bars + a yellow slash. Reads as a scoreboard.</p>
@@ -80,41 +74,17 @@ export default () => (
 
       <div className='grid grid-cols-3 gap-4'>
         <div className='flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-5'>
-          <div className='flex h-24 w-24 items-center justify-center rounded-xl' style={{ background: 'var(--ink-primary)' }}>
-            <svg width='56' height='56' viewBox='0 0 64 64'>
-              <rect x='13' y='16' width='5' height='32' rx='1.5' style={{ fill: 'var(--paper-primary)' }} />
-              <rect x='22' y='16' width='5' height='32' rx='1.5' style={{ fill: 'var(--paper-primary)' }} />
-              <rect x='31' y='16' width='5' height='32' rx='1.5' style={{ fill: 'var(--paper-primary)' }} />
-              <rect x='40' y='16' width='5' height='32' rx='1.5' style={{ fill: 'var(--paper-primary)' }} />
-              <path d='M9 49 L52 15' strokeWidth='6' strokeLinecap='round' fill='none' style={{ stroke: 'var(--yellow-primary)' }} />
-            </svg>
-          </div>
+          <img src='/logo-ink.svg' className='h-24 w-24 rounded-xl' />
           <p className='eyebrow text-center text-ink-muted'>Ink ground · default</p>
         </div>
 
         <div className='flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-5'>
-          <div className='flex h-24 w-24 items-center justify-center rounded-xl bg-yellow-primary' style={{ color: 'var(--ink-primary)' }}>
-            <svg width='56' height='56' viewBox='0 0 64 64'>
-              <rect x='13' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-              <rect x='22' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-              <rect x='31' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-              <rect x='40' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-              <path d='M9 49 L52 15' stroke='currentColor' strokeWidth='6' strokeLinecap='round' fill='none' />
-            </svg>
-          </div>
+          <img src='/logo-yellow.svg' className='h-24 w-24 rounded-xl' />
           <p className='eyebrow text-center text-ink-muted'>Yellow ground · home tile</p>
         </div>
 
         <div className='flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-5'>
-          <div className='flex h-24 w-24 items-center justify-center rounded-xl border border-border bg-paper-secondary text-ink-primary'>
-            <svg width='56' height='56' viewBox='0 0 64 64'>
-              <rect x='13' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-              <rect x='22' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-              <rect x='31' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-              <rect x='40' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-              <path d='M9 49 L52 15' stroke='currentColor' strokeWidth='6' strokeLinecap='round' fill='none' />
-            </svg>
-          </div>
+          <img src='/logo-paper.svg' className='h-24 w-24 rounded-xl' />
           <p className='eyebrow text-center text-ink-muted'>Mono · footer / emboss</p>
         </div>
       </div>
@@ -482,13 +452,7 @@ export default () => (
           </div>
         ))}
         <div className='border-yellow-tertiary/40 text-yellow-tertiary flex flex-col items-center gap-2 rounded-lg border bg-yellow-secondary/40 p-3'>
-          <svg width='22' height='22' viewBox='0 0 64 64'>
-            <rect x='13' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-            <rect x='22' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-            <rect x='31' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-            <rect x='40' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
-            <path d='M9 49 L52 15' stroke='currentColor' strokeWidth='6' strokeLinecap='round' />
-          </svg>
+          <img src='/logo-ink.svg' width={22} height={22} className='rounded-sm' />
           <span className='font-mono text-[10px] text-ink-muted'>
             tally <em className='text-ink-muted/60 not-italic'>brand</em>
           </span>
