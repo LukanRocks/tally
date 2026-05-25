@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Badge } from '@/components/atoms/badge'
 import { navConfig } from './nav-config'
 
 const navItems = navConfig.filter((r) => r.desktop !== false)
@@ -25,7 +24,7 @@ export const DesktopNav = () => {
       <div className='h-px w-full bg-border' />
 
       <nav className='flex-1 space-y-1 px-3 py-4'>
-        {navItems.map(({ path, label, Icon, badge }) => {
+        {navItems.map(({ path, label, Icon }) => {
           return (
             <NavLink key={path} to={path}>
               {({ isActive }) => (
@@ -37,7 +36,6 @@ export const DesktopNav = () => {
                 >
                   <Icon size={16} />
                   <span className='flex-1'>{label}</span>
-                  {badge && <Badge color={badge.color}>{badge.label}</Badge>}
                 </div>
               )}
             </NavLink>

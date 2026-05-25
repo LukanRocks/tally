@@ -1,5 +1,4 @@
 import { House, Library, Settings, Trophy, Users, Wrench } from 'lucide-react'
-import type { ComponentColor } from '@/lib/colors'
 
 export type NavConfig = {
   path: string
@@ -7,7 +6,6 @@ export type NavConfig = {
   Icon: React.ElementType
   desktop?: boolean
   mobile?: boolean
-  badge?: { label: string; color: ComponentColor }
 }
 
 export const navConfig: NavConfig[] = [
