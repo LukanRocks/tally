@@ -17,6 +17,7 @@ export const componentColorKeys = [
 
   // Neutral
   'primary',
+  'secondary',
 ] as const
 
 export type ComponentColor = (typeof componentColorKeys)[number]

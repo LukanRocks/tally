@@ -25,6 +25,7 @@ const badgeVariants = cva(
         info: 'text-info',
         destructive: 'text-destructive',
         primary: 'text-primary',
+        secondary: 'text-secondary',
       } satisfies Record<ComponentColor, string>,
     },
     compoundVariants: [

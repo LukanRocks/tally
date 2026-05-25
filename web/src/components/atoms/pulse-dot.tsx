@@ -21,6 +21,7 @@ const pulseDotVariants = cva('relative flex shrink-0', {
       info: '[--pulse-color:var(--color-info)]',
       destructive: '[--pulse-color:var(--color-destructive)]',
       primary: '[--pulse-color:var(--color-primary)]',
+      secondary: '[--pulse-color:var(--color-secondary)]',
     } satisfies Record<ComponentColor, string>,
   },
   defaultVariants: {
