@@ -2,6 +2,8 @@ import { Page } from '@/components/page'
 import { cn } from '@/lib/utils'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { GameCard } from '@/components/game-card'
+import { Button } from '@/components/atoms/button'
+import { componentColorKeys } from '@/lib/colors'
 
 // import React, { useState } from 'react'
 // import { Badge, badgeColorKeys, badgeVariantKeys } from '@/components/badge'
@@ -499,75 +501,82 @@ export default () => (
       <div>
         <p className='eyebrow text-ink-muted'>02 — Components</p>
         <h2 className='mt-1 text-2xl font-bold'>Buttons</h2>
-        <p className='mt-1 text-sm text-ink-secondary'>One primary per surface. Yellow is loud; reserve it for the single most important action.</p>
+        <p className='mt-1 text-sm text-ink-secondary'>
+          One primary per surface. Yellow is loud; reserve it for the single most important action. Four variants × twelve colors × four sizes.
+        </p>
       </div>
 
+      {/* Sizes & states */}
       <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
-        <p className='eyebrow text-ink-muted'>Variants</p>
-        <div className='flex flex-wrap items-center gap-3'>
-          <button className='border-yellow-tertiary hover:bg-yellow-tertiary inline-flex h-9.5 cursor-pointer items-center gap-2 rounded-md border bg-yellow-primary px-3.5 text-sm font-semibold text-ink-primary shadow-xs transition-colors'>
-            + Log session
-          </button>
-          <button className='inline-flex h-9.5 cursor-pointer items-center gap-2 rounded-md border border-ink-primary bg-ink-primary px-3.5 text-sm font-semibold text-paper-primary transition-colors hover:bg-ink-secondary'>
-            Add player
-          </button>
-          <button className='inline-flex h-9.5 cursor-pointer items-center gap-2 rounded-md border border-transparent bg-transparent px-3.5 text-sm font-semibold text-ink-secondary transition-colors hover:bg-paper-secondary hover:text-ink-primary'>
-            Cancel
-          </button>
-          <button className='inline-flex h-9.5 cursor-pointer items-center gap-2 rounded-md border border-border bg-card px-3.5 text-sm font-semibold text-ink-primary transition-colors hover:border-ink-muted hover:bg-paper-secondary'>
-            Filter
-          </button>
-          <button className='inline-flex h-9.5 cursor-pointer items-center gap-2 rounded-md border border-loss/35 bg-transparent px-3.5 text-sm font-semibold text-loss transition-colors hover:border-loss hover:bg-loss/12'>
-            Delete
-          </button>
-          <button
-            disabled
-            className='border-yellow-tertiary inline-flex h-9.5 cursor-not-allowed items-center gap-2 rounded-md border bg-yellow-primary px-3.5 text-sm font-semibold text-ink-primary opacity-45'
-          >
-            Disabled
-          </button>
-        </div>
-
         <p className='eyebrow text-ink-muted'>Sizes</p>
-        <div className='flex flex-wrap items-center gap-3'>
-          <button className='border-yellow-tertiary hover:bg-yellow-tertiary inline-flex h-7.5 cursor-pointer items-center gap-2 rounded-md border bg-yellow-primary px-2.5 text-xs font-semibold text-ink-primary transition-colors'>
-            + Log
-          </button>
-          <button className='border-yellow-tertiary hover:bg-yellow-tertiary inline-flex h-9.5 cursor-pointer items-center gap-2 rounded-md border bg-yellow-primary px-3.5 text-sm font-semibold text-ink-primary transition-colors'>
-            + Log session
-          </button>
-          <button className='border-yellow-tertiary hover:bg-yellow-tertiary inline-flex h-11.5 cursor-pointer items-center gap-2 rounded-md border bg-yellow-primary px-5 text-[15px] font-semibold text-ink-primary transition-colors'>
-            + Log session tonight
-          </button>
+        <div className='flex flex-wrap items-end gap-4'>
+          {([
+            { size: 'small', label: '+ Log' },
+            { size: 'default', label: '+ Log session' },
+            { size: 'big', label: '+ Log session tonight' },
+          ] as const).map(({ size, label }) => (
+            <div key={size} className='flex flex-col items-center gap-1.5'>
+              <Button size={size}>{label}</Button>
+              <span className='eyebrow text-[10px] text-ink-muted'>{size}</span>
+            </div>
+          ))}
+          <div className='flex flex-col items-center gap-1.5'>
+            <Button size='icon' aria-label='Add session'>
+              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2.5' strokeLinecap='round'>
+                <path d='M12 5v14M5 12h14' />
+              </svg>
+            </Button>
+            <span className='eyebrow text-[10px] text-ink-muted'>icon</span>
+          </div>
         </div>
 
-        <p className='eyebrow text-ink-muted'>Icon & special</p>
-        <div className='flex flex-wrap items-center gap-3'>
-          <button className='border-yellow-tertiary hover:bg-yellow-tertiary inline-flex h-9.5 cursor-pointer items-center gap-2 rounded-md border bg-yellow-primary px-3.5 text-sm font-semibold text-ink-primary transition-colors'>
-            <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2.25' strokeLinecap='round'>
-              <path d='M12 5v14M5 12h14' />
-            </svg>
-            Log session
-          </button>
-          <button
-            aria-label='Search'
-            className='inline-flex h-9.5 w-9.5 cursor-pointer items-center justify-center rounded-md border border-border bg-card text-ink-primary transition-colors hover:bg-paper-secondary'
-          >
-            <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.75' strokeLinecap='round' strokeLinejoin='round'>
-              <circle cx='11' cy='11' r='7' />
-              <path d='M21 21l-4.3-4.3' />
-            </svg>
-          </button>
-          <button
-            aria-label='Log a session'
-            className='inline-flex h-14 w-14 cursor-pointer items-center justify-center rounded-full border-[1.5px] border-ink-primary bg-yellow-primary text-ink-primary shadow-stamp transition-[transform,box-shadow] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0_var(--ink-primary)] active:translate-x-px active:translate-y-px'
-          >
-            <svg width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2.5' strokeLinecap='round'>
-              <path d='M12 5v14M5 12h14' />
-            </svg>
-          </button>
-          <span className='text-xs text-ink-muted'>FAB — bottom right, mobile only</span>
+        <p className='eyebrow text-ink-muted'>States</p>
+        <div className='flex flex-wrap items-center gap-2'>
+          <Button>Active</Button>
+          <Button disabled>Disabled</Button>
+          <Button variant='outline' color='secondary'>Active</Button>
+          <Button variant='outline' color='secondary' disabled>Disabled</Button>
+          <Button variant='ghost' color='secondary'>Active</Button>
+          <Button variant='ghost' color='secondary' disabled>Disabled</Button>
+          <Button variant='link'>Active</Button>
+          <Button variant='link' disabled>Disabled</Button>
         </div>
+      </div>
+
+      {/* Color × variant matrix */}
+      <div className='overflow-auto rounded-xl border border-border bg-card'>
+        <table className='w-full'>
+          <thead>
+            <tr className='border-b border-border'>
+              <th className='eyebrow px-4 py-3 text-left text-ink-muted'>color</th>
+              <th className='eyebrow px-4 py-3 text-center text-ink-muted'>default</th>
+              <th className='eyebrow px-4 py-3 text-center text-ink-muted'>outline</th>
+              <th className='eyebrow px-4 py-3 text-center text-ink-muted'>ghost</th>
+              <th className='eyebrow px-4 py-3 text-center text-ink-muted'>link</th>
+            </tr>
+          </thead>
+          <tbody className='divide-y divide-dashed divide-border'>
+            {componentColorKeys.map((color) => (
+              <tr key={color} className='hover:bg-paper-secondary/40'>
+                <td className='px-4 py-2.5'>
+                  <code className='font-mono text-xs text-ink-muted'>{color}</code>
+                </td>
+                <td className='px-4 py-2.5 text-center'>
+                  <Button color={color} size='small'>{color}</Button>
+                </td>
+                <td className='px-4 py-2.5 text-center'>
+                  <Button variant='outline' color={color} size='small'>{color}</Button>
+                </td>
+                <td className='px-4 py-2.5 text-center'>
+                  <Button variant='ghost' color={color} size='small'>{color}</Button>
+                </td>
+                <td className='px-4 py-2.5 text-center'>
+                  <Button variant='link' color={color} size='small'>{color}</Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </section>
 
