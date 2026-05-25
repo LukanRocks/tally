@@ -4,12 +4,12 @@ import { cn } from '@/lib/utils'
 import { Badge } from '@/components/atoms/badge'
 import { navConfig } from './nav-config'
 
-const desktopNav = navConfig.filter((r) => r.desktop !== false)
+const navItems = navConfig.filter((r) => r.desktop !== false)
 
 export const DesktopNav = () => {
   return (
     <aside className='bg-surface-elevated hidden w-56 shrink-0 border-r border-border text-foreground md:flex md:flex-col'>
-      <NavLink to={desktopNav[0].path} className='hover:bg-surface-sunken flex items-center gap-2 px-4 py-3 transition-colors'>
+      <NavLink to={navItems[0].path} className='hover:bg-surface-sunken flex items-center gap-2 px-4 py-3 transition-colors'>
         <svg width='32' height='32' viewBox='0 0 64 64' className='shrink-0 text-foreground' aria-hidden='true'>
           <rect x='13' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
           <rect x='22' y='16' width='5' height='32' rx='1.5' fill='currentColor' />
@@ -25,7 +25,7 @@ export const DesktopNav = () => {
       <div className='h-px w-full bg-border' />
 
       <nav className='flex-1 space-y-1 px-3 py-4'>
-        {desktopNav.map(({ path, label, Icon, badge }) => {
+        {navItems.map(({ path, label, Icon, badge }) => {
           return (
             <NavLink key={path} to={path}>
               {({ isActive }) => (
