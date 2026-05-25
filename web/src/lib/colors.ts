@@ -5,9 +5,9 @@ export const componentColorKeys = [
   'bronze',
 
   // Player status
-  'self',
-  'friend',
-  'store',
+  'owned',
+  'borrowed',
+  'rented',
 
   // Feedback
   'success',
