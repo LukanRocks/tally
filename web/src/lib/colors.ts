@@ -4,6 +4,11 @@ export const componentColorKeys = [
   'silver',
   'bronze',
 
+  // Session
+  'win',
+  'loss',
+  'tie',
+
   // Player status
   'owned',
   'borrowed',
