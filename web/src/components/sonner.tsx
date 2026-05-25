@@ -20,14 +20,14 @@ function useIsMobile() {
 }
 
 export const Toaster = ({ ...props }: ToasterProps) => {
-  const { theme = 'system' } = useTheme()
+  const { userTheme } = useTheme()
   const isMobile = useIsMobile()
 
   return (
     <Sonner
-      theme={theme as ToasterProps['theme']}
+      theme={userTheme as ToasterProps['theme']}
       richColors
-      position={isMobile ? 'top-center' : 'bottom-right'}
+      position={isMobile ? 'top-center' : 'bottom-center'}
       className='toaster group'
       icons={{
         success: <CircleCheckIcon className='size-4 text-success' />,
