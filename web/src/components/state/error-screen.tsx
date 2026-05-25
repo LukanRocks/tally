@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useAutoRetry } from '@/hooks/useAutoRetry'
 import { useTimeAgo } from '@/hooks/useTimeAgo'
 import { PulseDot } from '@/components/atoms/pulse-dot'
+import { Button } from '@/components/atoms/button'
 
 type HttpError = Error & { code?: number }
 
@@ -60,14 +61,14 @@ export const ErrorScreen = ({ error, onRetry }: Props) => {
           <p className='mt-10 text-lg leading-relaxed text-foreground/70'>Your browser can see the table. It just can't sit down at it. The Tally server. We meant server.</p>
 
           <div className='mt-10 flex items-center gap-4'>
-            <button onClick={fire} className='flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-bold text-foreground transition-opacity hover:opacity-90'>
-              <RefreshCwIcon className='size-4' />
+            <Button size='big' onClick={fire}>
+              <RefreshCwIcon />
               Roll again
-            </button>
-            <button onClick={toggle} className='eyebrow ml-2 text-muted-foreground transition-opacity hover:opacity-70'>
+            </Button>
+            <button onClick={toggle} className='eyebrow ml-2 text-ink-muted transition-opacity hover:opacity-70'>
               {enabled ? (
                 <>
-                  AUTO · NEXT IN <span className='monospace text-foreground'>{formatted}</span>
+                  AUTO · NEXT IN <span className='monospace text-ink-primary'>{formatted}</span>
                 </>
               ) : (
                 'AUTO · PAUSED'
