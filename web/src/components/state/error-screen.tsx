@@ -2,7 +2,7 @@ import { RefreshCwIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useAutoRetry } from '@/hooks/useAutoRetry'
 import { useTimeAgo } from '@/hooks/useTimeAgo'
-import { PulseDot } from '@/components/pulse-dot'
+import { PulseDot } from '@/components/atoms/pulse-dot'
 
 type HttpError = Error & { code?: number }
 

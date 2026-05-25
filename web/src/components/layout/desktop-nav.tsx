@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router-dom'
 import { Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Badge } from '@/components/badge'
+import { Badge } from '@/components/atoms/badge'
 import { navConfig } from './nav-config'
 
-const desktopNav = navConfig.filter(r => r.desktop !== false)
+const desktopNav = navConfig.filter((r) => r.desktop !== false)
 
 export const DesktopNav = () => {
   return (
