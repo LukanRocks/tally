@@ -6,10 +6,12 @@ import { StrictMode } from 'react'
 import { SettingsProvider } from '@/contexts/settings-context'
 import { Toaster } from '@/components/sonner'
 import { AppRoutes } from '@/routes'
+import { Theme } from '@/components/layout/theme'
 
 const App = () => (
   <StrictMode>
     <SettingsProvider>
+      <Theme />
       <AppRoutes />
       <Toaster />
     </SettingsProvider>
