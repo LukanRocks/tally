@@ -1,23 +1,8 @@
-import { useEffect, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { useTheme } from '@/hooks/useTheme'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import { Toaster as Sonner, type ToasterProps } from 'sonner'
 import { CircleCheckIcon, InfoIcon, TriangleAlertIcon, OctagonXIcon, Loader2Icon } from 'lucide-react'
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 767px)').matches)
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 767px)')
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
-
-    mq.addEventListener('change', handler)
-
-    return () => mq.removeEventListener('change', handler)
-  }, [])
-
-  return isMobile
-}
 
 export const Toaster = ({ ...props }: ToasterProps) => {
   const { userTheme } = useTheme()
@@ -53,12 +38,12 @@ export const Toaster = ({ ...props }: ToasterProps) => {
           '--info-bg': 'color-mix(in oklch, var(--info) 20%, transparent)',
           '--info-text': 'var(--foreground)',
           '--info-border': 'var(--info)',
-          '--border-radius': 'var(--radius)',
+          '--border-radius': '9999px',
         } as CSSProperties
       }
       toastOptions={{
         classNames: {
-          toast: 'cn-toast',
+          toast: 'cn-toast !py-2.5 !px-4',
         },
       }}
       {...props}
