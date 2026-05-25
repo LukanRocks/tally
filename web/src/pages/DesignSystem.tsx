@@ -1,6 +1,7 @@
 import { Page } from '@/components/page'
 import { cn } from '@/lib/utils'
-import { Badge } from '@/components/atoms/badge'
+import { Badge, badgeVariantGroups } from '@/components/atoms/badge'
+import { Chip } from '@/components/atoms/chip'
 import { ThemeToggle } from '@/components/theme/theme-toggle'
 import { GameCard } from '@/components/game-card'
 import { Button } from '@/components/atoms/button'
@@ -330,7 +331,7 @@ export default () => (
               { name: 'md · 8', desc: 'inputs, small cards', cls: 'rounded-md' },
               { name: 'lg · 12', desc: 'cards, panels', cls: 'rounded-lg' },
               { name: 'xl · 16', desc: 'sheets, dialogs', cls: 'rounded-xl' },
-              { name: 'full', desc: 'pills, avatars, FAB', cls: 'rounded-full' },
+              { name: 'full', desc: 'badges, avatars, FAB', cls: 'rounded-full' },
             ] as const
           ).map(({ name, desc, cls }) => (
             <div key={name} className='flex flex-col items-center gap-2 rounded-xl border border-border bg-card p-4'>
@@ -529,18 +530,18 @@ export default () => (
       </div>
     </section>
 
-    {/* Chips & Pills */}
+    {/* Chips & Badges */}
     <section className='space-y-6'>
       <div>
-        <h2 className='text-2xl font-bold'>Chips & Pills</h2>
+        <h2 className='text-2xl font-bold'>Chips & Badges</h2>
         <p className='mt-1 text-sm text-ink-secondary'>
-          Two shapes, one job each. <strong>Pills</strong> are rounded; they carry status and selection. <strong>Chips</strong> are squared; they carry metadata (player counts,
+          Two shapes, one job each. <strong>Badges</strong> are rounded; they carry status and selection. <strong>Chips</strong> are squared; they carry metadata (player counts,
           times, tags).
         </p>
       </div>
 
       <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
-        <p className='eyebrow text-ink-muted'>Pill — selection & status</p>
+        {/* <p className='eyebrow text-ink-muted'>Pill — selection & status</p>
         <div className='flex flex-wrap items-center gap-2'>
           <span className='inline-flex h-7 items-center rounded-full border border-border bg-card px-3 text-sm font-medium text-ink-primary'>Default</span>
           <span className='inline-flex h-7 items-center rounded-full border border-ink-primary bg-ink-primary px-3 text-sm font-medium text-paper-primary'>Selected</span>
@@ -561,66 +562,29 @@ export default () => (
               ×
             </button>
           </span>
-        </div>
+        </div> */}
 
         <p className='eyebrow text-ink-muted'>Chip — metadata</p>
         <div className='flex flex-wrap items-center gap-2'>
-          <span className='inline-flex h-6 items-center rounded-sm border border-border bg-paper-secondary px-2 font-mono text-[11.5px] font-medium text-ink-primary'>
-            2–4 players
-          </span>
-          <span className='inline-flex h-6 items-center rounded-sm border border-border bg-paper-secondary px-2 font-mono text-[11.5px] font-medium text-ink-primary'>~45 min</span>
-          <span className='inline-flex h-6 items-center rounded-sm border border-border bg-paper-secondary px-2 font-mono text-[11.5px] font-medium text-ink-primary'>
-            strategy
-          </span>
-          <span className='inline-flex h-6 items-center rounded-sm border border-yellow-tertiary/40 bg-yellow-secondary px-2 font-mono text-[11.5px] font-medium text-ink-primary'>
-            ★ best for 3
-          </span>
-          <span className='inline-flex h-6 items-center rounded-sm border border-win/30 bg-win/14 px-2 font-mono text-[11.5px] font-medium text-ink-primary'>🥇 Alyne · 5</span>
-          <span className='inline-flex h-6 items-center rounded-sm border border-border bg-card px-2 font-mono text-[11.5px] font-medium text-ink-primary'>🥈 Marina · 3</span>
-          <span className='inline-flex h-6 items-center rounded-sm border border-loss/30 bg-loss/12 px-2 font-mono text-[11.5px] font-medium text-ink-primary'>🔥 3 streak</span>
+          <Chip>2–4 players</Chip>
+          <Chip>~45 min</Chip>
+          <Chip>strategy</Chip>
+          {/* <Chip className='border-yellow-tertiary/40 bg-yellow-secondary'>★ best for 3</Chip>
+          <Chip className='border-loss/30 bg-loss/12'>🔥 3 streak</Chip> */}
         </div>
 
-        <p className='eyebrow text-ink-muted'>Status badge — ownership</p>
-        <div className='flex flex-wrap items-center gap-2'>
-          <Badge className='rounded-lg border-yellow-tertiary bg-yellow-primary font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>OWN</Badge>
-          <Badge className='rounded-lg border-player-b/60 bg-player-b font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>FRIEND</Badge>
-          <Badge className='rounded-lg border-player-a/60 bg-player-a font-mono text-[10px] font-bold tracking-[1.2px] text-ink-primary uppercase'>RENT</Badge>
-          <Badge className='rounded-lg border-ink-primary bg-ink-primary font-mono text-[10px] font-bold tracking-[1.2px] text-paper-primary uppercase'>NEW</Badge>
-        </div>
-      </div>
-    </section>
-
-    {/* Badges */}
-    <section className='space-y-4'>
-      <h2 className='text-lg font-semibold'>Badges</h2>
-
-      <div className='bg-surface-elevated overflow-auto rounded-xl border border-border'>
-        <table className='w-full text-sm'>
-          <thead className='bg-muted/50'>
-            <tr>
-              <th className='eyebrow px-4 py-3 text-left text-muted-foreground'>Variant</th>
-              {componentColorKeys.map((c) => (
-                <th key={c} className='eyebrow px-3 py-3 text-center text-muted-foreground'>
-                  {c}
-                </th>
+        {badgeVariantGroups.map(({ label, variants }) => (
+          <div key={label} className='space-y-2'>
+            <p className='eyebrow text-ink-muted'>{label}</p>
+            <div className='flex flex-wrap items-center gap-2'>
+              {variants.map((v) => (
+                <Badge key={v} variant={v}>
+                  {v}
+                </Badge>
               ))}
-            </tr>
-          </thead>
-          <tbody className='divide-y divide-border'>
-            {(['default', 'outline', 'ghost'] as const).map((variant) => (
-              <tr key={variant} className='hover:bg-muted/30'>
-                <td className='eyebrow px-4 py-3 text-muted-foreground'>{variant}</td>
-                {componentColorKeys.map((color) => (
-                  <td key={color} className='px-3 py-3 text-center'>
-                    <Badge variant={variant} color={color}>
-                      {color}
-                    </Badge>
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            </div>
+          </div>
+        ))}
       </div>
     </section>
 
@@ -1250,43 +1214,21 @@ export default () => (
         <div className='grid grid-cols-4 gap-3.5'>
           {(
             [
-              {
-                title: 'Rumikubi',
-                meta: '2 sessions · 2–4p',
-                badge: 'OWN',
-                badgeCls: 'bg-yellow-primary border-yellow-tertiary text-ink-primary',
-                art: 'repeating-linear-gradient(135deg, #e8e2d0 0 8px, #dfd9c5 8px 16px)',
-              },
-              {
-                title: 'Sushi Go!',
-                meta: '0 sessions · 2–5p',
-                badge: 'FRIEND',
-                badgeCls: 'bg-player-b border-player-b/60 text-ink-primary',
-                art: 'repeating-linear-gradient(45deg,  #e2e8d0 0 8px, #d5dfc5 8px 16px)',
-              },
-              {
-                title: 'BG3',
-                meta: 'Joy Joy · 7d left',
-                badge: 'RENT',
-                badgeCls: 'bg-player-a border-player-a/60 text-ink-primary',
-                art: 'repeating-linear-gradient(135deg, #f0d4d4 0 8px, #e5c8c8 8px 16px)',
-              },
-              {
-                title: 'Hearthstone',
-                meta: '1 session · 3p',
-                badge: 'OWN',
-                badgeCls: 'bg-yellow-primary border-yellow-tertiary text-ink-primary',
-                art: 'repeating-linear-gradient(45deg,  #d8d4e8 0 8px, #c8c4dc 8px 16px)',
-              },
+              { title: 'Rumikubi', meta: '2 sessions · 2–4p', badge: 'OWN', variant: 'owned', art: 'repeating-linear-gradient(135deg, #e8e2d0 0 8px, #dfd9c5 8px 16px)' },
+              { title: 'Sushi Go!', meta: '0 sessions · 2–5p', badge: 'FRIEND', variant: 'borrowed', art: 'repeating-linear-gradient(45deg,  #e2e8d0 0 8px, #d5dfc5 8px 16px)' },
+              { title: 'BG3', meta: 'Joy Joy · 7d left', badge: 'RENT', variant: 'rented', art: 'repeating-linear-gradient(135deg, #f0d4d4 0 8px, #e5c8c8 8px 16px)' },
+              { title: 'Hearthstone', meta: '1 session · 3p', badge: 'OWN', variant: 'owned', art: 'repeating-linear-gradient(45deg,  #d8d4e8 0 8px, #c8c4dc 8px 16px)' },
             ] as const
-          ).map(({ title, meta, badge, badgeCls, art }) => (
+          ).map(({ title, meta, badge, variant, art }) => (
             <article
               key={title}
               className='flex cursor-pointer flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-md'
             >
               <div className='relative aspect-3/4 border-b border-border'>
                 <div className='h-full w-full' style={{ background: art }} />
-                <Badge className={`absolute top-2.5 left-2.5 rounded-lg font-mono text-[10px] font-bold tracking-[1.2px] uppercase ${badgeCls}`}>{badge}</Badge>
+                <Badge variant={variant} className='absolute top-2.5 left-2.5'>
+                  {badge}
+                </Badge>
               </div>
               <div className='px-3.5 pt-3 pb-3.5'>
                 <h3 className='text-base leading-tight font-bold text-ink-primary'>{title}</h3>
