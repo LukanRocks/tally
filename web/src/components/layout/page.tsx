@@ -1,34 +1,15 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode } from 'react'
 import { cn } from '@/lib/utils'
-import { Loading } from '@/components/feedback/loading-screen'
 
 interface PageProps {
-  children: ReactNode
-  loading?: boolean
-  className?: string
   container?: boolean
+  className?: string
+  children: ReactNode
 }
 
-export const Page = ({ children, loading, className, container = false }: PageProps) => {
-  const [showLoader, setShowLoader] = useState(false)
-
-  useEffect(() => {
-    if (!loading) {
-      setShowLoader(false)
-
-      return
-    }
-
-    const timer = setTimeout(() => setShowLoader(true), 200)
-
-    return () => clearTimeout(timer)
-  }, [loading])
-
-  if (loading && showLoader) return <Loading />
-  if (loading) return null
-
-  return <div className={cn('h-full space-y-4 p-4 md:p-8', container && 'mx-auto max-w-5xl', className)}>{children}</div>
-}
+export const Page = ({ children, className, container = false }: PageProps) => (
+  <div className={cn('h-full space-y-4 p-4 md:p-8', container && 'mx-auto max-w-5xl', className)}>{children}</div>
+)
 
 export const PageHeader = ({ title, caption, children }: { title: string; caption: string; children?: ReactNode }) => (
   <header className='flex flex-col gap-2'>

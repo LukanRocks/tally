@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dices, Plus } from 'lucide-react'
-import { api, Game, Player } from '@/lib/http-transport/api'
+
+import { Page, PageHeader } from '@/components/layout/page'
+import { Button } from '@/components/atoms/button'
 import { GameCard } from '@/components/game-card'
+import { EmptyState } from '@/components/feedback/empty-state'
+
 import { useSettings } from '@/contexts/settings-context'
+import { api, Game, Player } from '@/lib/http-transport/api'
 
 export default function Library() {
   const { settings } = useSettings()
@@ -19,8 +24,10 @@ export default function Library() {
   const ownerInitialized = useRef(false)
 
   useEffect(() => {
+    setLoading(true)
     if (settings && !ownerInitialized.current) {
       ownerInitialized.current = true
+
       if (settings.default_owner_id != null) setOwnerId(String(settings.default_owner_id))
     }
   }, [settings])
@@ -30,7 +37,6 @@ export default function Library() {
   }, [])
 
   useEffect(() => {
-    setLoading(true)
     api.games
       .list({
         search: search || undefined,
@@ -48,7 +54,15 @@ export default function Library() {
   }, [search, sort, order, minPlayers, maxPlayers, ownerId])
 
   return (
-    <div className='p-4 md:p-8'>
+    <Page>
+      <PageHeader title='Library' caption={`${games.length} ${games.length === 1 ? 'game' : 'games'} · ${games.filter((g) => (g.session_count ?? 0) > 0).length} Played`}>
+        <Button asChild>
+          <Link to='/library/new'>
+            <Plus size={14} /> Add Game
+          </Link>
+        </Button>
+      </PageHeader>
+
       <div className='mb-6 flex flex-wrap items-center gap-3'>
         <input
           type='text'
@@ -101,26 +115,16 @@ export default function Library() {
           onChange={(e) => setMaxPlayers(e.target.value)}
           className='w-28 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
         />
-        <Link
-          to='/library/new'
-          className='ml-auto flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90'
-        >
-          <Plus size={14} /> Add Game
-        </Link>
       </div>
 
-      {loading ? (
-        <div className='text-muted-foreground'>Loading…</div>
-      ) : games.length === 0 ? (
-        <div className='py-20 text-center text-muted-foreground'>
-          <Dices size={40} className='mx-auto mb-4 text-muted-foreground/40' />
-          <p className='mb-3'>{search ? 'No games match your search.' : 'Your library is empty.'}</p>
+      {games.length === 0 ? (
+        <EmptyState icon={Dices} description={search ? 'No games match your search.' : 'Your library is empty.'}>
           {!search && (
             <Link to='/library/new' className='text-sm text-primary hover:underline'>
               Add your first game →
             </Link>
           )}
-        </div>
+        </EmptyState>
       ) : (
         <div className='grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
           {games.map((game) => (
@@ -128,6 +132,6 @@ export default function Library() {
           ))}
         </div>
       )}
-    </div>
+    </Page>
   )
 }
