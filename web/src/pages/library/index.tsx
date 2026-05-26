@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Dices, Plus } from 'lucide-react'
 
@@ -7,30 +7,18 @@ import { Button } from '@/components/atoms/button'
 import { GameCard } from '@/components/game-card'
 import { EmptyState } from '@/components/feedback/empty-state'
 
-import { useSettings } from '@/contexts/settings-context'
 import { api, Game, Player } from '@/lib/http-transport/api'
 
 export default function Library() {
-  const { settings } = useSettings()
   const [games, setGames] = useState<Game[]>([])
   const [players, setPlayers] = useState<Player[]>([])
   const [search, setSearch] = useState('')
-  const [sort, setSort] = useState('name')
-  const [order, setOrder] = useState<'asc' | 'desc'>('asc')
+  const [sort, setSort] = useState('date_added')
+  const [order, setOrder] = useState<'asc' | 'desc'>('desc')
   const [minPlayers, setMinPlayers] = useState('')
   const [maxPlayers, setMaxPlayers] = useState('')
   const [ownerId, setOwnerId] = useState('')
   const [loading, setLoading] = useState(true)
-  const ownerInitialized = useRef(false)
-
-  useEffect(() => {
-    setLoading(true)
-    if (settings && !ownerInitialized.current) {
-      ownerInitialized.current = true
-
-      if (settings.default_owner_id != null) setOwnerId(String(settings.default_owner_id))
-    }
-  }, [settings])
 
   useEffect(() => {
     api.players.list().then(setPlayers)
@@ -117,21 +105,22 @@ export default function Library() {
         />
       </div>
 
-      {games.length === 0 ? (
-        <EmptyState icon={Dices} description={search ? 'No games match your search.' : 'Your library is empty.'}>
-          {!search && (
-            <Link to='/library/new' className='text-sm text-primary hover:underline'>
-              Add your first game →
-            </Link>
-          )}
-        </EmptyState>
-      ) : (
-        <div className='grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
-          {games.map((game) => (
-            <GameCard key={game.id} {...game} />
-          ))}
-        </div>
-      )}
+      {!loading &&
+        (games.length === 0 ? (
+          <EmptyState icon={Dices} description={search ? 'No games match your search.' : 'Your library is empty.'}>
+            {!search && (
+              <Link to='/library/new' className='text-sm text-primary hover:underline'>
+                Add your first game →
+              </Link>
+            )}
+          </EmptyState>
+        ) : (
+          <div className='grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6'>
+            {games.map((game) => (
+              <GameCard key={game.id} {...game} />
+            ))}
+          </div>
+        ))}
     </Page>
   )
 }
