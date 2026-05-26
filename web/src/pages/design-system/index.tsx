@@ -1,4 +1,4 @@
-import { Page } from '@/components/layout/page'
+import { Page, PageHeader } from '@/components/layout/page'
 import { ThemeToggle } from '@/components/theme/theme-toggle'
 
 import { BrandSection } from './foundation/brand-section'
@@ -30,11 +30,8 @@ import { LoadingScreenSection } from './feedback/loading-screen-section'
 import { ErrorScreenSection } from './feedback/error-screen-section'
 
 export default () => (
-  <Page className='space-y-8'>
-    <header className='flx flex-col gap-2'>
-      <span className='caption text-ink-muted'>v1 · foundations · patterns · components</span>
-      <h1 className='text-5xl font-bold'>Design system</h1>
-    </header>
+  <Page container>
+    <PageHeader title='Design system' caption='v1 · foundations · patterns · components' />
     <div className='fixed right-4 bottom-4 z-50'>
       <ThemeToggle />
     </div>

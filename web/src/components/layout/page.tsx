@@ -6,9 +6,10 @@ interface PageProps {
   children: ReactNode
   loading?: boolean
   className?: string
+  container?: boolean
 }
 
-export const Page = ({ children, loading, className }: PageProps) => {
+export const Page = ({ children, loading, className, container = false }: PageProps) => {
   const [showLoader, setShowLoader] = useState(false)
 
   useEffect(() => {
@@ -26,5 +27,12 @@ export const Page = ({ children, loading, className }: PageProps) => {
   if (loading && showLoader) return <Loading />
   if (loading) return null
 
-  return <div className={cn('mx-auto max-w-5xl p-4 md:p-8', className)}>{children}</div>
+  return <div className={cn('space-y-4 p-4 md:p-8', container && 'mx-auto max-w-5xl', className)}>{children}</div>
 }
+
+export const PageHeader = ({ title, caption }: { title: string; caption: string }) => (
+  <header className='flx flex-col gap-2'>
+    <span className='caption text-ink-muted'>{caption} </span>
+    <h1 className='text-5xl font-bold'>{title}</h1>
+  </header>
+)
