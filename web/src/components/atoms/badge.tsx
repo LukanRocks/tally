@@ -8,9 +8,9 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        owned: 'border-status-owned/60 bg-status-owned text-ink-on-yellow',
-        borrowed: 'border-status-borrowed/60 bg-status-borrowed text-ink-on-yellow',
-        rented: 'border-status-rented/60 bg-status-rented text-ink-on-yellow',
+        owned: 'border-owned/60 bg-owned text-ink-on-yellow',
+        borrowed: 'border-borrowed/60 bg-borrowed text-ink-on-yellow',
+        rented: 'border-rented/60 bg-rented text-ink-on-yellow',
 
         gold: 'border-1st-place bg-1st-place/20 text-1st-place',
         silver: 'border-2nd-place bg-2nd-place/20 text-2nd-place',

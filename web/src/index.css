@@ -81,9 +81,9 @@
   --tie:  oklch(0.531 0.1284 258.500);
 
   /* Player status */
-  --status-owned:  var(--yellow-primary);
-  --status-borrowed:oklch(0.652 0.1590 250.000);
-  --status-rented: oklch(0.722 0.1890   0.000);
+  --owned:  var(--yellow-primary);
+  --borrowed:oklch(0.652 0.1590 250.000);
+  --rented: oklch(0.722 0.1890   0.000);
 
   /* Feedback */
   --success:     oklch(0.680 0.180 145.000);
@@ -140,9 +140,9 @@
   --tie:  oklch(0.531 0.1284 258.500);
 
   /* Player status */
-  --status-owned:   oklch(0.78 0.16  90.000);
-  --status-borrowed: oklch(0.60 0.14 250.000);
-  --status-rented:  oklch(0.68 0.16   0.000);
+  --owned:   oklch(0.78 0.16  90.000);
+  --borrowed: oklch(0.60 0.14 250.000);
+  --rented:  oklch(0.68 0.16   0.000);
 
   /* Feedback */
   --success:     oklch(0.620 0.160 145.000);
@@ -226,9 +226,9 @@
   --color-loss: var(--loss);
   --color-tie:  var(--tie);
 
-  --color-status-owned:   var(--status-owned);
-  --color-status-borrowed: var(--status-borrowed);
-  --color-status-rented:  var(--status-rented);
+  --color-owned:   var(--owned);
+  --color-borrowed: var(--borrowed);
+  --color-rented:  var(--rented);
 
   --color-success:     var(--success);
   --color-warning:     var(--warning);
