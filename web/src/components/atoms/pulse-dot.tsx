@@ -1,6 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { type ComponentColor } from '@/lib/colors'
 
 const pulseDotVariants = cva('relative flex shrink-0', {
   variants: {
@@ -25,7 +24,7 @@ const pulseDotVariants = cva('relative flex shrink-0', {
       destructive: '[--pulse-color:var(--color-destructive)]',
       primary: '[--pulse-color:var(--color-primary)]',
       secondary: '[--pulse-color:var(--color-secondary)]',
-    } satisfies Record<ComponentColor, string>,
+    },
   },
   defaultVariants: {
     size: 'md',
