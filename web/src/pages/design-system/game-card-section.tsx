@@ -1,8 +1,6 @@
-import { Badge } from '@/components/atoms/badge'
 import { GameCard } from '@/components/game-card'
-import { cn } from '@/lib/utils'
 
-export function GameCardSection() {
+export const GameCardSection = () => {
   return (
     <section className='space-y-6'>
       <div>
@@ -17,18 +15,18 @@ export function GameCardSection() {
         <div className='grid grid-cols-4 gap-3.5'>
           {(
             [
-              { id: 1, name: 'Hearthstone', session_count: 0 },
-              { id: 2, name: 'Catan', session_count: 14 },
-              { id: 3, name: 'Ticket to Ride', session_count: 7 },
-              { id: 4, name: 'Wingspan', session_count: 23 },
-              { id: 5, name: 'Pandemic', session_count: 5 },
-              { id: 6, name: 'Codenames', session_count: 31 },
-              { id: 7, name: 'Azul', session_count: 9 },
-              { id: 8, name: 'Gloomhaven', session_count: 2 },
-              { id: 9, name: 'Terraforming Mars', session_count: 18 },
-              { id: 10, name: 'Betrayal at House on the Hill', session_count: 4 },
-              { id: 11, name: 'Dominion', session_count: 11 },
-              { id: 12, name: '7 Wonders', session_count: 16 },
+              { id: 1, name: 'Calico', session_count: 0, min_players: 2, max_players: 5, owner_id: 1 },
+              { id: 2, name: 'Catan', session_count: 14, min_players: 2, max_players: 5, owner_id: 1 },
+              { id: 3, name: 'Ticket to Ride', session_count: 7, min_players: 2, max_players: 5, owner_id: 1 },
+              { id: 4, name: 'Wingspan', session_count: 23, min_players: 2, max_players: 5, owner_id: 1 },
+              { id: 5, name: 'Pandemic', session_count: 5, min_players: 2, max_players: 5, owner_id: 1 },
+              { id: 6, name: 'Codenames', session_count: 31, min_players: 2, max_players: 5, owner_id: 1 },
+              { id: 7, name: 'Azul', session_count: 9, min_players: 2, max_players: 5, owner_id: 1 },
+              { id: 8, name: 'Gloomhaven', session_count: 2, min_players: 2, max_players: 5, owner_id: 1 },
+              { id: 9, name: 'Terraforming Mars', session_count: 18, min_players: 2, max_players: 5, owner_id: 1 },
+              { id: 10, name: 'Betrayal at House on the Hill', session_count: 4, min_players: 2, max_players: 5, owner_id: 1 },
+              { id: 11, name: 'Dominion', session_count: 11, min_players: 2, max_players: 5, owner_id: 1 },
+              { id: 12, name: '7 Wonders', session_count: 16, min_players: 2, max_players: 5, owner_id: 1 },
             ] as const
           ).map((game, index) => (
             <GameCard key={index} {...game} />
@@ -36,37 +34,7 @@ export function GameCardSection() {
         </div>
       </div>
 
-      <div>
-        <p className='caption mb-3 text-ink-muted'>Rich · grid</p>
-        <div className='grid grid-cols-4 gap-3.5'>
-          {(
-            [
-              { title: 'Rumikubi', meta: '2 sessions · 2–4p', badge: 'OWN', variant: 'owned', art: 'repeating-linear-gradient(135deg, #e8e2d0 0 8px, #dfd9c5 8px 16px)' },
-              { title: 'Sushi Go!', meta: '0 sessions · 2–5p', badge: 'FRIEND', variant: 'borrowed', art: 'repeating-linear-gradient(45deg,  #e2e8d0 0 8px, #d5dfc5 8px 16px)' },
-              { title: 'BG3', meta: 'Joy Joy · 7d left', badge: 'RENT', variant: 'rented', art: 'repeating-linear-gradient(135deg, #f0d4d4 0 8px, #e5c8c8 8px 16px)' },
-              { title: 'Hearthstone', meta: '1 session · 3p', badge: 'OWN', variant: 'owned', art: 'repeating-linear-gradient(45deg,  #d8d4e8 0 8px, #c8c4dc 8px 16px)' },
-            ] as const
-          ).map(({ title, meta, badge, variant, art }) => (
-            <article
-              key={title}
-              className='flex cursor-pointer flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-md'
-            >
-              <div className='relative aspect-3/4 border-b border-border'>
-                <div className='h-full w-full' style={{ background: art }} />
-                <Badge variant={variant} className='absolute top-2.5 left-2.5'>
-                  {badge}
-                </Badge>
-              </div>
-              <div className='px-3.5 pt-3 pb-3.5'>
-                <h3 className='text-base leading-tight font-bold text-ink-primary'>{title}</h3>
-                <p className='mt-0.5 text-xs text-ink-muted'>{meta}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-
-      <div>
+      {/* <div>
         <p className='caption mb-3 text-ink-muted'>Row · list</p>
         <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
           {(
@@ -85,7 +53,7 @@ export function GameCardSection() {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </section>
   )
 }

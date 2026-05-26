@@ -12,6 +12,7 @@ export interface Game {
   cover_image_path?: string
   owner_id?: number
   owner_name?: string
+  owner_player_type?: 'person' | 'shop'
   bgg_id?: number
   year_published?: number
   created_at: string
