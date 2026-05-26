@@ -14,10 +14,10 @@
   "rtl": false,
   "aliases": {
     "components": "@/shadcn/components",
-    "utils": "@/shadcn/lib/utils",
-    "ui": "@/shadcn/components/ui",
-    "lib": "@/shadcn/lib",
-    "hooks": "@/shadcn/hooks"
+    "utils": "@/lib/utils",
+    "ui": "@/shadcn/components",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
   },
   "menuColor": "default",
   "menuAccent": "subtle",

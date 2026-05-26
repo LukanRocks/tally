@@ -3,9 +3,9 @@
 import * as React from 'react'
 import { Combobox as ComboboxPrimitive } from '@base-ui/react'
 
-import { cn } from '@/shadcn/lib/utils'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/atoms/button'
-import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/shadcn/components/ui/input-group'
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/shadcn/components/input-group'
 import { ChevronDownIcon, XIcon, CheckIcon } from 'lucide-react'
 
 const Combobox = ComboboxPrimitive.Root
