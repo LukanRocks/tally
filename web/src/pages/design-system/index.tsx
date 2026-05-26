@@ -31,7 +31,7 @@ export default () => (
     {/* FOUNDATIONS */}
     <BrandSection />
     <ColorsSection />
-    <TypographySection /> {/* !TODO NEEDS COMPONENTIZATION*/}
+    <TypographySection />
     {/* <SpacingSection /> — import from ./spacing-section when ready */}
     <ElevationSection />
     <IconographySection />
