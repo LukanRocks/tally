@@ -8,6 +8,7 @@ import { ElevationSection } from './foundation/elevation-section'
 import { IconographySection } from './foundation/iconography-section'
 
 import { CheckboxSection } from './component/checkbox-section'
+import { SwitchSection } from './component/switch-section'
 // import { InputsSection } from './inputs-section'
 
 import { ButtonsSection } from './component/buttons-section'
@@ -44,6 +45,7 @@ export default () => (
     <IconographySection />
     <span className='caption text-ink-muted'>02 — Inputs</span>
     <CheckboxSection />
+    <SwitchSection />
     {/* <InputsSection /> !TODO NEEDS COMPONENTIZATION */}
     <span className='caption text-ink-muted'>03 — Atomic Components</span>
     <ButtonsSection />
