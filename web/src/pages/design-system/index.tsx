@@ -1,13 +1,17 @@
 import { Page } from '@/components/page'
 import { ThemeToggle } from '@/components/theme/theme-toggle'
+
 import { BrandSection } from './foundation/brand-section'
 import { ColorsSection } from './foundation/colors-section'
 import { TypographySection } from './foundation/typography-section'
 import { ElevationSection } from './foundation/elevation-section'
 import { IconographySection } from './foundation/iconography-section'
+
+import { CheckboxSection } from './component/checkbox-section'
+// import { InputsSection } from './inputs-section'
+
 import { ButtonsSection } from './component/buttons-section'
 import { ChipsBadgesSection } from './component/chips-badges-section'
-// import { InputsSection } from './inputs-section'
 import { AvatarsSection } from './component/avatars-section'
 import { GameCardSection } from './component/game-card-section'
 // import { CardsSection } from './cards-section'
@@ -17,6 +21,7 @@ import { GameCardSection } from './component/game-card-section'
 // import { PodiumSection } from './podium-section'
 // import { SessionCardSection } from './session-card-section'
 // import { PlayerProfileSection } from './player-profile-section'
+
 import { SonnerSection } from './feedback/sonner-section'
 import { EmptyStateSection } from './feedback/empty-state-section'
 import { LoadingScreenSection } from './feedback/loading-screen-section'
@@ -37,20 +42,21 @@ export default () => (
     <TypographySection />
     <ElevationSection />
     <IconographySection />
-    <span className='caption text-ink-muted'>02 — Atomic Components</span>
+    <span className='caption text-ink-muted'>02 — Inputs</span>
+    <CheckboxSection />
+    {/* <InputsSection /> !TODO NEEDS COMPONENTIZATION */}
+    <span className='caption text-ink-muted'>03 — Atomic Components</span>
     <ButtonsSection />
     <ChipsBadgesSection />
-    {/* <InputsSection /> !TODO NEEDS COMPONENTIZATION */}
-    {/* <CheckboxSection /> — import from ./checkbox-section when ready */}
     <AvatarsSection />
-    <span className='caption text-ink-muted'>03 — Components</span>
+    <span className='caption text-ink-muted'>04 — Components</span>
     <GameCardSection />
     {/* <CardsSection /> !TODO NEEDS COMPONENTIZATION */}
     {/* <LeaderboardSection /> !TODO NEEDS COMPONENTIZATION */}
     {/* <PodiumSection /> !TODO NEEDS COMPONENTIZATION */}
     {/* <SessionCardSection /> !TODO NEEDS COMPONENTIZATION */}
     {/* <PlayerProfileSection /> !TODO NEEDS COMPONENTIZATION */}
-    <span className='caption text-ink-muted'>04 — Feedback</span>
+    <span className='caption text-ink-muted'>05 — Feedback</span>
     <SonnerSection /> {/*  !TODO NEEDS COMPONENTIZATION */}
     <EmptyStateSection />
     <LoadingScreenSection />
