@@ -27,12 +27,15 @@ export const Page = ({ children, loading, className, container = false }: PagePr
   if (loading && showLoader) return <Loading />
   if (loading) return null
 
-  return <div className={cn('space-y-4 p-4 md:p-8', container && 'mx-auto max-w-5xl', className)}>{children}</div>
+  return <div className={cn('h-full space-y-4 p-4 md:p-8', container && 'mx-auto max-w-5xl', className)}>{children}</div>
 }
 
-export const PageHeader = ({ title, caption }: { title: string; caption: string }) => (
-  <header className='flx flex-col gap-2'>
+export const PageHeader = ({ title, caption, children }: { title: string; caption: string; children?: ReactNode }) => (
+  <header className='flex flex-col gap-2'>
     <span className='caption text-ink-muted'>{caption} </span>
-    <h1 className='text-5xl font-bold'>{title}</h1>
+    <div className='flex flex-row items-center justify-between'>
+      <h1 className='text-5xl font-bold'>{title}</h1>
+      <div className='flex flex-row items-center gap-2'>{children}</div>
+    </div>
   </header>
 )
