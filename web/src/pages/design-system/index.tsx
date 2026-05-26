@@ -42,7 +42,7 @@ export default () => (
     <ChipsBadgesSection />
     <InputsSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     {/* <CheckboxSection /> — import from ./checkbox-section when ready */}
-    <AvatarsSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
+    <AvatarsSection />
     <CardsSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <NavigationSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <LeaderboardSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
