@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { api, Game, LeaderboardEntry, MostPlayedGame } from '@/lib/http-transport/api'
 import { GameCard } from '@/components/game-card'
 import { cn } from '@/lib/utils'
-import { Page } from '@/components/page'
+import { Page } from '@/components/layout/page'
 import { GreetingBanner } from '@/components/greeting-banner'
 
 export default () => {
@@ -54,7 +54,9 @@ export default () => {
                 <tbody className='divide-y divide-border'>
                   {leaderboard.map((e, i) => (
                     <tr key={e.player_id} className='hover:bg-muted/50'>
-                      <td className={cn('font-mono tabular-nums px-4 py-3', i === 0 ? 'text-1st-place' : i === 1 ? 'text-2nd-place' : i === 2 ? 'text-3rd-place' : 'text-ink-muted')}>
+                      <td
+                        className={cn('px-4 py-3 font-mono tabular-nums', i === 0 ? 'text-1st-place' : i === 1 ? 'text-2nd-place' : i === 2 ? 'text-3rd-place' : 'text-ink-muted')}
+                      >
                         {i + 1}
                       </td>
                       <td className='px-4 py-3 font-medium'>
@@ -62,8 +64,8 @@ export default () => {
                           {e.player_name}
                         </Link>
                       </td>
-                      <td className='font-mono tabular-nums px-4 py-3 text-right'>{e.total_points}</td>
-                      <td className='font-mono tabular-nums px-4 py-3 text-right text-ink-muted'>{e.wins}</td>
+                      <td className='px-4 py-3 text-right font-mono tabular-nums'>{e.total_points}</td>
+                      <td className='px-4 py-3 text-right font-mono text-ink-muted tabular-nums'>{e.wins}</td>
                     </tr>
                   ))}
                 </tbody>

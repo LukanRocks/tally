@@ -1,4 +1,4 @@
-import { Page } from '@/components/page'
+import { Page } from '@/components/layout/page'
 import { ThemeToggle } from '@/components/theme/theme-toggle'
 
 import { BrandSection } from './foundation/brand-section'

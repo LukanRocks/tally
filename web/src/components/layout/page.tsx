@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
+import { Loading } from '@/components/feedback/loading-screen'
 
 interface PageProps {
   children: ReactNode
@@ -22,7 +23,7 @@ export const Page = ({ children, loading, className }: PageProps) => {
     return () => clearTimeout(timer)
   }, [loading])
 
-  if (loading && showLoader) return <div className='p-4 text-muted-foreground md:p-8'>Loading…</div>
+  if (loading && showLoader) return <Loading />
   if (loading) return null
 
   return <div className={cn('mx-auto max-w-5xl p-4 md:p-8', className)}>{children}</div>
