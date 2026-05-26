@@ -9,12 +9,12 @@ interface Tool {
 }
 
 const TOOLS: Tool[] = [
-  { path: '/tools/timer', icon: Timer, label: 'Go faster!', description: 'Keep turns moving with a countdown timer.' },
-  { path: '/tools/first-player', icon: Dices, label: 'Who Goes First?', description: 'Decide who starts playing with a random prompt.' },
-  { path: '/tools/dice', icon: Dice6, label: 'Roll the Dice!', description: 'Roll any die, any number of times.' },
+  { path: '/tools/turn-timer', icon: Timer, label: 'Go faster!', description: 'Keep turns moving with a countdown timer.' },
+  { path: '/tools/first-player-picker', icon: Dices, label: 'Who Goes First?', description: 'Decide who starts playing with a random prompt.' },
+  { path: '/tools/roll-dice', icon: Dice6, label: 'Roll the Dice!', description: 'Roll any die, any number of times.' },
 ]
 
-function ToolCard({ path, icon: Icon, label, description }: Tool) {
+const ToolCard = ({ path, icon: Icon, label, description }: Tool) => {
   return (
     <Link to={path}>
       <div className='flex items-center gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:bg-accent'>
@@ -30,7 +30,7 @@ function ToolCard({ path, icon: Icon, label, description }: Tool) {
   )
 }
 
-export default function ToolsPage() {
+export default () => {
   return (
     <div className='flex flex-col gap-6 p-6'>
       <h1 className='text-2xl font-bold'>Tools</h1>

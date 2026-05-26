@@ -15,10 +15,11 @@ import PlayerProfile from '@/pages/PlayerProfile'
 import Leaderboard from '@/pages/Leaderboard'
 import SettingsPage from '@/pages/Settings'
 import DesignSystem from '@/pages/design-system'
-import Tools from '@/pages/Tools'
-import Dice from '@/pages/Dice'
-import FirstPlayer from '@/pages/FirstPlayer'
-import Timer from '@/pages/Timer'
+
+import Tools from '@/pages/tools'
+import Dice from '@/pages/tools/dice-roll'
+import FirstPlayer from '@/pages/tools/first-player-picker'
+import Timer from '@/pages/tools/turn-timer'
 
 export const AppRoutes = () => {
   const { settings } = useSettings()
@@ -42,9 +43,9 @@ export const AppRoutes = () => {
           <Route path='settings' element={<SettingsPage />} />
           <Route path='design-system' element={<DesignSystem />} />
           <Route path='tools' element={<Tools />} />
-          <Route path='tools/dice' element={<Dice />} />
-          <Route path='tools/first-player' element={<FirstPlayer />} />
-          <Route path='tools/timer' element={<Timer />} />
+          <Route path='tools/roll-dice' element={<Dice />} />
+          <Route path='tools/first-player-picker' element={<FirstPlayer />} />
+          <Route path='tools/turn-timer' element={<Timer />} />
         </Route>
       </Routes>
     </BrowserRouter>
