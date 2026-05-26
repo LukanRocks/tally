@@ -1,5 +1,5 @@
 import { Dices, Library } from 'lucide-react'
-import { EmptyState } from '@/components/state/empty-state'
+import { EmptyState } from '@/components/feedback/empty-state'
 import { Button } from '@/components/atoms/button'
 
 export function EmptyStateSection() {
@@ -13,21 +13,15 @@ export function EmptyStateSection() {
       </div>
 
       <div className='grid grid-cols-2 gap-4'>
-        <EmptyState
-          icon={Dices}
-          title='No sessions yet'
-          description='Log your first game and the leaderboard starts filling in.'
-        >
+        <EmptyState icon={Dices} title='No sessions yet' description='Log your first game and the leaderboard starts filling in.'>
           <Button>+ Log first session</Button>
         </EmptyState>
 
-        <EmptyState
-          icon={Library}
-          title='Your library is empty'
-          description="Add a game you own, or one you've played at a friend's place."
-        >
+        <EmptyState icon={Library} title='Your library is empty' description="Add a game you own, or one you've played at a friend's place.">
           <Button size='small'>+ Add game</Button>
-          <Button size='small' variant='ghost' color='secondary'>Browse BGG</Button>
+          <Button size='small' variant='ghost' color='secondary'>
+            Browse BGG
+          </Button>
         </EmptyState>
       </div>
     </section>
