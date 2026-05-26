@@ -12,11 +12,11 @@ export const EmptyStateSection = () => (
     </div>
 
     <div className='grid grid-cols-2 gap-4'>
-      <EmptyState icon={Dices} title='No sessions yet' description='Log your first game and the leaderboard starts filling in.'>
+      <EmptyState icon={Dices} description='Log your first game and the leaderboard starts filling in.'>
         <Button>+ Log first session</Button>
       </EmptyState>
 
-      <EmptyState icon={Library} title='Your library is empty' description="Add a game you own, or one you've played at a friend's place.">
+      <EmptyState icon={Library} description="Add a game you own, or one you've played at a friend's place.">
         <Button size='small'>+ Add game</Button>
         <Button size='small' variant='ghost' color='secondary'>
           Browse BGG

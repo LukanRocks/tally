@@ -67,5 +67,6 @@ export const buttonSizes: ButtonSize[] = ['small', 'default', 'big', 'icon']
 
 export const Button = ({ className, variant, color, size, asChild = false, ...props }: ComponentProps<'button'> & ButtonVariants & { asChild?: boolean }) => {
   const Comp = asChild ? Slot.Root : 'button'
+
   return <Comp data-slot='button' className={cn(buttonVariants({ variant, color, size }), className)} {...props} />
 }
