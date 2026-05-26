@@ -8,8 +8,8 @@ import { IconographySection } from './foundation/iconography-section'
 import { ButtonsSection } from './component/buttons-section'
 import { ChipsBadgesSection } from './component/chips-badges-section'
 // import { InputsSection } from './inputs-section'
-import { AvatarsSection } from './avatars-section'
-import { GameCardSection } from './game-card-section'
+import { AvatarsSection } from './component/avatars-section'
+import { GameCardSection } from './component/game-card-section'
 // import { CardsSection } from './cards-section'
 // import { NavigationSection } from './navigation-section'
 // import { SonnerSection } from './feedback/sonner-section'
@@ -34,7 +34,6 @@ export default () => (
     <BrandSection />
     <ColorsSection />
     <TypographySection />
-    {/* <SpacingSection /> — import from ./spacing-section when ready */}
     <ElevationSection />
     <IconographySection />
     <span className='caption text-ink-muted'>02 — Atomic Components</span>
@@ -46,7 +45,6 @@ export default () => (
     <span className='caption text-ink-muted'>03 — Components</span>
     <GameCardSection />
     {/* <CardsSection /> !TODO NEEDS COMPONENTIZATION */}
-    {/* <NavigationSection /> !TODO NEEDS COMPONENTIZATION */}
     {/* <LeaderboardSection /> !TODO NEEDS COMPONENTIZATION */}
     {/* <PodiumSection /> !TODO NEEDS COMPONENTIZATION */}
     {/* <SessionCardSection /> !TODO NEEDS COMPONENTIZATION */}
