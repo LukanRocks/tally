@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import { getBackgroundFallback } from '@/lib/backgrounds'
+import { backgrounds } from '@/lib/backgrounds'
+import { useDeterministicPick } from '@/hooks/useDeterministicPick'
 
 interface GameCardProps {
   id: number
@@ -11,11 +12,13 @@ interface GameCardProps {
 }
 
 export const GameCard = (game: GameCardProps) => {
+  const fallback = useDeterministicPick(backgrounds, game.id)
+
   return (
     <Link to={`/library/${game.id}`} className='group overflow-hidden rounded-xl border border-border bg-card transition-shadow hover:shadow-md'>
       <div className='flex aspect-3/4 items-center justify-center bg-muted'>
         <img
-          src={game.cover_image_path ?? getBackgroundFallback(game.id)}
+          src={game.cover_image_path ?? fallback}
           alt={game.cover_image_path ? game.name : ''}
           className='h-full w-full object-cover transition-transform duration-200 group-hover:scale-105'
         />

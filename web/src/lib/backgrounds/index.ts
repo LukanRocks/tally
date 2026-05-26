@@ -11,6 +11,4 @@ import bg9 from './bg-9.svg'
 import bg10 from './bg-10.svg'
 import bg11 from './bg-11.svg'
 
-const backgrounds = [bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11]
-
-export const getBackgroundFallback = (gameId: number): string => backgrounds[gameId % backgrounds.length]
+export const backgrounds = [bg0, bg1, bg2, bg3, bg4, bg5, bg6, bg7, bg8, bg9, bg10, bg11]

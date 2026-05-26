@@ -7,16 +7,16 @@ import { ElevationSection } from './foundation/elevation-section'
 import { IconographySection } from './foundation/iconography-section'
 import { ButtonsSection } from './component/buttons-section'
 import { ChipsBadgesSection } from './component/chips-badges-section'
-import { InputsSection } from './inputs-section'
+// import { InputsSection } from './inputs-section'
 import { AvatarsSection } from './avatars-section'
-import { CardsSection } from './cards-section'
-import { NavigationSection } from './navigation-section'
-import { SonnerSection } from './feedback/sonner-section'
-import { LeaderboardSection } from './leaderboard-section'
-import { PodiumSection } from './podium-section'
-import { GameCardSection } from './game-card-section'
-import { SessionCardSection } from './session-card-section'
-import { PlayerProfileSection } from './player-profile-section'
+// import { CardsSection } from './cards-section'
+// import { NavigationSection } from './navigation-section'
+// import { SonnerSection } from './feedback/sonner-section'
+// import { LeaderboardSection } from './leaderboard-section'
+// import { PodiumSection } from './podium-section'
+// import { GameCardSection } from './game-card-section'
+// import { SessionCardSection } from './session-card-section'
+// import { PlayerProfileSection } from './player-profile-section'
 import { EmptyStateSection } from './feedback/empty-state-section'
 import { LoadingScreenSection } from './feedback/loading-screen-section'
 import { ErrorScreenSection } from './feedback/error-screen-section'
@@ -40,18 +40,18 @@ export default () => (
     <span className='caption text-ink-muted'>01 — Components</span>
     <ButtonsSection />
     <ChipsBadgesSection />
-    <InputsSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
+    {/* <InputsSection /> !TODO NEEDS COMPONENTIZATION */}
     {/* <CheckboxSection /> — import from ./checkbox-section when ready */}
     <AvatarsSection />
-    <CardsSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
-    <NavigationSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
-    <LeaderboardSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
-    <PodiumSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
-    <GameCardSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
-    <SessionCardSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
-    <PlayerProfileSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
+    {/* <CardsSection /> !TODO NEEDS COMPONENTIZATION */}
+    {/* <NavigationSection /> !TODO NEEDS COMPONENTIZATION */}
+    {/* <LeaderboardSection /> !TODO NEEDS COMPONENTIZATION */}
+    {/* <PodiumSection /> !TODO NEEDS COMPONENTIZATION */}
+    {/* <GameCardSection /> !TODO NEEDS COMPONENTIZATION */}
+    {/* <SessionCardSection /> !TODO NEEDS COMPONENTIZATION */}
+    {/* <PlayerProfileSection /> !TODO NEEDS COMPONENTIZATION */}
     <span className='caption text-ink-muted'>03 — Feedback</span>
-    <SonnerSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
+    {/* <SonnerSection /> !TODO NEEDS COMPONENTIZATION */}
     <EmptyStateSection />
     <LoadingScreenSection />
     <ErrorScreenSection />
