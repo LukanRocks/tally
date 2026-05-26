@@ -17,6 +17,7 @@ import { GameCardSection } from './component/game-card-section'
 // import { PodiumSection } from './podium-section'
 // import { SessionCardSection } from './session-card-section'
 // import { PlayerProfileSection } from './player-profile-section'
+import { SonnerSection } from './feedback/sonner-section'
 import { EmptyStateSection } from './feedback/empty-state-section'
 import { LoadingScreenSection } from './feedback/loading-screen-section'
 import { ErrorScreenSection } from './feedback/error-screen-section'
@@ -25,11 +26,11 @@ export default () => (
   <Page className='space-y-8'>
     <header className='flx flex-col gap-2'>
       <span className='caption text-ink-muted'>v1 · foundations · patterns · components</span>
-      <div className='flex w-full items-center justify-between'>
-        <h1 className='text-5xl font-bold'>Design system</h1>
-        <ThemeToggle />
-      </div>
+      <h1 className='text-5xl font-bold'>Design system</h1>
     </header>
+    <div className='fixed right-4 bottom-4 z-50'>
+      <ThemeToggle />
+    </div>
     <span className='caption text-ink-muted'>01 — Foundations</span>
     <BrandSection />
     <ColorsSection />
@@ -50,7 +51,7 @@ export default () => (
     {/* <SessionCardSection /> !TODO NEEDS COMPONENTIZATION */}
     {/* <PlayerProfileSection /> !TODO NEEDS COMPONENTIZATION */}
     <span className='caption text-ink-muted'>04 — Feedback</span>
-    {/* <SonnerSection /> !TODO NEEDS COMPONENTIZATION */}
+    <SonnerSection /> {/*  !TODO NEEDS COMPONENTIZATION */}
     <EmptyStateSection />
     <LoadingScreenSection />
     <ErrorScreenSection />
