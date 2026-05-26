@@ -28,14 +28,14 @@ export default () => (
         <ThemeToggle />
       </div>
     </header>
-    {/* FOUNDATIONS */}
+    <span className='caption text-ink-muted'>01 — Foundations</span>
     <BrandSection />
     <ColorsSection />
     <TypographySection />
     {/* <SpacingSection /> — import from ./spacing-section when ready */}
     <ElevationSection />
     <IconographySection />
-    {/* COMPONENTS */}
+    <span className='caption text-ink-muted'>01 — Components</span>
     <ButtonsSection />
     <ChipsBadgesSection />
     <InputsSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
@@ -43,12 +43,13 @@ export default () => (
     <AvatarsSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <CardsSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <NavigationSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
-    <FeedbackSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <LeaderboardSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <PodiumSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <GameCardSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <SessionCardSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <PlayerProfileSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
-    <EmptyStateSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
+    <span className='caption text-ink-muted'>03 — Feedback</span>
+    <EmptyStateSection />
+    <FeedbackSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
   </Page>
 )

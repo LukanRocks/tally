@@ -1,7 +1,6 @@
 export const BrandSection = () => (
   <section className='space-y-6'>
     <div>
-      <span className='caption text-ink-muted'>01 — Foundations</span>
       <h2 className='mt-1 text-2xl font-bold'>Brand</h2>
       <p className='mt-1 text-sm text-ink-secondary'>
         Tally is a board-game session tracker. The voice is <strong>warm, sharp, a little smug after a win</strong>. Surfaces are calm and paper-coloured; the yellow only shows up

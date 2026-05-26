@@ -6,7 +6,6 @@ export function ButtonsSection() {
   return (
     <section className='space-y-6'>
       <div>
-        <p className='caption text-ink-muted'>02 — Components</p>
         <h2 className='mt-1 text-2xl font-bold'>Buttons</h2>
         <p className='mt-1 text-sm text-ink-secondary'>
           One primary per surface. Yellow is loud; reserve it for the single most important action. Four variants × three colors × four sizes.
