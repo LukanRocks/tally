@@ -1,4 +1,4 @@
-import { Toggle } from '@/components/inputs/toggle'
+import { Toggle } from '@/components/atoms/toggle'
 import { Star } from 'lucide-react'
 
 export const ToggleSection = () => (

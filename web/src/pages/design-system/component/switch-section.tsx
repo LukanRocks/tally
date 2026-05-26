@@ -1,4 +1,4 @@
-import { Switch } from '@/components/inputs/switch'
+import { Switch } from '@/components/atoms/switch'
 
 export const SwitchSection = () => (
   <section className='space-y-6'>
