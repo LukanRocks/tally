@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { Plus } from 'lucide-react'
 import { Button, buttonColorGroups } from '@/components/atoms/button'
 
@@ -73,8 +74,8 @@ export function ButtonsSection() {
           </thead>
           <tbody className='divide-y divide-dashed divide-border'>
             {buttonColorGroups.map(({ label, colors }) => (
-              <>
-                <tr key={label} className='bg-paper-secondary/40'>
+              <Fragment key={label}>
+                <tr className='bg-paper-secondary/40'>
                   <td colSpan={5} className='px-4 py-1.5'>
                     <span className='caption text-[10px] text-ink-muted'>{label}</span>
                   </td>
@@ -106,7 +107,7 @@ export function ButtonsSection() {
                     </td>
                   </tr>
                 ))}
-              </>
+              </Fragment>
             ))}
           </tbody>
         </table>
