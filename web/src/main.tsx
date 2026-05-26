@@ -18,7 +18,11 @@ import PlayerProfile from './pages/PlayerProfile'
 import Leaderboard from './pages/Leaderboard'
 import SettingsPage from './pages/Settings'
 import Onboarding from './pages/Onboarding'
-import DesignSystem from './pages/DesignSystem'
+import DesignSystem from '@/pages/DesignSystem'
+import Tools from '@/pages/Tools'
+import Dice from '@/pages/Dice'
+import FirstPlayer from '@/pages/FirstPlayer'
+import Timer from '@/pages/Timer'
 
 function App() {
   function OnboardingGuard({ children }: { children: React.ReactNode }) {
@@ -58,13 +62,17 @@ function App() {
               <Route path='library/new' element={<GameForm />} />
               <Route path='library/:id' element={<GameDetail />} />
               <Route path='library/:id/edit' element={<GameForm />} />
-              <Route path='library/:id/session/new' element={<SessionLogger />} />
-              <Route path='sessions/new' element={<SessionLogger />} />
-              <Route path='players' element={<Players />} />
-              <Route path='players/:id' element={<PlayerProfile />} />
-              <Route path='leaderboard' element={<Leaderboard />} />
-              <Route path='settings' element={<SettingsPage />} />
-              <Route path='design-system' element={<DesignSystem />} />
+          <Route path='library/:id/session/new' element={<SessionLogger />} />
+          <Route path='sessions/new' element={<SessionLogger />} />
+          <Route path='players' element={<Players />} />
+          <Route path='players/:id' element={<PlayerProfile />} />
+          <Route path='leaderboard' element={<Leaderboard />} />
+          <Route path='settings' element={<SettingsPage />} />
+          <Route path='design-system' element={<DesignSystem />} />
+          <Route path='tools' element={<Tools />} />
+          <Route path='tools/dice' element={<Dice />} />
+          <Route path='tools/first-player' element={<FirstPlayer />} />
+          <Route path='tools/timer' element={<Timer />} />
             </Route>
           </Routes>
           <Toaster />
