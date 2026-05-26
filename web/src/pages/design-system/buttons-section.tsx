@@ -1,5 +1,5 @@
-import { Button } from '@/components/atoms/button'
-import { componentColorKeys } from '@/lib/colors'
+import { Plus } from 'lucide-react'
+import { Button, buttonColorGroups } from '@/components/atoms/button'
 
 export function ButtonsSection() {
   return (
@@ -8,7 +8,7 @@ export function ButtonsSection() {
         <p className='eyebrow text-ink-muted'>02 — Components</p>
         <h2 className='mt-1 text-2xl font-bold'>Buttons</h2>
         <p className='mt-1 text-sm text-ink-secondary'>
-          One primary per surface. Yellow is loud; reserve it for the single most important action. Four variants × twelve colors × four sizes.
+          One primary per surface. Yellow is loud; reserve it for the single most important action. Four variants × three colors × four sizes.
         </p>
       </div>
 
@@ -30,9 +30,7 @@ export function ButtonsSection() {
           ))}
           <div className='flex flex-col items-center gap-1.5'>
             <Button size='icon' aria-label='Add session'>
-              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2.5' strokeLinecap='round'>
-                <path d='M12 5v14M5 12h14' />
-              </svg>
+              <Plus />
             </Button>
             <span className='eyebrow text-[10px] text-ink-muted'>icon</span>
           </div>
@@ -74,32 +72,41 @@ export function ButtonsSection() {
             </tr>
           </thead>
           <tbody className='divide-y divide-dashed divide-border'>
-            {componentColorKeys.map((color) => (
-              <tr key={color} className='hover:bg-paper-secondary/40'>
-                <td className='px-4 py-2.5'>
-                  <code className='font-mono text-xs text-ink-muted'>{color}</code>
-                </td>
-                <td className='px-4 py-2.5 text-center'>
-                  <Button color={color} size='small'>
-                    {color}
-                  </Button>
-                </td>
-                <td className='px-4 py-2.5 text-center'>
-                  <Button variant='outline' color={color} size='small'>
-                    {color}
-                  </Button>
-                </td>
-                <td className='px-4 py-2.5 text-center'>
-                  <Button variant='ghost' color={color} size='small'>
-                    {color}
-                  </Button>
-                </td>
-                <td className='px-4 py-2.5 text-center'>
-                  <Button variant='link' color={color} size='small'>
-                    {color}
-                  </Button>
-                </td>
-              </tr>
+            {buttonColorGroups.map(({ label, colors }) => (
+              <>
+                <tr key={label} className='bg-paper-secondary/40'>
+                  <td colSpan={5} className='px-4 py-1.5'>
+                    <span className='eyebrow text-[10px] text-ink-muted'>{label}</span>
+                  </td>
+                </tr>
+                {colors.map((color) => (
+                  <tr key={color} className='hover:bg-paper-secondary/40'>
+                    <td className='px-4 py-2.5'>
+                      <code className='font-mono text-xs text-ink-muted'>{color}</code>
+                    </td>
+                    <td className='px-4 py-2.5 text-center'>
+                      <Button color={color} size='small'>
+                        {color}
+                      </Button>
+                    </td>
+                    <td className='px-4 py-2.5 text-center'>
+                      <Button variant='outline' color={color} size='small'>
+                        {color}
+                      </Button>
+                    </td>
+                    <td className='px-4 py-2.5 text-center'>
+                      <Button variant='ghost' color={color} size='small'>
+                        {color}
+                      </Button>
+                    </td>
+                    <td className='px-4 py-2.5 text-center'>
+                      <Button variant='link' color={color} size='small'>
+                        {color}
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </>
             ))}
           </tbody>
         </table>
