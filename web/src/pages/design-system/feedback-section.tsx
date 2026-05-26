@@ -39,7 +39,7 @@ export function FeedbackSection() {
       </div>
 
       <div>
-        <p className='eyebrow mb-3 text-ink-muted'>Banner</p>
+        <p className='caption mb-3 text-ink-muted'>Banner</p>
         <div className='flex items-center justify-between gap-4 rounded-lg border border-yellow-tertiary/35 bg-yellow-secondary px-4 py-3.5'>
           <div className='flex flex-col gap-0.5'>
             <span className='text-sm font-bold text-ink-primary'>BG3 is due back to Joy Joy in 2 days.</span>
@@ -53,7 +53,7 @@ export function FeedbackSection() {
 
       {/* Toaster (interactive — needs sonner wired up)
       <div>
-        <p className='eyebrow mb-3 text-ink-muted'>Toaster</p>
+        <p className='caption mb-3 text-ink-muted'>Toaster</p>
         <div className='bg-surface-elevated flex flex-wrap gap-3 rounded-xl border border-border px-6 py-5'>
           <button className='rounded-md bg-primary px-3 py-1.5 text-sm text-primary-foreground' onClick={() => toast('Default toast')}>
             Default

@@ -12,26 +12,26 @@ export function CardsSection() {
 
       <div className='grid grid-cols-3 gap-4'>
         <div className='rounded-xl border border-border bg-card p-5 shadow-sm'>
-          <p className='eyebrow text-ink-muted'>Default · resting</p>
+          <p className='caption text-ink-muted'>Default · resting</p>
           <h3 className='my-1.5 text-lg font-bold'>Recent sessions</h3>
           <p className='text-sm text-ink-muted'>Wraps any content. Pad 16/20.</p>
         </div>
 
         <div className='cursor-pointer rounded-xl border border-border bg-card p-5 shadow-sm transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-md'>
-          <p className='eyebrow text-ink-muted'>Hoverable</p>
+          <p className='caption text-ink-muted'>Hoverable</p>
           <h3 className='my-1.5 text-lg font-bold'>Tap me</h3>
           <p className='text-sm text-ink-muted'>Lifts on hover. Use for navigable cards.</p>
         </div>
 
         <div className='rounded-xl border border-yellow-tertiary bg-yellow-primary p-5'>
-          <p className='eyebrow text-ink-primary/70'>Accent · key moment</p>
+          <p className='caption text-ink-primary/70'>Accent · key moment</p>
           <h3 className='my-1.5 text-lg font-bold text-ink-primary'>Play tonight</h3>
           <p className='text-sm text-ink-primary'>Yellow ground — at most one per screen.</p>
         </div>
       </div>
 
       <div>
-        <p className='eyebrow mb-3 text-ink-muted'>List row</p>
+        <p className='caption mb-3 text-ink-muted'>List row</p>
         <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
           {(
             [

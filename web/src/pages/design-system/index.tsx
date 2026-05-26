@@ -22,7 +22,7 @@ import { EmptyStateSection } from './empty-state-section'
 export default () => (
   <Page className='space-y-8'>
     <header className='flx flex-col gap-2'>
-      <span className='eyebrow text-ink-muted'>v1 · foundations · patterns · components</span>
+      <span className='caption text-ink-muted'>v1 · foundations · patterns · components</span>
       <div className='flex w-full items-center justify-between'>
         <h1 className='text-5xl font-bold'>Design system</h1>
         <ThemeToggle />

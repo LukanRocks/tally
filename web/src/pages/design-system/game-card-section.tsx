@@ -13,7 +13,7 @@ export function GameCardSection() {
       </div>
 
       <div>
-        <p className='eyebrow mb-3 text-ink-muted'>Current Card · grid</p>
+        <p className='caption mb-3 text-ink-muted'>Current Card · grid</p>
         <div className='grid grid-cols-4 gap-3.5'>
           {(
             [
@@ -37,7 +37,7 @@ export function GameCardSection() {
       </div>
 
       <div>
-        <p className='eyebrow mb-3 text-ink-muted'>Rich · grid</p>
+        <p className='caption mb-3 text-ink-muted'>Rich · grid</p>
         <div className='grid grid-cols-4 gap-3.5'>
           {(
             [
@@ -67,7 +67,7 @@ export function GameCardSection() {
       </div>
 
       <div>
-        <p className='eyebrow mb-3 text-ink-muted'>Row · list</p>
+        <p className='caption mb-3 text-ink-muted'>Row · list</p>
         <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
           {(
             [

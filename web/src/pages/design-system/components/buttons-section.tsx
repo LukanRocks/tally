@@ -5,7 +5,7 @@ export function ButtonsSection() {
   return (
     <section className='space-y-6'>
       <div>
-        <p className='eyebrow text-ink-muted'>02 — Components</p>
+        <p className='caption text-ink-muted'>02 — Components</p>
         <h2 className='mt-1 text-2xl font-bold'>Buttons</h2>
         <p className='mt-1 text-sm text-ink-secondary'>
           One primary per surface. Yellow is loud; reserve it for the single most important action. Four variants × three colors × four sizes.
@@ -14,7 +14,7 @@ export function ButtonsSection() {
 
       {/* Sizes & states */}
       <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
-        <p className='eyebrow text-ink-muted'>Sizes</p>
+        <p className='caption text-ink-muted'>Sizes</p>
         <div className='flex flex-wrap items-end gap-4'>
           {(
             [
@@ -25,18 +25,18 @@ export function ButtonsSection() {
           ).map(({ size, label }) => (
             <div key={size} className='flex flex-col items-center gap-1.5'>
               <Button size={size}>{label}</Button>
-              <span className='eyebrow text-[10px] text-ink-muted'>{size}</span>
+              <span className='caption text-[10px] text-ink-muted'>{size}</span>
             </div>
           ))}
           <div className='flex flex-col items-center gap-1.5'>
             <Button size='icon' aria-label='Add session'>
               <Plus />
             </Button>
-            <span className='eyebrow text-[10px] text-ink-muted'>icon</span>
+            <span className='caption text-[10px] text-ink-muted'>icon</span>
           </div>
         </div>
 
-        <p className='eyebrow text-ink-muted'>States</p>
+        <p className='caption text-ink-muted'>States</p>
         <div className='flex flex-wrap items-center gap-2'>
           <Button>Active</Button>
           <Button disabled>Disabled</Button>
@@ -64,11 +64,11 @@ export function ButtonsSection() {
         <table className='w-full'>
           <thead>
             <tr className='border-b border-border'>
-              <th className='eyebrow px-4 py-3 text-left text-ink-muted'>color</th>
-              <th className='eyebrow px-4 py-3 text-center text-ink-muted'>default</th>
-              <th className='eyebrow px-4 py-3 text-center text-ink-muted'>outline</th>
-              <th className='eyebrow px-4 py-3 text-center text-ink-muted'>ghost</th>
-              <th className='eyebrow px-4 py-3 text-center text-ink-muted'>link</th>
+              <th className='caption px-4 py-3 text-left text-ink-muted'>color</th>
+              <th className='caption px-4 py-3 text-center text-ink-muted'>default</th>
+              <th className='caption px-4 py-3 text-center text-ink-muted'>outline</th>
+              <th className='caption px-4 py-3 text-center text-ink-muted'>ghost</th>
+              <th className='caption px-4 py-3 text-center text-ink-muted'>link</th>
             </tr>
           </thead>
           <tbody className='divide-y divide-dashed divide-border'>
@@ -76,7 +76,7 @@ export function ButtonsSection() {
               <>
                 <tr key={label} className='bg-paper-secondary/40'>
                   <td colSpan={5} className='px-4 py-1.5'>
-                    <span className='eyebrow text-[10px] text-ink-muted'>{label}</span>
+                    <span className='caption text-[10px] text-ink-muted'>{label}</span>
                   </td>
                 </tr>
                 {colors.map((color) => (

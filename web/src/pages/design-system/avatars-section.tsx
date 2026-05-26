@@ -9,7 +9,7 @@ export function AvatarsSection() {
       </div>
 
       <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
-        <p className='eyebrow text-ink-muted'>Sizes</p>
+        <p className='caption text-ink-muted'>Sizes</p>
         <div className='flex flex-wrap items-center gap-4'>
           <span
             className='inline-flex h-5 w-5 items-center justify-center rounded-full border border-ink-primary font-sans text-[10px] font-bold text-ink-primary'
@@ -44,7 +44,7 @@ export function AvatarsSection() {
           <span className='text-xs text-ink-muted'>xs 20 · sm 28 · md 36 · lg 56 · xl 88</span>
         </div>
 
-        <p className='eyebrow text-ink-muted'>Player palette</p>
+        <p className='caption text-ink-muted'>Player palette</p>
         <div className='flex flex-wrap items-center gap-3'>
           {(
             [
@@ -66,7 +66,7 @@ export function AvatarsSection() {
           ))}
         </div>
 
-        <p className='eyebrow text-ink-muted'>Stack & with rank</p>
+        <p className='caption text-ink-muted'>Stack & with rank</p>
         <div className='flex flex-wrap items-center gap-8'>
           <div className='flex items-center'>
             {(['a', 'b', 'c'] as const).map((p, i) => (

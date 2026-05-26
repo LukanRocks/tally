@@ -8,7 +8,7 @@ export const ColorsSection = () => (
     </div>
 
     <div className='space-y-3'>
-      <p className='eyebrow text-ink-muted'>Core palette</p>
+      <p className='caption text-ink-muted'>Core palette</p>
       <div className='grid grid-cols-3 gap-3 sm:grid-cols-6'>
         {[
           { v: '--paper-primary', name: 'paper-primary', desc: 'app background' },
@@ -28,7 +28,7 @@ export const ColorsSection = () => (
     </div>
 
     <div className='space-y-3'>
-      <p className='eyebrow text-ink-muted'>Accent — the one and only yellow</p>
+      <p className='caption text-ink-muted'>Accent — the one and only yellow</p>
       <div className='grid grid-cols-3 gap-3'>
         {[
           { v: '--yellow-primary', name: 'yellow-primary', desc: 'primary CTA · slash' },
@@ -45,7 +45,7 @@ export const ColorsSection = () => (
     </div>
 
     <div className='space-y-3'>
-      <p className='eyebrow text-ink-muted'>Players</p>
+      <p className='caption text-ink-muted'>Players</p>
       <p className='text-xs text-ink-muted'>Use sparingly — these belong to people and outcomes, not buttons.</p>
       <div className='flex flex-wrap gap-3'>
         {(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'] as const).map((p) => (
@@ -58,7 +58,7 @@ export const ColorsSection = () => (
     </div>
 
     <div className='space-y-3'>
-      <p className='eyebrow text-ink-muted'>Outcomes</p>
+      <p className='caption text-ink-muted'>Outcomes</p>
       <div className='grid grid-cols-3 gap-3'>
         {[
           { v: '--win', name: 'win', desc: 'victory' },
@@ -75,7 +75,7 @@ export const ColorsSection = () => (
     </div>
 
     <div className='space-y-3'>
-      <p className='eyebrow text-ink-muted'>Medals</p>
+      <p className='caption text-ink-muted'>Medals</p>
       <div className='grid grid-cols-3 gap-3'>
         {[
           { v: '--medal-gold', name: 'medal-gold', desc: '1st place' },
@@ -92,7 +92,7 @@ export const ColorsSection = () => (
     </div>
 
     <div className='space-y-3'>
-      <p className='eyebrow text-ink-muted'>Ownership status</p>
+      <p className='caption text-ink-muted'>Ownership status</p>
       <div className='grid grid-cols-3 gap-3'>
         {[
           { v: '--owned', name: 'owned', desc: 'game you own' },
@@ -109,7 +109,7 @@ export const ColorsSection = () => (
     </div>
 
     <div className='space-y-3'>
-      <p className='eyebrow text-ink-muted'>Feedback</p>
+      <p className='caption text-ink-muted'>Feedback</p>
       <div className='grid grid-cols-4 gap-3'>
         {[
           { v: '--success', name: 'success', desc: 'confirmations' },

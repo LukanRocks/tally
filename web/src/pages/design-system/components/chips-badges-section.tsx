@@ -13,7 +13,7 @@ export const ChipsBadgesSection = () => (
       </div>
 
       <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
-        {/* <p className='eyebrow text-ink-muted'>Pill — selection & status</p>
+        {/* <p className='caption text-ink-muted'>Pill — selection & status</p>
         <div className='flex flex-wrap items-center gap-2'>
           <span className='inline-flex h-7 items-center rounded-full border border-border bg-card px-3 text-sm font-medium text-ink-primary'>Default</span>
           <span className='inline-flex h-7 items-center rounded-full border border-ink-primary bg-ink-primary px-3 text-sm font-medium text-paper-primary'>Selected</span>
@@ -36,7 +36,7 @@ export const ChipsBadgesSection = () => (
           </span>
         </div> */}
 
-        <p className='eyebrow text-ink-muted'>Chip — metadata</p>
+        <p className='caption text-ink-muted'>Chip — metadata</p>
         <div className='flex flex-wrap items-center gap-2'>
           <Chip>2–4 players</Chip>
           <Chip>~45 min</Chip>
@@ -47,7 +47,7 @@ export const ChipsBadgesSection = () => (
 
         {badgeVariantGroups.map(({ label, variants }) => (
           <div key={label} className='space-y-2'>
-            <p className='eyebrow text-ink-muted'>{label}</p>
+            <p className='caption text-ink-muted'>{label}</p>
             <div className='flex flex-wrap items-center gap-2'>
               {variants.map((v) => (
                 <Badge key={v} variant={v}>

@@ -38,23 +38,23 @@ export default () => {
           </Link>
         </div>
         {leaderboard.length === 0 ? (
-          <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
+          <p className='text-sm text-ink-muted'>No sessions logged yet.</p>
         ) : (
           <div className='bg-surface-elevated overflow-hidden rounded-xl border border-border'>
             <div className='overflow-x-auto'>
               <table className='w-full text-sm'>
                 <thead className='bg-muted/50'>
                   <tr>
-                    <th className='eyebrow px-4 py-3 text-left text-muted-foreground'>#</th>
-                    <th className='eyebrow px-4 py-3 text-left text-muted-foreground'>Player</th>
-                    <th className='eyebrow px-4 py-3 text-right text-muted-foreground'>Points</th>
-                    <th className='eyebrow px-4 py-3 text-right text-muted-foreground'>Wins</th>
+                    <th className='caption px-4 py-3 text-left text-ink-muted'>#</th>
+                    <th className='caption px-4 py-3 text-left text-ink-muted'>Player</th>
+                    <th className='caption px-4 py-3 text-right text-ink-muted'>Points</th>
+                    <th className='caption px-4 py-3 text-right text-ink-muted'>Wins</th>
                   </tr>
                 </thead>
                 <tbody className='divide-y divide-border'>
                   {leaderboard.map((e, i) => (
                     <tr key={e.player_id} className='hover:bg-muted/50'>
-                      <td className={cn('num px-4 py-3', i === 0 ? 'text-rank-gold' : i === 1 ? 'text-rank-silver' : i === 2 ? 'text-rank-bronze' : 'text-muted-foreground')}>
+                      <td className={cn('font-mono tabular-nums px-4 py-3', i === 0 ? 'text-1st-place' : i === 1 ? 'text-2nd-place' : i === 2 ? 'text-3rd-place' : 'text-ink-muted')}>
                         {i + 1}
                       </td>
                       <td className='px-4 py-3 font-medium'>
@@ -62,8 +62,8 @@ export default () => {
                           {e.player_name}
                         </Link>
                       </td>
-                      <td className='num px-4 py-3 text-right'>{e.total_points}</td>
-                      <td className='num px-4 py-3 text-right text-muted-foreground'>{e.wins}</td>
+                      <td className='font-mono tabular-nums px-4 py-3 text-right'>{e.total_points}</td>
+                      <td className='font-mono tabular-nums px-4 py-3 text-right text-ink-muted'>{e.wins}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -78,7 +78,7 @@ export default () => {
         <section>
           <h2 className='mb-4 text-lg font-semibold text-foreground'>Most Played</h2>
           {mostPlayed.length === 0 ? (
-            <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
+            <p className='text-sm text-ink-muted'>No sessions logged yet.</p>
           ) : (
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
               {mostPlayed.map((g) => (
@@ -91,7 +91,7 @@ export default () => {
         <section>
           <h2 className='mb-4 text-lg font-semibold text-foreground'>Least Played</h2>
           {leastPlayed.length === 0 ? (
-            <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
+            <p className='text-sm text-ink-muted'>No sessions logged yet.</p>
           ) : (
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
               {leastPlayed.map((g) => (
@@ -111,7 +111,7 @@ export default () => {
           </Link>
         </div>
         {recentGames.length === 0 ? (
-          <div className='py-10 text-center text-muted-foreground'>
+          <div className='py-10 text-center text-ink-muted'>
             <p className='mb-3'>No games yet.</p>
             <Link to='/library/new' className='text-sm text-primary hover:underline'>
               Add your first game →

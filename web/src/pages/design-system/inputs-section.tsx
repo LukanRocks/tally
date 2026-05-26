@@ -10,17 +10,17 @@ export function InputsSection() {
 
       <div className='grid grid-cols-2 gap-4'>
         <label className='flex flex-col gap-1.5'>
-          <span className='eyebrow text-ink-muted'>Game</span>
+          <span className='caption text-ink-muted'>Game</span>
           <input className='input' type='text' defaultValue='Rumikubi' />
         </label>
 
         <label className='flex flex-col gap-1.5'>
-          <span className='eyebrow text-ink-muted'>Date</span>
+          <span className='caption text-ink-muted'>Date</span>
           <input className='input' type='text' placeholder='May 6, 2024' />
         </label>
 
         <label className='flex flex-col gap-1.5'>
-          <span className='eyebrow text-ink-muted'>Search</span>
+          <span className='caption text-ink-muted'>Search</span>
           <div className='relative'>
             <svg
               className='pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-ink-muted'
@@ -41,7 +41,7 @@ export function InputsSection() {
         </label>
 
         <label className='flex flex-col gap-1.5'>
-          <span className='eyebrow text-ink-muted'>Player count</span>
+          <span className='caption text-ink-muted'>Player count</span>
           <select className='input cursor-pointer'>
             <option>2 players</option>
             <option>3 players</option>
@@ -50,12 +50,12 @@ export function InputsSection() {
         </label>
 
         <label className='flex flex-col gap-1.5'>
-          <span className='eyebrow text-ink-muted'>Notes</span>
+          <span className='caption text-ink-muted'>Notes</span>
           <textarea className='input min-h-18 resize-y py-2.5 leading-relaxed' rows={3} placeholder='What happened?' />
         </label>
 
         <div className='flex flex-col gap-1.5'>
-          <span className='eyebrow text-ink-muted'>Disabled / error</span>
+          <span className='caption text-ink-muted'>Disabled / error</span>
           <input className='input cursor-not-allowed opacity-50' type='text' defaultValue='--' disabled />
           <input className='input mt-2 border-loss bg-loss/6 focus:ring-loss/30' type='text' defaultValue="Two of these — that's the wrong number." />
           <span className='text-xs text-loss'>Each player can only appear once per session.</span>
@@ -63,7 +63,7 @@ export function InputsSection() {
       </div>
 
       <div className='space-y-3'>
-        <p className='eyebrow text-ink-muted'>Segmented control</p>
+        <p className='caption text-ink-muted'>Segmented control</p>
         <div className='flex flex-wrap gap-4'>
           <div className='inline-flex gap-0.5 rounded-md border border-border bg-paper-secondary p-0.5' role='tablist' aria-label='Ownership'>
             {(['All', 'Owned', "Friends'", 'Rented'] as const).map((opt, i) => (

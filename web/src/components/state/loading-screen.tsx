@@ -51,7 +51,7 @@ export const Loading = () => {
 
       <div className='w-56 border-t border-dashed border-border' />
 
-      <p className='eyebrow flex items-center gap-2 text-muted-foreground'>
+      <p className='caption flex items-center gap-2 text-muted-foreground'>
         {phrase}
         <span className='flex gap-1'>
           {[0, 1, 2].map((i) => (

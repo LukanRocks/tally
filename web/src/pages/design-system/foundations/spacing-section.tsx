@@ -9,7 +9,7 @@ export function SpacingSection() {
   //     </div>
   //
   //     <div>
-  //       <p className='eyebrow mb-3 text-ink-muted'>Radius</p>
+  //       <p className='caption mb-3 text-ink-muted'>Radius</p>
   //       <div className='grid grid-cols-5 gap-3'>
   //         {(
   //           [

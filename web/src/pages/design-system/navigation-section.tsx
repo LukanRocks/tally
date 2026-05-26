@@ -11,7 +11,7 @@ export function NavigationSection() {
       <div className='grid grid-cols-2 gap-4'>
         {/* Sidebar mock */}
         <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
-          <p className='eyebrow px-4 pt-3.5 pb-2 text-ink-muted'>Sidebar — desktop</p>
+          <p className='caption px-4 pt-3.5 pb-2 text-ink-muted'>Sidebar — desktop</p>
           <div className='border-t border-border bg-paper-primary px-3.5 py-3'>
             <div className='mb-2 flex items-center gap-2.5 border-b border-dashed border-border pb-3'>
               <svg width='22' height='22' viewBox='0 0 64 64'>
@@ -60,7 +60,7 @@ export function NavigationSection() {
 
         {/* Bottom tab bar mock */}
         <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
-          <p className='eyebrow px-4 pt-3.5 pb-2 text-ink-muted'>Bottom tab bar — mobile</p>
+          <p className='caption px-4 pt-3.5 pb-2 text-ink-muted'>Bottom tab bar — mobile</p>
           <div className='relative flex h-70 flex-col border-t border-border bg-paper-primary'>
             <div className='flex flex-1 flex-col gap-2.5 p-4'>
               <div className='h-14 rounded-lg border border-dashed border-border bg-card' />
@@ -99,7 +99,7 @@ export function NavigationSection() {
 
       {/* Top bar */}
       <div>
-        <p className='eyebrow mb-3 text-ink-muted'>Top bar — surface header</p>
+        <p className='caption mb-3 text-ink-muted'>Top bar — surface header</p>
         <div className='flex items-center justify-between gap-4 rounded-xl border border-border bg-card px-4 py-3.5 shadow-sm'>
           <div className='flex flex-col gap-0.5'>
             <h3 className='text-lg leading-none font-bold'>Library</h3>

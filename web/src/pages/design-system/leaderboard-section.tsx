@@ -4,7 +4,7 @@ export function LeaderboardSection() {
   return (
     <section className='space-y-6'>
       <div>
-        <p className='eyebrow text-ink-muted'>03 — Tally patterns</p>
+        <p className='caption text-ink-muted'>03 — Tally patterns</p>
         <h2 className='mt-1 text-2xl font-bold'>Leaderboard row</h2>
         <p className='mt-1 text-sm text-ink-secondary'>
           The most-touched component in the app. Avatar · name · score · trend, with an emphasis on <em>change</em>, not just standing.
