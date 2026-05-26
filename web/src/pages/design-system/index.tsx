@@ -11,13 +11,15 @@ import { InputsSection } from './inputs-section'
 import { AvatarsSection } from './avatars-section'
 import { CardsSection } from './cards-section'
 import { NavigationSection } from './navigation-section'
-import { FeedbackSection } from './feedback-section'
+import { SonnerSection } from './feedback/sonner-section'
 import { LeaderboardSection } from './leaderboard-section'
 import { PodiumSection } from './podium-section'
 import { GameCardSection } from './game-card-section'
 import { SessionCardSection } from './session-card-section'
 import { PlayerProfileSection } from './player-profile-section'
-import { EmptyStateSection } from './empty-state-section'
+import { EmptyStateSection } from './feedback/empty-state-section'
+import { LoadingScreenSection } from './feedback/loading-screen-section'
+import { ErrorScreenSection } from './feedback/error-screen-section'
 
 export default () => (
   <Page className='space-y-8'>
@@ -49,7 +51,9 @@ export default () => (
     <SessionCardSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <PlayerProfileSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <span className='caption text-ink-muted'>03 — Feedback</span>
+    <SonnerSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
     <EmptyStateSection />
-    <FeedbackSection /> {/* !TODO NEEDS COMPONENTIZATION*/}
+    <LoadingScreenSection />
+    <ErrorScreenSection />
   </Page>
 )
