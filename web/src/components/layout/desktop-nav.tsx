@@ -30,7 +30,7 @@ export const DesktopNav = () => {
               {({ isActive }) => (
                 <div
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all',
+                    'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium capitalize transition-all',
                     isActive ? 'bg-primary/10 text-foreground shadow-[-2px_0_0_var(--color-primary)]' : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
@@ -51,7 +51,7 @@ export const DesktopNav = () => {
           <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow-primary text-ink-on-yellow'>
             <Plus size={16} strokeWidth={2.5} />
           </span>
-          <span className='flex-1 text-sm font-semibold text-foreground'>Log a session</span>
+          <span className='flex-1 text-sm font-semibold text-foreground capitalize'>add session</span>
           {/* <span className='text-xs text-muted-foreground'>⌘N</span> */}
         </NavLink>
       </div>
