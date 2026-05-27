@@ -17,4 +17,4 @@ export const PLAYER_COLOR_KEYS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', '
 export const useDeterministicPick = <T>(items: readonly T[], id: number): T => items[id % items.length]
 
 export const getPlayerColor = (id: number): string => `var(--player-${useDeterministicPick(PLAYER_COLOR_KEYS, id)})`
-export const getFallbackBackground = (id: number): string => `var(--player-${useDeterministicPick(FALLBACK_BACKGROUNDS, id)})`
+export const getFallbackBackground = (id: number): string => useDeterministicPick(FALLBACK_BACKGROUNDS, id)
