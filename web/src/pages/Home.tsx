@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api, Game, LeaderboardEntry, MostPlayedGame } from '@/lib/http-transport/api'
-import { GameCard } from '@/components/game-card'
+import { GameCard } from '@/components/molecules/game-card'
 import { cn } from '@/lib/utils'
 import { Page } from '@/components/layout/page'
 import { GreetingBanner } from '@/components/greeting-banner'

@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Dices, Plus, Search } from 'lucide-react'
+import { Dices, Plus, Rows3, LayoutGrid, ShelvingUnit, ArrowUp, ArrowDown } from 'lucide-react'
 
 import { Page, PageHeader } from '@/components/layout/page'
-import { Button } from '@/components/atoms/button'
-import { GameCard } from '@/components/game-card'
+import { Button, ButtonGroup } from '@/components/atoms/button'
+import { GameCard } from '@/components/molecules/game-card'
 import { EmptyState } from '@/components/feedback/empty-state'
-import { Field, FieldTitle } from '@/components/atoms/field'
+import { Field } from '@/components/atoms/field'
 import { Input } from '@/components/atoms/input'
+import { SearchInput } from '@/components/molecules/search-input'
+import { SortControl } from '@/components/molecules/sort-control'
+import { Toggle } from '@/components/atoms/toggle'
 
 import { api, Game, Player } from '@/lib/http-transport/api'
 
@@ -15,6 +18,7 @@ export default function Library() {
   const [games, setGames] = useState<Game[]>([])
   const [players, setPlayers] = useState<Player[]>([])
   const [search, setSearch] = useState('')
+  const [activeSearch, setActiveSearch] = useState('')
   const [sort, setSort] = useState('date_added')
   const [order, setOrder] = useState<'asc' | 'desc'>('desc')
   const [minPlayers, setMinPlayers] = useState('')
@@ -38,15 +42,16 @@ export default function Library() {
       })
       .then((data) => {
         setGames(data)
+        setActiveSearch(search)
         setLoading(false)
       })
-      .catch(() => setLoading(false))
+      .catch(() => setLoading(false)) //!todo handle errors
   }, [search, sort, order, minPlayers, maxPlayers, ownerId])
 
   return (
     <Page>
       <PageHeader title='Library' caption={`${games.length} ${games.length === 1 ? 'game' : 'games'} · ${games.filter((g) => (g.session_count ?? 0) > 0).length} Played`}>
-        <Button asChild>
+        <Button polymorphic>
           <Link to='/library/new'>
             <Plus size={14} /> Add Game
           </Link>
@@ -54,22 +59,33 @@ export default function Library() {
       </PageHeader>
 
       <div className='flex flex-wrap items-end gap-2'>
-        <Input type='text' placeholder='Search games…' className='w-full sm:w-80' Icon={Search} value={search} onChange={(e) => setSearch(e.target.value)} />
+        <ButtonGroup className='order-last sm:order-first'>
+          <Toggle variant='outline' color='secondary' pressed={false}>
+            <Rows3 />
+          </Toggle>
+          <Toggle variant='outline' color='secondary' pressed>
+            <LayoutGrid />
+          </Toggle>
+          <Toggle variant='outline' color='secondary' pressed={false}>
+            <ShelvingUnit />
+          </Toggle>
+        </ButtonGroup>
 
-        <Field className='w-36'>
-          <select value={sort} onChange={(e) => setSort(e.target.value)} className='input cursor-pointer'>
-            <option value='name'>Name</option>
-            <option value='date_added'>Date Added</option>
-            <option value='most_played'>Most Played</option>
-            <option value='price'>Price</option>
-          </select>
-        </Field>
-        <Field className='w-32'>
-          <select value={order} onChange={(e) => setOrder(e.target.value as 'asc' | 'desc')} className='input cursor-pointer'>
-            <option value='asc'>Ascending</option>
-            <option value='desc'>Descending</option>
-          </select>
-        </Field>
+        <SearchInput className='order-first sm:order-0' placeholder='Search games…' value={search} onChange={(e) => setSearch(e.target.value)} />
+
+        <SortControl
+          sort={sort}
+          order={order}
+          onSortChange={setSort}
+          onOrderChange={setOrder}
+          options={[
+            { value: 'name', label: 'Name' },
+            { value: 'date_added', label: 'Date Added' },
+            { value: 'most_played', label: 'Most Played' },
+            { value: 'price', label: 'Price' },
+          ]}
+        />
+
         <Field className='w-36'>
           <select value={ownerId} onChange={(e) => setOwnerId(e.target.value)} className='input cursor-pointer'>
             <option value=''>All owners</option>
@@ -80,6 +96,7 @@ export default function Library() {
             ))}
           </select>
         </Field>
+
         <Field className='w-28'>
           <Input type='number' placeholder='–' value={minPlayers} onChange={(e) => setMinPlayers(e.target.value)} />
         </Field>
@@ -90,8 +107,8 @@ export default function Library() {
 
       {!loading &&
         (games.length === 0 ? (
-          <EmptyState icon={Dices} description={search ? 'No games match your search.' : 'Your library is empty.'}>
-            {!search && (
+          <EmptyState icon={Dices} description={activeSearch ? 'No games match your search.' : 'Your library is empty.'}>
+            {!activeSearch && (
               <Link to='/library/new' className='text-sm text-primary hover:underline'>
                 Add your first game →
               </Link>

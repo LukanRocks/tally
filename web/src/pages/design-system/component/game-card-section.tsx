@@ -1,4 +1,4 @@
-import { GameCard } from '@/components/game-card'
+import { GameCard } from '@/components/molecules/game-card'
 
 export const GameCardSection = () => {
   return (

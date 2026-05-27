@@ -141,7 +141,7 @@ export default function GameForm() {
 
     try {
       if (isEdit) {
-        await api.games.update(Number(id), payload)
+        await api.games.update(Number(id), payload as Parameters<typeof api.games.update>[1])
         navigate(`/library/${id}`)
       } else {
         const game = await api.games.create(payload as Parameters<typeof api.games.create>[0])
