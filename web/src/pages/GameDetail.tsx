@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Camera, Paperclip, Plus, Trash2, Pencil } from 'lucide-react'
 import { api, Game, LeaderboardEntry, Session } from '@/lib/http-transport/api'
-import { backgrounds } from '@/lib/backgrounds'
-import { useDeterministicPick } from '@/hooks/useDeterministicPick'
+import { getFallbackBackground } from '@/lib/deterministic-picker'
 import { useSettings } from '@/contexts/settings-context'
 
 function formatPrice(price: number, currency: 'USD' | 'BRL' = 'USD') {
@@ -20,7 +19,7 @@ export default function GameDetail() {
   const [gameLeaderboard, setGameLeaderboard] = useState<LeaderboardEntry[]>([])
   const [loading, setLoading] = useState(true)
   const [deleteConfirm, setDeleteConfirm] = useState(false)
-  const fallbackBg = useDeterministicPick(backgrounds, game?.id ?? 0)
+  const fallbackBg = getFallbackBackground(game?.id ?? 0)
   const [attachLabel, setAttachLabel] = useState('')
   const attachFileRef = useRef<HTMLInputElement>(null)
   const coverFileRef = useRef<HTMLInputElement>(null)

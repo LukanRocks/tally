@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { Game } from '@/lib/http-transport/api'
-import { backgrounds } from '@/lib/backgrounds'
-import { useDeterministicPick } from '@/hooks/useDeterministicPick'
+import { getFallbackBackground } from '@/lib/deterministic-picker'
 import { useSettings } from '@/contexts/settings-context'
 import { Badge } from '@/components/atoms/badge'
 import { Dices } from 'lucide-react'
@@ -9,7 +8,7 @@ import { Dices } from 'lucide-react'
 type GameCardProps = Pick<Game, 'id' | 'name' | 'cover_image_path' | 'min_players' | 'max_players' | 'session_count' | 'owner_id' | 'owner_player_type'>
 
 export const GameCard = (game: GameCardProps) => {
-  const fallback = useDeterministicPick(backgrounds, game.id)
+  const fallback = getFallbackBackground(game.id)
   const { settings } = useSettings()
   let ownershipVariant: 'owned' | 'borrowed' | 'rented' | null = null
 
