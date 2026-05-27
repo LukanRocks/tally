@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core'
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -43,6 +43,8 @@ function SortableItem({ player, rank, n }: { player: RankedPlayer; rank: number;
 export default function SessionLogger() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
+  const prefill = location.state as { players?: { id: number; rank: number }[]; gameId?: number } | null
   const [games, setGames] = useState<Game[]>([])
   const [players, setPlayers] = useState<Player[]>([])
   const [gameId, setGameId] = useState(id ? Number(id) : 0)
@@ -61,6 +63,19 @@ export default function SessionLogger() {
     Promise.all([api.games.list(), api.players.list()]).then(([g, p]) => {
       setGames(g)
       setPlayers(p)
+
+      if (prefill?.gameId) {
+        setGameId(prefill.gameId)
+      }
+
+      if (prefill?.players?.length) {
+        const sorted = [...prefill.players].sort((a, b) => a.rank - b.rank)
+        const rankedPlayers = sorted
+          .map((pf) => p.find((pl) => pl.id === pf.id))
+          .filter((pl): pl is Player => Boolean(pl))
+          .map((pl) => ({ id: pl.id, name: pl.name }))
+        setRanked(rankedPlayers)
+      }
     })
   }, [])
 
