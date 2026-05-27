@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 270" preserveAspectRatio="xMidYMid slice">
+  
+  <rect width="200" height="270" fill="oklch(0.55 0.18 35)"></rect>
+  <g color="oklch(0.92 0.06 60)">
+    <path d="M10 2 L26 18 L10 34 L-6 18 Z" fill="currentColor" opacity="0.12"></path>
+    <path d="M54 2 L70 18 L54 34 L38 18 Z" fill="currentColor" opacity="0.17"></path>
+    <path d="M98 2 L114 18 L98 34 L82 18 Z" fill="currentColor" opacity="0.22"></path>
+    <path d="M142 2 L158 18 L142 34 L126 18 Z" fill="currentColor" opacity="0.27"></path>
+    <path d="M186 2 L202 18 L186 34 L170 18 Z" fill="currentColor" opacity="0.12"></path>
+    <path d="M32 51 L51 70 L32 89 L13 70 Z" fill="currentColor" opacity="0.17"></path>
+    <path d="M76 51 L95 70 L76 89 L57 70 Z" fill="currentColor" opacity="0.22"></path>
+    <path d="M120 51 L139 70 L120 89 L101 70 Z" fill="currentColor" opacity="0.27"></path>
+    <path d="M164 51 L183 70 L164 89 L145 70 Z" fill="currentColor" opacity="0.12"></path>
+    <path d="M208 51 L227 70 L208 89 L189 70 Z" fill="currentColor" opacity="0.17"></path>
+    <path d="M10 100 L32 122 L10 144 L-12 122 Z" fill="currentColor" opacity="0.22"></path>
+    <path d="M54 100 L76 122 L54 144 L32 122 Z" fill="currentColor" opacity="0.27"></path>
+    <path d="M98 100 L120 122 L98 144 L76 122 Z" fill="currentColor" opacity="0.12"></path>
+    <path d="M142 100 L164 122 L142 144 L120 122 Z" fill="currentColor" opacity="0.17"></path>
+    <path d="M186 100 L208 122 L186 144 L164 122 Z" fill="currentColor" opacity="0.22"></path>
+    <path d="M32 158 L48 174 L32 190 L16 174 Z" fill="currentColor" opacity="0.27"></path>
+    <path d="M76 158 L92 174 L76 190 L60 174 Z" fill="currentColor" opacity="0.12"></path>
+    <path d="M120 158 L136 174 L120 190 L104 174 Z" fill="currentColor" opacity="0.17"></path>
+    <path d="M164 158 L180 174 L164 190 L148 174 Z" fill="currentColor" opacity="0.22"></path>
+    <path d="M208 158 L224 174 L208 190 L192 174 Z" fill="currentColor" opacity="0.27"></path>
+    <path d="M10 207 L29 226 L10 245 L-9 226 Z" fill="currentColor" opacity="0.12"></path>
+    <path d="M54 207 L73 226 L54 245 L35 226 Z" fill="currentColor" opacity="0.17"></path>
+    <path d="M98 207 L117 226 L98 245 L79 226 Z" fill="currentColor" opacity="0.22"></path>
+    <path d="M142 207 L161 226 L142 245 L123 226 Z" fill="currentColor" opacity="0.27"></path>
+    <path d="M186 207 L205 226 L186 245 L167 226 Z" fill="currentColor" opacity="0.12"></path>
+    <path d="M32 256 L54 278 L32 300 L10 278 Z" fill="currentColor" opacity="0.17"></path>
+    <path d="M76 256 L98 278 L76 300 L54 278 Z" fill="currentColor" opacity="0.22"></path>
+    <path d="M120 256 L142 278 L120 300 L98 278 Z" fill="currentColor" opacity="0.27"></path>
+    <path d="M164 256 L186 278 L164 300 L142 278 Z" fill="currentColor" opacity="0.12"></path>
+    <path d="M208 256 L230 278 L208 300 L186 278 Z" fill="currentColor" opacity="0.17"></path>
+  </g>
+  <defs>
+    <linearGradient id="foil-ember" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="white" stop-opacity="0.18"></stop>
+      <stop offset="35%" stop-color="white" stop-opacity="0"></stop>
+      <stop offset="65%" stop-color="white" stop-opacity="0"></stop>
+      <stop offset="100%" stop-color="black" stop-opacity="0.1"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="270" fill="url(#foil-ember)"></rect>
+</svg>

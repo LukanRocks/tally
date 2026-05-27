@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Dices } from 'lucide-react'
-import { api, Game, LeaderboardEntry, MostPlayedGame } from '@/lib/api'
+import { api, Game, LeaderboardEntry, MostPlayedGame } from '@/lib/http-transport/api'
+import { GameCard } from '@/components/molecules/game-card'
 import { cn } from '@/lib/utils'
-import { Page } from '@/components/page'
+import { Page } from '@/components/layout/page'
 import { GreetingBanner } from '@/components/greeting-banner'
 
 export default () => {
@@ -11,22 +11,18 @@ export default () => {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
   const [mostPlayed, setMostPlayed] = useState<MostPlayedGame[]>([])
   const [leastPlayed, setLeastPlayed] = useState<MostPlayedGame[]>([])
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    Promise.all([api.games.list({ sort: 'date_added', order: 'desc' }), api.stats.leaderboard(), api.stats.mostPlayed(), api.stats.leastPlayed()])
-      .then(([games, lb, mp, lp]) => {
-        setRecentGames(games.slice(0, 5))
-        setLeaderboard(lb.slice(0, 5))
-        setMostPlayed(mp.slice(0, 3))
-        setLeastPlayed(lp.slice(0, 3))
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
+    Promise.all([api.games.list({ sort: 'date_added', order: 'desc' }), api.stats.leaderboard(), api.stats.mostPlayed(), api.stats.leastPlayed()]).then(([games, lb, mp, lp]) => {
+      setRecentGames(games.slice(0, 5))
+      setLeaderboard(lb.slice(0, 5))
+      setMostPlayed(mp.slice(0, 3))
+      setLeastPlayed(lp.slice(0, 3))
+    })
   }, [])
 
   return (
-    <Page loading={loading}>
+    <Page>
       <GreetingBanner />
 
       {/* Leaderboard snippet */}
@@ -38,23 +34,25 @@ export default () => {
           </Link>
         </div>
         {leaderboard.length === 0 ? (
-          <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
+          <p className='text-sm text-ink-muted'>No sessions logged yet.</p>
         ) : (
           <div className='bg-surface-elevated overflow-hidden rounded-xl border border-border'>
             <div className='overflow-x-auto'>
               <table className='w-full text-sm'>
                 <thead className='bg-muted/50'>
                   <tr>
-                    <th className='eyebrow px-4 py-3 text-left text-muted-foreground'>#</th>
-                    <th className='eyebrow px-4 py-3 text-left text-muted-foreground'>Player</th>
-                    <th className='eyebrow px-4 py-3 text-right text-muted-foreground'>Points</th>
-                    <th className='eyebrow px-4 py-3 text-right text-muted-foreground'>Wins</th>
+                    <th className='caption px-4 py-3 text-left text-ink-muted'>#</th>
+                    <th className='caption px-4 py-3 text-left text-ink-muted'>Player</th>
+                    <th className='caption px-4 py-3 text-right text-ink-muted'>Points</th>
+                    <th className='caption px-4 py-3 text-right text-ink-muted'>Wins</th>
                   </tr>
                 </thead>
                 <tbody className='divide-y divide-border'>
                   {leaderboard.map((e, i) => (
                     <tr key={e.player_id} className='hover:bg-muted/50'>
-                      <td className={cn('num px-4 py-3', i === 0 ? 'text-rank-gold' : i === 1 ? 'text-rank-silver' : i === 2 ? 'text-rank-bronze' : 'text-muted-foreground')}>
+                      <td
+                        className={cn('px-4 py-3 font-mono tabular-nums', i === 0 ? 'text-1st-place' : i === 1 ? 'text-2nd-place' : i === 2 ? 'text-3rd-place' : 'text-ink-muted')}
+                      >
                         {i + 1}
                       </td>
                       <td className='px-4 py-3 font-medium'>
@@ -62,8 +60,8 @@ export default () => {
                           {e.player_name}
                         </Link>
                       </td>
-                      <td className='num px-4 py-3 text-right'>{e.total_points}</td>
-                      <td className='num px-4 py-3 text-right text-muted-foreground'>{e.wins}</td>
+                      <td className='px-4 py-3 text-right font-mono tabular-nums'>{e.total_points}</td>
+                      <td className='px-4 py-3 text-right font-mono text-ink-muted tabular-nums'>{e.wins}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -78,17 +76,11 @@ export default () => {
         <section>
           <h2 className='mb-4 text-lg font-semibold text-foreground'>Most Played</h2>
           {mostPlayed.length === 0 ? (
-            <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
+            <p className='text-sm text-ink-muted'>No sessions logged yet.</p>
           ) : (
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
               {mostPlayed.map((g) => (
-                <Link key={g.id} to={`/library/${g.id}`} className='bg-surface-elevated overflow-hidden rounded-xl border border-border transition-shadow hover:shadow-md'>
-                  <div className='bg-surface-sunken aspect-3/4'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
-                  <div className='p-3'>
-                    <p className='truncate text-sm font-medium'>{g.name}</p>
-                    <p className='num mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
-                  </div>
-                </Link>
+                <GameCard key={g.id} {...g} />
               ))}
             </div>
           )}
@@ -97,17 +89,11 @@ export default () => {
         <section>
           <h2 className='mb-4 text-lg font-semibold text-foreground'>Least Played</h2>
           {leastPlayed.length === 0 ? (
-            <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
+            <p className='text-sm text-ink-muted'>No sessions logged yet.</p>
           ) : (
             <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-3'>
               {leastPlayed.map((g) => (
-                <Link key={g.id} to={`/library/${g.id}`} className='bg-surface-elevated overflow-hidden rounded-xl border border-border transition-shadow hover:shadow-md'>
-                  <div className='bg-surface-sunken aspect-3/4'>{g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-full w-full object-cover' />}</div>
-                  <div className='p-3'>
-                    <p className='truncate text-sm font-medium'>{g.name}</p>
-                    <p className='num mt-1 text-xs text-muted-foreground'>{g.session_count} sessions</p>
-                  </div>
-                </Link>
+                <GameCard key={g.id} {...g} />
               ))}
             </div>
           )}
@@ -123,7 +109,7 @@ export default () => {
           </Link>
         </div>
         {recentGames.length === 0 ? (
-          <div className='py-10 text-center text-muted-foreground'>
+          <div className='py-10 text-center text-ink-muted'>
             <p className='mb-3'>No games yet.</p>
             <Link to='/library/new' className='text-sm text-primary hover:underline'>
               Add your first game →
@@ -132,33 +118,11 @@ export default () => {
         ) : (
           <div className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5'>
             {recentGames.map((g) => (
-              <GameCard key={g.id} game={g} />
+              <GameCard key={g.id} {...g} />
             ))}
           </div>
         )}
       </section>
     </Page>
-  )
-}
-
-function GameCard({ game }: { game: Game }) {
-  return (
-    <Link to={`/library/${game.id}`} className='bg-surface-elevated overflow-hidden rounded-xl border border-border transition-shadow hover:shadow-md'>
-      <div className='bg-surface-sunken flex aspect-3/4 items-center justify-center'>
-        {game.cover_image_path ? (
-          <img src={game.cover_image_path} alt={game.name} className='h-full w-full object-cover' />
-        ) : (
-          <Dices size={32} className='text-muted-foreground/40' />
-        )}
-      </div>
-      <div className='p-3'>
-        <p className='truncate text-sm font-medium'>{game.name}</p>
-        {game.min_players && game.max_players && (
-          <p className='mt-1 text-xs text-muted-foreground'>
-            {game.min_players}–{game.max_players} players
-          </p>
-        )}
-      </div>
-    </Link>
   )
 }
