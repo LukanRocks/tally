@@ -1,51 +1,50 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { api, Player } from '@/lib/api'
+import { api, Player } from '@/lib/http-transport/api'
 import { ThemeSetting } from '@/hooks/useTheme'
 import { useSettings } from '@/contexts/settings-context'
 
-type FormState = {
-  currency: 'USD' | 'BRL'
-  language: 'en' | 'pt'
-  theme: ThemeSetting
-  default_owner_id: string
-}
+// 1. DELETE_ALL_DATA doesn't show the loading gate during refetch
+
+// After reset, fetchSettings is called internally but isLoading stays false — the context re-renders the children immediately while the fetch is in-flight. Since settings in state still holds the old value momentarily before setSettings updates it, this is a brief inconsistency. If fetchSettings throws during reset, error gets set but the app has already navigated to /onboarding.
+
+// Two options:
+
+// A — Set isLoading to true before calling fetchSettings in DELETE_ALL_DATA
+// The loading gate kicks in during the refetch, children are unmounted, and when settings come back the app re-renders cleanly. Simple one-liner addition.
+
+// const DELETE_ALL_DATA = async () => {
+//   await api.settings.reset()
+//   setIsLoading(true)
+//   await fetchSettings()
+// }
+// Pros: reuses the existing gate, no new state. Cons: the loading spinner briefly flashes before navigation — may look like a glitch since the page is about to navigate to /onboarding anyway.
+
+// B — Don't refetch in the context at all, let the caller navigate and let the app re-initialize naturally
+// Since DELETE_ALL_DATA always ends with navigate('/onboarding', { replace: true }), the entire app re-mounts under the provider, which triggers the useEffect and fetches fresh settings from scratch. The context doesn't need to refetch — the navigation does it for free.
+
+// // context — just do the API call
+// const DELETE_ALL_DATA = async () => {
+//   await api.settings.reset()
+// }
+// Pros: no timing issue, no flash, the natural app lifecycle handles re-initialization. Cons: assumes reset always leads to a full re-mount, which is true today but could break if reset is ever called from somewhere that doesn't navigate away.
+
+// Recommendation: B. Reset is a destructive, navigate-away action by nature — the provider re-initializes on its own. Refetching inside the context after reset is doing work the navigation already does, which is what created the inconsistency in the first place. Which would you like?
 
 export default function SettingsPage() {
   const navigate = useNavigate()
-  const { settings: ctxSettings, updateSetting, refreshSettings, isLoading: settingsLoading } = useSettings()
-  const [form, setForm] = useState<FormState>({
-    currency: 'USD',
-    language: 'en',
-    theme: 'system',
-    default_owner_id: '',
-  })
+  const { settings, updateSetting, DELETE_ALL_DATA } = useSettings()
   const [players, setPlayers] = useState<Player[]>([])
   const [playersLoading, setPlayersLoading] = useState(true)
   const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [resetConfirmText, setResetConfirmText] = useState('')
   const [resetting, setResetting] = useState(false)
-  const [bggLastUpdated, setBggLastUpdated] = useState<string | null>(null)
   const [bggFile, setBggFile] = useState<File | null>(null)
   const [bggImporting, setBggImporting] = useState(false)
   const [showBggDeleteConfirm, setShowBggDeleteConfirm] = useState(false)
   const [bggDeleteText, setBggDeleteText] = useState('')
   const [bggDeleting, setBggDeleting] = useState(false)
-  const formInitialized = useRef(false)
-
-  useEffect(() => {
-    if (ctxSettings && !formInitialized.current) {
-      formInitialized.current = true
-      setForm({
-        currency: ctxSettings.currency,
-        language: ctxSettings.language,
-        theme: ctxSettings.theme,
-        default_owner_id: ctxSettings.default_owner_id != null ? String(ctxSettings.default_owner_id) : '',
-      })
-      setBggLastUpdated(ctxSettings.bgg_last_updated ?? null)
-    }
-  }, [ctxSettings])
 
   useEffect(() => {
     api.players.list().then((playerList) => {
@@ -54,11 +53,9 @@ export default function SettingsPage() {
     })
   }, [])
 
-  async function set<K extends keyof FormState>(field: K, value: FormState[K]) {
-    setForm((f) => ({ ...f, [field]: value }))
-    const patch = field === 'default_owner_id' ? { default_owner_id: value ? Number(value) : null } : { [field]: value }
+  async function set(patch: Parameters<typeof updateSetting>[0]) {
     try {
-      await updateSetting(patch as Parameters<typeof updateSetting>[0])
+      await updateSetting(patch)
       toast.success('Settings saved')
     } catch (err: any) {
       toast.error(err.message)
@@ -70,7 +67,6 @@ export default function SettingsPage() {
     setBggImporting(true)
     try {
       const result = await api.bgg.import(bggFile)
-      setBggLastUpdated(new Date().toISOString())
       setBggFile(null)
       toast.success(`BGG data updated — ${result.imported} games imported`)
     } catch (err: any) {
@@ -84,7 +80,6 @@ export default function SettingsPage() {
     setBggDeleting(true)
     try {
       await api.bgg.delete()
-      setBggLastUpdated(null)
       setShowBggDeleteConfirm(false)
       setBggDeleteText('')
       toast.success('BGG data deleted')
@@ -98,8 +93,7 @@ export default function SettingsPage() {
   async function handleReset() {
     setResetting(true)
     try {
-      await api.settings.reset()
-      await refreshSettings()
+      await DELETE_ALL_DATA()
       setShowResetConfirm(false)
       setResetConfirmText('')
       toast.success('All data deleted')
@@ -111,7 +105,7 @@ export default function SettingsPage() {
     }
   }
 
-  if (settingsLoading || playersLoading) {
+  if (playersLoading) {
     return <div className='p-8 text-sm text-muted-foreground'>Loading…</div>
   }
 
@@ -121,8 +115,12 @@ export default function SettingsPage() {
 
       <div className='space-y-6'>
         <Field label='Default Owner' htmlFor='default_owner_id'>
-          <select id='default_owner_id' value={form.default_owner_id} onChange={(e) => set('default_owner_id', e.target.value)} className='input'>
-            <option value=''>— None —</option>
+          <select
+            id='default_owner_id'
+            value={settings.default_owner_id != null ? String(settings.default_owner_id) : ''}
+            onChange={(e) => set({ default_owner_id: Number(e.target.value) })}
+            className='input'
+          >
             {players.map((p) => (
               <option key={p.id} value={String(p.id)}>
                 {p.name}
@@ -133,21 +131,21 @@ export default function SettingsPage() {
         </Field>
 
         <Field label='Currency' htmlFor='currency'>
-          <select id='currency' value={form.currency} onChange={(e) => set('currency', e.target.value as 'USD' | 'BRL')} className='input'>
+          <select id='currency' value={settings.currency} onChange={(e) => set({ currency: e.target.value as 'USD' | 'BRL' })} className='input'>
             <option value='USD'>USD — US Dollar</option>
             <option value='BRL'>BRL — Brazilian Real</option>
           </select>
         </Field>
 
         <Field label='Language' htmlFor='language'>
-          <select id='language' value={form.language} onChange={(e) => set('language', e.target.value as 'en' | 'pt')} className='input'>
+          <select id='language' value={settings.language} onChange={(e) => set({ language: e.target.value as 'en' | 'pt' })} className='input'>
             <option value='en'>English</option>
             <option value='pt'>Português</option>
           </select>
         </Field>
 
         <Field label='Theme' htmlFor='theme'>
-          <select id='theme' value={form.theme} onChange={(e) => set('theme', e.target.value as ThemeSetting)} className='input'>
+          <select id='theme' value={settings.theme} onChange={(e) => set({ theme: e.target.value as ThemeSetting })} className='input'>
             <option value='system'>System</option>
             <option value='light'>Light</option>
             <option value='dark'>Dark</option>
@@ -177,7 +175,9 @@ export default function SettingsPage() {
         </p>
 
         <p className='mb-4 text-xs text-muted-foreground'>
-          {bggLastUpdated ? `Last updated: ${new Date(bggLastUpdated).toLocaleString(ctxSettings?.language === 'pt' ? 'pt-BR' : 'en-US')}` : 'No BGG data loaded.'}
+          {settings.bgg_last_updated
+            ? `Last updated: ${new Date(settings.bgg_last_updated).toLocaleString(settings.language === 'pt' ? 'pt-BR' : 'en-US')}`
+            : 'No BGG data loaded.'}
         </p>
 
         <div className='flex items-center gap-2'>
@@ -196,17 +196,19 @@ export default function SettingsPage() {
           </button>
         </div>
 
-        <div className='mt-4'>
-          <button
-            onClick={() => {
-              setShowBggDeleteConfirm(true)
-              setBggDeleteText('')
-            }}
-            className='rounded-lg border border-destructive/40 px-4 py-2 text-sm font-medium text-destructive hover:bg-destructive/10'
-          >
-            Delete BGG data
-          </button>
-        </div>
+        {settings.bgg_last_updated && (
+          <div className='mt-4'>
+            <button
+              onClick={() => {
+                setShowBggDeleteConfirm(true)
+                setBggDeleteText('')
+              }}
+              className='rounded-lg border border-destructive/40 px-4 py-2 text-sm font-medium text-destructive hover:bg-destructive/10'
+            >
+              Delete BGG data
+            </button>
+          </div>
+        )}
       </div>
 
       <div className='mt-12 border-t border-border pt-8'>

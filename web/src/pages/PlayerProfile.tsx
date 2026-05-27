@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { api, Player, Session } from '@/lib/api'
+import { api, Player, Session } from '@/lib/http-transport/api'
 
 export default function PlayerProfile() {
   const { id } = useParams<{ id: string }>()

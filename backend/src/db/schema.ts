@@ -77,7 +77,7 @@ export const session_results = sqliteTable('session_results', {
 
 export const settings = sqliteTable('settings', {
   id: integer('id').primaryKey(),
-  onboarded: integer('onboarded').notNull().default(0),
+  onboarded: integer('onboarded', { mode: 'boolean' }).notNull().default(false),
   currency: text('currency').notNull().default('USD'),
   language: text('language').notNull().default('en'),
   default_owner_id: integer('default_owner_id'),
