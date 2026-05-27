@@ -63,14 +63,23 @@ export function useScoreCounter() {
     setState((s) => {
       const scores: Record<number, PlayerScore> = {}
       for (const id of s.selectedPlayerIds) {
-        scores[id] = { entries: [], total: 0 }
+        scores[id] = s.scores[id] ?? { entries: [], total: 0 }
       }
-      return { ...s, step: 'count', scores, activePlayerId: s.selectedPlayerIds[0], inputBuffer: '' }
+      const activePlayerId =
+        s.activePlayerId && s.selectedPlayerIds.includes(s.activePlayerId)
+          ? s.activePlayerId
+          : s.selectedPlayerIds[0]
+      return { ...s, step: 'count', scores, activePlayerId, inputBuffer: '' }
     })
   }
 
   function setActivePlayer(id: number) {
-    setState((s) => ({ ...s, activePlayerId: id, inputBuffer: '' }))
+    setState((s) => {
+      const reordered = s.activePlayerId
+        ? [...s.selectedPlayerIds.filter((pid) => pid !== s.activePlayerId), s.activePlayerId]
+        : s.selectedPlayerIds
+      return { ...s, selectedPlayerIds: reordered, activePlayerId: id, inputBuffer: '' }
+    })
   }
 
   function applyQuickAdd(value: number) {
@@ -136,6 +145,10 @@ export function useScoreCounter() {
     })
   }
 
+  function backToSetup() {
+    setState((s) => ({ ...s, step: 'setup', inputBuffer: '' }))
+  }
+
   function viewResults() {
     setState((s) => ({ ...s, step: 'result' }))
   }
@@ -176,6 +189,7 @@ export function useScoreCounter() {
     backspace,
     commitBuffer,
     undoLast,
+    backToSetup,
     viewResults,
     newCount,
     rankedResults,

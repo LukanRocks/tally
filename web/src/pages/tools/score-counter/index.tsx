@@ -91,6 +91,7 @@ export default function ScoreCounter() {
             backspace={hook.backspace}
             commitBuffer={hook.commitBuffer}
             undoLast={hook.undoLast}
+            onBack={hook.backToSetup}
             onViewResults={hook.viewResults}
           />
         )}

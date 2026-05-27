@@ -2,6 +2,7 @@ import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/atoms/button'
 import { Avatar } from '@/components/atoms/avatar'
+import { GameCard } from '@/components/molecules/game-card'
 import { type Game, type Player } from '@/lib/http-transport/api'
 import { type ScoringDirection } from '@/hooks/useScoreCounter'
 import { ArrowUp, ArrowDown, BookOpen } from 'lucide-react'
@@ -67,49 +68,37 @@ export const SetupStep = ({
     </div>
 
     {/* Game card */}
-    <div className='rounded-2xl border border-border bg-paper-secondary p-5'>
-      <div className='mb-4 flex items-start justify-between gap-4'>
+    <div className='space-y-4 rounded-2xl border border-border bg-paper-secondary p-5'>
+      <div className='flex items-start justify-between gap-4'>
         <div>
           <p className='mb-0.5 text-[11px] font-semibold tracking-widest text-ink-muted uppercase'>Game · Optional</p>
           <h2 className='text-lg font-bold text-ink-primary'>What are we playing?</h2>
         </div>
       </div>
 
-      {/* Game cards horizontal scroll */}
-      <div className='flex gap-3 overflow-x-auto pb-1'>
-        {/* Just counting */}
-        <button
-          className={cn('flex w-28 shrink-0 flex-col overflow-hidden rounded-xl border-2 transition-colors', gameId === null ? 'border-yellow-primary' : 'border-transparent')}
-          onClick={() => setGameId(null)}
-        >
-          <div className='flex h-20 w-full items-center justify-center bg-paper-muted'>
-            <BookOpen size={22} className='text-ink-muted' />
-          </div>
-          <div className={cn('px-2 py-1.5', gameId === null ? 'bg-yellow-primary/10' : 'bg-paper-primary')}>
-            <p className='line-clamp-2 text-xs font-medium text-ink-primary'>Just counting</p>
-          </div>
-        </button>
+      {/* Just counting */}
+      <button
+        type='button'
+        className={cn(
+          'flex w-full items-center gap-3 overflow-hidden rounded-xl border-2 transition-colors',
+          gameId === null ? 'border-yellow-primary bg-yellow-primary/10' : 'border-border bg-paper-primary hover:bg-paper-muted',
+        )}
+        onClick={() => setGameId(null)}
+      >
+        <div className='flex aspect-square w-14 shrink-0 items-center justify-center bg-paper-muted'>
+          <BookOpen size={20} className='text-ink-muted' />
+        </div>
+        <span className='flex-1 text-left text-sm font-bold text-ink-primary'>Just counting</span>
+      </button>
 
-        {games.map((game) => {
-          const isActive = gameId === game.id
-          return (
-            <button
-              key={game.id}
-              className={cn('flex w-28 shrink-0 flex-col overflow-hidden rounded-xl border-2 transition-colors', isActive ? 'border-yellow-primary' : 'border-transparent')}
-              onClick={() => setGameId(game.id)}
-            >
-              {game.cover_image_path ? (
-                <img src={game.cover_image_path} alt={game.name} className='h-20 w-full object-cover' />
-              ) : (
-                <div className='flex h-20 w-full items-center justify-center bg-paper-muted text-3xl font-bold text-ink-muted'>{game.name[0]}</div>
-              )}
-              <div className={cn('px-2 py-1.5', isActive ? 'bg-yellow-primary/10' : 'bg-paper-primary')}>
-                <p className='line-clamp-2 text-xs font-medium text-ink-primary'>{game.name}</p>
-              </div>
-            </button>
-          )
-        })}
-      </div>
+      {/* Game cards horizontal scroll */}
+      {games.length > 0 && (
+        <div className='-mx-6 -my-6 flex gap-3 overflow-x-auto px-6 py-6'>
+          {games.map((game) => (
+            <GameCard key={game.id} polymorphic active={gameId === game.id} onClick={() => setGameId(game.id)} className='w-36 shrink-0' {...game} />
+          ))}
+        </div>
+      )}
     </div>
 
     {/* Scoring direction card */}

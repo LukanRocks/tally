@@ -1,4 +1,4 @@
-import { Delete } from 'lucide-react'
+import { ChevronLeft, Delete, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/atoms/button'
 import { Avatar } from '@/components/atoms/avatar'
@@ -22,11 +22,12 @@ interface CountStepProps {
   backspace: () => void
   commitBuffer: () => void
   undoLast: () => void
+  onBack: () => void
   onViewResults: () => void
 }
 
-const QUICK_ADDS_POS = [1, 5, 10, 25, 50, 100]
-const QUICK_ADDS_NEG = [-1, -5]
+const QUICK_ADDS_POS = [1, 5, 10]
+const QUICK_ADDS_NEG = [-10, -5, -1]
 const NUMPAD_ROWS = [
   ['7', '8', '9'],
   ['4', '5', '6'],
@@ -48,6 +49,7 @@ export function CountStep({
   backspace,
   commitBuffer,
   undoLast,
+  onBack,
   onViewResults,
 }: CountStepProps) {
   const activePlayer = players.find((p) => p.id === activePlayerId)
@@ -58,7 +60,7 @@ export function CountStep({
 
   return (
     <>
-      <div className='grid grid-cols-1 gap-4 p-4 md:grid-cols-2'>
+      <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
         {/* Score sheet */}
         <div className='flex flex-col gap-3'>
           {/* Active player card */}
@@ -70,10 +72,11 @@ export function CountStep({
                   <div className='rounded-full' style={{ outline: `2px solid ${getPlayerColor(activePlayerId)}`, outlineOffset: '2px' }}>
                     <Avatar id={activePlayer.id} name={activePlayer.name} avatar_path={activePlayer.avatar_path} size='sm' />
                   </div>
+
                   <div className='flex flex-col'>
                     <div className='flex items-center gap-2'>
                       <span className='font-semibold text-ink-primary'>{activePlayer.name}</span>
-                      <span className='rounded-full bg-yellow-primary px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-on-yellow uppercase'>Active</span>
+                      {/* <span className='rounded-full bg-yellow-primary px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-on-yellow uppercase'>Active</span> */}
                     </div>
                     <span className='text-xs text-ink-muted'>{activeScore?.entries.length ?? 0} entries</span>
                   </div>
@@ -83,7 +86,7 @@ export function CountStep({
                 {/* Entries */}
                 <div className='flex flex-col gap-1.5'>
                   <div className='flex items-center justify-between'>
-                    <span className='text-xs font-semibold tracking-wide text-ink-muted uppercase'>Entries</span>
+                    <span className='caption text-xs text-ink-muted'>Entries</span>
                     {(activeScore?.entries.length ?? 0) > 0 && (
                       <button onClick={undoLast} className='text-xs font-medium text-ink-secondary underline underline-offset-2'>
                         Undo last
@@ -94,12 +97,9 @@ export function CountStep({
                   {(activeScore?.entries.length ?? 0) === 0 ? (
                     <p className='text-xs text-ink-muted italic'>No points yet — tap a number or quick-add to start</p>
                   ) : (
-                    <div className='flex flex-wrap gap-1.5'>
+                    <div className='grid gap-1.5' style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(4rem, 1fr))' }}>
                       {activeScore.entries.map((entry, i) => {
-                        const entryClasses = cn(
-                          'rounded-lg px-2 py-1 font-mono text-xs font-medium',
-                          entry.value > 0 ? 'bg-paper-secondary text-ink-primary' : 'bg-destructive/10 text-destructive',
-                        )
+                        const entryClasses = cn('rounded-lg px-2 py-1 text-center font-mono text-xs font-medium', entry.value > 0 ? 'bg-win/20 text-win' : 'bg-loss/20 text-loss')
                         return (
                           <span key={i} className={entryClasses}>
                             #{i + 1} {entry.value > 0 ? '+' : ''}
@@ -114,40 +114,63 @@ export function CountStep({
             </div>
           )}
 
-          {/* Inactive player rows */}
-          {inactivePlayers.map((id) => {
-            const player = players.find((p) => p.id === id)
-            if (!player) return null
-            const score = scores[id]
-            return (
-              <button
-                key={id}
-                className='flex items-center gap-3 rounded-xl border border-border bg-paper-secondary px-4 py-3 transition-colors hover:bg-paper-muted'
-                onClick={() => setActivePlayer(id)}
-              >
-                <Avatar id={player.id} name={player.name} avatar_path={player.avatar_path} size='sm' />
-                <span className='flex-1 text-left text-sm font-medium text-ink-primary'>{player.name}</span>
-                <span className='text-xs text-ink-muted'>{score?.entries.length ?? 0} entries</span>
-                <span className='w-12 text-right text-base font-bold text-ink-primary tabular-nums'>{score?.total ?? 0}</span>
-              </button>
-            )
-          })}
+          {/* Mobile: horizontal scrollable player strip */}
+          {inactivePlayers.length > 0 && (
+            <div className='flex scrollbar-none gap-2 overflow-x-auto pb-1 md:hidden'>
+              {inactivePlayers.map((id) => {
+                const player = players.find((p) => p.id === id)
+                if (!player) return null
+                const score = scores[id]
+                return (
+                  <button
+                    key={id}
+                    className='flex shrink-0 items-center gap-2 rounded-xl border border-border bg-paper-secondary px-3 py-2 transition-colors hover:bg-paper-muted'
+                    onClick={() => setActivePlayer(id)}
+                  >
+                    <Avatar id={player.id} name={player.name} avatar_path={player.avatar_path} size='sm' />
+                    <span className='text-sm font-medium text-ink-primary'>{player.name}</span>
+                    <span className='text-sm font-bold text-ink-primary tabular-nums'>{score?.total ?? 0}</span>
+                  </button>
+                )
+              })}
+            </div>
+          )}
+
+          {/* Desktop: vertical inactive player rows */}
+          <div className='hidden md:flex md:flex-col md:gap-3'>
+            {inactivePlayers.map((id) => {
+              const player = players.find((p) => p.id === id)
+              if (!player) return null
+              const score = scores[id]
+              return (
+                <button
+                  key={id}
+                  className='flex items-center gap-3 rounded-xl border border-border bg-paper-secondary px-4 py-3 transition-colors hover:bg-paper-muted'
+                  onClick={() => setActivePlayer(id)}
+                >
+                  <Avatar id={player.id} name={player.name} avatar_path={player.avatar_path} size='sm' />
+                  <span className='flex-1 text-left text-sm font-medium text-ink-primary'>{player.name}</span>
+                  <span className='text-xs text-ink-muted'>{score?.entries.length ?? 0} entries</span>
+                  <span className='w-12 text-right text-base font-bold text-ink-primary tabular-nums'>{score?.total ?? 0}</span>
+                </button>
+              )
+            })}
+          </div>
         </div>
 
         {/* Input panel */}
         <div className='flex flex-col gap-4'>
           {/* Quick add */}
           <div className='flex flex-col gap-2'>
-            <span className='text-xs font-semibold tracking-wide text-ink-muted uppercase'>Quick Add</span>
             <div className='flex flex-wrap gap-2'>
-              {QUICK_ADDS_NEG.map((v) => (
-                <Button key={v} size='small' variant='outline' color='destructive' onClick={() => applyQuickAdd(v)}>
-                  {v}
+              {QUICK_ADDS_POS.map((value) => (
+                <Button key={value} className='flex-1' variant='outline' color='secondary' onClick={() => applyQuickAdd(value)}>
+                  +{value}
                 </Button>
               ))}
-              {QUICK_ADDS_POS.map((v) => (
-                <Button key={v} size='small' variant='outline' color='secondary' onClick={() => applyQuickAdd(v)}>
-                  +{v}
+              {QUICK_ADDS_NEG.map((value) => (
+                <Button key={value} className='flex-1' variant='outline' color='destructive' onClick={() => applyQuickAdd(value)}>
+                  {value}
                 </Button>
               ))}
             </div>
@@ -187,16 +210,20 @@ export function CountStep({
             </div>
 
             <Button className='w-full' size='big' disabled={!canCommitBuffer} onClick={commitBuffer}>
-              Add +
+              <Plus />
+              Add points
             </Button>
           </div>
         </div>
       </div>
 
-      {/* View results footer */}
-      <div className='fixed right-0 bottom-0 left-0 border-t border-border bg-paper-primary p-4'>
-        <Button className='w-full' size='big' variant='outline' color='secondary' onClick={onViewResults}>
-          View results →
+      {/* Footer actions */}
+      <div className='mt-6 flex items-center gap-6'>
+        <Button variant='ghost' color='secondary' onClick={onBack}>
+          <ChevronLeft /> Back
+        </Button>
+        <Button className='flex-1' size='big' variant='outline' color='secondary' onClick={onViewResults}>
+          View results
         </Button>
       </div>
     </>
