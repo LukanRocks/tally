@@ -8,7 +8,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "better-sqlite3": "11.9.1",
+    "better-sqlite3": "12.10.0",
     "csv-parse": "6.2.1",
     "drizzle-orm": "0.45.2",
     "express": "5.2.1",
@@ -20,7 +20,7 @@
     "@types/express": "5.0.6",
     "@types/multer": "2.1.0",
     "@types/node": "25.9.1",
-    "tsx": "4.19.4",
+    "tsx": "4.22.3",
     "typescript": "6.0.3"
   }
 }
