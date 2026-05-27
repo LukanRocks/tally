@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 270" preserveAspectRatio="xMidYMid slice">
+  
+  <rect width="200" height="270" fill="oklch(0.62 0.15 230)"></rect>
+  <g color="oklch(0.92 0.04 230)">
+    <rect x="5" y="10" width="30" height="44" rx="3" fill="currentColor" opacity="0.08"></rect>
+    <rect x="45" y="10" width="30" height="44" rx="3" fill="currentColor" opacity="0.18"></rect>
+    <rect x="85" y="10" width="30" height="44" rx="3" fill="currentColor" opacity="0.28"></rect>
+    <rect x="125" y="10" width="30" height="44" rx="3" fill="currentColor" opacity="0.13"></rect>
+    <rect x="165" y="10" width="30" height="44" rx="3" fill="currentColor" opacity="0.23"></rect>
+    <rect x="5" y="64" width="30" height="44" rx="3" fill="currentColor" opacity="0.08"></rect>
+    <rect x="45" y="64" width="30" height="44" rx="3" fill="currentColor" opacity="0.18"></rect>
+    <rect x="85" y="64" width="30" height="44" rx="3" fill="currentColor" opacity="0.28"></rect>
+    <rect x="125" y="64" width="30" height="44" rx="3" fill="currentColor" opacity="0.13"></rect>
+    <rect x="165" y="64" width="30" height="44" rx="3" fill="currentColor" opacity="0.23"></rect>
+    <rect x="5" y="118" width="30" height="44" rx="3" fill="currentColor" opacity="0.08"></rect>
+    <rect x="45" y="118" width="30" height="44" rx="3" fill="currentColor" opacity="0.18"></rect>
+    <rect x="85" y="118" width="30" height="44" rx="3" fill="currentColor" opacity="0.28"></rect>
+    <rect x="125" y="118" width="30" height="44" rx="3" fill="currentColor" opacity="0.13"></rect>
+    <rect x="165" y="118" width="30" height="44" rx="3" fill="currentColor" opacity="0.23"></rect>
+    <rect x="5" y="172" width="30" height="44" rx="3" fill="currentColor" opacity="0.08"></rect>
+    <rect x="45" y="172" width="30" height="44" rx="3" fill="currentColor" opacity="0.18"></rect>
+    <rect x="85" y="172" width="30" height="44" rx="3" fill="currentColor" opacity="0.28"></rect>
+    <rect x="125" y="172" width="30" height="44" rx="3" fill="currentColor" opacity="0.13"></rect>
+    <rect x="165" y="172" width="30" height="44" rx="3" fill="currentColor" opacity="0.23"></rect>
+    <rect x="5" y="226" width="30" height="44" rx="3" fill="currentColor" opacity="0.08"></rect>
+    <rect x="45" y="226" width="30" height="44" rx="3" fill="currentColor" opacity="0.18"></rect>
+    <rect x="85" y="226" width="30" height="44" rx="3" fill="currentColor" opacity="0.28"></rect>
+    <rect x="125" y="226" width="30" height="44" rx="3" fill="currentColor" opacity="0.13"></rect>
+    <rect x="165" y="226" width="30" height="44" rx="3" fill="currentColor" opacity="0.23"></rect>
+  </g>
+  
+  <defs>
+    <linearGradient id="foil-azul" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="white" stop-opacity="0.18"></stop>
+      <stop offset="35%" stop-color="white" stop-opacity="0"></stop>
+      <stop offset="65%" stop-color="white" stop-opacity="0"></stop>
+      <stop offset="100%" stop-color="black" stop-opacity="0.1"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="270" fill="url(#foil-azul)"></rect>
+</svg>
