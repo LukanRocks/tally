@@ -1,4 +1,4 @@
-import { Badge, badgeVariantGroups } from '@/components/atoms/badge'
+import { Badge, BADGE_VARIANT_GROUPS } from '@/components/atoms/badge'
 import { Chip } from '@/components/atoms/chip'
 
 // !TODO: Add chip variants and export as variant groups like badge
@@ -45,7 +45,7 @@ export const ChipsBadgesSection = () => (
           <Chip className='border-loss/30 bg-loss/12'>🔥 3 streak</Chip> */}
         </div>
 
-        {badgeVariantGroups.map(({ label, variants }) => (
+        {BADGE_VARIANT_GROUPS.map(({ label, variants }) => (
           <div key={label} className='space-y-2'>
             <p className='caption text-ink-muted'>{label}</p>
             <div className='flex flex-wrap items-center gap-2'>

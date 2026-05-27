@@ -1,5 +1,6 @@
-import { Plus } from 'lucide-react'
-import { Button, BUTTON_COLORS } from '@/components/atoms/button'
+import { ArrowUpDown, LayoutGrid, LayoutList, Plus, SlidersHorizontal, Table } from 'lucide-react'
+import { Button, BUTTON_COLORS, ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from '@/components/atoms/button'
+import { Toggle } from '@/components/atoms/toggle'
 
 export function ButtonsSection() {
   return (
@@ -100,6 +101,129 @@ export function ButtonsSection() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Button groups */}
+      <div className='space-y-5 rounded-xl border border-border bg-card p-5'>
+        <p className='caption text-ink-muted'>Groups</p>
+
+        <div className='space-y-1.5'>
+          <p className='caption text-[10px] text-ink-muted'>horizontal</p>
+          <ButtonGroup>
+            <Button variant='outline' color='secondary' size='big'>
+              <Table />
+              Table
+            </Button>
+            <Button variant='outline' color='secondary' size='big'>
+              <LayoutGrid />
+              Board
+            </Button>
+            <Button variant='outline' color='secondary' size='big'>
+              <LayoutList />
+              Timeline
+            </Button>
+          </ButtonGroup>
+        </div>
+
+        <div className='space-y-1.5'>
+          <p className='caption text-[10px] text-ink-muted'>vertical</p>
+          <ButtonGroup orientation='vertical'>
+            <Button variant='outline' color='secondary'>
+              <Table />
+            </Button>
+            <Button variant='outline' color='secondary'>
+              <LayoutGrid />
+            </Button>
+            <Button variant='outline' color='secondary'>
+              <LayoutList />
+            </Button>
+          </ButtonGroup>
+        </div>
+
+        <div className='space-y-1.5'>
+          <p className='caption text-[10px] text-ink-muted'>with prefix text</p>
+          <ButtonGroup>
+            <ButtonGroupText>Sort by</ButtonGroupText>
+            <Button variant='outline' color='secondary'>
+              Name
+            </Button>
+            <Button variant='outline' color='secondary'>
+              Date
+            </Button>
+            <Button variant='outline' color='secondary'>
+              Rating
+            </Button>
+          </ButtonGroup>
+        </div>
+
+        <div className='space-y-1.5'>
+          <p className='caption text-[10px] text-ink-muted'>with separator</p>
+          <ButtonGroup>
+            <ButtonGroupText>Sort by</ButtonGroupText>
+            <ButtonGroupSeparator />
+            <Button variant='outline' color='secondary'>
+              Asc
+            </Button>
+            <Button variant='outline' color='secondary'>
+              Desc
+            </Button>
+          </ButtonGroup>
+        </div>
+
+        <div className='space-y-1.5'>
+          <p className='caption text-[10px] text-ink-muted'>mixed: text + icon</p>
+          <div className='flex flex-wrap gap-3'>
+            <ButtonGroup>
+              <Button variant='outline' color='secondary'>
+                Filter
+              </Button>
+              <Button variant='outline' color='secondary' size='icon' className='size-7.5' aria-label='Filter options'>
+                <SlidersHorizontal />
+              </Button>
+            </ButtonGroup>
+            <ButtonGroup>
+              <Button variant='outline' color='secondary' size='icon' className='size-7.5' aria-label='Sort direction'>
+                <ArrowUpDown />
+              </Button>
+              <Button variant='outline' color='secondary'>
+                Sort
+              </Button>
+            </ButtonGroup>
+          </div>
+        </div>
+
+        <div className='space-y-1.5'>
+          <p className='caption text-[10px] text-ink-muted'>with toggles — view switcher</p>
+          <ButtonGroup>
+            <Toggle variant='outline' defaultPressed>
+              <Table />
+              Table
+            </Toggle>
+            <Toggle variant='outline'>
+              <LayoutGrid />
+              Board
+            </Toggle>
+            <Toggle variant='outline'>
+              <LayoutList />
+              Timeline
+            </Toggle>
+          </ButtonGroup>
+        </div>
+
+        <div className='space-y-1.5'>
+          <p className='caption text-[10px] text-ink-muted'>with toggles — icon group, vertical</p>
+          <ButtonGroup orientation='vertical'>
+            <Toggle variant='outline' size='icon' defaultPressed>
+              <Table />
+            </Toggle>
+            <Toggle variant='outline' size='icon'>
+              <LayoutGrid />
+            </Toggle>
+            <Toggle variant='outline' size='icon'>
+              <LayoutList />
+            </Toggle>
+          </ButtonGroup>
+        </div>
       </div>
     </section>
   )
