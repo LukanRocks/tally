@@ -24,6 +24,7 @@ import Tools from '@/pages/tools'
 import Dice from '@/pages/tools/dice-roll'
 import FirstPlayer from '@/pages/tools/first-player-picker'
 import Timer from '@/pages/tools/turn-timer'
+import ScoreCounter from '@/pages/tools/score-counter'
 
 import DesignSystem from '@/pages/design-system'
 
@@ -51,6 +52,7 @@ export const AppRoutes = () => {
           <Route path='tools/roll-dice' element={<Dice />} />
           <Route path='tools/first-player-picker' element={<FirstPlayer />} />
           <Route path='tools/turn-timer' element={<Timer />} />
+          <Route path='tools/score-counter' element={<ScoreCounter />} />
           <Route path='design-system' element={<DesignSystem />} />
         </Route>
       </Routes>
