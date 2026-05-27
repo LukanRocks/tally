@@ -34,6 +34,7 @@ router.get('/', (req: Request, res: Response, next: NextFunction) => {
         cover_image_path: gamesTable.cover_image_path,
         owner_id: gamesTable.owner_id,
         owner_name: sql<string | null>`(SELECT name FROM players WHERE players.id = games.owner_id)`,
+        owner_player_type: sql<'person' | 'shop' | null>`(SELECT player_type FROM players WHERE players.id = games.owner_id)`,
         created_at: gamesTable.created_at,
         session_count: sessionCount,
       })
@@ -81,11 +82,11 @@ router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
       .where(and(eq(sessionsTable.game_id, id), isNull(sessionsTable.deleted_at)))
       .get()
 
-    const ownerName = game.owner_id
-      ? (db.select({ name: playersTable.name }).from(playersTable).where(eq(playersTable.id, game.owner_id)).get())?.name ?? null
+    const ownerRow = game.owner_id
+      ? db.select({ name: playersTable.name, player_type: playersTable.player_type }).from(playersTable).where(eq(playersTable.id, game.owner_id)).get()
       : null
 
-    res.json({ ...game, owner_name: ownerName, attachments, session_count: countRow?.count ?? 0 })
+    res.json({ ...game, owner_name: ownerRow?.name ?? null, owner_player_type: ownerRow?.player_type ?? null, attachments, session_count: countRow?.count ?? 0 })
   } catch (err) {
     next(err)
   }

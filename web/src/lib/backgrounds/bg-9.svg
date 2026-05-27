@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 270" preserveAspectRatio="xMidYMid slice">
+  
+  <rect width="200" height="270" fill="oklch(0.82 0.16 95)"></rect>
+  <g color="oklch(0.30 0.12 60)">
+    <path d="M50 80 L45.6 84.1 L43.5 72.4 L60.9 71.2 L61.0 94.3 L32.2 92.9 L35.4 58.5 L75.3 63.9 L67.4 109.2 L16.8 98.5 L30.7 42.7 L91.4 60.0 L70.4 125.6 L0.1 100.6 L29.5 25.8 " fill="none" stroke="currentColor" stroke-width="2" opacity="0.18"></path>
+    <path d="M105 140 L100.6 144.1 L98.5 132.4 L115.9 131.2 L116.0 154.3 L87.2 152.9 L90.4 118.5 L130.3 123.9 L122.4 169.2 L71.8 158.5 L85.7 102.7 L146.4 120.0 L125.4 185.6 L55.1 160.6 L84.5 85.8 " fill="none" stroke="currentColor" stroke-width="2" opacity="0.14"></path>
+    <path d="M160 200 L155.6 204.1 L153.5 192.4 L170.9 191.2 L171.0 214.3 L142.2 212.9 L145.4 178.5 L185.3 183.9 L177.4 229.2 L126.8 218.5 L140.7 162.7 L201.4 180.0 L180.4 245.6 L110.1 220.6 L139.5 145.8 " fill="none" stroke="currentColor" stroke-width="2" opacity="0.10"></path>
+  </g>
+  <defs>
+    <linearGradient id="foil-vortex" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="white" stop-opacity="0.18"></stop>
+      <stop offset="35%" stop-color="white" stop-opacity="0"></stop>
+      <stop offset="65%" stop-color="white" stop-opacity="0"></stop>
+      <stop offset="100%" stop-color="black" stop-opacity="0.1"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="270" fill="url(#foil-vortex)"></rect>
+</svg>

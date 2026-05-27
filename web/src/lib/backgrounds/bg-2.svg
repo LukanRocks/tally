@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 270" preserveAspectRatio="xMidYMid slice">
+  
+  <rect width="200" height="270" fill="oklch(0.28 0.10 270)"></rect>
+  <g color="oklch(0.92 0.05 90)">
+    <line x1="30" y1="40" x2="55" y2="90" stroke="currentColor" stroke-width="1" opacity="0.22"></line>
+    <line x1="55" y1="90" x2="85" y2="55" stroke="currentColor" stroke-width="1" opacity="0.22"></line>
+    <line x1="85" y1="55" x2="120" y2="100" stroke="currentColor" stroke-width="1" opacity="0.22"></line>
+    <line x1="120" y1="100" x2="150" y2="40" stroke="currentColor" stroke-width="1" opacity="0.22"></line>
+    <line x1="150" y1="40" x2="170" y2="90" stroke="currentColor" stroke-width="1" opacity="0.22"></line>
+    <line x1="40" y1="140" x2="80" y2="160" stroke="currentColor" stroke-width="1" opacity="0.22"></line>
+    <line x1="80" y1="160" x2="120" y2="180" stroke="currentColor" stroke-width="1" opacity="0.22"></line>
+    <line x1="120" y1="180" x2="160" y2="150" stroke="currentColor" stroke-width="1" opacity="0.22"></line>
+    <line x1="180" y1="200" x2="160" y2="150" stroke="currentColor" stroke-width="1" opacity="0.22"></line>
+    <line x1="50" y1="220" x2="100" y2="240" stroke="currentColor" stroke-width="1" opacity="0.22"></line>
+    <line x1="100" y1="240" x2="150" y2="230" stroke="currentColor" stroke-width="1" opacity="0.22"></line>
+    <circle cx="30" cy="40" r="2.6" fill="currentColor" opacity="0.4"></circle>
+    <circle cx="55" cy="90" r="1.2" fill="currentColor" opacity="0.55"></circle>
+    <circle cx="85" cy="55" r="1.2" fill="currentColor" opacity="0.7"></circle>
+    <circle cx="120" cy="100" r="1.8" fill="currentColor" opacity="0.4"></circle>
+    <circle cx="150" cy="40" r="2.6" fill="currentColor" opacity="0.55"></circle>
+    <circle cx="170" cy="90" r="1.2" fill="currentColor" opacity="0.7"></circle>
+    <circle cx="40" cy="140" r="1.8" fill="currentColor" opacity="0.4"></circle>
+    <circle cx="80" cy="160" r="1.2" fill="currentColor" opacity="0.55"></circle>
+    <circle cx="120" cy="180" r="2.6" fill="currentColor" opacity="0.7"></circle>
+    <circle cx="160" cy="150" r="1.8" fill="currentColor" opacity="0.4"></circle>
+    <circle cx="180" cy="200" r="1.2" fill="currentColor" opacity="0.55"></circle>
+    <circle cx="50" cy="220" r="1.2" fill="currentColor" opacity="0.7"></circle>
+    <circle cx="100" cy="240" r="2.6" fill="currentColor" opacity="0.4"></circle>
+    <circle cx="150" cy="230" r="1.2" fill="currentColor" opacity="0.55"></circle>
+    <circle cx="30" cy="250" r="1.2" fill="currentColor" opacity="0.7"></circle>
+    <path d="M155 240 a 14 14 0 1 0 -10 -22 a 11 11 0 1 1 10 22 Z" fill="currentColor" opacity="0.35"></path>
+  </g>
+  <defs>
+    <linearGradient id="foil-starfall" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="white" stop-opacity="0.18"></stop>
+      <stop offset="35%" stop-color="white" stop-opacity="0"></stop>
+      <stop offset="65%" stop-color="white" stop-opacity="0"></stop>
+      <stop offset="100%" stop-color="black" stop-opacity="0.1"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="270" fill="url(#foil-starfall)"></rect>
+</svg>
