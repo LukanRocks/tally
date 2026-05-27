@@ -1,6 +1,5 @@
-import { Fragment } from 'react'
 import { Plus } from 'lucide-react'
-import { Button, buttonColorGroups } from '@/components/atoms/button'
+import { Button, BUTTON_COLORS } from '@/components/atoms/button'
 
 export function ButtonsSection() {
   return (
@@ -72,41 +71,32 @@ export function ButtonsSection() {
             </tr>
           </thead>
           <tbody className='divide-y divide-dashed divide-border'>
-            {buttonColorGroups.map(({ label, colors }) => (
-              <Fragment key={label}>
-                <tr className='bg-paper-secondary/40'>
-                  <td colSpan={5} className='px-4 py-1.5'>
-                    <span className='caption text-[10px] text-ink-muted'>{label}</span>
-                  </td>
-                </tr>
-                {colors.map((color) => (
-                  <tr key={color} className='hover:bg-paper-secondary/40'>
-                    <td className='px-4 py-2.5'>
-                      <code className='font-mono text-xs text-ink-muted'>{color}</code>
-                    </td>
-                    <td className='px-4 py-2.5 text-center'>
-                      <Button color={color} size='small'>
-                        {color}
-                      </Button>
-                    </td>
-                    <td className='px-4 py-2.5 text-center'>
-                      <Button variant='outline' color={color} size='small'>
-                        {color}
-                      </Button>
-                    </td>
-                    <td className='px-4 py-2.5 text-center'>
-                      <Button variant='ghost' color={color} size='small'>
-                        {color}
-                      </Button>
-                    </td>
-                    <td className='px-4 py-2.5 text-center'>
-                      <Button variant='link' color={color} size='small'>
-                        {color}
-                      </Button>
-                    </td>
-                  </tr>
-                ))}
-              </Fragment>
+            {BUTTON_COLORS.map((color) => (
+              <tr key={color} className='hover:bg-paper-secondary/40'>
+                <td className='px-4 py-2.5'>
+                  <code className='font-mono text-xs text-ink-muted'>{color}</code>
+                </td>
+                <td className='px-4 py-2.5 text-center'>
+                  <Button color={color} size='small'>
+                    {color}
+                  </Button>
+                </td>
+                <td className='px-4 py-2.5 text-center'>
+                  <Button variant='outline' color={color} size='small'>
+                    {color}
+                  </Button>
+                </td>
+                <td className='px-4 py-2.5 text-center'>
+                  <Button variant='ghost' color={color} size='small'>
+                    {color}
+                  </Button>
+                </td>
+                <td className='px-4 py-2.5 text-center'>
+                  <Button variant='link' color={color} size='small'>
+                    {color}
+                  </Button>
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>

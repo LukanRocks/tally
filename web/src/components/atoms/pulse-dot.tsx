@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
-const pulseDotVariants = cva('relative flex shrink-0', {
+const PULSE_DOT_VARIANTS_CONFIG = cva('relative flex shrink-0', {
   variants: {
     size: {
       sm: 'size-2',
@@ -32,11 +32,23 @@ const pulseDotVariants = cva('relative flex shrink-0', {
   },
 })
 
-export type PulseDotProps = VariantProps<typeof pulseDotVariants> & { className?: string }
+export type PULSE_DOT_VARIANTS_PROPS = VariantProps<typeof PULSE_DOT_VARIANTS_CONFIG>
 
-export const PulseDot = ({ size, color, className }: PulseDotProps) => (
-  <span className={cn(pulseDotVariants({ size, color }), className)}>
-    <span className='absolute inline-flex size-full animate-ping rounded-full bg-(--pulse-color) opacity-75' />
-    <span className='relative inline-flex size-full rounded-full bg-(--pulse-color)' />
-  </span>
-)
+export type PULSE_DOT_SIZE = NonNullable<PULSE_DOT_VARIANTS_PROPS['size']>
+export const PULSE_DOT_SIZES: PULSE_DOT_SIZE[] = ['sm', 'md', 'lg']
+
+export type PULSE_DOT_COLOR = NonNullable<PULSE_DOT_VARIANTS_PROPS['color']>
+export const PULSE_DOT_COLORS: PULSE_DOT_COLOR[] = ['gold', 'silver', 'bronze', 'win', 'loss', 'tie', 'owned', 'borrowed', 'rented', 'success', 'warning', 'info', 'destructive', 'primary', 'secondary']
+
+export type PulseDotProps = PULSE_DOT_VARIANTS_PROPS & { className?: string; pulsing?: boolean }
+
+export const PulseDot = ({ size, color, className, pulsing = true }: PulseDotProps) => {
+  const classes = cn(PULSE_DOT_VARIANTS_CONFIG({ size, color }), className)
+
+  return (
+    <span data-slot='pulse-dot' data-size={size} data-color={color} className={classes}>
+      {pulsing && <span className='absolute inline-flex size-full animate-ping rounded-full bg-(--pulse-color) opacity-75' />}
+      <span className='relative inline-flex size-full rounded-full bg-(--pulse-color)' />
+    </span>
+  )
+}

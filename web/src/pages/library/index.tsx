@@ -54,7 +54,7 @@ export default function Library() {
       </PageHeader>
 
       <div className='flex flex-wrap items-end gap-2'>
-        <Input type='text' placeholder='Search games…' className='w-full sm:w-80' startIcon={<Search size={15} />} value={search} onChange={(e) => setSearch(e.target.value)} />
+        <Input type='text' placeholder='Search games…' className='w-full sm:w-80' Icon={Search} value={search} onChange={(e) => setSearch(e.target.value)} />
 
         <Field className='w-36'>
           <select value={sort} onChange={(e) => setSort(e.target.value)} className='input cursor-pointer'>

@@ -1,9 +1,9 @@
 import { ComponentProps } from 'react'
-import { cva, type VariantProps } from 'class-variance-authority'
 import { Slot } from 'radix-ui'
+import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
-const badgeVariants = cva(
+const BADGE_VARIANTS_CONFIG = cva(
   'inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border px-2 py-0.5 font-mono text-xs font-medium whitespace-nowrap uppercase transition-all focus-visible:ring-[3px] focus-visible:ring-ring/50 [&>svg]:pointer-events-none [&>svg]:size-3!',
   {
     variants: {
@@ -27,15 +27,22 @@ const badgeVariants = cva(
   },
 )
 
-export type BadgeVariant = NonNullable<VariantProps<typeof badgeVariants>['variant']>
+export type BADGE_VARIANTS_PROPS = VariantProps<typeof BADGE_VARIANTS_CONFIG>
 
-export const badgeVariantGroups: { label: string; variants: BadgeVariant[] }[] = [
+export type BADGE_VARIANT = NonNullable<BADGE_VARIANTS_PROPS['variant']>
+export const BADGE_VARIANTS: BADGE_VARIANT[] = ['owned', 'borrowed', 'rented', 'gold', 'silver', 'bronze', 'win', 'loss', 'tie']
+
+export const BADGE_VARIANT_GROUPS: { label: string; variants: BADGE_VARIANT[] }[] = [
   { label: 'Status badge — ownership', variants: ['owned', 'borrowed', 'rented'] },
   { label: 'Medals badge — leaderboard', variants: ['gold', 'silver', 'bronze'] },
   { label: 'Results badge — session', variants: ['win', 'loss', 'tie'] },
 ]
 
-export const Badge = ({ className, variant, asChild = false, ...props }: ComponentProps<'span'> & VariantProps<typeof badgeVariants> & { asChild?: boolean }) => {
-  const Comp = asChild ? Slot.Root : 'span'
-  return <Comp data-slot='badge' className={cn(badgeVariants({ variant }), className)} {...props} />
+export type BadgeProps = ComponentProps<'span'> & BADGE_VARIANTS_PROPS & { polymorphic?: boolean }
+
+export const Badge = ({ variant, className, polymorphic = false, ...props }: BadgeProps) => {
+  const Component = polymorphic ? Slot.Root : 'span'
+  const classes = cn(BADGE_VARIANTS_CONFIG({ variant }), className)
+
+  return <Component data-slot='badge' data-variant={variant} className={classes} {...props} />
 }

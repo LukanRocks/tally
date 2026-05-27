@@ -3,7 +3,7 @@ import { Toggle as TogglePrimitive } from 'radix-ui'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
-export const toggleVariants = cva(
+export const TOGGLE_VARIANTS_CONFIG = cva(
   'inline-flex shrink-0 items-center justify-center gap-2 rounded-md border border-transparent text-sm font-semibold whitespace-nowrap capitalize transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:translate-y-px disabled:pointer-events-none disabled:opacity-45 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
   {
     variants: {
@@ -22,10 +22,10 @@ export const toggleVariants = cva(
         ],
       },
       size: {
-        small:   "h-7.5 gap-1.5 px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3",
+        small: "h-7.5 gap-1.5 px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3",
         default: 'h-9.5 gap-2 px-3.5',
-        big:     'h-11.5 gap-2 px-5 text-[15px]',
-        icon:    'size-9.5',
+        big: 'h-11.5 gap-2 px-5 text-[15px]',
+        icon: 'size-9.5',
       },
     },
     defaultVariants: {
@@ -35,14 +35,18 @@ export const toggleVariants = cva(
   },
 )
 
-export type ToggleVariants = VariantProps<typeof toggleVariants>
+export type TOGGLE_VARIANTS_PROPS = VariantProps<typeof TOGGLE_VARIANTS_CONFIG>
 
-export type ToggleProps = ComponentProps<typeof TogglePrimitive.Root> & ToggleVariants
+export type TOGGLE_VARIANT = NonNullable<TOGGLE_VARIANTS_PROPS['variant']>
+export const TOGGLE_VARIANTS: TOGGLE_VARIANT[] = ['default', 'outline', 'ghost']
 
-export const Toggle = ({ className, variant, size, ...props }: ToggleProps) => (
-  <TogglePrimitive.Root
-    data-slot='toggle'
-    className={cn(toggleVariants({ variant, size }), className)}
-    {...props}
-  />
-)
+export type TOGGLE_SIZE = NonNullable<TOGGLE_VARIANTS_PROPS['size']>
+export const TOGGLE_SIZES: TOGGLE_SIZE[] = ['small', 'default', 'big', 'icon']
+
+export type ToggleProps = ComponentProps<typeof TogglePrimitive.Root> & TOGGLE_VARIANTS_PROPS
+
+export const Toggle = ({ className, variant, size, ...props }: ToggleProps) => {
+  const classes = cn(TOGGLE_VARIANTS_CONFIG({ variant, size }), className)
+
+  return <TogglePrimitive.Root data-slot='toggle' data-variant={variant} data-size={size} className={classes} {...props} />
+}
