@@ -56,6 +56,7 @@
   /* Accent Brand Color */
   --yellow-primary:   oklch(0.852 0.1990 91.936);
   --yellow-secondary: oklch(0.710 0.1392 86.000);
+  --yellow-tertiary:  oklch(0.800 0.1800 91.000); /* border + hover state of yellow buttons */
 
   /* Player/Team identity (10 generated colors given most games are up to 9 players) */
   --player-a: oklch(0.725 0.1131   6.800); /* pink   */
@@ -80,9 +81,9 @@
   --tie:  oklch(0.531 0.1284 258.500);
 
   /* Player status */
-  --status-self:  var(--yellow-primary);
-  --status-friend:oklch(0.652 0.1590 250.000);
-  --status-store: oklch(0.722 0.1890   0.000);
+  --owned:  var(--yellow-primary);
+  --borrowed:oklch(0.652 0.1590 250.000);
+  --rented: oklch(0.722 0.1890   0.000);
 
   /* Feedback */
   --success:     oklch(0.680 0.180 145.000);
@@ -114,6 +115,7 @@
   /* Accent Brand Color */
   --yellow-primary:   oklch(0.842 0.1515 87.400);
   --yellow-secondary: oklch(0.408 0.0694 86.900);
+  --yellow-tertiary:  oklch(0.780 0.1300 88.000); /* border + hover state of yellow buttons */
 
   /* Player/Team identity (10 generated colors given most games are up to 9 players) */
   --player-a: oklch(60.9% 0.1404   8.500); /* pink   */
@@ -138,9 +140,9 @@
   --tie:  oklch(0.531 0.1284 258.500);
 
   /* Player status */
-  --status-self:   oklch(0.78 0.16  90.000);
-  --status-friend: oklch(0.60 0.14 250.000);
-  --status-store:  oklch(0.68 0.16   0.000);
+  --owned:   oklch(0.78 0.16  90.000);
+  --borrowed: oklch(0.60 0.14 250.000);
+  --rented:  oklch(0.68 0.16   0.000);
 
   /* Feedback */
   --success:     oklch(0.620 0.160 145.000);
@@ -199,9 +201,11 @@
   --color-ink-primary:     var(--ink-primary);
   --color-ink-secondary:   var(--ink-secondary);
   --color-ink-muted:       var(--ink-muted);
+  --color-ink-on-yellow:   oklch(0.218 0.0000 89.900); /* fixed dark ink — always readable on yellow surfaces */
 
   --color-yellow-primary:   var(--yellow-primary);
   --color-yellow-secondary: var(--yellow-secondary);
+  --color-yellow-tertiary:  var(--yellow-tertiary);
 
   --color-player-a: var(--player-a);
   --color-player-b: var(--player-b);
@@ -222,9 +226,9 @@
   --color-loss: var(--loss);
   --color-tie:  var(--tie);
 
-  --color-status-self:   var(--status-self);
-  --color-status-friend: var(--status-friend);
-  --color-status-store:  var(--status-store);
+  --color-owned:   var(--owned);
+  --color-borrowed: var(--borrowed);
+  --color-rented:  var(--rented);
 
   --color-success:     var(--success);
   --color-warning:     var(--warning);
@@ -266,10 +270,52 @@
     @apply w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none;
   }
 
-  .eyebrow {
+  /* Typography scale */
+  .display {
+    font-size: var(--text-4xl);
+    font-weight: 800;
+    line-height: 1.125;
+    letter-spacing: -0.03em;
+  }
+
+  .h1 {
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    line-height: var(--leading-tight);
+    letter-spacing: -0.02em;
+  }
+
+  .h2 {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    line-height: var(--leading-snug);
+    letter-spacing: -0.01em;
+  }
+
+  .h3 {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    line-height: var(--leading-snug);
+  }
+
+  .body {
+    font-size: var(--text-sm);
+    font-weight: 400;
+    line-height: var(--leading-snug);
+  }
+
+  .small {
+    font-size: var(--text-xs);
+    font-weight: 400;
+    line-height: var(--leading-normal);
+    color: var(--ink-muted);
+  }
+
+  .caption {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     font-weight: 600;
+    line-height: var(--leading-normal);
     text-transform: uppercase;
     letter-spacing: 0.12em;
   }
@@ -282,9 +328,10 @@
 
   .callout {
     font-family: var(--font-callout);
-    font-size: var(--text-xl);
+    font-size: var(--text-2xl);
     font-weight: 700;
+    line-height: var(--leading-tight);
     rotate: -2deg;
-    color: var(--yellow-primary);
+    color: var(--yellow-tertiary);
   }
 }

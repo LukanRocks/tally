@@ -19,7 +19,7 @@ This document covers the full technical implementation for v5 — BGG catalog im
 | Decision | Choice | Reason |
 |---|---|---|
 | CSV parsing library | `csv-parse` (new server dep) | Handles quoted commas/newlines in game names; BGG dump has well-formed CSV but game names may contain commas |
-| Autocomplete UI | shadcn Combobox component (`@base-ui/react`) | `@base-ui/react` Combobox installed at `@/shadcn/components/ui/combobox`; provides native keyboard navigation, accessible popup, and server-side filtering via `filterFn` override |
+| Autocomplete UI | shadcn Combobox component (`@base-ui/react`) | `@base-ui/react` Combobox installed at `@/shadcn/components/combobox`; provides native keyboard navigation, accessible popup, and server-side filtering via `filterFn` override |
 | BGG delete confirmation | Text-confirmation dialog — user types `DELETE` | Consistent with the existing "Delete all data" Danger Zone pattern in `Settings.tsx` |
 | Full reset includes BGG | Yes — `DELETE /api/v1/settings/reset` also truncates `bgg_games` | bgg_games is a lookup table, not user library data; a factory reset should leave the DB completely empty |
 | Multer storage for CSV | `memoryStorage` | The CSV is parsed immediately and discarded; no reason to write it to disk |
@@ -506,7 +506,7 @@ import {
   ComboboxList,
   ComboboxItem,
   ComboboxEmpty,
-} from '@/shadcn/components/ui/combobox'
+} from '@/shadcn/components/combobox'
 ```
 
 #### Populate year_published when editing
