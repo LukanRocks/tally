@@ -4,7 +4,7 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, X } from 'lucide-react'
-import { api, Game, Player } from '@/lib/api'
+import { api, Game, Player } from '@/lib/http-transport/api'
 
 interface RankedPlayer {
   id: number
@@ -127,9 +127,7 @@ export default function SessionLogger() {
     }
   }
 
-  const filteredPlayers = players.filter(
-    (p) => p.player_type === 'person' && p.name.toLowerCase().includes(playerSearch.toLowerCase()) && !ranked.some((r) => r.id === p.id),
-  )
+  const filteredPlayers = players.filter((p) => p.player_type === 'person' && p.name.toLowerCase().includes(playerSearch.toLowerCase()) && !ranked.some((r) => r.id === p.id))
 
   return (
     <div className='max-w-2xl p-4 md:p-8'>
