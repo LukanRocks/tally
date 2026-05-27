@@ -57,7 +57,7 @@ export function CountStep({
   const bufferDisplay = inputBuffer === '' ? '0' : inputBuffer.startsWith('-') ? '−' + inputBuffer.slice(1) : inputBuffer
 
   return (
-    <div data-slot='score-counter-count' className='flex flex-col pb-24'>
+    <>
       <div className='grid grid-cols-1 gap-4 p-4 md:grid-cols-2'>
         {/* Score sheet */}
         <div className='flex flex-col gap-3'>
@@ -199,6 +199,6 @@ export function CountStep({
           View results →
         </Button>
       </div>
-    </div>
+    </>
   )
 }

@@ -33,7 +33,7 @@ export function ResultStep({ rankedResults, players, scoringDirection, onNewCoun
   const winnerCopy = scoringDirection === 'highest' ? 'top of the heap' : 'fewest points wins'
 
   return (
-    <div data-slot='score-counter-result' className='flex flex-col gap-4 p-4 pb-28'>
+    <>
       {/* Winner hero */}
       {winner && winnerPlayer && (
         <div className={heroClasses}>
@@ -113,6 +113,6 @@ export function ResultStep({ rankedResults, players, scoringDirection, onNewCoun
           Create session
         </Button>
       </div>
-    </div>
+    </>
   )
 }

@@ -11,9 +11,6 @@ import { ArrowUp, ArrowDown, BookOpen } from 'lucide-react'
 interface SetupStepProps {
   players: Player[]
   games: Game[]
-  playersLoading: boolean
-  playersError: string | null
-  onRetryPlayers: () => void
   selectedPlayerIds: number[]
   gameId: number | null
   scoringDirection: ScoringDirection
@@ -28,9 +25,6 @@ interface SetupStepProps {
 export function SetupStep({
   players,
   games,
-  playersLoading,
-  playersError,
-  onRetryPlayers,
   selectedPlayerIds,
   gameId,
   scoringDirection,
@@ -42,7 +36,7 @@ export function SetupStep({
   onCancel,
 }: SetupStepProps) {
   return (
-    <div data-slot='score-counter-setup' className='flex flex-col gap-4 p-4'>
+    <>
       {/* Players card */}
       <div className='rounded-2xl border border-border bg-paper-secondary p-5'>
         <div className='mb-4 flex items-start justify-between gap-3'>
@@ -55,25 +49,7 @@ export function SetupStep({
           )}
         </div>
 
-        {playersError && (
-          <div className='mb-3 flex items-center gap-3 rounded-xl border border-destructive/30 bg-destructive/8 px-4 py-3 text-sm text-destructive'>
-            <span className='flex-1'>{playersError}</span>
-            <button onClick={onRetryPlayers} className='font-semibold underline underline-offset-2'>
-              Retry
-            </button>
-          </div>
-        )}
-
-        {playersLoading && !playersError && (
-          <div className='flex gap-2 overflow-hidden'>
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className='h-10 w-28 shrink-0 animate-pulse rounded-full bg-paper-muted' />
-            ))}
-          </div>
-        )}
-
-        {!playersLoading && !playersError && (
-          <div className='flex gap-2 overflow-x-auto pb-1'>
+        <div className='flex gap-2 overflow-x-auto pb-1'>
             {players.map((player) => {
               const selected = selectedPlayerIds.includes(player.id)
               const chipClasses = cn(
@@ -89,7 +65,6 @@ export function SetupStep({
               )
             })}
           </div>
-        )}
       </div>
 
       {/* Game card */}
@@ -184,6 +159,6 @@ export function SetupStep({
           Start counting →
         </Button>
       </div>
-    </div>
+    </>
   )
 }
