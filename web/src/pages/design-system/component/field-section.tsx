@@ -1,7 +1,8 @@
+import { Search, AtSign, Eye, Send } from 'lucide-react'
 import { Label } from '@/components/atoms/label'
 import { Separator } from '@/components/atoms/separator'
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '@/components/atoms/field'
-import { Input } from '@/components/atoms/input'
+import { Input, InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea } from '@/components/atoms/input'
 import { Checkbox } from '@/components/atoms/checkbox'
 
 export function FieldSection() {
@@ -62,6 +63,63 @@ export function FieldSection() {
               <Checkbox label='Receive an email when a game session is logged.' />
             </Field>
           </FieldGroup>
+        </div>
+      </div>
+
+      <div className='space-y-3'>
+        <p className='caption text-ink-muted'>InputGroup — inline addons</p>
+        <div className='flex flex-row gap-3 rounded-xl border border-border bg-card p-5'>
+          <InputGroup>
+            <InputGroupAddon align='inline-start'>
+              <InputGroupText>
+                <Search size={15} />
+              </InputGroupText>
+            </InputGroupAddon>
+            <InputGroupInput placeholder='Search games…' />
+          </InputGroup>
+
+          <InputGroup>
+            <InputGroupAddon align='inline-start'>
+              <InputGroupText>
+                <AtSign size={15} />
+              </InputGroupText>
+            </InputGroupAddon>
+            <InputGroupInput placeholder='username' />
+            <InputGroupAddon align='inline-end'>
+              <InputGroupText>.bgg.com</InputGroupText>
+            </InputGroupAddon>
+          </InputGroup>
+
+          <InputGroup>
+            <InputGroupInput type='password' placeholder='Password' />
+            <InputGroupAddon align='inline-end'>
+              <InputGroupButton size='icon-xs'>
+                <Eye size={14} />
+              </InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+      </div>
+
+      <div className='space-y-3'>
+        <p className='caption text-ink-muted'>InputGroup — block addons</p>
+        <div className='flex flex-col gap-3 rounded-xl border border-border bg-card p-5'>
+          <InputGroup>
+            <InputGroupAddon align='block-start'>
+              <InputGroupText>Notes</InputGroupText>
+            </InputGroupAddon>
+            <InputGroupTextarea placeholder='Add a note about this session…' rows={3} />
+          </InputGroup>
+
+          <InputGroup>
+            <InputGroupTextarea placeholder='Write a message…' rows={3} />
+            <InputGroupAddon align='block-end'>
+              <InputGroupButton size='xs'>
+                <Send size={12} />
+                Send
+              </InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
         </div>
       </div>
     </section>
