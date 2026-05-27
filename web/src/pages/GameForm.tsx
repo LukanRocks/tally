@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { api, BggGame, Player } from '@/lib/api'
+import { api, BggGame, Player } from '@/lib/http-transport/api'
 import { useSettings } from '@/contexts/settings-context'
 
 type FormData = {
@@ -141,7 +141,7 @@ export default function GameForm() {
 
     try {
       if (isEdit) {
-        await api.games.update(Number(id), payload)
+        await api.games.update(Number(id), payload as Parameters<typeof api.games.update>[1])
         navigate(`/library/${id}`)
       } else {
         const game = await api.games.create(payload as Parameters<typeof api.games.create>[0])

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { UserRound, Camera, Pencil, Trash2, UserPlus, Store } from 'lucide-react'
 import { toast } from 'sonner'
-import { api, Player } from '@/lib/api'
+import { api, Player } from '@/lib/http-transport/api'
 import { useSettings } from '@/contexts/settings-context'
 
 export default function Players() {
