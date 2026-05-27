@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Dices, Plus, Rows3, LayoutGrid, ShelvingUnit, ArrowUp, ArrowDown } from 'lucide-react'
+import { Dices, Plus, Rows3, LayoutGrid, ShelvingUnit } from 'lucide-react'
 
 import { Page, PageHeader } from '@/components/layout/page'
 import { Button, ButtonGroup } from '@/components/atoms/button'

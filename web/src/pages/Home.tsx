@@ -11,22 +11,18 @@ export default () => {
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
   const [mostPlayed, setMostPlayed] = useState<MostPlayedGame[]>([])
   const [leastPlayed, setLeastPlayed] = useState<MostPlayedGame[]>([])
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    Promise.all([api.games.list({ sort: 'date_added', order: 'desc' }), api.stats.leaderboard(), api.stats.mostPlayed(), api.stats.leastPlayed()])
-      .then(([games, lb, mp, lp]) => {
-        setRecentGames(games.slice(0, 5))
-        setLeaderboard(lb.slice(0, 5))
-        setMostPlayed(mp.slice(0, 3))
-        setLeastPlayed(lp.slice(0, 3))
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
+    Promise.all([api.games.list({ sort: 'date_added', order: 'desc' }), api.stats.leaderboard(), api.stats.mostPlayed(), api.stats.leastPlayed()]).then(([games, lb, mp, lp]) => {
+      setRecentGames(games.slice(0, 5))
+      setLeaderboard(lb.slice(0, 5))
+      setMostPlayed(mp.slice(0, 3))
+      setLeastPlayed(lp.slice(0, 3))
+    })
   }, [])
 
   return (
-    <Page loading={loading}>
+    <Page>
       <GreetingBanner />
 
       {/* Leaderboard snippet */}
