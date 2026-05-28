@@ -18,7 +18,7 @@ import PlayerProfile from '@/pages/PlayerProfile'
 
 import Leaderboard from '@/pages/Leaderboard'
 
-import SettingsPage from '@/pages/Settings'
+import SettingsPage from '@/pages/settings'
 
 import Tools from '@/pages/tools'
 import Dice from '@/pages/tools/dice-roll'

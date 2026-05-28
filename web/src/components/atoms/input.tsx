@@ -12,7 +12,7 @@ export const Input = ({ className, ...props }: InputProps) => (
   <input
     data-slot='input'
     className={cn(
-      'h-9 w-full min-w-0 rounded-lg border border-transparent bg-paper-muted/50 px-3 py-1 text-sm transition-[color,box-shadow,background-color] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-ink-primary placeholder:text-ink-muted focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
+      'h-9 w-full min-w-0 rounded-lg border border-transparent bg-paper-muted/50 px-3 py-1 text-sm transition-[color,box-shadow,background-color] outline-none file:inline-flex file:h-7 file:cursor-pointer file:rounded-md file:border-0 file:bg-paper-secondary file:px-2 file:mr-3 file:text-sm file:font-medium file:text-ink-primary placeholder:text-ink-muted focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
       className,
     )}
     {...props}
@@ -69,30 +69,74 @@ export const InputGroupAddon = ({ className, align = 'inline-start', ...props }:
   )
 }
 
-const INPUT_GROUP_BUTTON_VARIANTS_CONFIG = cva('flex items-center gap-2 rounded-4xl text-sm shadow-none', {
-  variants: {
-    size: {
-      xs: "h-6 gap-1 rounded-xl px-1.5 [&>svg:not([class*='size-'])]:size-3.5",
-      sm: '',
-      'icon-xs': 'size-6 rounded-xl p-0 has-[>svg]:p-0',
-      'icon-sm': 'size-8 p-0 has-[>svg]:p-0',
+const INPUT_GROUP_BUTTON_VARIANTS_CONFIG = cva(
+  'inline-flex shrink-0 items-center justify-center rounded-xl border border-transparent font-semibold whitespace-nowrap capitalize transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-45 [&_svg]:pointer-events-none [&_svg]:shrink-0',
+  {
+    variants: {
+      variant: {
+        default: '',
+        outline: 'bg-transparent',
+        ghost: 'bg-transparent',
+        link: 'underline-offset-4 hover:underline',
+      },
+      color: {
+        primary: '',
+        secondary: '',
+        destructive: '',
+      },
+      size: {
+        xs: "h-6 gap-1 px-1.5 text-xs [&_svg:not([class*='size-'])]:size-3.5",
+        sm: "h-8 gap-1.5 px-2.5 text-xs [&_svg:not([class*='size-'])]:size-3.5",
+        'icon-xs': 'size-6 p-0 has-[>svg]:p-0',
+        'icon-sm': 'size-8 p-0 has-[>svg]:p-0',
+      },
+    },
+    compoundVariants: [
+      // ── default (filled) ───────────────────────────────────────────────
+      { variant: 'default', color: 'primary', className: 'border-yellow-tertiary bg-yellow-primary text-ink-on-yellow shadow-xs hover:bg-yellow-tertiary' },
+      { variant: 'default', color: 'secondary', className: 'border-secondary/50 bg-secondary text-secondary-foreground hover:bg-secondary/80' },
+      { variant: 'default', color: 'destructive', className: 'border-destructive/30 bg-destructive/12 text-destructive hover:border-destructive/50 hover:bg-destructive/20' },
+
+      // ── outline ────────────────────────────────────────────────────────
+      { variant: 'outline', color: 'primary', className: 'border-yellow-primary text-primary hover:border-yellow-tertiary hover:bg-yellow-secondary/40' },
+      { variant: 'outline', color: 'secondary', className: 'border-ink-muted/40 text-ink-secondary hover:border-ink-muted hover:bg-paper-secondary hover:text-ink-primary' },
+      { variant: 'outline', color: 'destructive', className: 'border-destructive/35 bg-transparent text-destructive hover:border-destructive hover:bg-destructive/10' },
+
+      // ── ghost ──────────────────────────────────────────────────────────
+      { variant: 'ghost', color: 'primary', className: 'text-primary hover:bg-yellow-primary/10 hover:text-ink-primary' },
+      { variant: 'ghost', color: 'secondary', className: 'text-ink-secondary hover:bg-paper-secondary hover:text-ink-primary' },
+      { variant: 'ghost', color: 'destructive', className: 'text-destructive hover:bg-destructive/10' },
+
+      // ── link ───────────────────────────────────────────────────────────
+      { variant: 'link', color: 'primary', className: 'text-primary' },
+      { variant: 'link', color: 'secondary', className: 'text-ink-secondary' },
+      { variant: 'link', color: 'destructive', className: 'text-destructive' },
+    ],
+    defaultVariants: {
+      variant: 'default',
+      color: 'primary',
+      size: 'xs',
     },
   },
-  defaultVariants: {
-    size: 'xs',
-  },
-})
+)
 
 export type INPUT_GROUP_BUTTON_VARIANTS_PROPS = VariantProps<typeof INPUT_GROUP_BUTTON_VARIANTS_CONFIG>
+
+export type INPUT_GROUP_BUTTON_VARIANT = NonNullable<INPUT_GROUP_BUTTON_VARIANTS_PROPS['variant']>
+export const INPUT_GROUP_BUTTON_VARIANTS: INPUT_GROUP_BUTTON_VARIANT[] = ['default', 'outline', 'ghost', 'link']
+
+export type INPUT_GROUP_BUTTON_COLOR = NonNullable<INPUT_GROUP_BUTTON_VARIANTS_PROPS['color']>
+export const INPUT_GROUP_BUTTON_COLORS: INPUT_GROUP_BUTTON_COLOR[] = ['primary', 'secondary', 'destructive']
+
 export type INPUT_GROUP_BUTTON_SIZE = NonNullable<INPUT_GROUP_BUTTON_VARIANTS_PROPS['size']>
 export const INPUT_GROUP_BUTTON_SIZES: INPUT_GROUP_BUTTON_SIZE[] = ['xs', 'sm', 'icon-xs', 'icon-sm']
 
-export type InputGroupButtonProps = Omit<ComponentProps<typeof Button>, 'size'> & INPUT_GROUP_BUTTON_VARIANTS_PROPS
+export type InputGroupButtonProps = ComponentProps<'button'> & INPUT_GROUP_BUTTON_VARIANTS_PROPS
 
-export const InputGroupButton = ({ className, type = 'button', variant = 'ghost', size = 'xs', ...props }: InputGroupButtonProps) => {
-  const classes = cn(INPUT_GROUP_BUTTON_VARIANTS_CONFIG({ size }), className)
+export const InputGroupButton = ({ className, type = 'button', variant, color, size, ...props }: InputGroupButtonProps) => {
+  const classes = cn(INPUT_GROUP_BUTTON_VARIANTS_CONFIG({ variant, color, size }), className)
 
-  return <Button type={type} data-size={size} variant={variant} className={classes} {...props} />
+  return <Button type={type} data-slot='button' data-variant={variant} data-color={color} data-size={size} className={classes} {...props} />
 }
 
 export type InputGroupTextProps = ComponentProps<'span'>

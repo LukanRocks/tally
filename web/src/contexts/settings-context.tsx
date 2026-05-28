@@ -33,7 +33,10 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
 
   const updateSetting = async (patch: Partial<Omit<Settings, 'updated_at'>>) => setSettings(await settingsTransport.update(patch))
 
-  const DELETE_ALL_DATA = async () => settingsTransport.reset()
+  const DELETE_ALL_DATA = async () => {
+    await settingsTransport.reset()
+    setSettings(await settingsTransport.get())
+  }
 
   useEffect(() => {
     fetchSettings()
