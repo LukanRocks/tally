@@ -28,7 +28,7 @@ export const DataManagement = () => {
         <CardTitle>Data Management</CardTitle>
       </CardHeader>
 
-      <CardContent className='grid grid-cols-1 gap-4 md:grid-cols-3'>
+      <CardContent className='grid grid-cols-1 gap-4 lg:grid-cols-3'>
         <Card size='sm' color='secondary'>
           <CardContent className='flex flex-col gap-4'>
             <FileDown className='size-6 text-ink-muted' />

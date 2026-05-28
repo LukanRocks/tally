@@ -6,7 +6,7 @@ import { BggManagement } from './bgg-management'
 import { DataManagement } from './data-management'
 
 export default () => (
-  <Page>
+  <Page container>
     <PageHeader title='Settings' caption='the little knobs' />
 
     <WorkspaceManagement />
