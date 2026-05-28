@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Timer, Dices, Dice6, type LucideIcon } from 'lucide-react'
+import { Timer, Dices, Dice6, Calculator, type LucideIcon } from 'lucide-react'
 
 interface Tool {
   path: string
@@ -9,6 +9,7 @@ interface Tool {
 }
 
 const TOOLS: Tool[] = [
+  { path: '/tools/score-counter', icon: Calculator, label: 'Score Counter', description: 'Track and tally scores for any game.' },
   { path: '/tools/turn-timer', icon: Timer, label: 'Go faster!', description: 'Keep turns moving with a countdown timer.' },
   { path: '/tools/first-player-picker', icon: Dices, label: 'Who Goes First?', description: 'Decide who starts playing with a random prompt.' },
   { path: '/tools/roll-dice', icon: Dice6, label: 'Roll the Dice!', description: 'Roll any die, any number of times.' },

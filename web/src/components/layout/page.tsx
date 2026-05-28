@@ -8,7 +8,7 @@ interface PageProps {
 }
 
 export const Page = ({ children, className, container = false }: PageProps) => (
-  <div className={cn('h-full space-y-4 p-4 md:p-8', container && 'mx-auto max-w-5xl', className)}>{children}</div>
+  <div className={cn('flex min-h-full flex-col gap-4 p-4 md:p-8', container && 'mx-auto max-w-5xl', className)}>{children}</div>
 )
 
 export const PageHeader = ({ title, caption, children }: { title: string; caption: string; children?: ReactNode }) => (

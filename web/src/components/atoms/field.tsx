@@ -1,4 +1,4 @@
-import { useMemo, ComponentProps } from 'react'
+import { ComponentProps } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import { Label } from '@/components/atoms/label'
@@ -119,7 +119,7 @@ export type FieldErrorProps = ComponentProps<'div'> & {
 export const FieldError = ({ className, children, errors, ...props }: FieldErrorProps) => {
   const classes = cn('text-sm font-normal text-destructive', className)
 
-  const content = useMemo(() => {
+  const content = (() => {
     if (children) return children
     if (!errors?.length) return null
 
@@ -128,7 +128,7 @@ export const FieldError = ({ className, children, errors, ...props }: FieldError
     if (uniqueErrors.length === 1) return uniqueErrors[0]?.message
 
     return <ul className='ml-4 flex list-disc flex-col gap-1'>{uniqueErrors.map((error, index) => error?.message && <li key={index}>{error.message}</li>)}</ul>
-  }, [children, errors])
+  })()
 
   if (!content) return null
 

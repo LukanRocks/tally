@@ -3,9 +3,7 @@ import { Avatar as AvatarPrimitive } from 'radix-ui'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 import type { Player } from '@/lib/http-transport/api'
-import { useDeterministicPick } from '@/hooks/useDeterministicPick'
-
-const BACKGROUNDS = ['bg-player-a', 'bg-player-b', 'bg-player-c', 'bg-player-d', 'bg-player-e', 'bg-player-f', 'bg-player-g', 'bg-player-h', 'bg-player-i', 'bg-player-j']
+import { getPlayerColor } from '@/lib/deterministic-picker'
 
 const AVATAR_VARIANTS_CONFIG = cva('relative flex shrink-0 overflow-hidden rounded-full border-ink-primary select-none', {
   variants: {
@@ -30,8 +28,8 @@ export const AVATAR_SIZES: AVATAR_SIZE[] = ['xs', 'sm', 'md', 'lg', 'xl']
 export type AvatarProps = AVATAR_VARIANTS_PROPS & Pick<Player, 'id' | 'name' | 'avatar_path'>
 
 export const Avatar = ({ size, id, avatar_path, name }: AvatarProps) => {
-  const background = useDeterministicPick(BACKGROUNDS, id)
-  const classes = cn(AVATAR_VARIANTS_CONFIG({ size }), background)
+  const background = getPlayerColor(id)
+  const classes = cn(AVATAR_VARIANTS_CONFIG({ size }), `bg-player-${background}`)
 
   return (
     <AvatarPrimitive.Root data-slot='avatar' data-size={size} className={classes}>

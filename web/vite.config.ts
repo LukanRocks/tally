@@ -1,7 +1,8 @@
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
+import babel from '@rolldown/plugin-babel'
 
 export default defineConfig({
   resolve: {
@@ -9,7 +10,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  plugins: [tailwindcss(), react()],
+  plugins: [tailwindcss(), react(), babel({ presets: [reactCompilerPreset()] })],
   server: {
     port: 5173,
     proxy: {
