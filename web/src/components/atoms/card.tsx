@@ -3,31 +3,51 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const CARD_VARIANTS_CONFIG = cva(
-  'group/card flex flex-col overflow-hidden rounded-2xl bg-paper-primary text-sm text-ink-primary shadow-md ring-1 ring-ink-primary/5 has-[>img:first-child]:pt-0 *:[img:first-child]:rounded-t-2xl *:[img:last-child]:rounded-b-2xl',
+  'group/card flex flex-col overflow-hidden rounded-2xl text-sm text-ink-primary ring-1 ring-ink-primary/5 has-[>img:first-child]:pt-0 *:[img:first-child]:rounded-t-2xl *:[img:last-child]:rounded-b-2xl',
   {
     variants: {
+      color: {
+        primary: 'bg-paper-secondary',
+        secondary: 'bg-paper-muted',
+      },
       size: {
         default: 'gap-6 py-6',
         sm: 'gap-4 py-4',
       },
+      elevation: {
+        none: 'shadow-none',
+        xs: 'shadow-xs',
+        sm: 'shadow-sm',
+        md: 'shadow-md',
+        lg: 'shadow-lg',
+        stamp: 'shadow-stamp',
+      },
     },
     defaultVariants: {
+      color: 'primary',
       size: 'default',
+      elevation: 'none',
     },
   },
 )
 
 export type CARD_VARIANTS_PROPS = VariantProps<typeof CARD_VARIANTS_CONFIG>
 
+export type CARD_COLOR = NonNullable<CARD_VARIANTS_PROPS['color']>
+export const CARD_COLORS: CARD_COLOR[] = ['primary', 'secondary']
+
 export type CARD_SIZE = NonNullable<CARD_VARIANTS_PROPS['size']>
 export const CARD_SIZES: CARD_SIZE[] = ['default', 'sm']
 
+export type CARD_ELEVATION = NonNullable<CARD_VARIANTS_PROPS['elevation']>
+export const CARD_ELEVATIONS: CARD_ELEVATION[] = ['none', 'xs', 'sm', 'md', 'lg', 'stamp']
+
 export type CardProps = ComponentProps<'div'> & CARD_VARIANTS_PROPS
 
-export const Card = ({ size, className, ...props }: CardProps) => {
-  const classes = cn(CARD_VARIANTS_CONFIG({ size }), className)
+export const Card = ({ color, size, elevation, className, ...props }: CardProps) => {
+  const classes = cn(CARD_VARIANTS_CONFIG({ color, size, elevation }), className)
 
-  return <div data-slot='card' data-size={size} className={classes} {...props} />
+  return <div data-slot='card' data-color={color} data-size={size} data-elevation={elevation} className={classes} {...props} />
 }
 
 export type CardHeaderProps = ComponentProps<'div'>
@@ -46,7 +66,7 @@ export type CardCaptionProps = ComponentProps<'div'>
 export const CardCaption = ({ className, ...props }: CardCaptionProps) => {
   const classes = cn('caption text-ink-muted', className)
 
-  return <div data-slot='card-description' className={classes} {...props} />
+  return <div data-slot='card-caption' className={classes} {...props} />
 }
 
 export type CardTitleProps = ComponentProps<'div'>
@@ -55,6 +75,14 @@ export const CardTitle = ({ className, ...props }: CardTitleProps) => {
   const classes = cn('text-base font-medium', className)
 
   return <div data-slot='card-title' className={classes} {...props} />
+}
+
+export type CardDescriptionProps = ComponentProps<'div'>
+
+export const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
+  const classes = cn('text-sm text-ink-secondary', className)
+
+  return <div data-slot='card-description' className={classes} {...props} />
 }
 
 export type CardActionProps = ComponentProps<'div'>
