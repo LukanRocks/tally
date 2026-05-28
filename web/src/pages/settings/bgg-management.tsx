@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { api } from '@/lib/http-transport/api'
 import { useSettings } from '@/contexts/settings-context'
+import { Card, CardContent, CardCaption, CardTitle, CardHeader, CardDescription, CardAction } from '@/components/atoms/card'
 import { Button } from '@/components/atoms/button'
-import { Input } from '@/components/atoms/input'
+import { InputGroup, InputGroupInput, InputGroupAddon, InputGroupButton } from '@/components/atoms/input'
+import { Field, FieldDescription } from '@/components/atoms/field'
 import { DeleteDialog } from '@/components/molecules/delete-dialog'
 
 export const BggManagement = () => {
@@ -29,63 +31,80 @@ export const BggManagement = () => {
   }
 
   const handleBggDelete = () =>
-    api.bgg.delete()
+    api.bgg
+      .delete()
       .then(() => toast.success('BGG data deleted.'))
       .catch((error) => toast.error(error instanceof Error ? error.message : 'Failed to delete BGG data.'))
 
   return (
-    <>
-      <div className='mt-12 border-t border-border pt-8'>
-        <div className='mb-4 flex items-center gap-3'>
-          <h2 className='text-sm font-semibold text-foreground'>BGG Games Dataset</h2>
+    <Card>
+      <CardHeader>
+        <CardCaption>Enrich games dataset</CardCaption>
+        <CardTitle>BGG Integration</CardTitle>
+        <CardAction>
           <a href='https://boardgamegeek.com' target='_blank' rel='noopener noreferrer'>
-            <img src='/bgg-logo.png' alt='BoardGameGeek' className='h-6' />
+            <img src='/bgg-logo.png' alt='BoardGameGeek' className='h-14' />
           </a>
-        </div>
+        </CardAction>
+      </CardHeader>
 
-        <p className='mb-1 text-xs text-muted-foreground'>
-          Game data provided by{' '}
-          <a href='https://boardgamegeek.com' target='_blank' rel='noopener noreferrer' className='underline hover:text-foreground'>
-            BoardGameGeek
-          </a>
-          .{' '}
-          <a href='https://boardgamegeek.com/data_dumps/bg_ranks' target='_blank' rel='noopener noreferrer' className='underline hover:text-foreground'>
-            Download the data dump
-          </a>{' '}
-          and import it here.
-        </p>
+      <CardContent className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
+        <Card size='sm' color='secondary'>
+          <CardContent className='flex flex-col gap-4'>
+            <div className='flex flex-col gap-1'>
+              <CardTitle>Import dataset dump</CardTitle>
+              <CardDescription className='[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-ink-primary'>
+                <a href='https://boardgamegeek.com' target='_blank' rel='noopener noreferrer'>
+                  BoardGameGeek{' '}
+                </a>
+                provides that{' '}
+                <a href='https://boardgamegeek.com/data_dumps/bg_ranks' target='_blank' rel='noopener noreferrer'>
+                  dataset dump that can be downloaded
+                </a>{' '}
+                and imported here.
+              </CardDescription>
+            </div>
 
-        <p className='mb-4 text-xs text-muted-foreground'>
-          {settings.bgg_last_updated
-            ? `Last updated: ${new Date(settings.bgg_last_updated).toLocaleString(settings.language === 'pt' ? 'pt-BR' : 'en-US')}`
-            : 'No BGG data loaded.'}
-        </p>
+            <Field orientation='vertical'>
+              <InputGroup>
+                <InputGroupInput type='file' accept='.csv' className='cursor-pointer file:hidden' onChange={(e) => setBggFile(e.target.files?.[0] ?? null)} />
+                <InputGroupAddon align='inline-end'>
+                  <InputGroupButton color='primary' onClick={handleBggImport} disabled={!bggFile || bggImporting}>
+                    {bggImporting ? 'Importing…' : 'Import'}
+                  </InputGroupButton>
+                </InputGroupAddon>
+              </InputGroup>
+              {settings.bgg_last_updated && (
+                <FieldDescription>Last updated: {new Date(settings.bgg_last_updated).toLocaleString(settings.language === 'pt' ? 'pt-BR' : 'en-US')}</FieldDescription>
+              )}
+            </Field>
 
-        <div className='flex items-center gap-2'>
-          <Input type='file' accept='.csv' onChange={(e) => setBggFile(e.target.files?.[0] ?? null)} />
-          <Button onClick={handleBggImport} disabled={!bggFile || bggImporting}>
-            {bggImporting ? 'Importing…' : 'Import'}
-          </Button>
-        </div>
+            {settings.bgg_last_updated && (
+              <Button variant='outline' color='destructive' size='small' onClick={() => setShowBggDeleteConfirm(true)}>
+                Delete data dump
+              </Button>
+            )}
+            <DeleteDialog
+              open={showBggDeleteConfirm}
+              onOpenChange={setShowBggDeleteConfirm}
+              title='Delete BGG data?'
+              description='All BoardGameGeek catalog data will be removed. Your library games are not affected.'
+              cta='Delete BGG data'
+              important
+              onConfirm={handleBggDelete}
+            />
+          </CardContent>
+        </Card>
 
-        {settings.bgg_last_updated && (
-          <div className='mt-4'>
-            <Button variant='outline' color='destructive' onClick={() => setShowBggDeleteConfirm(true)}>
-              Delete BGG data
-            </Button>
-          </div>
-        )}
-      </div>
-
-      <DeleteDialog
-        open={showBggDeleteConfirm}
-        onOpenChange={setShowBggDeleteConfirm}
-        title='Delete BGG data?'
-        description='All BoardGameGeek catalog data will be removed. Your library games are not affected.'
-        cta='Delete BGG data'
-        important
-        onConfirm={handleBggDelete}
-      />
-    </>
+        <Card size='sm' color='secondary'>
+          <CardContent className='flex flex-col gap-4'>
+            <div className='flex flex-col gap-1'>
+              <CardTitle>API integration</CardTitle>
+              <CardDescription>Coming soon</CardDescription>
+            </div>
+          </CardContent>
+        </Card>
+      </CardContent>
+    </Card>
   )
 }
