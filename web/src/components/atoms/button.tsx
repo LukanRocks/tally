@@ -10,7 +10,7 @@ const BUTTON_VARIANTS_CONFIG = cva(
     variants: {
       variant: {
         default: '',
-        outline: 'bg-card',
+        outline: 'bg-transparent',
         ghost: 'bg-transparent',
         link: 'underline-offset-4 hover:underline',
       },
@@ -34,8 +34,8 @@ const BUTTON_VARIANTS_CONFIG = cva(
 
       // ── outline ────────────────────────────────────────────────────────
       { variant: 'outline', color: 'primary', className: 'border-yellow-primary text-primary hover:border-yellow-tertiary hover:bg-yellow-secondary/40' },
-      { variant: 'outline', color: 'secondary', className: 'border-border text-ink-secondary hover:border-ink-muted hover:bg-paper-secondary hover:text-ink-primary' },
-      { variant: 'outline', color: 'destructive', className: 'border-destructive/35 text-destructive hover:border-destructive hover:bg-destructive/10' },
+      { variant: 'outline', color: 'secondary', className: 'border-ink-muted/40 text-ink-secondary hover:border-ink-muted hover:bg-paper-secondary hover:text-ink-primary' },
+      { variant: 'outline', color: 'destructive', className: 'border-destructive/35 bg-transparent text-destructive hover:border-destructive hover:bg-destructive/10' },
 
       // ── ghost ──────────────────────────────────────────────────────────
       { variant: 'ghost', color: 'primary', className: 'text-primary hover:bg-yellow-primary/10 hover:text-ink-primary' },
@@ -76,14 +76,12 @@ export const Button = ({ variant, color, size, className, polymorphic = false, .
 }
 
 export const BUTTON_GROUP_VARIANTS_CONFIG = cva(
-  "group/button-group flex w-fit items-stretch *:focus-visible:relative *:focus-visible:z-10 *:hover:relative *:hover:z-10 has-[>[data-slot=button-group]]:gap-2 has-[>[data-variant=outline]]:*:data-[slot=input-group]:border-border has-[>[data-variant=outline]]:*:data-[slot=select-trigger]:border-border has-[>[data-variant=outline]]:[&>[data-slot=input-group]:has(:focus-visible)]:border-ring has-[>[data-variant=outline]]:[&>[data-slot=select-trigger]:focus-visible]:border-ring has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-4xl [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 has-[>[data-variant=outline]]:[&>input]:border-border has-[>[data-variant=outline]]:[&>input:focus-visible]:border-ring",
+  "group/button-group flex w-fit items-stretch *:hover:relative *:hover:z-10 *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 has-[>[data-variant=outline]]:*:data-[slot=input-group]:border-border has-[>[data-variant=outline]]:*:data-[slot=select-trigger]:border-border has-[>[data-variant=outline]]:[&>[data-slot=input-group]:has(:focus-visible)]:border-ring has-[>[data-variant=outline]]:[&>[data-slot=select-trigger]:focus-visible]:border-ring has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-4xl [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 has-[>[data-variant=outline]]:[&>input]:border-border has-[>[data-variant=outline]]:[&>input:focus-visible]:border-ring",
   {
     variants: {
       orientation: {
-        horizontal:
-          '[&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:-ml-px [&>*:not(:last-child)]:rounded-r-none',
-        vertical:
-          'flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:-mt-px [&>*:not(:last-child)]:rounded-b-none',
+        horizontal: '[&>*:not(:first-child)]:-ml-px [&>*:not(:first-child)]:rounded-l-none [&>*:not(:last-child)]:rounded-r-none',
+        vertical: 'flex-col [&>*:not(:first-child)]:-mt-px [&>*:not(:first-child)]:rounded-t-none [&>*:not(:last-child)]:rounded-b-none',
       },
     },
     defaultVariants: {

@@ -2,34 +2,31 @@ import { ComponentProps } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
-const CARD_VARIANTS_CONFIG = cva(
-  'group/card flex flex-col overflow-hidden rounded-2xl text-sm text-ink-primary ring-1 ring-ink-primary/5 has-[>img:first-child]:pt-0 *:[img:first-child]:rounded-t-2xl *:[img:last-child]:rounded-b-2xl',
-  {
-    variants: {
-      color: {
-        primary: 'bg-paper-secondary',
-        secondary: 'bg-paper-muted',
-      },
-      size: {
-        default: 'gap-6 py-6',
-        sm: 'gap-4 py-4',
-      },
-      elevation: {
-        none: 'shadow-none',
-        xs: 'shadow-xs',
-        sm: 'shadow-sm',
-        md: 'shadow-md',
-        lg: 'shadow-lg',
-        stamp: 'shadow-stamp',
-      },
+const CARD_VARIANTS_CONFIG = cva('group/card flex flex-col overflow-hidden text-sm text-ink-primary ring-1 ring-ink-primary/5 has-[>img:first-child]:pt-0', {
+  variants: {
+    color: {
+      primary: 'bg-paper-secondary',
+      secondary: 'bg-paper-muted',
     },
-    defaultVariants: {
-      color: 'primary',
-      size: 'default',
-      elevation: 'none',
+    size: {
+      default: 'gap-6 rounded-2xl py-6 *:[img:first-child]:rounded-t-2xl *:[img:last-child]:rounded-b-2xl',
+      sm: 'gap-4 rounded-xl py-4 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl',
+    },
+    elevation: {
+      none: 'shadow-none',
+      xs: 'shadow-xs',
+      sm: 'shadow-sm',
+      md: 'shadow-md',
+      lg: 'shadow-lg',
+      stamp: 'shadow-stamp',
     },
   },
-)
+  defaultVariants: {
+    color: 'primary',
+    size: 'default',
+    elevation: 'none',
+  },
+})
 
 export type CARD_VARIANTS_PROPS = VariantProps<typeof CARD_VARIANTS_CONFIG>
 
@@ -54,7 +51,7 @@ export type CardHeaderProps = ComponentProps<'div'>
 
 export const CardHeader = ({ className, ...props }: CardHeaderProps) => {
   const classes = cn(
-    'group/card-header @container/card-header grid auto-rows-min items-start gap-1.5 rounded-t-2xl px-6 group-data-[size=sm]/card:px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-6 group-data-[size=sm]/card:[.border-b]:pb-4',
+    'group/card-header @container/card-header grid auto-rows-min items-start gap-1.5 rounded-t-2xl px-6 group-data-[size=sm]/card:rounded-t-xl group-data-[size=sm]/card:px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-6 group-data-[size=sm]/card:[.border-b]:pb-4',
     className,
   )
 
@@ -64,7 +61,7 @@ export const CardHeader = ({ className, ...props }: CardHeaderProps) => {
 export type CardCaptionProps = ComponentProps<'div'>
 
 export const CardCaption = ({ className, ...props }: CardCaptionProps) => {
-  const classes = cn('caption text-ink-muted', className)
+  const classes = cn('caption', className)
 
   return <div data-slot='card-caption' className={classes} {...props} />
 }
@@ -72,7 +69,7 @@ export const CardCaption = ({ className, ...props }: CardCaptionProps) => {
 export type CardTitleProps = ComponentProps<'div'>
 
 export const CardTitle = ({ className, ...props }: CardTitleProps) => {
-  const classes = cn('text-base font-medium', className)
+  const classes = cn('h2 group-data-[size=sm]/card:h3', className)
 
   return <div data-slot='card-title' className={classes} {...props} />
 }
@@ -80,7 +77,7 @@ export const CardTitle = ({ className, ...props }: CardTitleProps) => {
 export type CardDescriptionProps = ComponentProps<'div'>
 
 export const CardDescription = ({ className, ...props }: CardDescriptionProps) => {
-  const classes = cn('text-sm text-ink-secondary', className)
+  const classes = cn('body', className)
 
   return <div data-slot='card-description' className={classes} {...props} />
 }
@@ -104,7 +101,10 @@ export const CardContent = ({ className, ...props }: CardContentProps) => {
 export type CardFooterProps = ComponentProps<'div'>
 
 export const CardFooter = ({ className, ...props }: CardFooterProps) => {
-  const classes = cn('flex items-center rounded-b-2xl px-6 group-data-[size=sm]/card:px-4 [.border-t]:pt-6 group-data-[size=sm]/card:[.border-t]:pt-4', className)
+  const classes = cn(
+    'flex items-center rounded-b-2xl px-6 group-data-[size=sm]/card:rounded-b-xl group-data-[size=sm]/card:px-4 [.border-t]:pt-6 group-data-[size=sm]/card:[.border-t]:pt-4',
+    className,
+  )
 
   return <div data-slot='card-footer' className={classes} {...props} />
 }

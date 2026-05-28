@@ -269,69 +269,70 @@
   .input {
     @apply w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none;
   }
+}
 
-  /* Typography scale */
-  .display {
-    font-size: var(--text-4xl);
-    font-weight: 800;
-    line-height: 1.125;
-    letter-spacing: -0.03em;
-  }
+/* Typography scale */
+@utility display {
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  line-height: 1.125;
+  letter-spacing: -0.03em;
+}
 
-  .h1 {
-    font-size: var(--text-3xl);
-    font-weight: 800;
-    line-height: var(--leading-tight);
-    letter-spacing: -0.02em;
-  }
+@utility h1 {
+  font-size: var(--text-3xl);
+  font-weight: 800;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+}
 
-  .h2 {
-    font-size: var(--text-xl);
-    font-weight: 700;
-    line-height: var(--leading-snug);
-    letter-spacing: -0.01em;
-  }
+@utility h2 {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+  letter-spacing: -0.01em;
+}
 
-  .h3 {
-    font-size: var(--text-lg);
-    font-weight: 600;
-    line-height: var(--leading-snug);
-  }
+@utility h3 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: var(--leading-snug);
+}
 
-  .body {
-    font-size: var(--text-sm);
-    font-weight: 400;
-    line-height: var(--leading-snug);
-  }
+@utility body {
+  font-size: var(--text-sm);
+  font-weight: 400;
+  line-height: var(--leading-snug);
+}
 
-  .small {
-    font-size: var(--text-xs);
-    font-weight: 400;
-    line-height: var(--leading-normal);
-    color: var(--ink-muted);
-  }
+@utility small {
+  font-size: var(--text-xs);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  color: var(--ink-muted);
+}
 
-  .caption {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    font-weight: 600;
-    line-height: var(--leading-normal);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-  }
+@utility caption {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: var(--leading-normal);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ink-muted);
+}
 
-  .monospace {
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    font-weight: 700;
-  }
+@utility monospace {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
 
-  .callout {
-    font-family: var(--font-callout);
-    font-size: var(--text-2xl);
-    font-weight: 700;
-    line-height: var(--leading-tight);
-    rotate: -2deg;
-    color: var(--yellow-tertiary);
-  }
+@utility callout {
+  font-family: var(--font-callout);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  rotate: -2deg;
+  color: var(--yellow-tertiary);
 }
