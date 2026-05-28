@@ -1,112 +1,117 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 import { Page, PageHeader } from '@/components/layout/page'
-
+import { Button } from '@/components/atoms/button'
 import { api, type Game, type Player } from '@/lib/http-transport/api'
-import { useScoreCounter, type Step } from '@/hooks/useScoreCounter'
 
+import { type Step, type ScoringDirection, type PlayerScore, type RankedResult } from './types'
 import { SetupStep } from './setup-step'
 import { CountStep } from './count-step'
 import { ResultStep } from './result-step'
 
 // ── ScoreCounter ──────────────────────────────────────────────────────────────
 
-const STEP_TITLES: Record<Step, string> = {
-  setup: 'Set up the count',
-  count: 'Count it up',
-  result: "Here's how it went",
-}
-
-export default function ScoreCounter() {
+export default () => {
   const navigate = useNavigate()
 
+  const [loading, setLoading] = useState(true)
   const [players, setPlayers] = useState<Player[]>([])
   const [games, setGames] = useState<Game[]>([])
-  const [loading, setLoading] = useState(true)
-
-  const hook = useScoreCounter()
-
-  const fetchData = async () => {
-    setLoading(true)
-    try {
-      const [players, games] = await Promise.all([api.players.list(), api.games.list()])
-
-      setPlayers(players.filter((player) => player.player_type === 'person'))
-      setGames(games)
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Failed to load data', { action: { label: 'Retry', onClick: fetchData } })
-    } finally {
-      setLoading(false)
-    }
-  }
 
   useEffect(() => {
-    fetchData()
+    setLoading(true)
+
+    Promise.all([api.players.list(), api.games.list()])
+      .then(([players, games]) => {
+        setPlayers(players.filter((p) => p.player_type === 'person'))
+        setGames(games)
+      })
+      .catch((error) => toast.error(error instanceof Error ? error.message : 'Failed to load data'))
+      .finally(() => setLoading(false))
   }, [])
 
-  function handleCreateSession() {
-    navigate('/sessions/new', {
-      state: {
-        players: hook.rankedResults.map((r) => ({ id: r.playerId, rank: r.rank })),
-        gameId: hook.gameId ?? undefined,
-      },
+  const [step, setStep] = useState<Step>('setup')
+  const [selectedPlayers, setSelectedPlayers] = useState<Player[]>([])
+  const [selectedGameId, setSelectedGameId] = useState<number>()
+  const [scoringDirection, setScoringDirection] = useState<ScoringDirection>('highest')
+  const [scores, setScores] = useState<Record<number, PlayerScore>>({})
+
+  const rankedResults = useMemo((): RankedResult[] => {
+    const withIndex = selectedPlayers.map((player, index) => ({
+      playerId: player.id,
+      total: scores[player.id]?.total ?? 0,
+      entryCount: scores[player.id]?.entries.length ?? 0,
+      index,
+    }))
+
+    const sorted = [...withIndex].sort((a, b) => {
+      const diff = scoringDirection === 'highest' ? b.total - a.total : a.total - b.total
+      return diff !== 0 ? diff : a.index - b.index
     })
+    return sorted.map((player, i) => ({ playerId: player.playerId, total: player.total, entryCount: player.entryCount, rank: i + 1 }))
+  }, [selectedPlayers, scores, scoringDirection])
+
+  const STEPS: Record<Step, { title: string; nextLabel: string; back: () => void; next: () => void }> = {
+    setup: {
+      title: 'Set up the count',
+      nextLabel: 'Start counting',
+      back: () => navigate('/tools'),
+      next: () => setStep('count'),
+    },
+    count: {
+      title: 'Count it up',
+      nextLabel: 'View results',
+      back: () => setStep('setup'),
+      next: () => setStep('result'),
+    },
+    result: {
+      title: "Here's how it went",
+      nextLabel: 'Create session',
+      back: () => setStep('count'),
+      next: () => navigate('/sessions/new', { state: { players: rankedResults.map((r) => ({ id: r.playerId, rank: r.rank })), gameId: selectedGameId } }),
+    },
   }
 
   return (
     !loading && (
       <Page>
-        <PageHeader title={STEP_TITLES[hook.step]} caption='Tool · Score Counter' />
+        <PageHeader title={STEPS[step].title} caption='Tool · Score Counter' />
 
-        {hook.step === 'setup' && (
-          <SetupStep
-            players={players}
-            games={games}
-            selectedPlayerIds={hook.selectedPlayerIds}
-            gameId={hook.gameId}
-            scoringDirection={hook.scoringDirection}
-            togglePlayer={hook.togglePlayer}
-            setGameId={hook.setGameId}
-            setScoringDirection={hook.setScoringDirection}
-            canStartCounting={hook.canStartCounting}
-            onStart={hook.startCounting}
-            onCancel={() => navigate('/tools')}
-          />
-        )}
+        <div className='flex flex-1 flex-col gap-4'>
+          {step === 'setup' && (
+            <SetupStep
+              players={players}
+              games={games}
+              selectedPlayers={selectedPlayers}
+              selectedGameId={selectedGameId}
+              scoringDirection={scoringDirection}
+              setSelectedPlayers={setSelectedPlayers}
+              setSelectedGameId={setSelectedGameId}
+              setScoringDirection={setScoringDirection}
+            />
+          )}
 
-        {hook.step === 'count' && hook.activePlayerId !== null && (
-          <CountStep
-            selectedPlayerIds={hook.selectedPlayerIds}
-            players={players}
-            scores={hook.scores}
-            activePlayerId={hook.activePlayerId}
-            inputBuffer={hook.inputBuffer}
-            canCommitBuffer={hook.canCommitBuffer}
-            setActivePlayer={hook.setActivePlayer}
-            applyQuickAdd={hook.applyQuickAdd}
-            appendDigit={hook.appendDigit}
-            toggleSign={hook.toggleSign}
-            backspace={hook.backspace}
-            commitBuffer={hook.commitBuffer}
-            undoLast={hook.undoLast}
-            onBack={hook.backToSetup}
-            onViewResults={hook.viewResults}
-          />
-        )}
+          {step === 'count' && <CountStep selectedPlayers={selectedPlayers} scores={scores} onScoresChange={setScores} />}
 
-        {hook.step === 'result' && (
-          <ResultStep
-            rankedResults={hook.rankedResults}
-            players={players}
-            scoringDirection={hook.scoringDirection}
-            gameId={hook.gameId}
-            onNewCount={hook.newCount}
-            onCreateSession={handleCreateSession}
-            onDone={() => navigate('/tools')}
-          />
-        )}
+          {step === 'result' && <ResultStep rankedResults={rankedResults} selectedPlayers={selectedPlayers} scoringDirection={scoringDirection} />}
+        </div>
+
+        <div className='flex items-center justify-between gap-2'>
+          <Button variant='ghost' size='big' color='secondary' onClick={STEPS[step].back}>
+            <ChevronLeft />
+            Back
+          </Button>
+
+          {step === 'setup' && <span className='text-right text-xs text-ink-muted italic'>{selectedPlayers.length >= 2 ? 'ready when you are' : 'pick at least 2 players'}</span>}
+
+          <Button size='big' variant='ghost' disabled={selectedPlayers.length < 2} onClick={STEPS[step].next}>
+            {STEPS[step].nextLabel}
+            <ChevronRight />
+          </Button>
+        </div>
       </Page>
     )
   )

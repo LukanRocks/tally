@@ -1,29 +1,18 @@
-import { ChevronLeft, Delete, Plus } from 'lucide-react'
+import { useState, useRef } from 'react'
+import { Delete, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/atoms/button'
 import { Avatar } from '@/components/atoms/avatar'
 import { type Player } from '@/lib/http-transport/api'
-import { type PlayerScore } from '@/hooks/useScoreCounter'
+import { type PlayerScore } from './types'
 import { getPlayerColor } from '@/lib/deterministic-picker'
 
 // ── CountStep ─────────────────────────────────────────────────────────────────
 
 interface CountStepProps {
-  selectedPlayerIds: number[]
-  players: Player[]
+  selectedPlayers: Player[]
   scores: Record<number, PlayerScore>
-  activePlayerId: number
-  inputBuffer: string
-  canCommitBuffer: boolean
-  setActivePlayer: (id: number) => void
-  applyQuickAdd: (value: number) => void
-  appendDigit: (digit: string) => void
-  toggleSign: () => void
-  backspace: () => void
-  commitBuffer: () => void
-  undoLast: () => void
-  onBack: () => void
-  onViewResults: () => void
+  onScoresChange: (updater: (prev: Record<number, PlayerScore>) => Record<number, PlayerScore>) => void
 }
 
 const QUICK_ADDS_POS = [1, 5, 10]
@@ -35,32 +24,78 @@ const NUMPAD_ROWS = [
   ['±', '0', '⌫'],
 ]
 
-export function CountStep({
-  selectedPlayerIds,
-  players,
-  scores,
-  activePlayerId,
-  inputBuffer,
-  canCommitBuffer,
-  setActivePlayer,
-  applyQuickAdd,
-  appendDigit,
-  toggleSign,
-  backspace,
-  commitBuffer,
-  undoLast,
-  onBack,
-  onViewResults,
-}: CountStepProps) {
-  const activePlayer = players.find((p) => p.id === activePlayerId)
-  const activeScore = scores[activePlayerId]
-  const inactivePlayers = selectedPlayerIds.filter((id) => id !== activePlayerId)
+const addEntry = (score: PlayerScore, value: number): PlayerScore => {
+  const entries = [...score.entries, { value }]
+  return { entries, total: entries.reduce((sum, e) => sum + e.value, 0) }
+}
 
+const removeLastEntry = (score: PlayerScore): PlayerScore => {
+  const entries = score.entries.slice(0, -1)
+  return { entries, total: entries.reduce((sum, e) => sum + e.value, 0) }
+}
+
+export function CountStep({ selectedPlayers, scores, onScoresChange }: CountStepProps) {
+  const [playerOrder, setPlayerOrder] = useState<number[]>(selectedPlayers.map((p) => p.id))
+  const [activePlayerId, setActivePlayerId] = useState<number>(selectedPlayers[0].id)
+  const [inputBuffer, setInputBuffer] = useState('')
+
+  const activePlayer = selectedPlayers.find((p) => p.id === activePlayerId)
+  const activeScore = scores[activePlayerId]
+  const inactivePlayers = playerOrder.filter((id) => id !== activePlayerId)
+
+  const parsedBuffer = parseInt(inputBuffer, 10)
+  const canCommitBuffer = inputBuffer !== '' && inputBuffer !== '-' && !isNaN(parsedBuffer) && parsedBuffer !== 0
   const bufferDisplay = inputBuffer === '' ? '0' : inputBuffer.startsWith('-') ? '−' + inputBuffer.slice(1) : inputBuffer
 
+  const lastQuickAddTime = useRef(0)
+
+  const handleSetActivePlayer = (id: number) => {
+    setPlayerOrder((order) => [...order.filter((pid) => pid !== activePlayerId), activePlayerId])
+    setActivePlayerId(id)
+    setInputBuffer('')
+  }
+
+  const applyQuickAdd = (value: number) => {
+    const now = Date.now()
+    if (now - lastQuickAddTime.current < 100) return
+    lastQuickAddTime.current = now
+    onScoresChange((prev) => ({ ...prev, [activePlayerId]: addEntry(prev[activePlayerId] ?? { entries: [], total: 0 }, value) }))
+  }
+
+  const appendDigit = (digit: string) => {
+    setInputBuffer((buf) => {
+      if (buf === '' || buf === '0') return digit
+      if (buf === '-') return '-' + digit
+      return buf + digit
+    })
+  }
+
+  const toggleSign = () => {
+    setInputBuffer((buf) => {
+      if (!buf || buf === '0') return buf
+      return buf.startsWith('-') ? buf.slice(1) : '-' + buf
+    })
+  }
+
+  const backspace = () => setInputBuffer((buf) => buf.slice(0, -1))
+
+  const commitBuffer = () => {
+    const value = parseInt(inputBuffer, 10)
+    if (!inputBuffer || inputBuffer === '-' || isNaN(value) || value === 0) return
+    onScoresChange((prev) => ({ ...prev, [activePlayerId]: addEntry(prev[activePlayerId] ?? { entries: [], total: 0 }, value) }))
+    setInputBuffer('')
+  }
+
+  const undoLast = () => {
+    onScoresChange((prev) => {
+      const score = prev[activePlayerId] ?? { entries: [], total: 0 }
+      if (!score.entries.length) return prev
+      return { ...prev, [activePlayerId]: removeLastEntry(score) }
+    })
+  }
+
   return (
-    <>
-      <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
+    <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
         {/* Score sheet */}
         <div className='flex flex-col gap-3'>
           {/* Active player card */}
@@ -76,7 +111,6 @@ export function CountStep({
                   <div className='flex flex-col'>
                     <div className='flex items-center gap-2'>
                       <span className='font-semibold text-ink-primary'>{activePlayer.name}</span>
-                      {/* <span className='rounded-full bg-yellow-primary px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-on-yellow uppercase'>Active</span> */}
                     </div>
                     <span className='text-xs text-ink-muted'>{activeScore?.entries.length ?? 0} entries</span>
                   </div>
@@ -118,14 +152,14 @@ export function CountStep({
           {inactivePlayers.length > 0 && (
             <div className='flex scrollbar-none gap-2 overflow-x-auto pb-1 md:hidden'>
               {inactivePlayers.map((id) => {
-                const player = players.find((p) => p.id === id)
+                const player = selectedPlayers.find((p) => p.id === id)
                 if (!player) return null
                 const score = scores[id]
                 return (
                   <button
                     key={id}
                     className='flex shrink-0 items-center gap-2 rounded-xl border border-border bg-paper-secondary px-3 py-2 transition-colors hover:bg-paper-muted'
-                    onClick={() => setActivePlayer(id)}
+                    onClick={() => handleSetActivePlayer(id)}
                   >
                     <Avatar id={player.id} name={player.name} avatar_path={player.avatar_path} size='sm' />
                     <span className='text-sm font-medium text-ink-primary'>{player.name}</span>
@@ -139,14 +173,14 @@ export function CountStep({
           {/* Desktop: vertical inactive player rows */}
           <div className='hidden md:flex md:flex-col md:gap-3'>
             {inactivePlayers.map((id) => {
-              const player = players.find((p) => p.id === id)
+              const player = selectedPlayers.find((p) => p.id === id)
               if (!player) return null
               const score = scores[id]
               return (
                 <button
                   key={id}
                   className='flex items-center gap-3 rounded-xl border border-border bg-paper-secondary px-4 py-3 transition-colors hover:bg-paper-muted'
-                  onClick={() => setActivePlayer(id)}
+                  onClick={() => handleSetActivePlayer(id)}
                 >
                   <Avatar id={player.id} name={player.name} avatar_path={player.avatar_path} size='sm' />
                   <span className='flex-1 text-left text-sm font-medium text-ink-primary'>{player.name}</span>
@@ -189,7 +223,7 @@ export function CountStep({
 
             <div className='grid grid-cols-3 gap-2'>
               {NUMPAD_ROWS.flat().map((key) => {
-                function handleKey() {
+                const handleKey = () => {
                   if (key === '±') toggleSign()
                   else if (key === '⌫') backspace()
                   else appendDigit(key)
@@ -217,15 +251,5 @@ export function CountStep({
         </div>
       </div>
 
-      {/* Footer actions */}
-      <div className='mt-6 flex items-center gap-6'>
-        <Button variant='ghost' color='secondary' onClick={onBack}>
-          <ChevronLeft /> Back
-        </Button>
-        <Button className='flex-1' size='big' variant='outline' color='secondary' onClick={onViewResults}>
-          View results
-        </Button>
-      </div>
-    </>
   )
 }

@@ -1,26 +1,21 @@
-import { Crown, RotateCcw } from 'lucide-react'
+import { Crown } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/atoms/button'
 import { Avatar } from '@/components/atoms/avatar'
 import { type Player } from '@/lib/http-transport/api'
-import { type RankedResult, type ScoringDirection } from '@/hooks/useScoreCounter'
+import { type RankedResult, type ScoringDirection } from './types'
 import { getPlayerColor } from '@/lib/deterministic-picker'
 
 // ── ResultStep ────────────────────────────────────────────────────────────────
 
 interface ResultStepProps {
   rankedResults: RankedResult[]
-  players: Player[]
+  selectedPlayers: Player[]
   scoringDirection: ScoringDirection
-  gameId: number | null
-  onNewCount: () => void
-  onCreateSession: () => void
-  onDone: () => void
 }
 
-export function ResultStep({ rankedResults, players, scoringDirection, onNewCount, onCreateSession, onDone }: ResultStepProps) {
+export function ResultStep({ rankedResults, selectedPlayers, scoringDirection }: ResultStepProps) {
   const winner = rankedResults[0]
-  const winnerPlayer = winner ? players.find((p) => p.id === winner.playerId) : undefined
+  const winnerPlayer = winner ? selectedPlayers.find((p) => p.id === winner.playerId) : undefined
   const maxAbsTotal = Math.max(...rankedResults.map((r) => Math.abs(r.total)), 0)
 
   function barWidth(result: RankedResult) {
@@ -69,7 +64,7 @@ export function ResultStep({ rankedResults, players, scoringDirection, onNewCoun
         </div>
 
         {rankedResults.map((result) => {
-          const player = players.find((p) => p.id === result.playerId)
+          const player = selectedPlayers.find((p) => p.id === result.playerId)
           if (!player) return null
           const isWinner = result.rank === 1
           const rowClasses = cn('flex flex-col gap-2 rounded-xl border border-border p-4', isWinner ? 'bg-yellow-primary/8' : 'bg-paper-secondary')
@@ -100,19 +95,6 @@ export function ResultStep({ rankedResults, players, scoringDirection, onNewCoun
         })}
       </div>
 
-      {/* Footer actions */}
-      <div className='fixed right-0 bottom-0 left-0 flex gap-2 border-t border-border bg-paper-primary p-4'>
-        <Button variant='ghost' color='secondary' onClick={onDone}>
-          Done
-        </Button>
-        <Button variant='outline' color='secondary' className='flex items-center gap-1.5' onClick={onNewCount}>
-          <RotateCcw size={14} />
-          New count
-        </Button>
-        <Button className='flex-1' onClick={onCreateSession}>
-          Create session
-        </Button>
-      </div>
     </>
   )
 }
