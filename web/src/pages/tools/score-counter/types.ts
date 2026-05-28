@@ -1,3 +1,4 @@
+import { type Player } from '@/lib/http-transport/api'
 export type Step = 'setup' | 'count' | 'result'
 export type ScoringDirection = 'highest' | 'lowest'
 
@@ -11,8 +12,7 @@ export interface PlayerScore {
 }
 
 export interface RankedResult {
-  playerId: number
+  player: Player
   total: number
-  entryCount: number
   rank: number
 }

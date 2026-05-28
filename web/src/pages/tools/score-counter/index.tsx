@@ -12,8 +12,6 @@ import { SetupStep } from './setup-step'
 import { CountStep } from './count-step'
 import { ResultStep } from './result-step'
 
-// ── ScoreCounter ──────────────────────────────────────────────────────────────
-
 export default () => {
   const navigate = useNavigate()
 
@@ -39,20 +37,19 @@ export default () => {
   const [scoringDirection, setScoringDirection] = useState<ScoringDirection>('highest')
   const [scores, setScores] = useState<Record<number, PlayerScore>>({})
 
-  const rankedResults: RankedResult[] = (() => {
-    const withIndex = selectedPlayers.map((player, index) => ({
-      playerId: player.id,
-      total: scores[player.id]?.total ?? 0,
-      entryCount: scores[player.id]?.entries.length ?? 0,
-      index,
-    }))
+  const withIndex = selectedPlayers.map((player, index) => ({
+    player,
+    total: scores[player.id]?.total ?? 0,
+    index,
+  }))
 
-    const sorted = [...withIndex].sort((a, b) => {
-      const diff = scoringDirection === 'highest' ? b.total - a.total : a.total - b.total
-      return diff !== 0 ? diff : a.index - b.index
-    })
-    return sorted.map((player, i) => ({ playerId: player.playerId, total: player.total, entryCount: player.entryCount, rank: i + 1 }))
-  })()
+  const sorted = [...withIndex].sort((a, b) => {
+    const diff = scoringDirection === 'highest' ? b.total - a.total : a.total - b.total
+
+    return diff !== 0 ? diff : a.index - b.index
+  })
+
+  const rankedResults: RankedResult[] = sorted.map((item, i) => ({ player: item.player, total: item.total, rank: i + 1 }))
 
   const STEPS: Record<Step, { title: string; nextLabel: string; back: () => void; next: () => void }> = {
     setup: {
@@ -71,7 +68,7 @@ export default () => {
       title: "Here's how it went",
       nextLabel: 'Create session',
       back: () => setStep('count'),
-      next: () => navigate('/sessions/new', { state: { players: rankedResults.map((r) => ({ id: r.playerId, rank: r.rank })), gameId: selectedGameId } }),
+      next: () => navigate('/sessions/new', { state: { players: rankedResults.map((r) => ({ id: r.player.id, rank: r.rank })), gameId: selectedGameId } }),
     },
   }
 
@@ -96,7 +93,7 @@ export default () => {
 
           {step === 'count' && <CountStep selectedPlayers={selectedPlayers} scores={scores} onScoresChange={setScores} />}
 
-          {step === 'result' && <ResultStep rankedResults={rankedResults} selectedPlayers={selectedPlayers} scoringDirection={scoringDirection} />}
+          {step === 'result' && <ResultStep rankedResults={rankedResults} scoringDirection={scoringDirection} />}
         </div>
 
         <div className='flex items-center justify-between gap-2'>

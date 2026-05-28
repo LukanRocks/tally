@@ -1,21 +1,11 @@
 import { Crown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Avatar } from '@/components/atoms/avatar'
-import { type Player } from '@/lib/http-transport/api'
 import { type RankedResult, type ScoringDirection } from './types'
 import { getPlayerColor } from '@/lib/deterministic-picker'
 
-// ── ResultStep ────────────────────────────────────────────────────────────────
-
-interface ResultStepProps {
-  rankedResults: RankedResult[]
-  selectedPlayers: Player[]
-  scoringDirection: ScoringDirection
-}
-
-export function ResultStep({ rankedResults, selectedPlayers, scoringDirection }: ResultStepProps) {
+export function ResultStep({ rankedResults, scoringDirection }: { rankedResults: RankedResult[]; scoringDirection: ScoringDirection }) {
   const winner = rankedResults[0]
-  const winnerPlayer = winner ? selectedPlayers.find((p) => p.id === winner.playerId) : undefined
   const maxAbsTotal = Math.max(...rankedResults.map((r) => Math.abs(r.total)), 0)
 
   function barWidth(result: RankedResult) {
@@ -30,20 +20,19 @@ export function ResultStep({ rankedResults, selectedPlayers, scoringDirection }:
   return (
     <>
       {/* Winner hero */}
-      {winner && winnerPlayer && (
+      {winner && (
         <div className={heroClasses}>
-          <div className='pointer-events-none absolute inset-0' style={{ backgroundColor: getPlayerColor(winner.playerId), opacity: 0.15 }} />
+          <div className='pointer-events-none absolute inset-0' style={{ backgroundColor: getPlayerColor(winner.player.id), opacity: 0.15 }} />
           <div className='relative flex flex-col items-center gap-3'>
             <p className='text-sm text-ink-secondary italic'>{winnerCopy}</p>
-            <div className='rounded-full' style={{ outline: `3px solid ${getPlayerColor(winner.playerId)}`, outlineOffset: '3px' }}>
-              <Avatar id={winnerPlayer.id} name={winnerPlayer.name} avatar_path={winnerPlayer.avatar_path} size='xl' />
+            <div className='rounded-full' style={{ outline: `3px solid ${getPlayerColor(winner.player.id)}`, outlineOffset: '3px' }}>
+              <Avatar id={winner.player.id} name={winner.player.name} avatar_path={winner.player.avatar_path} size='xl' />
             </div>
             <div className='flex flex-col items-center gap-1'>
               <div className='flex items-center gap-2'>
-                <Crown size={18} style={{ color: getPlayerColor(winner.playerId) }} />
-                <span className='text-xl font-bold text-ink-primary'>{winnerPlayer.name}</span>
+                <Crown size={18} style={{ color: getPlayerColor(winner.player.id) }} />
+                <span className='text-xl font-bold text-ink-primary'>{winner.player.name}</span>
               </div>
-              <span className='text-xs text-ink-muted'>{winner.entryCount} entries</span>
               <div className='flex items-baseline gap-1'>
                 <span className='text-4xl font-bold text-ink-primary tabular-nums'>{winner.total}</span>
                 <span className='text-sm font-semibold tracking-wide text-ink-muted uppercase'>points</span>
@@ -64,12 +53,10 @@ export function ResultStep({ rankedResults, selectedPlayers, scoringDirection }:
         </div>
 
         {rankedResults.map((result) => {
-          const player = selectedPlayers.find((p) => p.id === result.playerId)
-          if (!player) return null
           const isWinner = result.rank === 1
           const rowClasses = cn('flex flex-col gap-2 rounded-xl border border-border p-4', isWinner ? 'bg-yellow-primary/8' : 'bg-paper-secondary')
           return (
-            <div key={result.playerId} className={rowClasses}>
+            <div key={result.player.id} className={rowClasses}>
               <div className='flex items-center gap-3'>
                 <span
                   className={cn(
@@ -79,22 +66,20 @@ export function ResultStep({ rankedResults, selectedPlayers, scoringDirection }:
                 >
                   {result.rank}
                 </span>
-                <Avatar id={player.id} name={player.name} avatar_path={player.avatar_path} size='sm' />
-                <span className='flex-1 font-medium text-ink-primary'>{player.name}</span>
+                <Avatar id={result.player.id} name={result.player.name} avatar_path={result.player.avatar_path} size='sm' />
+                <span className='flex-1 font-medium text-ink-primary'>{result.player.name}</span>
                 {isWinner && <span className='rounded-full bg-yellow-primary px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink-on-yellow uppercase'>Winner</span>}
-                <span className='text-xs text-ink-muted'>{result.entryCount} entries</span>
                 <span className='w-14 text-right text-base font-bold text-ink-primary tabular-nums'>{result.total}</span>
               </div>
 
               {/* Bar chart */}
               <div className='h-2 overflow-hidden rounded-full bg-paper-muted'>
-                <div className='h-full rounded-full transition-all' style={{ width: barWidth(result), backgroundColor: getPlayerColor(result.playerId) }} />
+                <div className='h-full rounded-full transition-all' style={{ width: barWidth(result), backgroundColor: getPlayerColor(result.player.id) }} />
               </div>
             </div>
           )
         })}
       </div>
-
     </>
   )
 }
