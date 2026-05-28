@@ -2,7 +2,7 @@ import { ComponentProps } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
-const CARD_VARIANTS_CONFIG = cva('group/card flex flex-col overflow-hidden text-sm text-ink-primary ring-1 ring-ink-primary/5 has-[>img:first-child]:pt-0', {
+const CARD_VARIANTS_CONFIG = cva('group/card flex flex-col overflow-hidden border border-border text-sm text-ink-primary has-[>img:first-child]:pt-0', {
   variants: {
     color: {
       primary: 'bg-paper-secondary',

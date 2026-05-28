@@ -55,7 +55,7 @@ export const DataManagement = () => {
           </CardContent>
         </Card>
 
-        <Card size='sm' color='secondary' className='bg-destructive/5 ring-destructive/15'>
+        <Card size='sm' className='border-destructive bg-destructive/5 ring-destructive/15'>
           <CardContent className='flex flex-col gap-4'>
             <Radiation className='size-6 text-destructive' />
             <div className='flex flex-col gap-1'>
