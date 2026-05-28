@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const CARD_VARIANTS_CONFIG = cva(
-  'group/card flex flex-col overflow-hidden rounded-4xl bg-paper-primary text-sm text-ink-primary shadow-md ring-1 ring-ink-primary/5 has-[>img:first-child]:pt-0 *:[img:first-child]:rounded-t-4xl *:[img:last-child]:rounded-b-4xl',
+  'group/card flex flex-col overflow-hidden rounded-2xl bg-paper-primary text-sm text-ink-primary shadow-md ring-1 ring-ink-primary/5 has-[>img:first-child]:pt-0 *:[img:first-child]:rounded-t-2xl *:[img:last-child]:rounded-b-2xl',
   {
     variants: {
       size: {
@@ -34,7 +34,7 @@ export type CardHeaderProps = ComponentProps<'div'>
 
 export const CardHeader = ({ className, ...props }: CardHeaderProps) => {
   const classes = cn(
-    'group/card-header @container/card-header grid auto-rows-min items-start gap-1.5 rounded-t-4xl px-6 group-data-[size=sm]/card:px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-6 group-data-[size=sm]/card:[.border-b]:pb-4',
+    'group/card-header @container/card-header grid auto-rows-min items-start gap-1.5 rounded-t-2xl px-6 group-data-[size=sm]/card:px-4 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-6 group-data-[size=sm]/card:[.border-b]:pb-4',
     className,
   )
 
@@ -76,7 +76,7 @@ export const CardContent = ({ className, ...props }: CardContentProps) => {
 export type CardFooterProps = ComponentProps<'div'>
 
 export const CardFooter = ({ className, ...props }: CardFooterProps) => {
-  const classes = cn('flex items-center rounded-b-4xl px-6 group-data-[size=sm]/card:px-4 [.border-t]:pt-6 group-data-[size=sm]/card:[.border-t]:pt-4', className)
+  const classes = cn('flex items-center rounded-b-2xl px-6 group-data-[size=sm]/card:px-4 [.border-t]:pt-6 group-data-[size=sm]/card:[.border-t]:pt-4', className)
 
   return <div data-slot='card-footer' className={classes} {...props} />
 }
