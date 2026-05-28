@@ -4,10 +4,9 @@ import { toast } from 'sonner'
 import { api, Player } from '@/lib/http-transport/api'
 import { ThemeSetting } from '@/hooks/useTheme'
 import { useSettings } from '@/contexts/settings-context'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/atoms/card'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter } from '@/components/atoms/dialog'
 import { Button } from '@/components/atoms/button'
 import { Field, FieldLabel, FieldDescription } from '@/components/atoms/field'
-import { Label } from '@/components/atoms/label'
 import { Input } from '@/components/atoms/input'
 
 // 1. DELETE_ALL_DATA doesn't show the loading gate during refetch
@@ -233,71 +232,87 @@ export default () => {
           </button>
         </div>
 
-        {showBggDeleteConfirm && (
-          <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
-            <Card className='w-full max-w-sm'>
-              <CardHeader>
-                <CardTitle className='text-lg font-semibold'>Delete BGG data?</CardTitle>
-                <CardDescription>All BoardGameGeek catalog data will be removed. Your library games are not affected.</CardDescription>
-              </CardHeader>
-              <CardContent className='space-y-2'>
-                <Label htmlFor='bgg-delete-confirm'>
+        <Dialog
+          open={showBggDeleteConfirm}
+          onOpenChange={(open) => {
+            if (!open) {
+              setShowBggDeleteConfirm(false)
+              setBggDeleteText('')
+            }
+          }}
+        >
+          <DialogContent size='sm'>
+            <DialogHeader>
+              <DialogTitle>Delete BGG data?</DialogTitle>
+              <DialogDescription>All BoardGameGeek catalog data will be removed. Your library games are not affected.</DialogDescription>
+            </DialogHeader>
+            <DialogBody>
+              <Field>
+                <FieldLabel htmlFor='bgg-delete-confirm'>
                   Type <span className='font-mono text-destructive'>DELETE</span> to confirm
-                </Label>
+                </FieldLabel>
                 <Input id='bgg-delete-confirm' type='text' value={bggDeleteText} onChange={(e) => setBggDeleteText(e.target.value)} placeholder='DELETE' autoFocus />
-              </CardContent>
-              <CardFooter className='justify-end gap-3'>
-                <Button
-                  variant='outline'
-                  color='secondary'
-                  onClick={() => {
-                    setShowBggDeleteConfirm(false)
-                    setBggDeleteText('')
-                  }}
-                  disabled={bggDeleting}
-                >
-                  Cancel
-                </Button>
-                <Button color='destructive' onClick={handleBggDelete} disabled={bggDeleting || bggDeleteText !== 'DELETE'}>
-                  {bggDeleting ? 'Deleting…' : 'Delete BGG data'}
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-        )}
+              </Field>
+            </DialogBody>
+            <DialogFooter>
+              <Button
+                variant='outline'
+                color='secondary'
+                onClick={() => {
+                  setShowBggDeleteConfirm(false)
+                  setBggDeleteText('')
+                }}
+                disabled={bggDeleting}
+              >
+                Cancel
+              </Button>
+              <Button color='destructive' onClick={handleBggDelete} disabled={bggDeleting || bggDeleteText !== 'DELETE'}>
+                {bggDeleting ? 'Deleting…' : 'Delete BGG data'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
-        {showResetConfirm && (
-          <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
-            <Card className='w-full max-w-sm'>
-              <CardHeader>
-                <CardTitle className='text-lg font-semibold'>Delete all data?</CardTitle>
-                <CardDescription>All games, sessions, players, and uploaded files will be permanently removed. This cannot be undone.</CardDescription>
-              </CardHeader>
-              <CardContent className='space-y-2'>
-                <Label htmlFor='reset-confirm'>
+        <Dialog
+          open={showResetConfirm}
+          onOpenChange={(open) => {
+            if (!open) {
+              setShowResetConfirm(false)
+              setResetConfirmText('')
+            }
+          }}
+        >
+          <DialogContent size='sm'>
+            <DialogHeader>
+              <DialogTitle>Delete all data?</DialogTitle>
+              <DialogDescription>All games, sessions, players, and uploaded files will be permanently removed. This cannot be undone.</DialogDescription>
+            </DialogHeader>
+            <DialogBody>
+              <Field>
+                <FieldLabel htmlFor='reset-confirm'>
                   Type <span className='font-mono text-destructive'>DELETE</span> to confirm
-                </Label>
+                </FieldLabel>
                 <Input id='reset-confirm' type='text' value={resetConfirmText} onChange={(e) => setResetConfirmText(e.target.value)} placeholder='DELETE' autoFocus />
-              </CardContent>
-              <CardFooter className='justify-end gap-3'>
-                <Button
-                  variant='outline'
-                  color='secondary'
-                  onClick={() => {
-                    setShowResetConfirm(false)
-                    setResetConfirmText('')
-                  }}
-                  disabled={resetting}
-                >
-                  Cancel
-                </Button>
-                <Button color='destructive' onClick={handleReset} disabled={resetting || resetConfirmText !== 'DELETE'}>
-                  {resetting ? 'Deleting…' : 'Delete everything'}
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-        )}
+              </Field>
+            </DialogBody>
+            <DialogFooter>
+              <Button
+                variant='outline'
+                color='secondary'
+                onClick={() => {
+                  setShowResetConfirm(false)
+                  setResetConfirmText('')
+                }}
+                disabled={resetting}
+              >
+                Cancel
+              </Button>
+              <Button color='destructive' onClick={handleReset} disabled={resetting || resetConfirmText !== 'DELETE'}>
+                {resetting ? 'Deleting…' : 'Delete everything'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     )
   )
