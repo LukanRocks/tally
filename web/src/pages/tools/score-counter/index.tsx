@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -39,7 +39,7 @@ export default () => {
   const [scoringDirection, setScoringDirection] = useState<ScoringDirection>('highest')
   const [scores, setScores] = useState<Record<number, PlayerScore>>({})
 
-  const rankedResults = useMemo((): RankedResult[] => {
+  const rankedResults: RankedResult[] = (() => {
     const withIndex = selectedPlayers.map((player, index) => ({
       playerId: player.id,
       total: scores[player.id]?.total ?? 0,
@@ -52,7 +52,7 @@ export default () => {
       return diff !== 0 ? diff : a.index - b.index
     })
     return sorted.map((player, i) => ({ playerId: player.playerId, total: player.total, entryCount: player.entryCount, rank: i + 1 }))
-  }, [selectedPlayers, scores, scoringDirection])
+  })()
 
   const STEPS: Record<Step, { title: string; nextLabel: string; back: () => void; next: () => void }> = {
     setup: {
