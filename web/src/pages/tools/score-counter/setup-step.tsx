@@ -1,7 +1,7 @@
 import { type Dispatch, type SetStateAction } from 'react'
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Avatar } from '@/components/atoms/avatar'
+import { Avatar } from '@/components/1-atoms/avatar'
 import { GameCard } from '@/components/molecules/game-card'
 import { type Game, type Player } from '@/lib/http-transport/api'
 import { type ScoringDirection } from './types'

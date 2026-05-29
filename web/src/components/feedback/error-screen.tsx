@@ -2,8 +2,8 @@ import { RefreshCwIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useAutoRetry } from '@/hooks/useAutoRetry'
 import { useTimeAgo } from '@/hooks/useTimeAgo'
-import { PulseDot } from '@/components/atoms/pulse-dot'
-import { Button } from '@/components/atoms/button'
+import { PulseDot } from '@/components/1-atoms/pulse-dot'
+import { Button } from '@/components/1-atoms/button'
 
 type HttpError = Error & { code?: number }
 
@@ -44,7 +44,7 @@ export const ErrorScreen = ({ error, onRetry }: Props) => {
     <div className='flex min-h-screen flex-col bg-background'>
       <div className='mx-auto flex w-full max-w-3xl flex-1 flex-col justify-between px-12 py-16'>
         <div className='flex flex-col'>
-          <div className='caption mb-10 flex items-center gap-2 text-muted-foreground'>
+          <div className='mb-10 flex items-center gap-2 caption text-muted-foreground'>
             <PulseDot color='destructive' />
             TALLY · OFFLINE
           </div>
@@ -56,7 +56,7 @@ export const ErrorScreen = ({ error, onRetry }: Props) => {
             <br />
             the table.
           </h1>
-          <p className='callout mt-1 text-4xl'>{tagline}</p>
+          <p className='mt-1 callout text-4xl'>{tagline}</p>
 
           <p className='mt-10 text-lg leading-relaxed text-foreground/70'>Your browser can see the table. It just can't sit down at it. The Tally server. We meant server.</p>
 
@@ -65,7 +65,7 @@ export const ErrorScreen = ({ error, onRetry }: Props) => {
               <RefreshCwIcon />
               Roll again
             </Button>
-            <button onClick={toggle} className='caption ml-2 text-ink-muted transition-opacity hover:opacity-70'>
+            <button onClick={toggle} className='ml-2 caption text-ink-muted transition-opacity hover:opacity-70'>
               {enabled ? (
                 <>
                   AUTO · NEXT IN <span className='monospace text-ink-primary'>{formatted}</span>
@@ -85,7 +85,7 @@ export const ErrorScreen = ({ error, onRetry }: Props) => {
             // ['ATTEMPT', `#${retryCount + 1}`],
           ].map(([label, value]) => (
             <div key={label}>
-              <p className='caption mb-1 text-muted-foreground'>{label}</p>
+              <p className='mb-1 caption text-muted-foreground'>{label}</p>
               <p className='monospace text-sm text-foreground'>{value}</p>
             </div>
           ))}

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter } from '@/components/atoms/dialog'
-import { Button } from '@/components/atoms/button'
-import { Field, FieldLabel } from '@/components/atoms/field'
-import { Input } from '@/components/atoms/input'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogBody, DialogFooter } from '@/components/1-atoms/dialog'
+import { Button } from '@/components/1-atoms/button'
+import { Field, FieldLabel } from '@/components/1-atoms/field'
+import { Input } from '@/components/1-atoms/input'
 
 export type DeleteDialogProps = {
   open: boolean

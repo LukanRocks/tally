@@ -1,6 +1,6 @@
 import { ArrowUpDown, LayoutGrid, LayoutList, Plus, SlidersHorizontal, Table } from 'lucide-react'
-import { Button, BUTTON_COLORS, ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from '@/components/atoms/button'
-import { Toggle } from '@/components/atoms/toggle'
+import { Button, BUTTON_COLORS, ButtonGroup, ButtonGroupSeparator, ButtonGroupText } from '@/components/1-atoms/button'
+import { Toggle } from '@/components/1-atoms/toggle'
 
 export function ButtonsSection() {
   return (
@@ -64,11 +64,11 @@ export function ButtonsSection() {
         <table className='w-full'>
           <thead>
             <tr className='border-b border-border'>
-              <th className='caption px-4 py-3 text-left text-ink-muted'>color</th>
-              <th className='caption px-4 py-3 text-center text-ink-muted'>default</th>
-              <th className='caption px-4 py-3 text-center text-ink-muted'>outline</th>
-              <th className='caption px-4 py-3 text-center text-ink-muted'>ghost</th>
-              <th className='caption px-4 py-3 text-center text-ink-muted'>link</th>
+              <th className='px-4 py-3 text-left caption text-ink-muted'>color</th>
+              <th className='px-4 py-3 text-center caption text-ink-muted'>default</th>
+              <th className='px-4 py-3 text-center caption text-ink-muted'>outline</th>
+              <th className='px-4 py-3 text-center caption text-ink-muted'>ghost</th>
+              <th className='px-4 py-3 text-center caption text-ink-muted'>link</th>
             </tr>
           </thead>
           <tbody className='divide-y divide-dashed divide-border'>

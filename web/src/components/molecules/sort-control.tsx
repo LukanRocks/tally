@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react'
 import { ArrowDownAZ, ArrowUpZA } from 'lucide-react'
 
-import { Button, ButtonGroup } from '@/components/atoms/button'
+import { Button, ButtonGroup } from '@/components/1-atoms/button'
 import { cn } from '@/lib/utils'
 
 export type SORT_CONTROL_ORDER = 'asc' | 'desc'

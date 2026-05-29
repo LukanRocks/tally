@@ -1,5 +1,5 @@
 import { toast } from 'sonner'
-import { Button } from '@/components/atoms/button'
+import { Button } from '@/components/1-atoms/button'
 
 export const SonnerSection = () => (
   <section className='space-y-6'>
@@ -10,7 +10,7 @@ export const SonnerSection = () => (
       </p>
     </div>
 
-    <p className='caption mb-3 text-ink-muted'>Toast - Sonner</p>
+    <p className='mb-3 caption text-ink-muted'>Toast - Sonner</p>
     <div className='grid grid-cols-2 gap-4'>
       <div className='flex items-center gap-3 rounded-lg bg-ink-primary px-3.5 py-3 shadow-md'>
         <span className='inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-yellow-primary text-[13px] font-bold text-ink-primary'>✓</span>
@@ -56,7 +56,7 @@ export const SonnerSection = () => (
       </div>
     </div>
 
-    <p className='caption mb-3 text-ink-muted'>Banner</p>
+    <p className='mb-3 caption text-ink-muted'>Banner</p>
     <div>
       <div className='flex items-center justify-between gap-4 rounded-lg border border-yellow-tertiary/35 bg-yellow-secondary px-4 py-3.5'>
         <div className='flex flex-col gap-0.5'>

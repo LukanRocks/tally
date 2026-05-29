@@ -1,4 +1,4 @@
-import { Toggle } from '@/components/atoms/toggle'
+import { Toggle } from '@/components/1-atoms/toggle'
 import { Star } from 'lucide-react'
 
 export const ToggleSection = () => (
@@ -50,10 +50,10 @@ export const ToggleSection = () => (
       <table className='w-full'>
         <thead>
           <tr className='border-b border-border'>
-            <th className='caption px-4 py-3 text-left text-ink-muted'>variant</th>
-            <th className='caption px-4 py-3 text-center text-ink-muted'>off</th>
-            <th className='caption px-4 py-3 text-center text-ink-muted'>on</th>
-            <th className='caption px-4 py-3 text-center text-ink-muted'>disabled</th>
+            <th className='px-4 py-3 text-left caption text-ink-muted'>variant</th>
+            <th className='px-4 py-3 text-center caption text-ink-muted'>off</th>
+            <th className='px-4 py-3 text-center caption text-ink-muted'>on</th>
+            <th className='px-4 py-3 text-center caption text-ink-muted'>disabled</th>
           </tr>
         </thead>
         <tbody className='divide-y divide-dashed divide-border'>

@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom'
 import { Dices, Plus, Rows3, LayoutGrid, ShelvingUnit } from 'lucide-react'
 
 import { Page, PageHeader } from '@/components/layout/page'
-import { Button, ButtonGroup } from '@/components/atoms/button'
+import { Button, ButtonGroup } from '@/components/1-atoms/button'
 import { GameCard } from '@/components/molecules/game-card'
 import { EmptyState } from '@/components/feedback/empty-state'
-import { Field } from '@/components/atoms/field'
-import { Input } from '@/components/atoms/input'
+import { Field } from '@/components/1-atoms/field'
+import { Input } from '@/components/1-atoms/input'
 import { SearchInput } from '@/components/molecules/search-input'
 import { SortControl } from '@/components/molecules/sort-control'
-import { Toggle } from '@/components/atoms/toggle'
+import { Toggle } from '@/components/1-atoms/toggle'
 
 import { api, Game, Player } from '@/lib/http-transport/api'
 

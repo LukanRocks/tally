@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { FileDown, FileUp, Radiation } from 'lucide-react'
 import { toast } from 'sonner'
 import { useSettings } from '@/contexts/settings-context'
-import { Button } from '@/components/atoms/button'
-import { Card, CardContent, CardCaption, CardTitle, CardHeader, CardDescription } from '@/components/atoms/card'
+import { Button } from '@/components/1-atoms/button'
+import { Card, CardContent, CardCaption, CardTitle, CardHeader, CardDescription } from '@/components/1-atoms/card'
 import { DeleteDialog } from '@/components/molecules/delete-dialog'
 
 export const DataManagement = () => {

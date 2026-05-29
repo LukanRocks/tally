@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTimer, TimerState } from '@/hooks/useTimer'
-import { Button } from '@/components/atoms/button'
+import { Button } from '@/components/1-atoms/button'
 import { Plus, Minus } from 'lucide-react'
 
 const fmt = (s: number) => `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`

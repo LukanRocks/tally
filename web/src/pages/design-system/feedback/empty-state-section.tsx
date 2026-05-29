@@ -1,6 +1,6 @@
 import { Dices, Library } from 'lucide-react'
 import { EmptyState } from '@/components/feedback/empty-state'
-import { Button } from '@/components/atoms/button'
+import { Button } from '@/components/1-atoms/button'
 
 export const EmptyStateSection = () => (
   <section className='space-y-6'>

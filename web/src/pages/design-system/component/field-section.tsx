@@ -1,9 +1,9 @@
 import { Search, AtSign, Eye, Send } from 'lucide-react'
-import { Label } from '@/components/atoms/label'
-import { Separator } from '@/components/atoms/separator'
-import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '@/components/atoms/field'
-import { Input, InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea } from '@/components/atoms/input'
-import { Checkbox } from '@/components/atoms/checkbox'
+import { Label } from '@/components/1-atoms/label'
+import { Separator } from '@/components/1-atoms/separator'
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '@/components/1-atoms/field'
+import { Input, InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupText, InputGroupTextarea } from '@/components/1-atoms/input'
+import { Checkbox } from '@/components/1-atoms/checkbox'
 
 export function FieldSection() {
   return (

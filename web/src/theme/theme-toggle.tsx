@@ -1,6 +1,6 @@
 import { Moon, Sun, SunMoon } from 'lucide-react'
 import { useTheme, AVAILABLE_THEMES, ThemeSetting } from '@/theme'
-import { Button } from '@/components/atoms/button'
+import { Button } from '@/components/1-atoms/button'
 
 const ThemeIcon = ({ theme }: { theme: ThemeSetting }) => {
   if (theme === 'dark') return <Moon />
