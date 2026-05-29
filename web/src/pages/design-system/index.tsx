@@ -1,5 +1,5 @@
 import { Page, PageHeader } from '@/components/layout/page'
-import { ThemeToggle } from '@/components/theme/theme-toggle'
+import { ThemeToggle } from '@/theme/theme-toggle'
 
 import { BrandSection } from './foundation/brand-section'
 import { ColorsSection } from './foundation/colors-section'

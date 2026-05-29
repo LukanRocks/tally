@@ -1,9 +1,9 @@
 import { toast } from 'sonner'
-import { ThemeSetting } from '@/hooks/useTheme'
+import { ThemeSetting } from '@/theme'
 import { useSettings } from '@/contexts/settings-context'
 import { Card, CardHeader, CardContent, CardTitle, CardCaption } from '@/components/atoms/card'
 import { Field, FieldContent, FieldTitle, FieldDescription } from '@/components/atoms/field'
-import { ThemeToggle } from '@/components/theme/theme-toggle'
+import { ThemeToggle } from '@/theme/theme-toggle'
 
 const THEME_LABEL: Record<ThemeSetting, string> = {
   system: 'System',

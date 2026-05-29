@@ -1,5 +1,5 @@
 import { Moon, Sun, SunMoon } from 'lucide-react'
-import { useTheme, AVAILABLE_THEMES, ThemeSetting } from '@/hooks/useTheme'
+import { useTheme, AVAILABLE_THEMES, ThemeSetting } from '@/theme'
 import { Button } from '@/components/atoms/button'
 
 const ThemeIcon = ({ theme }: { theme: ThemeSetting }) => {
