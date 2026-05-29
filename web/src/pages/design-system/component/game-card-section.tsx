@@ -1,4 +1,4 @@
-import { GameCard } from '@/components/molecules/game-card'
+import { GameCard } from '@/components/2-molecules/game-card'
 
 export const GameCardSection = () => {
   return (
@@ -11,7 +11,7 @@ export const GameCardSection = () => {
       </div>
 
       <div>
-        <p className='caption mb-3 text-ink-muted'>Current Card · grid</p>
+        <p className='mb-3 caption text-ink-muted'>Current Card · grid</p>
         <div className='grid grid-cols-4 gap-3.5'>
           {(
             [

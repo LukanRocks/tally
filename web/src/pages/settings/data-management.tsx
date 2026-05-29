@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 import { useSettings } from '@/contexts/settings-context'
 import { Button } from '@/components/1-atoms/button'
 import { Card, CardContent, CardCaption, CardTitle, CardHeader, CardDescription } from '@/components/1-atoms/card'
-import { DeleteDialog } from '@/components/molecules/delete-dialog'
+import { DeleteDialog } from '@/components/2-molecules/delete-dialog'
 
 export const DataManagement = () => {
   const { DELETE_ALL_DATA } = useSettings()

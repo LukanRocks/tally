@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { api, Game, LeaderboardEntry, MostPlayedGame } from '@/lib/http-transport/api'
-import { GameCard } from '@/components/molecules/game-card'
+import { GameCard } from '@/components/2-molecules/game-card'
 import { cn } from '@/lib/utils'
 import { Page } from '@/components/layout/page'
 import { GreetingBanner } from '@/components/greeting-banner'
@@ -41,10 +41,10 @@ export default () => {
               <table className='w-full text-sm'>
                 <thead className='bg-muted/50'>
                   <tr>
-                    <th className='caption px-4 py-3 text-left text-ink-muted'>#</th>
-                    <th className='caption px-4 py-3 text-left text-ink-muted'>Player</th>
-                    <th className='caption px-4 py-3 text-right text-ink-muted'>Points</th>
-                    <th className='caption px-4 py-3 text-right text-ink-muted'>Wins</th>
+                    <th className='px-4 py-3 text-left caption text-ink-muted'>#</th>
+                    <th className='px-4 py-3 text-left caption text-ink-muted'>Player</th>
+                    <th className='px-4 py-3 text-right caption text-ink-muted'>Points</th>
+                    <th className='px-4 py-3 text-right caption text-ink-muted'>Wins</th>
                   </tr>
                 </thead>
                 <tbody className='divide-y divide-border'>

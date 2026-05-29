@@ -6,7 +6,7 @@ import { Card, CardContent, CardCaption, CardTitle, CardHeader, CardDescription,
 import { Button } from '@/components/1-atoms/button'
 import { InputGroup, InputGroupInput, InputGroupAddon, InputGroupButton } from '@/components/1-atoms/input'
 import { Field, FieldDescription } from '@/components/1-atoms/field'
-import { DeleteDialog } from '@/components/molecules/delete-dialog'
+import { DeleteDialog } from '@/components/2-molecules/delete-dialog'
 
 export const BggManagement = () => {
   const { settings } = useSettings()
