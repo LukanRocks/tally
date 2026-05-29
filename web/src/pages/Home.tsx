@@ -4,7 +4,7 @@ import { api, Game, LeaderboardEntry, MostPlayedGame } from '@/lib/http-transpor
 import { GameCard } from '@/components/2-molecules/game-card'
 import { cn } from '@/lib/utils'
 import { Page } from '@/components/layout/page'
-import { GreetingBanner } from '@/components/greeting-banner'
+import { GreetingBanner } from '@/components/custom/greeting-banner'
 
 export default () => {
   const [recentGames, setRecentGames] = useState<Game[]>([])
