@@ -1,5 +1,5 @@
 import { Dices, Library } from 'lucide-react'
-import { EmptyState } from '@/components/feedback/empty-state'
+import { EmptyState } from '@/components/2-molecules/empty-state'
 import { Button } from '@/components/1-atoms/button'
 
 export const EmptyStateSection = () => (
