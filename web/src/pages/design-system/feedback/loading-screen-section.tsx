@@ -1,4 +1,4 @@
-import { Loading } from '@/components/feedback/loading-screen'
+import { Loading } from '@/components/4-templates/loading-screen'
 
 export const LoadingScreenSection = () => (
   <section className='space-y-6'>

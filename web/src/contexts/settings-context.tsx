@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import { settingsTransport, Settings } from '@/lib/http-transport/private/settings'
-import { Loading } from '@/components/feedback/loading-screen'
-import { ErrorScreen } from '@/components/feedback/error-screen'
+import { Loading } from '@/components/4-templates/loading-screen'
+import { ErrorScreen } from '@/components/4-templates/error-screen'
 
 export type { Settings }
 

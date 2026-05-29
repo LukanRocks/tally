@@ -1,4 +1,4 @@
-import { ErrorScreen } from '@/components/feedback/error-screen'
+import { ErrorScreen } from '@/components/4-templates/error-screen'
 
 const mockError = Object.assign(new Error('Connection refused'), { code: 503 })
 
