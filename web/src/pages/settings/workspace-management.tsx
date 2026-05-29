@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { api, Player } from '@/lib/http-transport/api'
 import { useSettings } from '@/contexts/settings-context'
-import { Card, CardHeader, CardContent, CardTitle, CardCaption } from '@/components/atoms/card'
-import { Field, FieldContent, FieldTitle, FieldDescription } from '@/components/atoms/field'
+import { Card, CardHeader, CardContent, CardTitle, CardCaption } from '@/components/1-atoms/card'
+import { Field, FieldContent, FieldTitle, FieldDescription } from '@/components/1-atoms/field'
 
 export const WorkspaceManagement = () => {
   const [players, setPlayers] = useState<Player[]>([])

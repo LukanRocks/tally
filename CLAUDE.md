@@ -5,7 +5,7 @@ Full-stack TypeScript monorepo. Client: React + Vite + Tailwind v4 + shadcn/ui. 
 
 ## Components pattern
 
-All components follow this exact file structure and naming convention. The button component is the canonical reference: [web/src/components/atoms/button.tsx](web/src/components/atoms/button.tsx).
+All components follow this exact file structure and naming convention. The button component is the canonical reference: [web/src/components/1-atoms/button.tsx](web/src/components/1-atoms/button.tsx).
 
 ### File structure (top to bottom)
 

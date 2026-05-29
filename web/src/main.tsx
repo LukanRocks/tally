@@ -1,12 +1,12 @@
 import './index.css'
 
+import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import { StrictMode } from 'react'
-import { SettingsProvider } from '@/contexts/settings-context'
-import { Toaster } from '@/components/feedback/sonner'
+import { Theme } from '@/theme'
 import { AppRoutes } from '@/routes'
-import { Theme } from '@/components/theme/theme'
+import { SettingsProvider } from '@/contexts/settings-context'
+import { Toaster } from '@/components/4-templates/sonner'
 
 const App = () => (
   <StrictMode>

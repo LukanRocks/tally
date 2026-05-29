@@ -1,4 +1,4 @@
-import { Checkbox } from '@/components/atoms/checkbox'
+import { Checkbox } from '@/components/1-atoms/checkbox'
 
 export function CheckboxSection() {
   return (

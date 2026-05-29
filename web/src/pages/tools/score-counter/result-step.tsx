@@ -1,6 +1,6 @@
 import { Crown } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Avatar } from '@/components/atoms/avatar'
+import { Avatar } from '@/components/1-atoms/avatar'
 import { type RankedResult, type ScoringDirection } from './types'
 import { getPlayerColor } from '@/lib/deterministic-picker'
 

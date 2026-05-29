@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Button } from '@/components/atoms/button'
+import { Button } from '@/components/1-atoms/button'
 import { Plus, Minus } from 'lucide-react'
 
 type Phase = 'setup' | 'rolling' | 'results'

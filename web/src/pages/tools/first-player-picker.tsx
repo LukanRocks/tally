@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Button } from '@/components/atoms/button'
+import { Button } from '@/components/1-atoms/button'
 import { PROMPTS, type Prompt } from '@/lib/prompts'
 
 type Phase = 'idle' | 'animating' | 'revealed'

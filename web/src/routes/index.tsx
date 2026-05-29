@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
-import { RouteGuard } from '@/components/routing/route-guard'
+import { RouteGuard } from '@/routes/route-guard'
 import { useSettings } from '@/contexts/settings-context'
 import { Shell } from '@/components/layout/shell'
 

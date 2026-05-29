@@ -1,8 +1,8 @@
 import { ComponentProps } from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
-import { Label } from '@/components/atoms/label'
-import { Separator } from '@/components/atoms/separator'
+import { Label } from '@/components/1-atoms/label'
+import { Separator } from '@/components/1-atoms/separator'
 
 const FIELD_VARIANTS_CONFIG = cva('group/field flex w-full gap-3 data-[invalid=true]:text-destructive', {
   variants: {

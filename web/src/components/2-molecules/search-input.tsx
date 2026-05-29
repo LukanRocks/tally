@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react'
 import { Search } from 'lucide-react'
 
-import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '@/components/atoms/input'
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from '@/components/1-atoms/input'
 
 export type SearchInputProps = Omit<ComponentProps<'input'>, 'type'>
 

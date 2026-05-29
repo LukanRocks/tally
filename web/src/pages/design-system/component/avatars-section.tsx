@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup } from '@/components/atoms/avatar'
+import { Avatar, AvatarGroup } from '@/components/1-atoms/avatar'
 import { Plus } from 'lucide-react'
 
 export function AvatarsSection() {

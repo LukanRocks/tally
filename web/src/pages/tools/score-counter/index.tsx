@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 import { Page, PageHeader } from '@/components/layout/page'
-import { Button } from '@/components/atoms/button'
+import { Button } from '@/components/1-atoms/button'
 import { api, type Game, type Player } from '@/lib/http-transport/api'
 
 import { type Step, type ScoringDirection, type PlayerScore, type RankedResult } from './types'

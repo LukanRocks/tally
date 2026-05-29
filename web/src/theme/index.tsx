@@ -4,7 +4,7 @@ import { useSettings } from '@/contexts/settings-context'
 export type ThemeSetting = 'light' | 'dark' | 'system'
 
 export const AVAILABLE_THEMES: ThemeSetting[] = ['light', 'dark', 'system']
-// !TODO: use files from /public instead of rewriting
+
 const FAVICON_LIGHT = '/logo-ink.svg'
 const FAVICON_DARK = '/logo-yellow.svg'
 
@@ -53,4 +53,10 @@ export const useTheme = () => {
   const setTheme = (theme: ThemeSetting) => updateSetting({ theme })
 
   return { userTheme, activeTheme: applied, setTheme }
+}
+
+export const Theme = () => {
+  useTheme()
+
+  return null
 }

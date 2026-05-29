@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import type { Game } from '@/lib/http-transport/api'
 import { getFallbackBackground } from '@/lib/deterministic-picker'
 import { useSettings } from '@/contexts/settings-context'
-import { Badge } from '@/components/atoms/badge'
+import { Badge } from '@/components/1-atoms/badge'
 import { cn } from '@/lib/utils'
 import { Dices } from 'lucide-react'
 
@@ -57,6 +57,15 @@ export const GameCard = ({ active = false, polymorphic = false, className, onCli
     </>
   )
 
-  if (polymorphic) return <button type='button' className={cn(classes, 'text-left')} onClick={onClick}>{content}</button>
-  return <Link to={`/library/${game.id}`} className={classes}>{content}</Link>
+  if (polymorphic)
+    return (
+      <button type='button' className={cn(classes, 'text-left')} onClick={onClick}>
+        {content}
+      </button>
+    )
+  return (
+    <Link to={`/library/${game.id}`} className={classes}>
+      {content}
+    </Link>
+  )
 }
