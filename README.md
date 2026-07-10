@@ -2,7 +2,7 @@
   <img src="./client/public/favicon.svg" alt="Tally Logo" width="100" height="100" />
   <h1>Tally</h1>
   <p><strong>Self-hosted board game collection manager & session tracker</strong></p>
-  <p>Log play sessions, rank players, and track your group's leaderboard — all on your own hardware.</p>
+  <p>Log play sessions, rank players, and track your group's leaderboard on your own hardware.</p>
 </div>
 
 <div align="center">
