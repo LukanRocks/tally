@@ -28,7 +28,7 @@ importers:
         version: 7.0.1
       drizzle-orm:
         specifier: 0.45.2
-        version: 0.45.2(@types/better-sqlite3@7.6.12)(better-sqlite3@12.11.1)
+        version: 0.45.2(@types/better-sqlite3@7.6.13)(better-sqlite3@12.11.1)
       express:
         specifier: 5.2.1
         version: 5.2.1
@@ -40,8 +40,8 @@ importers:
         version: 2.2.0
     devDependencies:
       '@types/better-sqlite3':
-        specifier: 7.6.12
-        version: 7.6.12
+        specifier: 7.6.13
+        version: 7.6.13
       '@types/express':
         specifier: 5.0.6
         version: 5.0.6
@@ -1523,8 +1523,8 @@ packages:
   '@tybys/wasm-util@0.10.3':
     resolution: {integrity: sha512-F3fo1MYrRJYL3zER0OUOmkutjr1Vp23m7OsSgp7nq4SP6OqX6C/56XFIPAl5bt3zaBRjmW7SGz3u/6LwFpYcOg==}
 
-  '@types/better-sqlite3@7.6.12':
-    resolution: {integrity: sha512-fnQmj8lELIj7BSrZQAdBMHEHX8OZLYIHXqAKT1O7tDfLxaINzf00PMjw22r3N/xXh0w/sGHlO6SVaCQ2mj78lg==}
+  '@types/better-sqlite3@7.6.13':
+    resolution: {integrity: sha512-NMv9ASNARoKksWtsq/SHakpYAYnhBrQgGD8zkLYk/jaK8jUGn08CfEdTRgYhMypUQAfzSP8W6gNLe0q19/t4VA==}
 
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
@@ -4627,7 +4627,7 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
-  '@types/better-sqlite3@7.6.12':
+  '@types/better-sqlite3@7.6.13':
     dependencies:
       '@types/node': 25.9.1
 
@@ -4955,9 +4955,9 @@ snapshots:
 
   dotenv@17.4.2: {}
 
-  drizzle-orm@0.45.2(@types/better-sqlite3@7.6.12)(better-sqlite3@12.11.1):
+  drizzle-orm@0.45.2(@types/better-sqlite3@7.6.13)(better-sqlite3@12.11.1):
     optionalDependencies:
-      '@types/better-sqlite3': 7.6.12
+      '@types/better-sqlite3': 7.6.13
       better-sqlite3: 12.11.1
 
   dunder-proto@1.0.1:
