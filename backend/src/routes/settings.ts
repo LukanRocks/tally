@@ -11,9 +11,9 @@ const stripId = <T extends { id: number }>({ id: _id, ...rest }: T) => rest
 const router = Router()
 
 // GET /api/v1/settings
-router.get('/', (_req: Request, res: Response, next: NextFunction) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const row = db.select().from(settingsTable).where(eq(settingsTable.id, SETTINGS_SINGLETON)).get()!
+    const [row] = await db.select().from(settingsTable).where(eq(settingsTable.id, SETTINGS_SINGLETON)).limit(1)
 
     res.json(stripId(row))
   } catch (err) {
@@ -22,7 +22,7 @@ router.get('/', (_req: Request, res: Response, next: NextFunction) => {
 })
 
 // PUT /api/v1/settings
-router.put('/', (req: Request, res: Response, next: NextFunction) => {
+router.put('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { currency, language, default_owner_id, theme, onboarded } = req.body
     const patch: Record<string, any> = { updated_at: new Date().toISOString() }
@@ -45,17 +45,17 @@ router.put('/', (req: Request, res: Response, next: NextFunction) => {
     }
     if (default_owner_id !== undefined) {
       if (default_owner_id !== null) {
-        const player = db
+        const [player] = await db
           .select()
           .from(playersTable)
           .where(and(eq(playersTable.id, Number(default_owner_id)), isNull(playersTable.deleted_at)))
-          .get()
+          .limit(1)
         if (!player) return res.status(404).json({ error: 'Player not found' })
       }
       patch.default_owner_id = default_owner_id ?? null
     }
 
-    const [updated] = db.update(settingsTable).set(patch).where(eq(settingsTable.id, SETTINGS_SINGLETON)).returning().all()
+    const [updated] = await db.update(settingsTable).set(patch).where(eq(settingsTable.id, SETTINGS_SINGLETON)).returning()
 
     res.json(stripId(updated))
   } catch (err) {

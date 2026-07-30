@@ -16,9 +16,9 @@ function calcPoints(n: number, rank: number): number {
 }
 
 // GET /api/v1/sessions
-router.get('/', (_req: Request, res: Response, next: NextFunction) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const rows = db
+    const rows = await db
       .select({
         id: sessionsTable.id,
         game_id: sessionsTable.game_id,
@@ -33,7 +33,6 @@ router.get('/', (_req: Request, res: Response, next: NextFunction) => {
       })
       .from(sessionsTable)
       .where(isNull(sessionsTable.deleted_at))
-      .all()
 
     res.json(rows)
   } catch (err) {
@@ -42,19 +41,19 @@ router.get('/', (_req: Request, res: Response, next: NextFunction) => {
 })
 
 // GET /api/v1/sessions/:id
-router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id)
 
-    const session = db
+    const [session] = await db
       .select()
       .from(sessionsTable)
       .where(and(eq(sessionsTable.id, id), isNull(sessionsTable.deleted_at)))
-      .get()
+      .limit(1)
 
     if (!session) return res.status(404).json({ error: 'Session not found' })
 
-    const results = db
+    const results = await db
       .select({
         id: resultsTable.id,
         player_id: resultsTable.player_id,
@@ -64,7 +63,6 @@ router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
       })
       .from(resultsTable)
       .where(and(eq(resultsTable.session_id, id), isNull(resultsTable.deleted_at)))
-      .all()
 
     res.json({ ...session, results })
   } catch (err) {
@@ -73,7 +71,7 @@ router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
 })
 
 // POST /api/v1/sessions
-router.post('/', (req: Request, res: Response, next: NextFunction) => {
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { game_id, played_at, notes, results } = req.body as {
       game_id: number
@@ -94,14 +92,18 @@ router.post('/', (req: Request, res: Response, next: NextFunction) => {
       return res.status(400).json({ error: 'Ranks must be unique integers from 1 to N' })
     }
 
-    const game = db
+    const [game] = await db
       .select()
       .from(gamesTable)
       .where(and(eq(gamesTable.id, game_id), isNull(gamesTable.deleted_at)))
-      .get()
+      .limit(1)
 
     if (!game) return res.status(404).json({ error: 'Game not found' })
 
+    // The two terminal calls inside this block stay synchronous on purpose:
+    // better-sqlite3's transaction() requires a sync callback, so awaiting here
+    // would let the transaction commit before the inserts resolve. They convert
+    // in Phase 2, together with the move to db.transaction().
     const createSession = sqlite.transaction(() => {
       const [session] = db
         .insert(sessionsTable)
@@ -136,25 +138,25 @@ router.post('/', (req: Request, res: Response, next: NextFunction) => {
 })
 
 // DELETE /api/v1/sessions/:id
-router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id)
     const now = new Date().toISOString()
 
-    const existing = db
+    const [existing] = await db
       .select()
       .from(sessionsTable)
       .where(and(eq(sessionsTable.id, id), isNull(sessionsTable.deleted_at)))
-      .get()
+      .limit(1)
 
     if (!existing) return res.status(404).json({ error: 'Session not found' })
 
-    db.update(resultsTable)
+    await db
+      .update(resultsTable)
       .set({ deleted_at: now })
       .where(and(eq(resultsTable.session_id, id), isNull(resultsTable.deleted_at)))
-      .run()
 
-    db.update(sessionsTable).set({ deleted_at: now }).where(eq(sessionsTable.id, id)).run()
+    await db.update(sessionsTable).set({ deleted_at: now }).where(eq(sessionsTable.id, id))
 
     res.status(204).send()
   } catch (err) {

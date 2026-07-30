@@ -9,9 +9,9 @@ import { avatarUpload } from '../middleware/upload'
 const router = Router()
 
 // GET /api/v1/players
-router.get('/', (_req: Request, res: Response, next: NextFunction) => {
+router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const rows = db
+    const rows = await db
       .select({
         id: playersTable.id,
         name: playersTable.name,
@@ -37,7 +37,6 @@ router.get('/', (_req: Request, res: Response, next: NextFunction) => {
       })
       .from(playersTable)
       .where(isNull(playersTable.deleted_at))
-      .all()
 
     res.json(rows)
   } catch (err) {
@@ -46,19 +45,19 @@ router.get('/', (_req: Request, res: Response, next: NextFunction) => {
 })
 
 // GET /api/v1/players/:id
-router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
+router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id)
 
-    const player = db
+    const [player] = await db
       .select()
       .from(playersTable)
       .where(and(eq(playersTable.id, id), isNull(playersTable.deleted_at)))
-      .get()
+      .limit(1)
 
     if (!player) return res.status(404).json({ error: 'Player not found' })
 
-    const stats = db
+    const [stats] = await db
       .select({
         total_points: sql<number>`COALESCE(SUM(points_awarded), 0)`,
         total_sessions: sql<number>`COUNT(DISTINCT session_id)`,
@@ -66,7 +65,7 @@ router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
       })
       .from(resultsTable)
       .where(and(eq(resultsTable.player_id, id), isNull(resultsTable.deleted_at)))
-      .get()
+      .limit(1)
 
     const win_rate = stats && stats.total_sessions > 0 ? Math.round((stats.wins / stats.total_sessions) * 100) : 0
 
@@ -77,7 +76,7 @@ router.get('/:id', (req: Request, res: Response, next: NextFunction) => {
 })
 
 // POST /api/v1/players
-router.post('/', (req: Request, res: Response, next: NextFunction) => {
+router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { name, player_type } = req.body
     if (!name?.trim()) return res.status(400).json({ error: 'Name is required' })
@@ -85,11 +84,10 @@ router.post('/', (req: Request, res: Response, next: NextFunction) => {
       return res.status(400).json({ error: 'player_type must be "person" or "shop"' })
     }
 
-    const [player] = db
+    const [player] = await db
       .insert(playersTable)
       .values({ name: name.trim(), player_type: player_type ?? 'person' })
       .returning()
-      .all()
     res.status(201).json(player)
   } catch (err) {
     next(err)
@@ -97,14 +95,14 @@ router.post('/', (req: Request, res: Response, next: NextFunction) => {
 })
 
 // PUT /api/v1/players/:id
-router.put('/:id', (req: Request, res: Response, next: NextFunction) => {
+router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id)
-    const existing = db
+    const [existing] = await db
       .select()
       .from(playersTable)
       .where(and(eq(playersTable.id, id), isNull(playersTable.deleted_at)))
-      .get()
+      .limit(1)
 
     if (!existing) return res.status(404).json({ error: 'Player not found' })
 
@@ -117,7 +115,7 @@ router.put('/:id', (req: Request, res: Response, next: NextFunction) => {
     const patch: { name: string; player_type?: 'person' | 'shop' } = { name: name.trim() }
     if (player_type) patch.player_type = player_type
 
-    const [updated] = db.update(playersTable).set(patch).where(eq(playersTable.id, id)).returning().all()
+    const [updated] = await db.update(playersTable).set(patch).where(eq(playersTable.id, id)).returning()
 
     res.json(updated)
   } catch (err) {
@@ -126,29 +124,29 @@ router.put('/:id', (req: Request, res: Response, next: NextFunction) => {
 })
 
 // DELETE /api/v1/players/:id
-router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
+router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id)
-    const existing = db
+    const [existing] = await db
       .select()
       .from(playersTable)
       .where(and(eq(playersTable.id, id), isNull(playersTable.deleted_at)))
-      .get()
+      .limit(1)
 
     if (!existing) return res.status(404).json({ error: 'Player not found' })
 
-    const settingsRow = db.select().from(settingsTable).where(eq(settingsTable.id, 1)).get()
+    const [settingsRow] = await db.select().from(settingsTable).where(eq(settingsTable.id, 1)).limit(1)
     if (settingsRow?.default_owner_id === id) {
       return res.status(409).json({ error: 'Cannot delete the default owner. Change the default owner in Settings first.' })
     }
 
     const now = new Date().toISOString()
-    db.update(resultsTable)
+    await db
+      .update(resultsTable)
       .set({ deleted_at: now })
       .where(and(eq(resultsTable.player_id, id), isNull(resultsTable.deleted_at)))
-      .run()
 
-    db.update(playersTable).set({ deleted_at: now }).where(eq(playersTable.id, id)).run()
+    await db.update(playersTable).set({ deleted_at: now }).where(eq(playersTable.id, id))
 
     res.status(204).send()
   } catch (err) {
@@ -157,14 +155,14 @@ router.delete('/:id', (req: Request, res: Response, next: NextFunction) => {
 })
 
 // POST /api/v1/players/:id/avatar
-router.post('/:id/avatar', avatarUpload.single('avatar'), (req: Request, res: Response, next: NextFunction) => {
+router.post('/:id/avatar', avatarUpload.single('avatar'), async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = Number(req.params.id)
-    const existing = db
+    const [existing] = await db
       .select()
       .from(playersTable)
       .where(and(eq(playersTable.id, id), isNull(playersTable.deleted_at)))
-      .get()
+      .limit(1)
 
     if (!existing) return res.status(404).json({ error: 'Player not found' })
     if (!req.file) return res.status(400).json({ error: 'No file uploaded' })
@@ -175,7 +173,7 @@ router.post('/:id/avatar', avatarUpload.single('avatar'), (req: Request, res: Re
     }
 
     const avatar_path = `/files/avatars/${req.file.filename}`
-    const [updated] = db.update(playersTable).set({ avatar_path }).where(eq(playersTable.id, id)).returning().all()
+    const [updated] = await db.update(playersTable).set({ avatar_path }).where(eq(playersTable.id, id)).returning()
 
     res.json(updated)
   } catch (err) {

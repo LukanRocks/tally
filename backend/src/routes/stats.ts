@@ -6,9 +6,9 @@ import { players as playersTable, session_results as resultsTable, sessions as s
 const router = Router()
 
 // GET /api/v1/stats/leaderboard
-router.get('/leaderboard', (_req: Request, res: Response, next: NextFunction) => {
+router.get('/leaderboard', async (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const rows = db
+    const rows = await db
       .select({
         player_id: playersTable.id,
         player_name: playersTable.name,
@@ -30,7 +30,6 @@ router.get('/leaderboard', (_req: Request, res: Response, next: NextFunction) =>
         desc(sql`COALESCE(SUM(CASE WHEN ${sessionsTable.id} IS NOT NULL AND ${resultsTable.rank} = 1 THEN 1 ELSE 0 END), 0)`),
         sql`COALESCE(MIN(CASE WHEN ${resultsTable.rank} = 1 THEN ${sessionsTable.played_at} END), '9999-12-31T23:59:59') ASC`,
       )
-      .all()
 
     res.json(rows)
   } catch (err) {
@@ -39,11 +38,11 @@ router.get('/leaderboard', (_req: Request, res: Response, next: NextFunction) =>
 })
 
 // GET /api/v1/stats/leaderboard/game/:gameId
-router.get('/leaderboard/game/:gameId', (req: Request, res: Response, next: NextFunction) => {
+router.get('/leaderboard/game/:gameId', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const gameId = Number(req.params.gameId)
 
-    const rows = db
+    const rows = await db
       .select({
         player_id: playersTable.id,
         player_name: playersTable.name,
@@ -62,7 +61,6 @@ router.get('/leaderboard/game/:gameId', (req: Request, res: Response, next: Next
         desc(sql`COALESCE(SUM(CASE WHEN ${resultsTable.rank} = 1 THEN 1 ELSE 0 END), 0)`),
         sql`COALESCE(MIN(CASE WHEN ${resultsTable.rank} = 1 THEN ${sessionsTable.played_at} END), '9999-12-31T23:59:59') ASC`,
       )
-      .all()
 
     res.json(rows)
   } catch (err) {
@@ -71,9 +69,9 @@ router.get('/leaderboard/game/:gameId', (req: Request, res: Response, next: Next
 })
 
 // GET /api/v1/stats/most-played
-router.get('/most-played', (_req: Request, res: Response, next: NextFunction) => {
+router.get('/most-played', async (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const rows = db
+    const rows = await db
       .select({
         id: gamesTable.id,
         name: gamesTable.name,
@@ -87,7 +85,6 @@ router.get('/most-played', (_req: Request, res: Response, next: NextFunction) =>
       .where(isNull(gamesTable.deleted_at))
       .groupBy(gamesTable.id)
       .orderBy(desc(sql`COUNT(DISTINCT ${sessionsTable.id})`))
-      .all()
 
     res.json(rows)
   } catch (err) {
@@ -96,9 +93,9 @@ router.get('/most-played', (_req: Request, res: Response, next: NextFunction) =>
 })
 
 // GET /api/v1/stats/least-played
-router.get('/least-played', (_req: Request, res: Response, next: NextFunction) => {
+router.get('/least-played', async (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const rows = db
+    const rows = await db
       .select({
         id: gamesTable.id,
         name: gamesTable.name,
@@ -112,7 +109,6 @@ router.get('/least-played', (_req: Request, res: Response, next: NextFunction) =
       .where(isNull(gamesTable.deleted_at))
       .groupBy(gamesTable.id)
       .orderBy(asc(sql`COUNT(DISTINCT ${sessionsTable.id})`))
-      .all()
 
     res.json(rows)
   } catch (err) {
@@ -121,7 +117,7 @@ router.get('/least-played', (_req: Request, res: Response, next: NextFunction) =
 })
 
 // GET /api/v1/stats/head-to-head?player1=:id&player2=:id
-router.get('/head-to-head', (req: Request, res: Response, next: NextFunction) => {
+router.get('/head-to-head', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const p1 = Number(req.query.player1)
     const p2 = Number(req.query.player2)
@@ -129,23 +125,23 @@ router.get('/head-to-head', (req: Request, res: Response, next: NextFunction) =>
     if (!p1 || !p2) return res.status(400).json({ error: 'player1 and player2 are required' })
     if (p1 === p2) return res.status(400).json({ error: 'Players must be different' })
 
-    const player1 = db
+    const [player1] = await db
       .select()
       .from(playersTable)
       .where(and(eq(playersTable.id, p1), isNull(playersTable.deleted_at)))
-      .get()
-    const player2 = db
+      .limit(1)
+    const [player2] = await db
       .select()
       .from(playersTable)
       .where(and(eq(playersTable.id, p2), isNull(playersTable.deleted_at)))
-      .get()
+      .limit(1)
 
     if (!player1 || !player2) return res.status(404).json({ error: 'Player not found' })
     if (player1.player_type !== 'person' || player2.player_type !== 'person') {
       return res.status(400).json({ error: 'Head-to-head is only available for person-type players' })
     }
 
-    const sharedSessions = db
+    const sharedSessions = await db
       .select({
         session_id: sessionsTable.id,
         played_at: sessionsTable.played_at,
@@ -163,7 +159,6 @@ router.get('/head-to-head', (req: Request, res: Response, next: NextFunction) =>
           sql`EXISTS (SELECT 1 FROM session_results WHERE session_id = sessions.id AND player_id = ${p2} AND deleted_at IS NULL)`,
         ),
       )
-      .all()
 
     const p1Wins = sharedSessions.filter((s) => s.p1_rank < s.p2_rank).length
     const p2Wins = sharedSessions.filter((s) => s.p2_rank < s.p1_rank).length
