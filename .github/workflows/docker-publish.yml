@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - 'release-*'
   pull_request:
     branches:
       - main
+      - 'release-*'
 
 jobs:
   # Deliberately a separate job rather than a step in `test`: `build` gates on
@@ -90,9 +92,21 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # :latest is the released image and must only ever come from main.
+      # Release trains publish :next instead, so the train can be dogfooded
+      # without shipping unreleased code to everyone running :latest.
+      - name: Resolve image tag
+        id: tag
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "value=latest" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=next" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Build and push
         uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
         with:
           context: .
           push: ${{ github.event_name == 'push' }}
-          tags: ghcr.io/lukanrocks/tally:latest
+          tags: ghcr.io/lukanrocks/tally:${{ steps.tag.outputs.value }}
