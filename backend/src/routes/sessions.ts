@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express'
 import { eq, isNull, and, sql } from 'drizzle-orm'
-import { db, sqlite } from '../db'
+import { db } from '../db'
+import { withTransaction } from '../db/transaction'
 import { sessions as sessionsTable, session_results as resultsTable, games as gamesTable } from '../db/schema'
 
 const router = Router()
@@ -100,12 +101,8 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
 
     if (!game) return res.status(404).json({ error: 'Game not found' })
 
-    // The two terminal calls inside this block stay synchronous on purpose:
-    // better-sqlite3's transaction() requires a sync callback, so awaiting here
-    // would let the transaction commit before the inserts resolve. They convert
-    // in Phase 2, together with the move to db.transaction().
-    const createSession = sqlite.transaction(() => {
-      const [session] = db
+    const session = await withTransaction(async (tx) => {
+      const [created] = await tx
         .insert(sessionsTable)
         .values({
           game_id,
@@ -113,24 +110,20 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
           notes: notes || null,
         })
         .returning()
-        .all()
 
       const N = results.length
       for (const r of results) {
-        db.insert(resultsTable)
-          .values({
-            session_id: session.id,
-            player_id: r.player_id,
-            rank: r.rank,
-            points_awarded: calcPoints(N, r.rank),
-          })
-          .run()
+        await tx.insert(resultsTable).values({
+          session_id: created.id,
+          player_id: r.player_id,
+          rank: r.rank,
+          points_awarded: calcPoints(N, r.rank),
+        })
       }
 
-      return session
+      return created
     })
 
-    const session = createSession()
     res.status(201).json(session)
   } catch (err) {
     next(err)

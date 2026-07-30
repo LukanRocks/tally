@@ -2,8 +2,17 @@ import { Router, Request, Response, NextFunction } from 'express'
 import { eq, isNull, and } from 'drizzle-orm'
 import { readdirSync, unlinkSync } from 'fs'
 import { join } from 'path'
-import { db, sqlite, DATA_DIR } from '../db'
-import { settings as settingsTable, players as playersTable } from '../db/schema'
+import { db, DATA_DIR } from '../db'
+import { withTransaction } from '../db/transaction'
+import {
+  settings as settingsTable,
+  players as playersTable,
+  bgg_games as bggTable,
+  session_results as resultsTable,
+  sessions as sessionsTable,
+  game_attachments as attachmentsTable,
+  games as gamesTable,
+} from '../db/schema'
 
 // #DOCS: Migration 0002_settings_and_owner.sql seeds DB by default creating a singleton
 const SETTINGS_SINGLETON = 1
@@ -64,24 +73,22 @@ router.put('/', async (req: Request, res: Response, next: NextFunction) => {
 })
 
 // DELETE /api/v1/settings/reset
-router.delete('/reset', (_req: Request, res: Response, next: NextFunction) => {
+router.delete('/reset', async (_req: Request, res: Response, next: NextFunction) => {
   try {
-    const reset = sqlite.transaction(() => {
+    await withTransaction(async (tx) => {
       // 1. Clear settings FK before players are removed
-      sqlite.prepare('DELETE FROM settings').run()
-      sqlite.prepare('DELETE FROM bgg_games').run()
+      await tx.delete(settingsTable)
+      await tx.delete(bggTable)
       // 2-5. Clear dependent tables before their parents
-      sqlite.prepare('DELETE FROM session_results').run()
-      sqlite.prepare('DELETE FROM sessions').run()
-      sqlite.prepare('DELETE FROM game_attachments').run()
-      sqlite.prepare('DELETE FROM games').run()
+      await tx.delete(resultsTable)
+      await tx.delete(sessionsTable)
+      await tx.delete(attachmentsTable)
+      await tx.delete(gamesTable)
       // 6. Players
-      sqlite.prepare('DELETE FROM players').run()
+      await tx.delete(playersTable)
       // 7. Re-seed settings with defaults
-      sqlite.prepare('INSERT INTO settings (id) VALUES (?)').run(SETTINGS_SINGLETON)
+      await tx.insert(settingsTable).values({ id: SETTINGS_SINGLETON })
     })
-
-    reset()
 
     // Wipe uploaded files
     for (const subdir of ['covers', 'attachments', 'avatars']) {

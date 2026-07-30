@@ -55,6 +55,18 @@ describe('bgg', () => {
       expect(res.status).toBe(400)
       expect(res.body).toEqual({ error: 'No file uploaded' })
     })
+
+    // Imports are chunked multi-row inserts, so exercise well past one chunk —
+    // a real BGG export is orders of magnitude larger than this.
+    it('imports far more rows than fit in a single insert', async () => {
+      const rows = Array.from({ length: 1000 }, (_, i) => `${1000 + i},Bulk Game ${i},2000`)
+
+      const res = await importCsv(['id,name,yearpublished', ...rows].join('\n'))
+
+      expect(res.status).toBe(200)
+      expect(res.body).toEqual({ imported: 1000 })
+      expect((await request(testApp()).get('/api/v1/bgg/search?q=Bulk Game 999')).body).toEqual([{ bgg_id: 1999, name: 'Bulk Game 999', year_published: 2000 }])
+    })
   })
 
   describe('GET /api/v1/bgg/search', () => {
