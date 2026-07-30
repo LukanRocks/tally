@@ -38,7 +38,23 @@ export type PULSE_DOT_SIZE = NonNullable<PULSE_DOT_VARIANTS_PROPS['size']>
 export const PULSE_DOT_SIZES: PULSE_DOT_SIZE[] = ['sm', 'md', 'lg']
 
 export type PULSE_DOT_COLOR = NonNullable<PULSE_DOT_VARIANTS_PROPS['color']>
-export const PULSE_DOT_COLORS: PULSE_DOT_COLOR[] = ['gold', 'silver', 'bronze', 'win', 'loss', 'tie', 'owned', 'borrowed', 'rented', 'success', 'warning', 'info', 'destructive', 'primary', 'secondary']
+export const PULSE_DOT_COLORS: PULSE_DOT_COLOR[] = [
+  'gold',
+  'silver',
+  'bronze',
+  'win',
+  'loss',
+  'tie',
+  'owned',
+  'borrowed',
+  'rented',
+  'success',
+  'warning',
+  'info',
+  'destructive',
+  'primary',
+  'secondary',
+]
 
 export type PulseDotProps = PULSE_DOT_VARIANTS_PROPS & { className?: string; pulsing?: boolean }
 

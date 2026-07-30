@@ -45,28 +45,28 @@ export function TypographySection() {
       </div>
 
       <div>
-        <p className='caption mb-3 text-ink-muted'>Scale</p>
+        <p className='mb-3 caption text-ink-muted'>Scale</p>
         <div className='overflow-auto rounded-xl border border-border bg-card'>
           <table className='w-full'>
             <thead>
               <tr className='border-b border-border'>
-                <th className='caption px-4 py-3 text-left text-ink-muted'>token</th>
-                <th className='caption px-4 py-3 text-left text-ink-muted'>class</th>
-                <th className='caption px-4 py-3 text-left text-ink-muted'>size / line</th>
-                <th className='caption px-4 py-3 text-left text-ink-muted'>weight</th>
-                <th className='caption px-4 py-3 text-left text-ink-muted'>preview</th>
+                <th className='px-4 py-3 text-left caption text-ink-muted'>token</th>
+                <th className='px-4 py-3 text-left caption text-ink-muted'>class</th>
+                <th className='px-4 py-3 text-left caption text-ink-muted'>size / line</th>
+                <th className='px-4 py-3 text-left caption text-ink-muted'>weight</th>
+                <th className='px-4 py-3 text-left caption text-ink-muted'>preview</th>
               </tr>
             </thead>
             <tbody className='divide-y divide-dashed divide-border'>
               {[
-                { token: 'display', cls: '.display', size: '2.25rem',  line: '1.125', weight: '800' },
-                { token: 'h1',      cls: '.h1',      size: '1.875rem', line: '1.25',  weight: '800' },
-                { token: 'h2',      cls: '.h2',      size: '1.25rem',  line: '1.375', weight: '700' },
-                { token: 'h3',      cls: '.h3',      size: '1.125rem', line: '1.375', weight: '600' },
-                { token: 'body',    cls: '.body',    size: '0.875rem', line: '1.375', weight: '400' },
-                { token: 'small',   cls: '.small',   size: '0.75rem',  line: '1.5',   weight: '400' },
-                { token: 'caption', cls: '.caption', size: '0.75rem',  line: '1.5',   weight: '600 mono' },
-                { token: 'accent',  cls: '.callout', size: '1.5rem',   line: '1.25',  weight: '700 kalam' },
+                { token: 'display', cls: '.display', size: '2.25rem', line: '1.125', weight: '800' },
+                { token: 'h1', cls: '.h1', size: '1.875rem', line: '1.25', weight: '800' },
+                { token: 'h2', cls: '.h2', size: '1.25rem', line: '1.375', weight: '700' },
+                { token: 'h3', cls: '.h3', size: '1.125rem', line: '1.375', weight: '600' },
+                { token: 'body', cls: '.body', size: '0.875rem', line: '1.375', weight: '400' },
+                { token: 'small', cls: '.small', size: '0.75rem', line: '1.5', weight: '400' },
+                { token: 'caption', cls: '.caption', size: '0.75rem', line: '1.5', weight: '600 mono' },
+                { token: 'accent', cls: '.callout', size: '1.5rem', line: '1.25', weight: '700 kalam' },
               ].map((row) => (
                 <tr key={row.token}>
                   <td className='px-4 py-3'>
@@ -75,12 +75,12 @@ export function TypographySection() {
                   <td className='px-4 py-3'>
                     <code className='font-mono text-xs text-ink-muted'>{row.cls}</code>
                   </td>
-                  <td className='px-4 py-3 text-xs text-ink-muted'>{row.size} / {row.line}</td>
+                  <td className='px-4 py-3 text-xs text-ink-muted'>
+                    {row.size} / {row.line}
+                  </td>
                   <td className='px-4 py-3 text-xs text-ink-muted'>{row.weight}</td>
                   <td className='px-4 py-3'>
-                    <span className={row.token === 'accent' ? 'callout' : row.token === 'caption' ? 'caption text-ink-muted' : row.token}>
-                      {previews[row.token]}
-                    </span>
+                    <span className={row.token === 'accent' ? 'callout' : row.token === 'caption' ? 'caption text-ink-muted' : row.token}>{previews[row.token]}</span>
                   </td>
                 </tr>
               ))}

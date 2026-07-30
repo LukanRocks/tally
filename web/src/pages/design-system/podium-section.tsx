@@ -7,7 +7,7 @@ export function PodiumSection() {
       </div>
 
       <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
-        <p className='caption mb-6 text-center text-ink-muted'>Reigning champion · this week</p>
+        <p className='mb-6 text-center caption text-ink-muted'>Reigning champion · this week</p>
         <div className='grid grid-cols-3 items-end gap-2'>
           {/* 2nd */}
           <div className='flex flex-col items-center gap-1.5 text-center'>

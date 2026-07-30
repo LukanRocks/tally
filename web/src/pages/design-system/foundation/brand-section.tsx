@@ -10,7 +10,7 @@ export const BrandSection = () => (
 
     <div className='grid grid-cols-2 gap-4'>
       <div className='rounded-xl border border-border bg-card p-5'>
-        <p className='caption mb-4 text-ink-muted'>Primary lockup</p>
+        <p className='mb-4 caption text-ink-muted'>Primary lockup</p>
         <div className='flex items-center gap-4 py-4'>
           <img src='/logo-ink.svg' width={80} height={80} className='hidden rounded-xl dark:block' />
           <img src='/logo-paper.svg' width={80} height={80} className='rounded-xl dark:hidden' />
@@ -20,7 +20,7 @@ export const BrandSection = () => (
       </div>
 
       <div className='rounded-xl border border-border bg-card p-5'>
-        <p className='caption mb-4 text-ink-muted'>Voice — three rules</p>
+        <p className='mb-4 caption text-ink-muted'>Voice — three rules</p>
         <ol className='list-decimal space-y-2 pl-5 text-sm text-ink-secondary'>
           <li>
             <strong>Short and crisp.</strong> "Log a session", not "Record gameplay activity".
@@ -39,17 +39,17 @@ export const BrandSection = () => (
     <div className='grid grid-cols-3 gap-4'>
       <div className='flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-5'>
         <img src='/logo-ink.svg' className='h-24 w-24 rounded-xl' />
-        <p className='caption text-center text-ink-muted'>Ink ground · default</p>
+        <p className='text-center caption text-ink-muted'>Ink ground · default</p>
       </div>
 
       <div className='flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-5'>
         <img src='/logo-yellow.svg' className='h-24 w-24 rounded-xl' />
-        <p className='caption text-center text-ink-muted'>Yellow ground · home tile</p>
+        <p className='text-center caption text-ink-muted'>Yellow ground · home tile</p>
       </div>
 
       <div className='flex flex-col items-center gap-3 rounded-xl border border-border bg-card p-5'>
         <img src='/logo-paper.svg' className='h-24 w-24 rounded-xl' />
-        <p className='caption text-center text-ink-muted'>Mono · footer / emboss</p>
+        <p className='text-center caption text-ink-muted'>Mono · footer / emboss</p>
       </div>
     </div>
   </section>
