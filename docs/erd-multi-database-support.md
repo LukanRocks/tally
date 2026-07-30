@@ -107,7 +107,8 @@ backend/src/db/
   schema.ts            re-exports resolved schema + canonical row types
   migrations/
     sqlite/            existing 0001–0005 + future
-    pg/                hand-authored equivalents
+    postgres/          hand-authored equivalents
+  search.ts            searchLike() — dialect-aware case-insensitive match
   migrate/
     runner.ts          dialect-aware migration runner (replaces runMigrations)
     import-sqlite.ts   one-time SQLite → Postgres importer
@@ -171,7 +172,8 @@ this seam for us.
 | Timestamps | `text` ISO strings | Keep as `text` | **Do not** switch to `timestamptz` — it would ripple into the API contract and frontend types for no gain |
 | `datetime('now')` default | `(datetime('now'))` | `to_char(now() AT TIME ZONE 'UTC', ...)` | Per-dialect DDL, same ISO-8601 output format |
 | `real` price | `REAL` | `double precision` | Direct equivalent |
-| Sequences after import | n/a | Start at 1 | `setval` after import or the first insert dies on duplicate key |
+| `COUNT()` / `SUM()` return type | JS `number` | **String** — node-postgres returns int8/numeric as strings to avoid precision loss | `setTypeParser` for INT8 + NUMERIC in `db/index.ts`. **Silent API contract change if missed** — every aggregate would become `"0"` instead of `0` |
+| Sequences after import | n/a | Start at 1 | `setval` after import or the first insert dies on duplicate key. Verified: reproduces as a duplicate-key error on the first insert after an explicit-id import |
 
 `stats.ts` raw SQL fragments (`COALESCE`, `CASE`, `SUM`, `EXISTS`) are portable as written —
 fortunate, and the file to re-test hardest.
@@ -455,9 +457,9 @@ the `Protect Main` ruleset.
 1. ✅ Add `release-*` to both `push` and `pull_request` branch lists.
 2. ✅ Make the image tag conditional — `main` → `:latest`, any train → `:next`. Publishing train
    builds over `:latest` would ship unreleased code to every user running it.
-3. ⬜ Add a `postgres:17` service container to the `test` job and matrix it over both dialects
-   (§11), so the §4.3 cast is exercised on every PR. **Deferred to Phase 3** — there is no
-   Postgres dialect to test until then.
+3. ✅ Add a `postgres:17` service container to the `test` job and matrix it over both dialects
+   (§11), so the §4.3 cast is exercised on every PR. Done in Phase 3; `docker-compose.test.yml`
+   runs the same image locally on the same port, so `pnpm test:pg` is identical either side.
 4. ⬜ Extend branch protection to `release-*` (same required checks, squash-only), so features
    merging into a train meet the same bar as `main`. Repo settings; owner action.
 
@@ -474,9 +476,10 @@ seam is not something to verify by hand.
 
 - **Runner:** Vitest in `backend`.
 - **SQLite fixture:** `better-sqlite3` in-memory, migrations applied per test file.
-- **Postgres fixture:** from Phase 3, a `postgres:17` service container in CI and a compose
-  service locally. PGlite is a legitimate option here specifically — an ephemeral test database
-  losing data is a non-event, which is exactly where its weaknesses do not bite.
+- **Postgres fixture:** `postgres:17`, as a CI service container and via
+  `docker-compose.test.yml` locally — same image, same port, so `DATABASE_URL` matches. The
+  Postgres pass shares one database, so `fileParallelism` is disabled for it; SQLite keeps a
+  temp file per test file and stays parallel.
 - **Matrix:** from Phase 3, the whole suite runs twice, once per dialect. This is what guards
   the §4.3 cast.
 - **Import test:** seed SQLite from a fixture, import into empty Postgres, assert row-for-row
@@ -524,7 +527,7 @@ SQLite half and watching the SQLite-only tests pass. This doc is the guardrail.
 Required contents:
 
 1. **The rule up front:** every migration is two files with the same numeric prefix —
-   `migrations/sqlite/00NN_name.sql` and `migrations/pg/00NN_name.sql`. Never one without the
+   `migrations/sqlite/00NN_name.sql` and `migrations/postgres/00NN_name.sql`. Never one without the
    other. Never edit a migration that has already been applied; add a new one.
 2. **Both schema files** (`schema.sqlite.ts`, `schema.pg.ts`) must be updated together, with
    identical column names — the §4.3 cast means the compiler will not catch a mismatch.

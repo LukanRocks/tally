@@ -6,7 +6,9 @@ describe('players', () => {
 
   describe('POST /api/v1/players', () => {
     it('creates a player defaulting to person', async () => {
-      const res = await request(testApp()).post('/api/v1/players').send({ name: 'Ada' })
+      const res = await request(await testApp())
+        .post('/api/v1/players')
+        .send({ name: 'Ada' })
 
       expect(res.status).toBe(201)
       expect(res.body).toMatchObject({ id: 1, name: 'Ada', player_type: 'person', avatar_path: null, deleted_at: null })
@@ -14,7 +16,9 @@ describe('players', () => {
     })
 
     it('accepts an explicit shop type and trims the name', async () => {
-      const res = await request(testApp()).post('/api/v1/players').send({ name: '  Board Game Cafe  ', player_type: 'shop' })
+      const res = await request(await testApp())
+        .post('/api/v1/players')
+        .send({ name: '  Board Game Cafe  ', player_type: 'shop' })
 
       expect(res.status).toBe(201)
       expect(res.body).toMatchObject({ name: 'Board Game Cafe', player_type: 'shop' })
@@ -22,7 +26,9 @@ describe('players', () => {
 
     it('allows duplicate names', async () => {
       await createPlayer('Ada')
-      const res = await request(testApp()).post('/api/v1/players').send({ name: 'Ada' })
+      const res = await request(await testApp())
+        .post('/api/v1/players')
+        .send({ name: 'Ada' })
 
       expect(res.status).toBe(201)
       expect(res.body.id).toBe(2)
@@ -33,7 +39,9 @@ describe('players', () => {
       ['blank name', { name: '   ' }, 'Name is required'],
       ['bad player_type', { name: 'Ada', player_type: 'robot' }, 'player_type must be "person" or "shop"'],
     ])('rejects %s', async (_label, body, error) => {
-      const res = await request(testApp()).post('/api/v1/players').send(body)
+      const res = await request(await testApp())
+        .post('/api/v1/players')
+        .send(body)
 
       expect(res.status).toBe(400)
       expect(res.body).toEqual({ error })
@@ -42,7 +50,7 @@ describe('players', () => {
 
   describe('GET /api/v1/players', () => {
     it('returns an empty list initially', async () => {
-      const res = await request(testApp()).get('/api/v1/players')
+      const res = await request(await testApp()).get('/api/v1/players')
 
       expect(res.status).toBe(200)
       expect(res.body).toEqual([])
@@ -57,7 +65,7 @@ describe('players', () => {
         { player_id: bob.id, rank: 2 },
       ])
 
-      const res = await request(testApp()).get('/api/v1/players')
+      const res = await request(await testApp()).get('/api/v1/players')
 
       expect(res.status).toBe(200)
       expect(res.body).toHaveLength(2)
@@ -69,9 +77,9 @@ describe('players', () => {
     it('omits soft-deleted players', async () => {
       const ada = await createPlayer('Ada')
       await createPlayer('Bob')
-      await request(testApp()).delete(`/api/v1/players/${ada.id}`)
+      await request(await testApp()).delete(`/api/v1/players/${ada.id}`)
 
-      const res = await request(testApp()).get('/api/v1/players')
+      const res = await request(await testApp()).get('/api/v1/players')
 
       expect(res.body.map((p: { name: string }) => p.name)).toEqual(['Bob'])
     })
@@ -81,7 +89,7 @@ describe('players', () => {
     it('returns win_rate and zeroed stats for a player with no sessions', async () => {
       const ada = await createPlayer('Ada')
 
-      const res = await request(testApp()).get(`/api/v1/players/${ada.id}`)
+      const res = await request(await testApp()).get(`/api/v1/players/${ada.id}`)
 
       expect(res.status).toBe(200)
       expect(res.body).toMatchObject({ id: ada.id, name: 'Ada', total_points: 0, total_sessions: 0, win_rate: 0 })
@@ -100,17 +108,17 @@ describe('players', () => {
         { player_id: bob.id, rank: 1 },
       ])
 
-      const res = await request(testApp()).get(`/api/v1/players/${ada.id}`)
+      const res = await request(await testApp()).get(`/api/v1/players/${ada.id}`)
 
       expect(res.body).toMatchObject({ total_points: 4, total_sessions: 2, wins: 1, win_rate: 50 })
     })
 
     it('404s for unknown and soft-deleted players', async () => {
       const ada = await createPlayer('Ada')
-      await request(testApp()).delete(`/api/v1/players/${ada.id}`)
+      await request(await testApp()).delete(`/api/v1/players/${ada.id}`)
 
-      expect((await request(testApp()).get('/api/v1/players/999')).status).toBe(404)
-      expect((await request(testApp()).get(`/api/v1/players/${ada.id}`)).status).toBe(404)
+      expect((await request(await testApp()).get('/api/v1/players/999')).status).toBe(404)
+      expect((await request(await testApp()).get(`/api/v1/players/${ada.id}`)).status).toBe(404)
     })
   })
 
@@ -118,7 +126,9 @@ describe('players', () => {
     it('updates name and type', async () => {
       const ada = await createPlayer('Ada')
 
-      const res = await request(testApp()).put(`/api/v1/players/${ada.id}`).send({ name: 'Ada L.', player_type: 'shop' })
+      const res = await request(await testApp())
+        .put(`/api/v1/players/${ada.id}`)
+        .send({ name: 'Ada L.', player_type: 'shop' })
 
       expect(res.status).toBe(200)
       expect(res.body).toMatchObject({ id: ada.id, name: 'Ada L.', player_type: 'shop' })
@@ -127,7 +137,9 @@ describe('players', () => {
     it('leaves player_type untouched when omitted', async () => {
       const shop = await createPlayer('Cafe', 'shop')
 
-      const res = await request(testApp()).put(`/api/v1/players/${shop.id}`).send({ name: 'Cafe 2' })
+      const res = await request(await testApp())
+        .put(`/api/v1/players/${shop.id}`)
+        .send({ name: 'Cafe 2' })
 
       expect(res.body).toMatchObject({ name: 'Cafe 2', player_type: 'shop' })
     })
@@ -135,9 +147,27 @@ describe('players', () => {
     it('validates and 404s', async () => {
       const ada = await createPlayer('Ada')
 
-      expect((await request(testApp()).put(`/api/v1/players/${ada.id}`).send({ name: '' })).status).toBe(400)
-      expect((await request(testApp()).put(`/api/v1/players/${ada.id}`).send({ name: 'Ada', player_type: 'robot' })).status).toBe(400)
-      expect((await request(testApp()).put('/api/v1/players/999').send({ name: 'Nobody' })).status).toBe(404)
+      expect(
+        (
+          await request(await testApp())
+            .put(`/api/v1/players/${ada.id}`)
+            .send({ name: '' })
+        ).status,
+      ).toBe(400)
+      expect(
+        (
+          await request(await testApp())
+            .put(`/api/v1/players/${ada.id}`)
+            .send({ name: 'Ada', player_type: 'robot' })
+        ).status,
+      ).toBe(400)
+      expect(
+        (
+          await request(await testApp())
+            .put('/api/v1/players/999')
+            .send({ name: 'Nobody' })
+        ).status,
+      ).toBe(404)
     })
   })
 
@@ -151,28 +181,30 @@ describe('players', () => {
         { player_id: bob.id, rank: 2 },
       ])
 
-      const res = await request(testApp()).delete(`/api/v1/players/${ada.id}`)
+      const res = await request(await testApp()).delete(`/api/v1/players/${ada.id}`)
       expect(res.status).toBe(204)
 
       // The session survives, but Ada's result row is gone from it.
-      const detail = await request(testApp()).get(`/api/v1/sessions/${session.id}`)
+      const detail = await request(await testApp()).get(`/api/v1/sessions/${session.id}`)
       expect(detail.status).toBe(200)
       expect(detail.body.results.map((r: { player_id: number }) => r.player_id)).toEqual([bob.id])
     })
 
     it('refuses to delete the configured default owner', async () => {
       const ada = await createPlayer('Ada')
-      await request(testApp()).put('/api/v1/settings').send({ default_owner_id: ada.id })
+      await request(await testApp())
+        .put('/api/v1/settings')
+        .send({ default_owner_id: ada.id })
 
-      const res = await request(testApp()).delete(`/api/v1/players/${ada.id}`)
+      const res = await request(await testApp()).delete(`/api/v1/players/${ada.id}`)
 
       expect(res.status).toBe(409)
       expect(res.body.error).toMatch(/default owner/i)
-      expect((await request(testApp()).get(`/api/v1/players/${ada.id}`)).status).toBe(200)
+      expect((await request(await testApp()).get(`/api/v1/players/${ada.id}`)).status).toBe(200)
     })
 
     it('404s for unknown players', async () => {
-      expect((await request(testApp()).delete('/api/v1/players/999')).status).toBe(404)
+      expect((await request(await testApp()).delete('/api/v1/players/999')).status).toBe(404)
     })
   })
 })

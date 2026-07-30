@@ -1,95 +1,26 @@
-import { sqliteTable, integer, text, real } from 'drizzle-orm/sqlite-core'
-import { sql } from 'drizzle-orm'
+import * as sqliteSchema from './schema.sqlite'
+import * as pgSchema from './schema.pg'
+import { dialect } from './index'
 
-export const games = sqliteTable('games', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  name: text('name').notNull(),
-  description: text('description'),
-  quick_rules: text('quick_rules'),
-  min_players: integer('min_players'),
-  max_players: integer('max_players'),
-  purchase_at: text('purchase_at'),
-  price: real('price'),
-  cover_image_path: text('cover_image_path'),
-  owner_id: integer('owner_id'),
-  bgg_id: integer('bgg_id'),
-  year_published: integer('year_published'),
-  created_at: text('created_at')
-    .notNull()
-    .default(sql`(datetime('now'))`),
-  updated_at: text('updated_at')
-    .notNull()
-    .default(sql`(datetime('now'))`),
-  deleted_at: text('deleted_at'),
-})
+/**
+ * Hands out the resolved dialect's tables under one set of names, so route code
+ * imports from here and never learns which database it is talking to.
+ *
+ * The *values* are the running dialect's tables; the *types* are always the
+ * SQLite ones. That pairs with the cast in index.ts — `db` is likewise typed as
+ * the SQLite client — so the two lies are consistent and cancel out. Row shapes
+ * are structurally identical across the dialects, which is what makes this safe.
+ *
+ * Column names must therefore stay identical between schema.sqlite.ts and
+ * schema.pg.ts. Nothing here will tell you if they drift; only the dual-dialect
+ * test matrix will.
+ */
+const resolved = dialect === 'postgres' ? pgSchema : sqliteSchema
 
-export const game_attachments = sqliteTable('game_attachments', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  game_id: integer('game_id')
-    .notNull()
-    .references(() => games.id),
-  label: text('label').notNull(),
-  file_path: text('file_path').notNull(),
-  created_at: text('created_at')
-    .notNull()
-    .default(sql`(datetime('now'))`),
-  deleted_at: text('deleted_at'),
-})
-
-export const players = sqliteTable('players', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  name: text('name').notNull(),
-  avatar_path: text('avatar_path'),
-  player_type: text('player_type', { enum: ['person', 'shop'] })
-    .notNull()
-    .default('person'),
-  created_at: text('created_at')
-    .notNull()
-    .default(sql`(strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))`),
-  deleted_at: text('deleted_at'),
-})
-
-export const sessions = sqliteTable('sessions', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  game_id: integer('game_id')
-    .notNull()
-    .references(() => games.id),
-  played_at: text('played_at').notNull(),
-  notes: text('notes'),
-  created_at: text('created_at')
-    .notNull()
-    .default(sql`(datetime('now'))`),
-  deleted_at: text('deleted_at'),
-})
-
-export const session_results = sqliteTable('session_results', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  session_id: integer('session_id')
-    .notNull()
-    .references(() => sessions.id),
-  player_id: integer('player_id')
-    .notNull()
-    .references(() => players.id),
-  rank: integer('rank').notNull(),
-  points_awarded: integer('points_awarded').notNull(),
-  deleted_at: text('deleted_at'),
-})
-
-export const settings = sqliteTable('settings', {
-  id: integer('id').primaryKey(),
-  onboarded: integer('onboarded', { mode: 'boolean' }).notNull().default(false),
-  currency: text('currency').notNull().default('USD'),
-  language: text('language').notNull().default('en'),
-  default_owner_id: integer('default_owner_id'),
-  theme: text('theme').notNull().default('system'),
-  bgg_last_updated: text('bgg_last_updated'),
-  updated_at: text('updated_at')
-    .notNull()
-    .default(sql`(datetime('now'))`),
-})
-
-export const bgg_games = sqliteTable('bgg_games', {
-  bgg_id: integer('bgg_id').primaryKey(),
-  name: text('name').notNull(),
-  year_published: integer('year_published'),
-})
+export const games = resolved.games as typeof sqliteSchema.games
+export const game_attachments = resolved.game_attachments as typeof sqliteSchema.game_attachments
+export const players = resolved.players as typeof sqliteSchema.players
+export const sessions = resolved.sessions as typeof sqliteSchema.sessions
+export const session_results = resolved.session_results as typeof sqliteSchema.session_results
+export const settings = resolved.settings as typeof sqliteSchema.settings
+export const bgg_games = resolved.bgg_games as typeof sqliteSchema.bgg_games

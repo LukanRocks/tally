@@ -1,0 +1,24 @@
+# Postgres for the dual-dialect test matrix. Not part of running Tally —
+# see docker-compose.yml for that.
+#
+#   docker compose -f docker-compose.test.yml up -d
+#   pnpm -C backend test:pg
+#
+# Port 55432 avoids clashing with a Postgres already running on 5432.
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: tally
+      POSTGRES_PASSWORD: tally
+      POSTGRES_DB: tally_test
+    ports:
+      - '55432:5432'
+    # tmpfs: the data is disposable by definition, and this keeps the suite fast.
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U tally -d tally_test']
+      interval: 1s
+      timeout: 3s
+      retries: 30

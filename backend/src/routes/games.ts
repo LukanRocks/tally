@@ -1,9 +1,10 @@
 import { Router, Request, Response, NextFunction } from 'express'
-import { eq, isNull, like, and, gte, lte, desc, asc, sql } from 'drizzle-orm'
+import { eq, isNull, and, gte, lte, desc, asc, sql } from 'drizzle-orm'
 import path from 'path'
 import { existsSync, unlinkSync } from 'fs'
 import { db, DATA_DIR } from '../db'
 import { games as gamesTable, game_attachments as attachmentsTable, sessions as sessionsTable, session_results as resultsTable, players as playersTable } from '../db/schema'
+import { searchLike } from '../db/search'
 import { coverUpload, attachmentUpload } from '../middleware/upload'
 
 const router = Router()
@@ -42,7 +43,7 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
       .where(
         and(
           isNull(gamesTable.deleted_at),
-          search ? like(gamesTable.name, `%${search as string}%`) : undefined,
+          search ? searchLike(gamesTable.name, search as string) : undefined,
           minPlayers ? gte(gamesTable.min_players, Number(minPlayers)) : undefined,
           maxPlayers ? lte(gamesTable.max_players, Number(maxPlayers)) : undefined,
           ownerId ? eq(gamesTable.owner_id, Number(ownerId)) : undefined,

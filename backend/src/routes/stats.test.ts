@@ -29,7 +29,7 @@ describe('stats', () => {
         '2026-02-01T18:00:00.000Z',
       )
 
-      const res = await request(testApp()).get('/api/v1/stats/leaderboard')
+      const res = await request(await testApp()).get('/api/v1/stats/leaderboard')
 
       expect(res.status).toBe(200)
       expect(res.body).toEqual([
@@ -42,7 +42,7 @@ describe('stats', () => {
     it('includes players with no sessions at zero', async () => {
       await createPlayer('Ada')
 
-      const res = await request(testApp()).get('/api/v1/stats/leaderboard')
+      const res = await request(await testApp()).get('/api/v1/stats/leaderboard')
 
       expect(res.body).toEqual([expect.objectContaining({ player_name: 'Ada', total_points: 0, wins: 0, total_sessions: 0, win_rate: 0 })])
     })
@@ -51,9 +51,9 @@ describe('stats', () => {
       await createPlayer('Ada')
       await createPlayer('Cafe', 'shop')
       const gone = await createPlayer('Gone')
-      await request(testApp()).delete(`/api/v1/players/${gone.id}`)
+      await request(await testApp()).delete(`/api/v1/players/${gone.id}`)
 
-      const res = await request(testApp()).get('/api/v1/stats/leaderboard')
+      const res = await request(await testApp()).get('/api/v1/stats/leaderboard')
 
       expect(res.body.map((r: { player_name: string }) => r.player_name)).toEqual(['Ada'])
     })
@@ -66,9 +66,9 @@ describe('stats', () => {
         { player_id: ada.id, rank: 1 },
         { player_id: bob.id, rank: 2 },
       ])
-      await request(testApp()).delete(`/api/v1/sessions/${session.id}`)
+      await request(await testApp()).delete(`/api/v1/sessions/${session.id}`)
 
-      const res = await request(testApp()).get('/api/v1/stats/leaderboard')
+      const res = await request(await testApp()).get('/api/v1/stats/leaderboard')
 
       expect(res.body).toEqual([
         expect.objectContaining({ player_name: 'Ada', total_points: 0, total_sessions: 0 }),
@@ -93,7 +93,7 @@ describe('stats', () => {
         { player_id: ada.id, rank: 2 },
       ])
 
-      const res = await request(testApp()).get(`/api/v1/stats/leaderboard/game/${catan.id}`)
+      const res = await request(await testApp()).get(`/api/v1/stats/leaderboard/game/${catan.id}`)
 
       expect(res.status).toBe(200)
       expect(res.body).toEqual([
@@ -106,7 +106,7 @@ describe('stats', () => {
       await createPlayer('Ada')
       const game = await createGame('Catan')
 
-      const res = await request(testApp()).get(`/api/v1/stats/leaderboard/game/${game.id}`)
+      const res = await request(await testApp()).get(`/api/v1/stats/leaderboard/game/${game.id}`)
 
       expect(res.body).toEqual([])
     })
@@ -130,7 +130,7 @@ describe('stats', () => {
     })
 
     it('orders most-played by session count descending', async () => {
-      const res = await request(testApp()).get('/api/v1/stats/most-played')
+      const res = await request(await testApp()).get('/api/v1/stats/most-played')
 
       expect(res.status).toBe(200)
       expect(res.body[0]).toMatchObject({ name: 'Catan', session_count: 2, unique_players: 2 })
@@ -138,7 +138,7 @@ describe('stats', () => {
     })
 
     it('orders least-played by session count ascending', async () => {
-      const res = await request(testApp()).get('/api/v1/stats/least-played')
+      const res = await request(await testApp()).get('/api/v1/stats/least-played')
 
       expect(res.status).toBe(200)
       expect(res.body[0]).toMatchObject({ name: 'Chess', session_count: 0 })
@@ -179,7 +179,7 @@ describe('stats', () => {
         '2026-03-01T18:00:00.000Z',
       )
 
-      const res = await request(testApp()).get(`/api/v1/stats/head-to-head?player1=${ada.id}&player2=${bob.id}`)
+      const res = await request(await testApp()).get(`/api/v1/stats/head-to-head?player1=${ada.id}&player2=${bob.id}`)
 
       expect(res.status).toBe(200)
       expect(res.body).toMatchObject({
@@ -197,7 +197,7 @@ describe('stats', () => {
       const ada = await createPlayer('Ada')
       const bob = await createPlayer('Bob')
 
-      const res = await request(testApp()).get(`/api/v1/stats/head-to-head?player1=${ada.id}&player2=${bob.id}`)
+      const res = await request(await testApp()).get(`/api/v1/stats/head-to-head?player1=${ada.id}&player2=${bob.id}`)
 
       expect(res.status).toBe(200)
       expect(res.body).toMatchObject({ shared_sessions: 0, p1_wins: 0, p2_wins: 0, sessions: [] })
@@ -210,7 +210,7 @@ describe('stats', () => {
     ])('rejects %s', async (_label, buildQuery, status, error) => {
       const ada = await createPlayer('Ada')
 
-      const res = await request(testApp()).get(`/api/v1/stats/head-to-head${buildQuery(ada.id)}`)
+      const res = await request(await testApp()).get(`/api/v1/stats/head-to-head${buildQuery(ada.id)}`)
 
       expect(res.status).toBe(status)
       expect(res.body).toEqual({ error })
@@ -220,7 +220,7 @@ describe('stats', () => {
       const ada = await createPlayer('Ada')
       const shop = await createPlayer('Cafe', 'shop')
 
-      const res = await request(testApp()).get(`/api/v1/stats/head-to-head?player1=${ada.id}&player2=${shop.id}`)
+      const res = await request(await testApp()).get(`/api/v1/stats/head-to-head?player1=${ada.id}&player2=${shop.id}`)
 
       expect(res.status).toBe(400)
       expect(res.body).toEqual({ error: 'Head-to-head is only available for person-type players' })

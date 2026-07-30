@@ -7,7 +7,9 @@
     "build": "tsc && cp -r src/db/migrations dist/db/",
     "start": "node dist/index.js",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:pg": "DATABASE_URL=postgres://tally:tally@localhost:55432/tally_test vitest run",
+    "test:all": "pnpm test && pnpm test:pg"
   },
   "dependencies": {
     "better-sqlite3": "12.11.1",
@@ -15,13 +17,15 @@
     "drizzle-orm": "0.45.2",
     "express": "5.2.1",
     "express-rate-limit": "8.5.2",
-    "multer": "2.2.0"
+    "multer": "2.2.0",
+    "pg": "8.22.0"
   },
   "devDependencies": {
     "@types/better-sqlite3": "7.6.12",
     "@types/express": "5.0.6",
     "@types/multer": "2.1.0",
     "@types/node": "25.9.1",
+    "@types/pg": "8.20.0",
     "@types/supertest": "7.2.1",
     "supertest": "7.2.2",
     "tsx": "4.22.3",
