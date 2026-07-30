@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { eq } from 'drizzle-orm'
 import { resetDb, testApp, request } from '../test/helpers'
-import { db, sqlite } from './index'
+import { db, sqlite, dialect } from './index'
 import { withTransaction } from './transaction'
 import { players as playersTable, sessions as sessionsTable, session_results as resultsTable } from './schema'
 
@@ -35,7 +35,7 @@ describe('withTransaction', () => {
   it('leaves no transaction open after a rollback', async () => {
     await expect(withTransaction(async () => Promise.reject(new Error('boom')))).rejects.toThrow('boom')
 
-    expect(sqlite.inTransaction).toBe(false)
+    if (dialect === 'sqlite') expect(sqlite!.inTransaction).toBe(false)
   })
 
   it('is usable again after a failed transaction', async () => {
@@ -74,13 +74,15 @@ describe('withTransaction', () => {
 
     expect(results.map((r) => r.status)).toEqual(['fulfilled', 'rejected', 'fulfilled'])
     expect(await countPlayers()).toBe(2)
-    expect(sqlite.inTransaction).toBe(false)
+    if (dialect === 'sqlite') expect(sqlite!.inTransaction).toBe(false)
   })
 
   // End-to-end proof that the route-level guarantee survived the refactor: a
   // session and its result rows are all-or-nothing.
   it('leaves no partial session behind when a result insert fails', async () => {
-    const ada = await request(testApp()).post('/api/v1/players').send({ name: 'Ada' })
+    const ada = await request(await testApp())
+      .post('/api/v1/players')
+      .send({ name: 'Ada' })
 
     await expect(
       withTransaction(async (tx) => {

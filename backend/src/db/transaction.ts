@@ -1,4 +1,4 @@
-import { db, sqlite } from './index'
+import { db, sqlite, dialect } from './index'
 
 /**
  * Dialect-portable transactions.
@@ -9,13 +9,11 @@ import { db, sqlite } from './index'
  * "Transaction function cannot return a promise"), while node-postgres requires
  * an *async* one because every query is real network I/O.
  *
- * Route code needs one shape. So for SQLite we drive BEGIN/COMMIT/ROLLBACK
- * ourselves instead of delegating to better-sqlite3's transaction() wrapper,
- * which lets the callback be async. Postgres will delegate to db.transaction()
- * directly once that dialect exists (Phase 3).
+ * Route code needs one shape, so we standardise on the async one — the shape
+ * Postgres cannot do without — and give SQLite manual BEGIN/COMMIT/ROLLBACK
+ * rather than delegating to better-sqlite3's wrapper.
  */
 
-// Drizzle's better-sqlite3 client. Phase 3 widens this to the resolved dialect.
 type Db = typeof db
 
 /**
@@ -23,6 +21,8 @@ type Db = typeof db
  * both issue BEGIN and SQLite would error on the nested one — better-sqlite3's
  * own transaction() gets this for free by blocking the thread, which we give up
  * the moment we allow awaits inside the callback.
+ *
+ * Postgres needs none of this: each transaction gets its own pooled connection.
  */
 let tail: Promise<unknown> = Promise.resolve()
 
@@ -42,24 +42,31 @@ function enqueue<T>(task: () => Promise<T>): Promise<T> {
  * throw. The callback receives the same query interface used outside a
  * transaction, so route code reads identically on both dialects.
  *
- * Caveat worth knowing: each `await` inside `fn` yields to the microtask queue,
- * so a non-transactional write issued by another in-flight request can land
- * between BEGIN and COMMIT and be rolled back along with a failing transaction.
+ * SQLite caveat: each `await` inside `fn` yields to the microtask queue, so a
+ * non-transactional write issued by another in-flight request can land between
+ * BEGIN and COMMIT and be rolled back along with a failing transaction.
  * Acceptable for a single-user deployment with short transactions; the queue
  * above prevents the far more likely case of two transactions colliding.
+ * Postgres has no such caveat — its transactions are connection-scoped.
  */
 export async function withTransaction<T>(fn: (tx: Db) => Promise<T>): Promise<T> {
+  if (dialect === 'postgres') {
+    return db.transaction(fn as never) as Promise<T>
+  }
+
   return enqueue(async () => {
-    sqlite.exec('BEGIN')
+    const handle = sqlite!
+
+    handle.exec('BEGIN')
 
     try {
       const result = await fn(db)
-      sqlite.exec('COMMIT')
+      handle.exec('COMMIT')
       return result
     } catch (err) {
       // A failed BEGIN leaves no transaction open, so guard the rollback rather
       // than masking the original error with "no transaction is active".
-      if (sqlite.inTransaction) sqlite.exec('ROLLBACK')
+      if (handle.inTransaction) handle.exec('ROLLBACK')
       throw err
     }
   })
