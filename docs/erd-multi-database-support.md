@@ -30,7 +30,7 @@ Handholding by default, power on request.
 
 - Migrating **away** from Postgres back to SQLite. One direction only.
 - Moving uploaded files into the database. Covers, attachments, and avatars stay on the local
-  volume in both modes (see §11, Risk 4).
+  volume in both modes (see §12, Risk 4).
 - MySQL/MariaDB or any third dialect.
 - Multi-tenancy, connection pooling beyond driver defaults, or read replicas.
 
@@ -60,7 +60,7 @@ set. Rejected on data-safety maturity, not on repo health:
   DELETE+INSERT churn hangs — the exact shape of our BGG CSV import.
 
 Revisit at 1.0, specifically once #1065 is closed. **Do** adopt PGlite for test fixtures
-regardless (see §10) — that is its genuine sweet spot.
+regardless (see §11) — that is its genuine sweet spot.
 
 ### Rejected: Option C — Postgres sidecar in the default compose file
 
@@ -109,11 +109,13 @@ backend/src/db/
     sqlite/            existing 0001–0005 + future
     postgres/          hand-authored equivalents
   search.ts            searchLike() — dialect-aware case-insensitive match
-  migrate/
-    runner.ts          dialect-aware migration runner (replaces runMigrations)
-    import-sqlite.ts   one-time SQLite → Postgres importer
+  transaction.ts       withTransaction() — see §5.1
+  import-sqlite.ts     one-time SQLite → Postgres importer
   state.ts             boot state machine, _tally_meta accessors
 ```
+
+As built, the migration runner stayed in `index.ts` rather than moving to `migrate/runner.ts`;
+it is ~60 lines and splitting it bought nothing.
 
 ### 4.2 Config resolution
 
@@ -155,7 +157,7 @@ canonical, since both dialects produce structurally identical row shapes. Everyt
 of `db/index.ts` stays fully typed and dialect-unaware.
 
 This is one deliberate `as` in the codebase. It must carry a comment explaining why, and it is
-the reason §10's dual-dialect test matrix is non-optional — the type system is not checking
+the reason §11's dual-dialect test matrix is non-optional — the type system is not checking
 this seam for us.
 
 ---
@@ -267,12 +269,18 @@ Both exempt from the 503 gate:
 **`POST /api/v1/system/import-from-sqlite`**
 
 1. Reject unless state is `PENDING_IMPORT` (409 otherwise).
-2. Open the SQLite file **read-only**.
+2. **Checkpoint the WAL** (`PRAGMA wal_checkpoint(TRUNCATE)`), then open the SQLite file
+   **read-only**. Tally runs SQLite in WAL mode, so skipping this archives a near-empty file —
+   see §11.1.
 3. In a single Postgres transaction, insert in FK order, preserving IDs:
-   `players → games → game_attachments → sessions → session_results → settings → bgg_games`
+   `players → games → game_attachments → sessions → session_results → bgg_games → settings`.
+   **`settings` replaces rather than inserts** — migration 0002 seeds the singleton, so every
+   target created by our own migrations already holds `id=1` and a plain insert collides.
 4. `setval` every sequence to `max(id)`.
 5. Write `_tally_meta.imported_from_sqlite_at` in the same transaction.
-6. Commit, then rename `tally.db` → `tally.db.migrated-<ISO8601>`. **Rename, never delete.**
+6. Commit, then rename `tally.db` → `tally.db.migrated-<ISO8601>`, moving any surviving
+   `-wal` / `-shm` sidecars alongside so the archive stays self-contained. **Rename, never
+   delete.**
 7. Flip in-memory state to `READY`.
 
 Any throw rolls the transaction back; the app stays `PENDING_IMPORT` and surfaces the error via
@@ -309,12 +317,17 @@ Each phase is independently reviewable and independently revertible.
 | **1** | Async query refactor | Drop `.get()`/`.all()`/`.run()`; `await` throughout. **SQLite only.** *As landed (#102): 50 of 52 sites — the 2 inside sessions.ts's `sqlite.transaction()` callback cannot be awaited (better-sqlite3 requires a sync callback) and moved to Phase 2's scope.* | Phase 0 suite green, unmodified. Zero behavior change |
 | **2** | Transaction portability | Remove raw `sqlite` usage from routes; the 3 blocks move behind `withTransaction()`, converting the 2 call sites deferred from Phase 1. *As landed (#104): `db.transaction()` turned out not to be portable — see §5.1.* | Suite green. `grep -r "sqlite\." src/routes` returns nothing |
 | **3** | Dialect layer | `config.ts`, `schema.pg.ts`, `migrations/pg/`, boot-time driver resolution, `searchLike()` helper | Suite runs green against **both** dialects. Fresh Postgres boot works end to end |
-| **4** | Import + gate | `_tally_meta`, state machine, both system endpoints, 503 gate, importer with `setval` | Test: seeded SQLite + empty PG → import → row-for-row parity incl. IDs; insert-after-import succeeds |
+| **4** | Import + gate | `_tally_meta`, state machine, both system endpoints, 503 gate, importer with `setval`. *As landed (#108): also needed a settings-singleton replace and a WAL checkpoint before archiving — see §11.1.* | Test: seeded SQLite + empty PG → import → row-for-row parity incl. IDs; insert-after-import succeeds |
 | **5** | Frontend | Decision screen, mount-time status check | Manual: full flow both answers. Failure path surfaces the error |
 | **6** | Docs + packaging | README, compose examples, `.env.example`, Dockerfile audit, **agent-facing migration guide** | A stranger can follow the README for both modes; an agent can add a dual-dialect migration without reading this ERD |
+| **7** | E2E scenario suite | Automate the migration scenarios currently run by hand: real built binaries, real Postgres, real HTTP. See §11.1 | `pnpm test:e2e` green locally and in CI; each scenario in §11.1 covered and asserted, not just executed |
 
 Phases 0–2 are **dialect-agnostic pure refactors with no behavior change**. See §10.2 — they
 target `main` via their own PRs, not `release-1`.
+
+**Phase 7 is required before Release 1 closes, not optional polish.** §11.1 explains why: every
+bug that reached a user-visible state in this project was found by an end-to-end run, not by
+the unit suite.
 
 ---
 
@@ -487,6 +500,46 @@ seam is not something to verify by hand.
 - **Explicit case-sensitivity test** for game and BGG search on both dialects — this is the
   bug most likely to ship silently.
 
+### 11.1 End-to-end scenario tests (Phase 7)
+
+**Why this is its own phase.** Every defect in this project that would have reached a user was
+found by running the real thing, not by the unit suite. The record so far:
+
+| Found by | Defect | Would have caused |
+|---|---|---|
+| E2E (Phase 4) | Importing `settings` collided with the singleton seeded by migration 0002 | **Every real migration fails.** Unit tests missed it because their fixtures did not carry the seeded row |
+| E2E (Phase 4) | Archive contained only `tally.db`, not the WAL — a 4 KB snapshot beside a 290 KB orphaned `tally.db-wal` | User's revert path silently empty, discovered only when they needed it |
+| E2E (Phase 4) | `tsc` failing while `dist` looked healthy from a previous build | Broken image shipped; the missing migration would surface as a crash on boot |
+| E2E (Phase 3) | Aggregates returned as strings by node-postgres | Every count in the API becomes `"0"`; frontend does string arithmetic |
+
+The common thread: these live at seams the unit suite cannot see — real migrations against a
+real server, real driver type coercion, the build pipeline, the filesystem. Mocking any of
+them reproduces the assumption rather than the behaviour.
+
+**What the suite must do.** Drive built artifacts (`dist`, not `src`), a real Postgres, and
+real HTTP. No mocking of the database, filesystem, or transport. Scenarios:
+
+1. **Fresh SQLite install** — boot, create data, verify it reads back.
+2. **Fresh Postgres install** — boot against an empty database, migrations apply, data round-trips.
+3. **Migration, accepted** — populate on SQLite, restart pointed at empty Postgres, assert
+   `PENDING_IMPORT`, assert the data API returns 503, import, assert **byte-identical**
+   leaderboard output before and after, assert an insert afterwards succeeds.
+4. **Migration, declined** — assert the gate holds indefinitely and that removing the env vars
+   restores the SQLite install unharmed.
+5. **Archive integrity** — the archived file opens standalone and contains every row.
+6. **Failed import** — Postgres untouched, source file still present, state still
+   `PENDING_IMPORT`, error surfaced through `db-status`.
+7. **Config refusal** — a partial `DB_*` set exits non-zero rather than falling back to SQLite.
+8. **Frontend flow** (after Phase 5) — load the app against a `PENDING_IMPORT` backend and
+   click through both answers in a browser.
+
+**Assertions, not smoke.** Scenario 3's value is the byte-identical comparison; running the
+steps without comparing output would have passed while the settings collision was live.
+
+**Where it runs.** Its own CI job — slower than the unit matrix and should not gate on it.
+Docker is available on the maintainer's machine as of 2026-07-30, so local and CI runs are
+equivalent.
+
 ---
 
 ## 12. Risks
@@ -501,6 +554,8 @@ seam is not something to verify by hand.
 | 6 | `release-1` drifts from `main` under weekly Dependabot traffic | Medium | Phases 0–2 target `main`; weekly `main`→`release-1` merge |
 | 7 | The §4.3 cast hides a real dialect mismatch from the compiler | Medium | Dual-dialect test matrix is the only check — treat as non-optional |
 | 8 | Async transactions allow interleaving that better-sqlite3's sync ones did not | Low | Single-user homelab workload; Phase 1–2 soak on `main` before Postgres lands |
+| 9 | A defect lives at a seam the unit suite cannot see — real migrations, driver coercion, the build pipeline, the filesystem | **High** | §11.1 E2E scenario suite (Phase 7). Four such defects have already occurred; treating this as hypothetical would be ignoring the evidence |
+| 10 | The archived SQLite file is incomplete, so a revert loses data | **High** | WAL checkpointed before archiving and sidecars moved alongside; §11.1 scenario 5 asserts the archive opens standalone with every row |
 
 ---
 
