@@ -1,0 +1,493 @@
+# ERD — Multi-Database Support (SQLite default, Postgres opt-in)
+
+**Status:** Draft
+**Target release:** v2
+**Author:** Lukan Vanderlinde
+**Last updated:** 2026-07-30
+
+---
+
+## 1. Summary
+
+Tally currently persists everything to a single SQLite file. This ERD adds opt-in Postgres
+support driven purely by environment variables, plus a guarded one-time import path for users
+who already have SQLite data and later point the container at Postgres.
+
+The product constraint that drives every decision below: **the zero-config, single-container
+default must not regress.** A user who runs `docker compose up` with no database env vars gets
+SQLite and never learns Postgres exists. Advanced users add `DATABASE_URL` and get Postgres.
+Handholding by default, power on request.
+
+### Goals
+
+- No database env vars → SQLite at `DATA_DIR`, exactly as today. Single container, no sidecar.
+- `DATABASE_URL` (or a complete discrete set) → Postgres, same feature set, same API contract.
+- Existing SQLite data + newly-added Postgres config → the app detects it, blocks writes, and
+  asks the user whether to import. Never migrates silently.
+- Misconfiguration fails loudly at boot rather than silently falling back to SQLite.
+
+### Non-goals
+
+- Migrating **away** from Postgres back to SQLite. One direction only.
+- Moving uploaded files into the database. Covers, attachments, and avatars stay on the local
+  volume in both modes (see §11, Risk 4).
+- MySQL/MariaDB or any third dialect.
+- Multi-tenancy, connection pooling beyond driver defaults, or read replicas.
+
+---
+
+## 2. Decision record
+
+### Chosen: Option A — dual dialect, one codebase
+
+Two Drizzle schema files and two migration sets; the driver is resolved at boot from env.
+
+### Rejected: Option B — PGlite as the default
+
+PGlite (embedded WASM Postgres) would collapse this to one dialect, one schema, one migration
+set. Rejected on data-safety maturity, not on repo health:
+
+- Still `0.5.4` after ~2.5 years of active, funded development — the maintainers have not
+  declared API stability.
+- [#1065](https://github.com/electric-sql/pglite/issues/1065) (open, unanswered): `transaction()`
+  skips `syncToFs()` on commit, so `await db.transaction(...)` can resolve before data reaches
+  disk. Container stop, OOM kill, or host reboot loses committed writes — precisely our
+  deployment model.
+- [#1046](https://github.com/electric-sql/pglite/issues/1046): concurrent extended-protocol
+  batches can interleave prepared statements, yielding silently wrong rows. Drizzle uses
+  prepared statements.
+- [#1068](https://github.com/electric-sql/pglite/issues/1068): multi-row INSERT under
+  DELETE+INSERT churn hangs — the exact shape of our BGG CSV import.
+
+Revisit at 1.0, specifically once #1065 is closed. **Do** adopt PGlite for test fixtures
+regardless (see §10) — that is its genuine sweet spot.
+
+### Rejected: Option C — Postgres sidecar in the default compose file
+
+One dialect, battle-tested storage, no dual-dialect tax. Rejected because it makes the default
+path a two-container deployment. That is a real regression against the "dumb-proof, single
+container, spin it up and go" product property, which is a deliberate differentiator.
+
+### Accepted cost of Option A
+
+Every future schema change needs two migration files and must be tested against both dialects.
+If that tax becomes painful after a few features, Option C is a strictly cheaper escape hatch
+than it is today, because the Postgres path will already exist and be exercised.
+
+---
+
+## 3. Current state
+
+| Area | State |
+|---|---|
+| Driver | `better-sqlite3` 12.11.1, synchronous |
+| ORM | Drizzle 0.45.2, `sqliteTable` schema |
+| Migrations | 5 hand-written `.sql` files, raw SQLite DDL, applied by a bespoke runner in `db/index.ts` |
+| Routes | 5 files, ~950 lines |
+| Sync terminal calls | **52** `.get()` / `.all()` / `.run()` across routes — SQLite-dialect-only Drizzle methods |
+| Raw driver usage | **17** lines of `sqlite.*` in 3 transaction blocks (`settings.ts`, `bgg.ts`, `sessions.ts`) |
+| Tests | **None.** No test runner in either package. |
+
+The refactor is tractable — ~97% of data access already goes through Drizzle, and query
+*construction* (`eq`, `and`, `isNull`, `select().from()`) is already dialect-portable. What is
+not portable is the terminal execution method and the raw transaction blocks.
+
+---
+
+## 4. Architecture
+
+### 4.1 File layout
+
+```
+backend/src/db/
+  config.ts            env → DatabaseConfig, validation, redacted logging
+  index.ts             resolves driver + schema, exports `db`, `schema`, `DATA_DIR`
+  schema.sqlite.ts     existing sqliteTable definitions (moved from schema.ts)
+  schema.pg.ts         pgTable equivalents, identical column names
+  schema.ts            re-exports resolved schema + canonical row types
+  migrations/
+    sqlite/            existing 0001–0005 + future
+    pg/                hand-authored equivalents
+  migrate/
+    runner.ts          dialect-aware migration runner (replaces runMigrations)
+    import-sqlite.ts   one-time SQLite → Postgres importer
+  state.ts             boot state machine, _tally_meta accessors
+```
+
+### 4.2 Config resolution
+
+```yaml
+# docker-compose.yml — advanced users only
+environment:
+  - DATABASE_URL=postgres://tally:pw@postgres:5432/tally
+  # or discrete:
+  # - DB_HOST=postgres
+  # - DB_PORT=5432
+  # - DB_NAME=tally
+  # - DB_USER=tally
+  # - DB_PASSWORD=...
+  # - DB_SSL=require        # disable | require | verify-full
+```
+
+Resolution rules, in order:
+
+1. `DATABASE_URL` set and parseable → Postgres.
+2. All of `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` set → Postgres (`DB_PORT` defaults
+   5432, `DB_SSL` defaults `disable`).
+3. **Some but not all** discrete vars set → **fatal error, exit non-zero.** A typo'd `DB_HOST`
+   silently falling back to SQLite is the worst failure mode available; it would let a user
+   write into a fresh empty SQLite file while believing they are on Postgres.
+4. Neither → SQLite at `join(DATA_DIR, 'tally.db')`.
+
+`DATABASE_URL` and discrete vars both set → fatal error; ambiguity is not resolved by
+precedence. Passwords are never logged; the startup line prints
+`postgres://tally:***@postgres:5432/tally`.
+
+### 4.3 The typing boundary
+
+Drizzle cannot type a single client across two dialects — `PgTable` and `SQLiteTable` do not
+unify, so `db.select().from(schema.games)` will not typecheck against a union type.
+
+Resolution: resolve driver and schema together at boot in `db/index.ts` and cast **once**, at
+that single boundary. `schema.ts` re-exports the SQLite schema's inferred row types as
+canonical, since both dialects produce structurally identical row shapes. Everything downstream
+of `db/index.ts` stays fully typed and dialect-unaware.
+
+This is one deliberate `as` in the codebase. It must carry a comment explaining why, and it is
+the reason §10's dual-dialect test matrix is non-optional — the type system is not checking
+this seam for us.
+
+---
+
+## 5. Dialect differences to handle
+
+| Concern | SQLite | Postgres | Resolution |
+|---|---|---|---|
+| Terminal call | `.get()` / `.all()` / `.run()` | `await` the builder | Drop terminal methods everywhere; `await`. `.get()` → `.limit(1)` + destructure |
+| Transactions | `sqlite.transaction(syncFn)` | `db.transaction(asyncFn)` | Drizzle `db.transaction()` on both |
+| Autoincrement | `INTEGER PRIMARY KEY AUTOINCREMENT` | `GENERATED BY DEFAULT AS IDENTITY` | Per-dialect DDL |
+| `LIKE` casing | Case-**insensitive** for ASCII | Case-**sensitive** | Dialect-aware `searchLike()` helper → `ilike` on PG. **Silent behavior change if missed** — affects [games.ts:45](../backend/src/routes/games.ts#L45) and [bgg.ts:84](../backend/src/routes/bgg.ts#L84) |
+| Booleans | `integer(mode:'boolean')` | `boolean` | Per-dialect column; importer coerces `0/1` → `false/true` |
+| Timestamps | `text` ISO strings | Keep as `text` | **Do not** switch to `timestamptz` — it would ripple into the API contract and frontend types for no gain |
+| `datetime('now')` default | `(datetime('now'))` | `to_char(now() AT TIME ZONE 'UTC', ...)` | Per-dialect DDL, same ISO-8601 output format |
+| `real` price | `REAL` | `double precision` | Direct equivalent |
+| Sequences after import | n/a | Start at 1 | `setval` after import or the first insert dies on duplicate key |
+
+`stats.ts` raw SQL fragments (`COALESCE`, `CASE`, `SUM`, `EXISTS`) are portable as written —
+fortunate, and the file to re-test hardest.
+
+---
+
+## 6. Boot state machine
+
+```
+1. Resolve config → dialect
+2. Connect. On Postgres: acquire pg_advisory_lock (guards two containers racing)
+3. Run target-dialect migrations. Release lock.
+4. Ensure _tally_meta (key TEXT PRIMARY KEY, value TEXT) exists
+5. Determine state:
+
+   READY           dialect is sqlite
+                 | target has domain rows
+                 | _tally_meta.imported_from_sqlite_at is set
+                 | target empty AND no SQLite file with rows (fresh install)
+
+   PENDING_IMPORT  dialect is postgres
+                   AND target has no domain rows
+                   AND _tally_meta.imported_from_sqlite_at is unset
+                   AND a SQLite file exists at DATA_DIR with ≥1 domain row
+```
+
+The `_tally_meta` marker is load-bearing: row-counting alone would re-prompt forever for a user
+who migrates and then deletes all their data.
+
+### Divergence guard
+
+While `PENDING_IMPORT`, **every `/api/v1/*` route except the two system endpoints returns
+`503`** with the status payload. Not a dismissible banner — a hard gate. Without it a user could
+add a game into the empty Postgres database, and neither store would be authoritative.
+
+---
+
+## 7. API surface
+
+Both exempt from the 503 gate:
+
+**`GET /api/v1/system/db-status`**
+```jsonc
+{
+  "state": "READY" | "PENDING_IMPORT",
+  "dialect": "sqlite" | "postgres",
+  "source": { "games": 42, "players": 6, "sessions": 118 },  // when PENDING_IMPORT
+  "lastError": null
+}
+```
+
+**`POST /api/v1/system/import-from-sqlite`**
+
+1. Reject unless state is `PENDING_IMPORT` (409 otherwise).
+2. Open the SQLite file **read-only**.
+3. In a single Postgres transaction, insert in FK order, preserving IDs:
+   `players → games → game_attachments → sessions → session_results → settings → bgg_games`
+4. `setval` every sequence to `max(id)`.
+5. Write `_tally_meta.imported_from_sqlite_at` in the same transaction.
+6. Commit, then rename `tally.db` → `tally.db.migrated-<ISO8601>`. **Rename, never delete.**
+7. Flip in-memory state to `READY`.
+
+Any throw rolls the transaction back; the app stays `PENDING_IMPORT` and surfaces the error via
+`lastError`. The SQLite file is untouched on failure, so the user can retry or revert.
+
+The "no thanks" path needs no server state — it is instructions to remove the env vars and
+restart.
+
+---
+
+## 8. Frontend
+
+A single full-page decision screen, rendered instead of the app whenever `db-status` reports
+`PENDING_IMPORT`. Checked once on app mount, before the router renders.
+
+- Explain plainly: existing SQLite data was found, the container is now pointed at Postgres.
+- Show the row counts from `source` so the user recognises their own data.
+- **Import my data** → `POST` the import endpoint, show progress, then reload into the app.
+- **No, I'll revert** → static instructions to remove the DB env vars and restart.
+- On import failure, show `lastError` verbatim and keep both buttons available.
+
+Components follow the standard project pattern (`docs` in [CLAUDE.md](../CLAUDE.md)) — `data-slot`,
+`cn()`-composed `classes` variable, `text-ink-*` / `bg-paper-*` tokens.
+
+---
+
+## 9. Phases
+
+Each phase is independently reviewable and independently revertible.
+
+| # | Phase | Scope | Acceptance |
+|---|---|---|---|
+| **0** | Test harness | Vitest in `backend`; in-memory SQLite fixture; route-level integration tests covering all 6 route files. No product change. | Suite green; meaningful coverage of every route's happy path + soft-delete behavior |
+| **1** | Async query refactor | Drop all 52 `.get()`/`.all()`/`.run()`; `await` throughout. **SQLite only.** | Phase 0 suite green, unmodified. Zero behavior change |
+| **2** | Transaction portability | Remove the raw `sqlite` export; the 3 blocks move to `await db.transaction()` | Suite green. `grep -r "sqlite\." src/routes` returns nothing |
+| **3** | Dialect layer | `config.ts`, `schema.pg.ts`, `migrations/pg/`, boot-time driver resolution, `searchLike()` helper | Suite runs green against **both** dialects. Fresh Postgres boot works end to end |
+| **4** | Import + gate | `_tally_meta`, state machine, both system endpoints, 503 gate, importer with `setval` | Test: seeded SQLite + empty PG → import → row-for-row parity incl. IDs; insert-after-import succeeds |
+| **5** | Frontend | Decision screen, mount-time status check | Manual: full flow both answers. Failure path surfaces the error |
+| **6** | Docs + packaging | README, compose examples, `.env.example`, Dockerfile audit, **agent-facing migration guide** | A stranger can follow the README for both modes; an agent can add a dual-dialect migration without reading this ERD |
+
+Phases 0–2 are **dialect-agnostic pure refactors with no behavior change**. See §10.2 — they
+target `main` via their own PRs, not `v2`.
+
+---
+
+## 10. Branch strategy
+
+### 10.1 Structure
+
+```
+main                              v0.6.x, always releasable
+ │
+ ├─ refactor/00-test-harness      ─┐
+ ├─ refactor/01-async-queries      ├─ one PR each into main, reviewed and merged serially
+ ├─ refactor/02-transaction-portability ─┘
+ │
+ └─ v2                            long-lived integration branch for all v2 features
+     │
+     ├─ feat/multi-db             this ERD's feature branch
+     │   ├─ feat/multi-db-03-dialect-layer
+     │   ├─ feat/multi-db-04-import-gate
+     │   ├─ feat/multi-db-05-frontend
+     │   └─ feat/multi-db-06-docs
+     │
+     └─ feat/design-language      ← absorbs the existing v2---official-redesign branch
+```
+
+> **Naming gotcha:** do **not** name the feature branch `feat/multi-database` and the phase
+> branches `feat/multi-database/01-...`. Git stores refs as files, so a ref named
+> `feat/multi-database` and a directory `feat/multi-database/` cannot coexist — you get a
+> directory/file conflict at the worst possible moment. Hence the flat
+> `feat/multi-db-03-dialect-layer` form above.
+
+### 10.2 Phases 0–2 go to `main`, not `v2`
+
+Phases 0–2 introduce tests and mechanical refactors with **zero behavior change and zero
+Postgres code**. Landing them on `main`:
+
+- gets test coverage onto the release branch immediately, where it protects v0.6.x too;
+- shrinks the v2↔main drift that makes long-lived branches painful;
+- means the risky, genuinely-v2 work (phases 3–6) starts from a tested base.
+
+`v2` picks them up through the routine sync in §10.4.
+
+**Each phase is its own PR into `main`, opened for review — never a direct push.** Three
+branches, three PRs:
+
+| Branch | PR title | Reviewable claim |
+|---|---|---|
+| `refactor/00-test-harness` | Add Vitest harness and route integration tests | New tests only; no `src/` behavior touched |
+| `refactor/01-async-queries` | Replace SQLite-only terminal calls with awaited queries | 52 call sites; Phase 0 suite passes **unmodified** |
+| `refactor/02-transaction-portability` | Move transactions to Drizzle, drop the raw sqlite export | 3 transaction blocks; `grep -r "sqlite\." src/routes` returns nothing |
+
+**Run them serially, not stacked.** Each depends on the one before, so the next branch is cut
+from `main` *after* the previous PR merges. Stacking three PRs would force a rebase of every
+descendant each time you merge or request changes — for three sequential refactors that cost
+buys nothing.
+
+The review value is concentrated in PR 01. It is a large diff, but it is the same edit repeated
+52 times, and the strongest signal that it is correct is that PR 00's tests pass **without being
+modified**. If a test had to change to accommodate 01, that is a behavior change and it needs
+justifying in the PR description. Worth stating that expectation explicitly in the PR body.
+
+Squash-merge each, matching the existing convention on `main`. After all three land, sync
+`main` → `v2` (§10.4) before starting Phase 3.
+
+### 10.3 Reconciling the existing v2 branch
+
+`v2---official-redesign` exists locally, is **89 commits ahead of main, and has never been
+pushed**. Recommended reconciliation:
+
+```bash
+git checkout main && git pull
+git checkout -b v2 && git push -u origin v2          # clean integration branch off main
+git branch -m v2---official-redesign feat/design-language
+git push -u origin feat/design-language              # now a feature branch, PRs into v2
+```
+
+This makes the redesign the first feature *into* v2 rather than being v2, which is what lets
+each v2 feature be validated in isolation. Since it was never pushed, the rename costs nothing.
+
+**Confirm this before executing** — it is the one assumption in this document that is not
+derivable from the repo.
+
+### 10.4 Merge and sync policy
+
+| From → To | Method | Why |
+|---|---|---|
+| `refactor/0N-*` → `main` | **Squash, via PR** | §10.2. Reviewed and merged by the maintainer; serial, never stacked |
+| phase branch → `feat/multi-db` | **Squash** | Matches existing convention (`e22f32b`, `24fa17b` — linear, squashed, PR-numbered). One commit per phase |
+| `feat/multi-db` → `v2` | **Merge `--no-ff`** | Preserves phase boundaries inside v2 so you can bisect a regression to a phase |
+| `main` → `v2` | **Merge, weekly** | Dependabot is active on `main`. Never rebase — `v2` is pushed and has branches built on it |
+| `v2` → feature branches | **Merge, after each main→v2 sync** | Keeps feature branches current |
+| `v2` → `main` | **Single `--no-ff` merge at release**, then tag | The release event |
+
+**Never rebase anything already pushed.** With phase branches stacked on a feature branch
+stacked on `v2`, a rebase upstream rewrites every descendant.
+
+### 10.5 Release
+
+The repo currently has **no tags at all**. Introduce them with v2:
+
+- Pre-releases from `v2` as work lands: `v2.0.0-beta.1`, `-beta.2`, …
+- Publish those as `ghcr.io/lukanrocks/tally:next` so you can dogfood the Postgres path on your
+  own homelab against real data before it reaches users. Given this change's blast radius, that
+  soak time is the highest-value safety measure in this document.
+- Final: merge `v2` → `main`, tag `v2.0.0`, `:latest` follows from `main` as it does today.
+
+### 10.6 Required CI changes (do this first — it is currently a blocker)
+
+[docker-publish.yml](../.github/workflows/docker-publish.yml) triggers only on `main`:
+
+```yaml
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+```
+
+**PRs into `v2` would get no CI at all.** Two batches, needed at different times:
+
+**Before Phase 0's PR into `main`** — add a `test` job running the Vitest suite. Without it,
+PR 01's "the tests still pass unmodified" claim is unverified by CI and rests entirely on the
+reviewer running it locally. This is the first change to make, and it can go in as part of the
+Phase 0 PR itself.
+
+**Before any `v2` work starts:**
+
+1. Add `v2` to both `push` and `pull_request` branch lists.
+2. Make the image tag conditional — `main` → `:latest`, `v2` → `:next`. The tag is currently
+   hardcoded to `:latest`; publishing v2 builds over it would ship unreleased code to every user
+   running `:latest`.
+3. Add a `postgres:17` service container to the `test` job and matrix it over both dialects
+   (§11), so the §4.3 cast is exercised on every PR.
+
+---
+
+## 11. Testing
+
+Phase 0 is the prerequisite for everything else — 52 mechanical edits plus a `as`-cast typing
+seam is not something to verify by hand.
+
+- **Runner:** Vitest in `backend`.
+- **SQLite fixture:** `better-sqlite3` in-memory, migrations applied per test file.
+- **Postgres fixture:** from Phase 3, a `postgres:17` service container in CI and a compose
+  service locally. PGlite is a legitimate option here specifically — an ephemeral test database
+  losing data is a non-event, which is exactly where its weaknesses do not bite.
+- **Matrix:** from Phase 3, the whole suite runs twice, once per dialect. This is what guards
+  the §4.3 cast.
+- **Import test:** seed SQLite from a fixture, import into empty Postgres, assert row-for-row
+  parity including IDs, then assert a subsequent insert succeeds (catches a missing `setval`).
+- **Explicit case-sensitivity test** for game and BGG search on both dialects — this is the
+  bug most likely to ship silently.
+
+---
+
+## 12. Risks
+
+| # | Risk | Severity | Mitigation |
+|---|---|---|---|
+| 1 | Silent partial-config fallback to SQLite; user writes into the wrong store | **High** | §4.2 rule 3 — fatal error on incomplete discrete config |
+| 2 | Divergence: writes land in empty Postgres while SQLite still holds real data | **High** | §6 hard 503 gate, not a banner |
+| 3 | `LIKE` case-sensitivity flips silently on Postgres | Medium | `searchLike()` helper + explicit dual-dialect test |
+| 4 | User assumes central Postgres centralises backups, but uploads are still on the local volume | Medium | Document prominently in README and on the import screen. Both modes keep files on disk |
+| 5 | Missing `setval` → first post-import insert fails on duplicate key | Medium | Covered by the import parity test |
+| 6 | `v2` drifts from `main` under weekly Dependabot traffic | Medium | Phases 0–2 target `main`; weekly `main`→`v2` merge |
+| 7 | The §4.3 cast hides a real dialect mismatch from the compiler | Medium | Dual-dialect test matrix is the only check — treat as non-optional |
+| 8 | Async transactions allow interleaving that better-sqlite3's sync ones did not | Low | Single-user homelab workload; Phase 1–2 soak on `main` before Postgres lands |
+
+---
+
+## 13. Documentation deliverables (Phase 6)
+
+### 13.1 User-facing
+
+- README: two clearly separated setup paths — **Simple** (copy compose, `docker compose up`,
+  done) and **Advanced** (external Postgres). The simple path must remain visually first and
+  obviously the default.
+- `docker-compose.postgres.yml` example.
+- `.env.example` with every supported variable and its default.
+- Migration/import walkthrough including the revert instructions.
+- Explicit note that uploaded files remain on the local volume in both modes (Risk 4).
+- Dockerfile audit: `python3 make g++` stay — `better-sqlite3` still needs them for the default
+  path.
+
+### 13.2 Agent-facing: `docs/adding-a-migration.md`
+
+Once this ships, **every future schema change needs two migration files that stay in lockstep**.
+That is exactly the kind of invariant an agent (or a future you) breaks by writing only the
+SQLite half and watching the SQLite-only tests pass. This doc is the guardrail.
+
+Required contents:
+
+1. **The rule up front:** every migration is two files with the same numeric prefix —
+   `migrations/sqlite/00NN_name.sql` and `migrations/pg/00NN_name.sql`. Never one without the
+   other. Never edit a migration that has already been applied; add a new one.
+2. **Both schema files** (`schema.sqlite.ts`, `schema.pg.ts`) must be updated together, with
+   identical column names — the §4.3 cast means the compiler will not catch a mismatch.
+3. **Dialect translation table** — the §5 table, restated as a practical checklist:
+   `AUTOINCREMENT` ↔ `GENERATED BY DEFAULT AS IDENTITY`, `integer(mode:'boolean')` ↔ `boolean`,
+   `(datetime('now'))` ↔ the `to_char(now() AT TIME ZONE 'UTC', …)` form, `REAL` ↔
+   `double precision`, timestamps stay `text`.
+4. **Query-layer rules:** no `.get()` / `.all()` / `.run()`; transactions only via
+   `db.transaction()`; text search only via the `searchLike()` helper, never a bare `like()`.
+5. **Verification:** the command that runs the suite against both dialects, stated as a
+   mandatory pre-PR step.
+6. **A worked example** — one real dual-file migration, both dialects, start to finish.
+
+### 13.3 Wiring it into agent context
+
+A file in `docs/` is invisible to an agent that never opens it. [CLAUDE.md](../CLAUDE.md) is
+auto-loaded into context every session, so Phase 6 must also add a short **Database** section
+there containing the non-negotiables inline — dual-dialect migrations, no SQLite-only terminal
+methods, `searchLike()` for search — plus a pointer to `docs/adding-a-migration.md` for the
+full procedure.
+
+Keep that CLAUDE.md section to a handful of lines. It is a signpost with the load-bearing rules
+inlined, not a copy of the guide.
