@@ -6,7 +6,7 @@ describe('settings', () => {
 
   describe('GET /api/v1/settings', () => {
     it('returns the seeded singleton without exposing its id', async () => {
-      const res = await request(testApp()).get('/api/v1/settings')
+      const res = await request(await testApp()).get('/api/v1/settings')
 
       expect(res.status).toBe(200)
       expect(res.body).toMatchObject({
@@ -23,7 +23,9 @@ describe('settings', () => {
 
   describe('PUT /api/v1/settings', () => {
     it('updates the valid fields', async () => {
-      const res = await request(testApp()).put('/api/v1/settings').send({ currency: 'BRL', language: 'pt', theme: 'dark', onboarded: true })
+      const res = await request(await testApp())
+        .put('/api/v1/settings')
+        .send({ currency: 'BRL', language: 'pt', theme: 'dark', onboarded: true })
 
       expect(res.status).toBe(200)
       expect(res.body).toMatchObject({ currency: 'BRL', language: 'pt', theme: 'dark', onboarded: true })
@@ -31,9 +33,11 @@ describe('settings', () => {
     })
 
     it('persists across requests', async () => {
-      await request(testApp()).put('/api/v1/settings').send({ theme: 'light' })
+      await request(await testApp())
+        .put('/api/v1/settings')
+        .send({ theme: 'light' })
 
-      expect((await request(testApp()).get('/api/v1/settings')).body.theme).toBe('light')
+      expect((await request(await testApp()).get('/api/v1/settings')).body.theme).toBe('light')
     })
 
     it.each([
@@ -42,7 +46,9 @@ describe('settings', () => {
       ['theme', { theme: 'neon' }, 'Invalid theme'],
       ['onboarded', { onboarded: 'yes' }, 'Invalid onboarded value'],
     ])('rejects an invalid %s', async (_label, body, error) => {
-      const res = await request(testApp()).put('/api/v1/settings').send(body)
+      const res = await request(await testApp())
+        .put('/api/v1/settings')
+        .send(body)
 
       expect(res.status).toBe(400)
       expect(res.body).toEqual({ error })
@@ -51,15 +57,21 @@ describe('settings', () => {
     it('sets and clears the default owner', async () => {
       const ada = await createPlayer('Ada')
 
-      const set = await request(testApp()).put('/api/v1/settings').send({ default_owner_id: ada.id })
+      const set = await request(await testApp())
+        .put('/api/v1/settings')
+        .send({ default_owner_id: ada.id })
       expect(set.body.default_owner_id).toBe(ada.id)
 
-      const cleared = await request(testApp()).put('/api/v1/settings').send({ default_owner_id: null })
+      const cleared = await request(await testApp())
+        .put('/api/v1/settings')
+        .send({ default_owner_id: null })
       expect(cleared.body.default_owner_id).toBeNull()
     })
 
     it('404s when the default owner does not exist', async () => {
-      const res = await request(testApp()).put('/api/v1/settings').send({ default_owner_id: 999 })
+      const res = await request(await testApp())
+        .put('/api/v1/settings')
+        .send({ default_owner_id: 999 })
 
       expect(res.status).toBe(404)
       expect(res.body).toEqual({ error: 'Player not found' })
@@ -67,9 +79,11 @@ describe('settings', () => {
 
     it('404s when the default owner is soft-deleted', async () => {
       const ada = await createPlayer('Ada')
-      await request(testApp()).delete(`/api/v1/players/${ada.id}`)
+      await request(await testApp()).delete(`/api/v1/players/${ada.id}`)
 
-      const res = await request(testApp()).put('/api/v1/settings').send({ default_owner_id: ada.id })
+      const res = await request(await testApp())
+        .put('/api/v1/settings')
+        .send({ default_owner_id: ada.id })
 
       expect(res.status).toBe(404)
     })
@@ -84,15 +98,17 @@ describe('settings', () => {
         { player_id: ada.id, rank: 1 },
         { player_id: bob.id, rank: 2 },
       ])
-      await request(testApp()).put('/api/v1/settings').send({ theme: 'dark', currency: 'BRL' })
+      await request(await testApp())
+        .put('/api/v1/settings')
+        .send({ theme: 'dark', currency: 'BRL' })
 
-      const res = await request(testApp()).delete('/api/v1/settings/reset')
+      const res = await request(await testApp()).delete('/api/v1/settings/reset')
       expect(res.status).toBe(204)
 
-      expect((await request(testApp()).get('/api/v1/players')).body).toEqual([])
-      expect((await request(testApp()).get('/api/v1/games')).body).toEqual([])
-      expect((await request(testApp()).get('/api/v1/sessions')).body).toEqual([])
-      expect((await request(testApp()).get('/api/v1/settings')).body).toMatchObject({
+      expect((await request(await testApp()).get('/api/v1/players')).body).toEqual([])
+      expect((await request(await testApp()).get('/api/v1/games')).body).toEqual([])
+      expect((await request(await testApp()).get('/api/v1/sessions')).body).toEqual([])
+      expect((await request(await testApp()).get('/api/v1/settings')).body).toMatchObject({
         currency: 'USD',
         language: 'en',
         theme: 'system',
@@ -102,8 +118,8 @@ describe('settings', () => {
     })
 
     it('leaves the settings singleton queryable when nothing exists yet', async () => {
-      expect((await request(testApp()).delete('/api/v1/settings/reset')).status).toBe(204)
-      expect((await request(testApp()).get('/api/v1/settings')).status).toBe(200)
+      expect((await request(await testApp()).delete('/api/v1/settings/reset')).status).toBe(204)
+      expect((await request(await testApp()).get('/api/v1/settings')).status).toBe(200)
     })
   })
 })

@@ -1,8 +1,9 @@
 import { Router, Request, Response, NextFunction } from 'express'
 import { parse } from 'csv-parse/sync'
-import { like, eq } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { db } from '../db'
 import { withTransaction } from '../db/transaction'
+import { searchLike } from '../db/search'
 import { bgg_games as bggTable, settings as settingsTable } from '../db/schema'
 import { csvUpload } from '../middleware/upload'
 
@@ -85,7 +86,7 @@ router.get('/search', async (req: Request, res: Response, next: NextFunction) =>
         year_published: bggTable.year_published,
       })
       .from(bggTable)
-      .where(like(bggTable.name, `%${query}%`))
+      .where(searchLike(bggTable.name, query))
       .limit(10)
 
     res.json(rows)

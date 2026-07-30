@@ -1,23 +1,103 @@
 import Database from 'better-sqlite3'
-import { drizzle } from 'drizzle-orm/better-sqlite3'
+import { Pool, types as pgTypes } from 'pg'
+import { drizzle as drizzleSqlite, BetterSQLite3Database } from 'drizzle-orm/better-sqlite3'
+import { drizzle as drizzlePg } from 'drizzle-orm/node-postgres'
 import { readFileSync, readdirSync, mkdirSync, existsSync } from 'fs'
 import { join } from 'path'
-import * as schema from './schema'
+import { resolveDatabaseConfig, describeConfig, type DatabaseConfig, type SslMode } from './config'
+import * as sqliteSchema from './schema.sqlite'
+import * as pgSchema from './schema.pg'
 
 export const DATA_DIR = process.env.DATA_DIR ?? join(process.cwd(), 'data')
+
+// Throws on ambiguous or partial configuration — see config.ts. Letting this
+// propagate out of module load is intentional: refusing to boot beats booting
+// against the wrong database.
+export const config: DatabaseConfig = resolveDatabaseConfig(process.env, DATA_DIR)
+export const dialect = config.dialect
 
 if (!existsSync(DATA_DIR)) {
   mkdirSync(DATA_DIR, { recursive: true })
 }
 
-export const sqlite = new Database(join(DATA_DIR, 'tally.db'))
-sqlite.pragma('journal_mode = WAL')
-sqlite.pragma('foreign_keys = ON')
+/** Raw better-sqlite3 handle. Undefined when running on Postgres. */
+export let sqlite: Database.Database | undefined
+/** node-postgres pool. Undefined when running on SQLite. */
+export let pool: Pool | undefined
 
-export const db = drizzle(sqlite, { schema })
+function sslConfig(mode: SslMode) {
+  if (mode === 'disable') return false
+  return { rejectUnauthorized: mode === 'verify-full' }
+}
 
-export function runMigrations(): void {
-  sqlite.exec(`
+/**
+ * node-postgres returns int8 (COUNT) and numeric (SUM, ROUND) as *strings*,
+ * because either can exceed what a JS number holds exactly. SQLite returns
+ * numbers. Without this, every aggregate in the API would silently change type
+ * for Postgres users — `session_count: 0` becoming `session_count: "0"` — and
+ * the frontend would start doing string arithmetic.
+ *
+ * Safe here because these are counts and point totals for a board-game tracker;
+ * both stay far below 2^53. Revisit only if some column could genuinely exceed
+ * that, which would be a different problem entirely.
+ */
+function alignPostgresNumericTypes(): void {
+  pgTypes.setTypeParser(pgTypes.builtins.INT8, (value) => Number.parseInt(value, 10))
+  pgTypes.setTypeParser(pgTypes.builtins.NUMERIC, (value) => Number.parseFloat(value))
+}
+
+/**
+ * The §4.3 cast, and the only one in the codebase.
+ *
+ * Drizzle cannot type a single client across dialects — PgTable and SQLiteTable
+ * do not unify, so `db.select().from(schema.games)` will not typecheck against a
+ * union. We therefore resolve driver and schema together here and assert the
+ * SQLite shape as canonical; both dialects produce structurally identical rows,
+ * and schema.ts hands out the matching dialect's tables at runtime.
+ *
+ * The compiler is NOT checking this seam. The dual-dialect test matrix is.
+ */
+type Db = BetterSQLite3Database<typeof sqliteSchema>
+
+function createClient(): Db {
+  if (config.dialect === 'postgres') {
+    alignPostgresNumericTypes()
+    pool = new Pool({ connectionString: config.connectionString, ssl: sslConfig(config.ssl) })
+    return drizzlePg(pool, { schema: pgSchema }) as unknown as Db
+  }
+
+  sqlite = new Database(config.file)
+  sqlite.pragma('journal_mode = WAL')
+  sqlite.pragma('foreign_keys = ON')
+
+  return drizzleSqlite(sqlite, { schema: sqliteSchema })
+}
+
+export const db: Db = createClient()
+
+// Postgres advisory lock id. Arbitrary but must stay stable — two containers
+// booting together would otherwise race to apply the same migrations.
+const MIGRATION_LOCK_ID = 4_021_517
+
+export async function runMigrations(): Promise<void> {
+  const dir = join(__dirname, 'migrations', config.dialect)
+
+  const files = readdirSync(dir)
+    .filter((file) => file.endsWith('.sql'))
+    .sort()
+
+  if (config.dialect === 'postgres') {
+    await runPostgresMigrations(dir, files)
+    return
+  }
+
+  runSqliteMigrations(dir, files)
+}
+
+function runSqliteMigrations(dir: string, files: string[]): void {
+  const handle = sqlite!
+
+  handle.exec(`
     CREATE TABLE IF NOT EXISTS _migrations (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL UNIQUE,
@@ -25,22 +105,62 @@ export function runMigrations(): void {
     )
   `)
 
-  const applied = new Set<string>((sqlite.prepare('SELECT name FROM _migrations').all() as { name: string }[]).map((row) => row.name))
-
-  const migrationsDir = join(__dirname, 'migrations')
-
-  const files = readdirSync(migrationsDir)
-    .filter((file) => file.endsWith('.sql'))
-    .sort()
+  const applied = new Set<string>((handle.prepare('SELECT name FROM _migrations').all() as { name: string }[]).map((row) => row.name))
 
   for (const file of files) {
-    if (!applied.has(file)) {
-      const sql = readFileSync(join(migrationsDir, file), 'utf-8')
+    if (applied.has(file)) continue
 
-      sqlite.exec(sql)
-      sqlite.prepare('INSERT INTO _migrations (name) VALUES (?)').run(file)
+    handle.exec(readFileSync(join(dir, file), 'utf-8'))
+    handle.prepare('INSERT INTO _migrations (name) VALUES (?)').run(file)
+
+    console.log(`Applied migration: ${file}`)
+  }
+}
+
+async function runPostgresMigrations(dir: string, files: string[]): Promise<void> {
+  const client = await pool!.connect()
+
+  try {
+    await client.query('SELECT pg_advisory_lock($1)', [MIGRATION_LOCK_ID])
+
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS _migrations (
+        id INTEGER PRIMARY KEY GENERATED BY DEFAULT AS IDENTITY,
+        name TEXT NOT NULL UNIQUE,
+        applied_at TEXT NOT NULL DEFAULT to_char(now() AT TIME ZONE 'UTC', 'YYYY-MM-DD HH24:MI:SS')
+      )
+    `)
+
+    const { rows } = await client.query<{ name: string }>('SELECT name FROM _migrations')
+    const applied = new Set(rows.map((row) => row.name))
+
+    for (const file of files) {
+      if (applied.has(file)) continue
+
+      // Each migration is its own transaction, so a failure half-way through the
+      // set leaves the successful ones recorded rather than silently reapplied.
+      await client.query('BEGIN')
+      try {
+        await client.query(readFileSync(join(dir, file), 'utf-8'))
+        await client.query('INSERT INTO _migrations (name) VALUES ($1)', [file])
+        await client.query('COMMIT')
+      } catch (err) {
+        await client.query('ROLLBACK')
+        throw err
+      }
 
       console.log(`Applied migration: ${file}`)
     }
+  } finally {
+    await client.query('SELECT pg_advisory_unlock($1)', [MIGRATION_LOCK_ID])
+    client.release()
   }
 }
+
+/** Releases driver resources. Used by tests; the server holds these for its lifetime. */
+export async function closeDatabase(): Promise<void> {
+  if (pool) await pool.end()
+  if (sqlite) sqlite.close()
+}
+
+export { describeConfig }

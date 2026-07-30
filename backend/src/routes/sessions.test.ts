@@ -11,7 +11,7 @@ describe('sessions', () => {
       const cleo = await createPlayer('Cleo')
       const game = await createGame('Catan')
 
-      const res = await request(testApp())
+      const res = await request(await testApp())
         .post('/api/v1/sessions')
         .send({
           game_id: game.id,
@@ -28,7 +28,7 @@ describe('sessions', () => {
       expect(res.body).toMatchObject({ game_id: game.id, played_at: '2026-03-01T18:00:00.000Z', notes: 'Close one' })
 
       // 3 players: winner gets N + 1 = 4, then 2, then 1.
-      const detail = await request(testApp()).get(`/api/v1/sessions/${res.body.id}`)
+      const detail = await request(await testApp()).get(`/api/v1/sessions/${res.body.id}`)
       expect(detail.body.results).toEqual([
         expect.objectContaining({ player_id: ada.id, player_name: 'Ada', rank: 1, points_awarded: 4 }),
         expect.objectContaining({ player_id: bob.id, player_name: 'Bob', rank: 2, points_awarded: 2 }),
@@ -46,7 +46,7 @@ describe('sessions', () => {
         { player_id: bob.id, rank: 2 },
       ])
 
-      const detail = await request(testApp()).get(`/api/v1/sessions/${session.id}`)
+      const detail = await request(await testApp()).get(`/api/v1/sessions/${session.id}`)
       expect(detail.body.results.map((r: { points_awarded: number }) => r.points_awarded)).toEqual([3, 1])
     })
 
@@ -55,7 +55,7 @@ describe('sessions', () => {
       const bob = await createPlayer('Bob')
       const game = await createGame('Chess')
 
-      const res = await request(testApp())
+      const res = await request(await testApp())
         .post('/api/v1/sessions')
         .send({
           game_id: game.id,
@@ -73,7 +73,9 @@ describe('sessions', () => {
       ['missing game_id', { played_at: '2026-03-01', results: [] }, 'game_id is required'],
       ['missing played_at', { game_id: 1, results: [] }, 'played_at is required'],
     ])('rejects %s', async (_label, body, error) => {
-      const res = await request(testApp()).post('/api/v1/sessions').send(body)
+      const res = await request(await testApp())
+        .post('/api/v1/sessions')
+        .send(body)
 
       expect(res.status).toBe(400)
       expect(res.body).toEqual({ error })
@@ -83,7 +85,7 @@ describe('sessions', () => {
       const ada = await createPlayer('Ada')
       const game = await createGame('Chess')
 
-      const res = await request(testApp())
+      const res = await request(await testApp())
         .post('/api/v1/sessions')
         .send({ game_id: game.id, played_at: '2026-03-01', results: [{ player_id: ada.id, rank: 1 }] })
 
@@ -100,7 +102,7 @@ describe('sessions', () => {
       const bob = await createPlayer('Bob')
       const game = await createGame('Chess')
 
-      const res = await request(testApp())
+      const res = await request(await testApp())
         .post('/api/v1/sessions')
         .send({
           game_id: game.id,
@@ -119,15 +121,27 @@ describe('sessions', () => {
       const ada = await createPlayer('Ada')
       const bob = await createPlayer('Bob')
       const game = await createGame('Chess')
-      await request(testApp()).delete(`/api/v1/games/${game.id}`)
+      await request(await testApp()).delete(`/api/v1/games/${game.id}`)
 
       const results = [
         { player_id: ada.id, rank: 1 },
         { player_id: bob.id, rank: 2 },
       ]
 
-      expect((await request(testApp()).post('/api/v1/sessions').send({ game_id: 999, played_at: '2026-03-01', results })).status).toBe(404)
-      expect((await request(testApp()).post('/api/v1/sessions').send({ game_id: game.id, played_at: '2026-03-01', results })).status).toBe(404)
+      expect(
+        (
+          await request(await testApp())
+            .post('/api/v1/sessions')
+            .send({ game_id: 999, played_at: '2026-03-01', results })
+        ).status,
+      ).toBe(404)
+      expect(
+        (
+          await request(await testApp())
+            .post('/api/v1/sessions')
+            .send({ game_id: game.id, played_at: '2026-03-01', results })
+        ).status,
+      ).toBe(404)
     })
   })
 
@@ -141,7 +155,7 @@ describe('sessions', () => {
         { player_id: bob.id, rank: 2 },
       ])
 
-      const res = await request(testApp()).get('/api/v1/sessions')
+      const res = await request(await testApp()).get('/api/v1/sessions')
 
       expect(res.status).toBe(200)
       expect(res.body).toHaveLength(1)
@@ -149,13 +163,13 @@ describe('sessions', () => {
     })
 
     it('returns an empty list initially', async () => {
-      expect((await request(testApp()).get('/api/v1/sessions')).body).toEqual([])
+      expect((await request(await testApp()).get('/api/v1/sessions')).body).toEqual([])
     })
   })
 
   describe('GET /api/v1/sessions/:id', () => {
     it('404s for unknown sessions', async () => {
-      expect((await request(testApp()).get('/api/v1/sessions/999')).status).toBe(404)
+      expect((await request(await testApp()).get('/api/v1/sessions/999')).status).toBe(404)
     })
   })
 
@@ -169,15 +183,15 @@ describe('sessions', () => {
         { player_id: bob.id, rank: 2 },
       ])
 
-      expect((await request(testApp()).delete(`/api/v1/sessions/${session.id}`)).status).toBe(204)
+      expect((await request(await testApp()).delete(`/api/v1/sessions/${session.id}`)).status).toBe(204)
 
-      expect((await request(testApp()).get(`/api/v1/sessions/${session.id}`)).status).toBe(404)
-      expect((await request(testApp()).get('/api/v1/sessions')).body).toEqual([])
-      expect((await request(testApp()).get(`/api/v1/players/${ada.id}`)).body).toMatchObject({ total_points: 0, total_sessions: 0 })
+      expect((await request(await testApp()).get(`/api/v1/sessions/${session.id}`)).status).toBe(404)
+      expect((await request(await testApp()).get('/api/v1/sessions')).body).toEqual([])
+      expect((await request(await testApp()).get(`/api/v1/players/${ada.id}`)).body).toMatchObject({ total_points: 0, total_sessions: 0 })
     })
 
     it('404s for unknown sessions', async () => {
-      expect((await request(testApp()).delete('/api/v1/sessions/999')).status).toBe(404)
+      expect((await request(await testApp()).delete('/api/v1/sessions/999')).status).toBe(404)
     })
   })
 })
