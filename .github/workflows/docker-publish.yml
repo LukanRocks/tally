@@ -35,6 +35,11 @@ jobs:
       - name: Run backend tests
         run: pnpm -C backend test
 
+      # Runs after the tests so a formatting slip never masks a real test
+      # failure. Fix locally with `pnpm format`.
+      - name: Check formatting
+        run: pnpm format:check
+
   build:
     runs-on: ubuntu-latest
     needs: test
