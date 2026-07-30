@@ -68,13 +68,13 @@ router.delete('/', (_req: Request, res: Response, next: NextFunction) => {
 })
 
 // GET /api/v1/bgg/search?q=
-router.get('/search', (req: Request, res: Response, next: NextFunction) => {
+router.get('/search', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const query = String(req.query.q ?? '').trim()
 
     if (query.length < 2) return res.json([])
 
-    const rows = db
+    const rows = await db
       .select({
         bgg_id: bggTable.bgg_id,
         name: bggTable.name,
@@ -83,7 +83,6 @@ router.get('/search', (req: Request, res: Response, next: NextFunction) => {
       .from(bggTable)
       .where(like(bggTable.name, `%${query}%`))
       .limit(10)
-      .all()
 
     res.json(rows)
   } catch (err) {
