@@ -99,3 +99,9 @@ export const bgg_games = pgTable('bgg_games', {
   name: text('name').notNull(),
   year_published: integer('year_published'),
 })
+
+// Provenance marker for the SQLite -> Postgres import; see db/state.ts.
+export const _tally_meta = pgTable('_tally_meta', {
+  key: text('key').primaryKey(),
+  value: text('value').notNull(),
+})

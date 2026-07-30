@@ -9,6 +9,10 @@ on:
     branches:
       - main
       - 'release-*'
+      # Phase branches PR into their feature branch, not into a train. Without
+      # this those PRs run no checks at all — #107 merged the entire Postgres
+      # dialect layer with zero CI because of it.
+      - 'feat/**'
 
 jobs:
   # Deliberately a separate job rather than a step in `test`: `build` gates on
