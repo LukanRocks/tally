@@ -1,7 +1,7 @@
 # ERD — Multi-Database Support (SQLite default, Postgres opt-in)
 
 **Status:** Draft
-**Target release:** v2
+**Target release:** Release 1 (the first official release train)
 **Author:** Lukan Vanderlinde
 **Last updated:** 2026-07-30
 
@@ -265,15 +265,15 @@ Each phase is independently reviewable and independently revertible.
 | # | Phase | Scope | Acceptance |
 |---|---|---|---|
 | **0** | Test harness | Vitest in `backend`; in-memory SQLite fixture; route-level integration tests covering all 6 route files. No product change. | Suite green; meaningful coverage of every route's happy path + soft-delete behavior |
-| **1** | Async query refactor | Drop all 52 `.get()`/`.all()`/`.run()`; `await` throughout. **SQLite only.** | Phase 0 suite green, unmodified. Zero behavior change |
-| **2** | Transaction portability | Remove the raw `sqlite` export; the 3 blocks move to `await db.transaction()` | Suite green. `grep -r "sqlite\." src/routes` returns nothing |
+| **1** | Async query refactor | Drop `.get()`/`.all()`/`.run()`; `await` throughout. **SQLite only.** *As landed (#102): 50 of 52 sites — the 2 inside sessions.ts's `sqlite.transaction()` callback cannot be awaited (better-sqlite3 requires a sync callback) and moved to Phase 2's scope.* | Phase 0 suite green, unmodified. Zero behavior change |
+| **2** | Transaction portability | Remove the raw `sqlite` export; the 3 blocks move to `await db.transaction()`, converting the 2 call sites deferred from Phase 1 | Suite green. `grep -r "sqlite\." src/routes` returns nothing |
 | **3** | Dialect layer | `config.ts`, `schema.pg.ts`, `migrations/pg/`, boot-time driver resolution, `searchLike()` helper | Suite runs green against **both** dialects. Fresh Postgres boot works end to end |
 | **4** | Import + gate | `_tally_meta`, state machine, both system endpoints, 503 gate, importer with `setval` | Test: seeded SQLite + empty PG → import → row-for-row parity incl. IDs; insert-after-import succeeds |
 | **5** | Frontend | Decision screen, mount-time status check | Manual: full flow both answers. Failure path surfaces the error |
 | **6** | Docs + packaging | README, compose examples, `.env.example`, Dockerfile audit, **agent-facing migration guide** | A stranger can follow the README for both modes; an agent can add a dual-dialect migration without reading this ERD |
 
 Phases 0–2 are **dialect-agnostic pure refactors with no behavior change**. See §10.2 — they
-target `main` via their own PRs, not `v2`.
+target `main` via their own PRs, not `release-1`.
 
 ---
 
@@ -281,14 +281,19 @@ target `main` via their own PRs, not `v2`.
 
 ### 10.1 Structure
 
+Tally uses **release trains**, not version-driven branches. A train is a named batch of
+features that ship together. This ERD is part of **Release 1**, the first official release; the
+next batch of features boards `release-2`, and so on. The number identifies the train, not a
+semver level — nothing about Release 2 implies a breaking change.
+
 ```
-main                              v0.6.x, always releasable
+main                              always releasable
  │
  ├─ refactor/00-test-harness      ─┐
  ├─ refactor/01-async-queries      ├─ one PR each into main, reviewed and merged serially
  ├─ refactor/02-transaction-portability ─┘
  │
- └─ v2                            long-lived integration branch for all v2 features
+ └─ release-1                     long-lived integration branch for the Release 1 train
      │
      ├─ feat/multi-db             this ERD's feature branch
      │   ├─ feat/multi-db-03-dialect-layer
@@ -296,8 +301,12 @@ main                              v0.6.x, always releasable
      │   ├─ feat/multi-db-05-frontend
      │   └─ feat/multi-db-06-docs
      │
-     └─ feat/design-language      ← absorbs the existing v2---official-redesign branch
+     └─ feat/design-language      ← the former v2---official-redesign branch
 ```
+
+Feature branches are named for what they do (`feat/multi-db`), never for their train. A feature
+that slips Release 1 boards Release 2 by merging into `release-2` instead — no rename, no
+history rewrite.
 
 > **Naming gotcha:** do **not** name the feature branch `feat/multi-database` and the phase
 > branches `feat/multi-database/01-...`. Git stores refs as files, so a ref named
@@ -305,16 +314,16 @@ main                              v0.6.x, always releasable
 > directory/file conflict at the worst possible moment. Hence the flat
 > `feat/multi-db-03-dialect-layer` form above.
 
-### 10.2 Phases 0–2 go to `main`, not `v2`
+### 10.2 Phases 0–2 go to `main`, not `release-1`
 
 Phases 0–2 introduce tests and mechanical refactors with **zero behavior change and zero
 Postgres code**. Landing them on `main`:
 
-- gets test coverage onto the release branch immediately, where it protects v0.6.x too;
-- shrinks the v2↔main drift that makes long-lived branches painful;
-- means the risky, genuinely-v2 work (phases 3–6) starts from a tested base.
+- gets test coverage onto the default branch immediately, where it protects current users too;
+- shrinks the release-1↔main drift that makes long-lived branches painful;
+- means the risky, train-bound work (phases 3–6) starts from a tested base.
 
-`v2` picks them up through the routine sync in §10.4.
+`release-1` picks them up through the routine sync in §10.4.
 
 **Each phase is its own PR into `main`, opened for review — never a direct push.** Three
 branches, three PRs:
@@ -336,25 +345,25 @@ modified**. If a test had to change to accommodate 01, that is a behavior change
 justifying in the PR description. Worth stating that expectation explicitly in the PR body.
 
 Squash-merge each, matching the existing convention on `main`. After all three land, sync
-`main` → `v2` (§10.4) before starting Phase 3.
+`main` → `release-1` (§10.4) before starting Phase 3.
 
-### 10.3 Reconciling the existing v2 branch
+> Status: phases 0–2 landed on `main` as PRs #98 and #102 (Phase 2 pending as of 2026-07-30).
 
-`v2---official-redesign` exists locally, is **89 commits ahead of main, and has never been
-pushed**. Recommended reconciliation:
+### 10.3 Reconciling the old redesign branch — done 2026-07-30
+
+`v2---official-redesign` existed only locally, 89 commits ahead of main. Executed
+reconciliation:
 
 ```bash
 git checkout main && git pull
-git checkout -b v2 && git push -u origin v2          # clean integration branch off main
+git checkout -b release-1 && git push -u origin release-1   # clean integration branch off main
 git branch -m v2---official-redesign feat/design-language
-git push -u origin feat/design-language              # now a feature branch, PRs into v2
+git push -u origin feat/design-language                     # feature branch; PRs into release-1
 ```
 
-This makes the redesign the first feature *into* v2 rather than being v2, which is what lets
-each v2 feature be validated in isolation. Since it was never pushed, the rename costs nothing.
-
-**Confirm this before executing** — it is the one assumption in this document that is not
-derivable from the repo.
+This makes the redesign the first feature *into* the Release 1 train rather than being the
+train itself, which is what lets each feature be validated in isolation. Since the branch had
+never been pushed, the rename cost nothing.
 
 ### 10.4 Merge and sync policy
 
@@ -362,23 +371,26 @@ derivable from the repo.
 |---|---|---|
 | `refactor/0N-*` → `main` | **Squash, via PR** | §10.2. Reviewed and merged by the maintainer; serial, never stacked |
 | phase branch → `feat/multi-db` | **Squash** | Matches existing convention (`e22f32b`, `24fa17b` — linear, squashed, PR-numbered). One commit per phase |
-| `feat/multi-db` → `v2` | **Merge `--no-ff`** | Preserves phase boundaries inside v2 so you can bisect a regression to a phase |
-| `main` → `v2` | **Merge, weekly** | Dependabot is active on `main`. Never rebase — `v2` is pushed and has branches built on it |
-| `v2` → feature branches | **Merge, after each main→v2 sync** | Keeps feature branches current |
-| `v2` → `main` | **Single `--no-ff` merge at release**, then tag | The release event |
+| `feat/multi-db` → `release-1` | **Merge `--no-ff`** | Preserves phase boundaries inside the train so you can bisect a regression to a phase |
+| `main` → `release-1` | **Merge, weekly** | Dependabot is active on `main`. Never rebase — `release-1` is pushed and has branches built on it |
+| `release-1` → feature branches | **Merge, after each main→release-1 sync** | Keeps feature branches current |
+| `release-1` → `main` | **Single merge at release**, then tag | The release event. Note: the `Protect Main` ruleset enforces squash-only + linear history, so this lands as a squash via PR unless the ruleset is relaxed for release merges — decide before the first release |
 
 **Never rebase anything already pushed.** With phase branches stacked on a feature branch
-stacked on `v2`, a rebase upstream rewrites every descendant.
+stacked on `release-1`, a rebase upstream rewrites every descendant.
 
 ### 10.5 Release
 
-The repo currently has **no tags at all**. Introduce them with v2:
+The repo currently has **no tags at all**. Introduce them with the first train:
 
-- Pre-releases from `v2` as work lands: `v2.0.0-beta.1`, `-beta.2`, …
+- Pre-releases from `release-1` as work lands: `release-1-beta.1`, `-beta.2`, …
 - Publish those as `ghcr.io/lukanrocks/tally:next` so you can dogfood the Postgres path on your
   own homelab against real data before it reaches users. Given this change's blast radius, that
   soak time is the highest-value safety measure in this document.
-- Final: merge `v2` → `main`, tag `v2.0.0`, `:latest` follows from `main` as it does today.
+- Final: merge `release-1` → `main`, tag `release-1`, `:latest` follows from `main` as it does
+  today.
+- The train branch is then done. `release-2` is cut fresh from `main` when the next batch of
+  features starts — trains are sequential, not parallel; only one is open at a time.
 
 ### 10.6 Required CI changes (do this first — it is currently a blocker)
 
@@ -392,21 +404,22 @@ on:
     branches: [main]
 ```
 
-**PRs into `v2` would get no CI at all.** Two batches, needed at different times:
+**PRs into `release-1` would get no CI at all.** Two batches, needed at different times:
 
-**Before Phase 0's PR into `main`** — add a `test` job running the Vitest suite. Without it,
-PR 01's "the tests still pass unmodified" claim is unverified by CI and rests entirely on the
-reviewer running it locally. This is the first change to make, and it can go in as part of the
-Phase 0 PR itself.
+**Before Phase 0's PR into `main`** — add a `test` job running the Vitest suite. ✅ Done in
+PR #98; `main` now also gates on a `format` job (#100/#101), and both are required checks in
+the `Protect Main` ruleset.
 
-**Before any `v2` work starts:**
+**Before any `release-1` work starts:**
 
-1. Add `v2` to both `push` and `pull_request` branch lists.
-2. Make the image tag conditional — `main` → `:latest`, `v2` → `:next`. The tag is currently
-   hardcoded to `:latest`; publishing v2 builds over it would ship unreleased code to every user
-   running `:latest`.
+1. Add `release-1` to both `push` and `pull_request` branch lists.
+2. Make the image tag conditional — `main` → `:latest`, `release-1` → `:next`. The tag is
+   currently hardcoded to `:latest`; publishing train builds over it would ship unreleased code
+   to every user running `:latest`.
 3. Add a `postgres:17` service container to the `test` job and matrix it over both dialects
    (§11), so the §4.3 cast is exercised on every PR.
+4. Extend branch protection to `release-1` (same required checks), so features merging into the
+   train meet the same bar as `main`.
 
 ---
 
@@ -438,7 +451,7 @@ seam is not something to verify by hand.
 | 3 | `LIKE` case-sensitivity flips silently on Postgres | Medium | `searchLike()` helper + explicit dual-dialect test |
 | 4 | User assumes central Postgres centralises backups, but uploads are still on the local volume | Medium | Document prominently in README and on the import screen. Both modes keep files on disk |
 | 5 | Missing `setval` → first post-import insert fails on duplicate key | Medium | Covered by the import parity test |
-| 6 | `v2` drifts from `main` under weekly Dependabot traffic | Medium | Phases 0–2 target `main`; weekly `main`→`v2` merge |
+| 6 | `release-1` drifts from `main` under weekly Dependabot traffic | Medium | Phases 0–2 target `main`; weekly `main`→`release-1` merge |
 | 7 | The §4.3 cast hides a real dialect mismatch from the compiler | Medium | Dual-dialect test matrix is the only check — treat as non-optional |
 | 8 | Async transactions allow interleaving that better-sqlite3's sync ones did not | Low | Single-user homelab workload; Phase 1–2 soak on `main` before Postgres lands |
 
