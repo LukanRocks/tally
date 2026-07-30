@@ -3,10 +3,13 @@ import type { Express } from 'express'
 import { sql } from 'drizzle-orm'
 import { createApp } from '../app'
 import { runMigrations, db, dialect } from '../db'
-import { games, game_attachments, players, sessions, session_results, settings, bgg_games } from '../db/schema'
+import { games, game_attachments, players, sessions, session_results, settings, bgg_games, _tally_meta } from '../db/schema'
 
 // Child-before-parent, matching the FK order the reset endpoint uses.
-const TABLES = [settings, bgg_games, session_results, sessions, game_attachments, games, players]
+// _tally_meta is included so the import provenance marker cannot leak between
+// tests. Production reset deliberately does NOT clear it — doing so would make
+// a migrated install prompt for import all over again.
+const TABLES = [settings, bgg_games, session_results, sessions, game_attachments, games, players, _tally_meta]
 
 let app: Express | undefined
 
@@ -36,7 +39,7 @@ export async function resetDb(): Promise<void> {
   await testApp()
 
   if (dialect === 'postgres') {
-    const names = ['settings', 'bgg_games', 'session_results', 'sessions', 'game_attachments', 'games', 'players']
+    const names = ['settings', 'bgg_games', 'session_results', 'sessions', 'game_attachments', 'games', 'players', '_tally_meta']
     // TRUNCATE ... RESTART IDENTITY resets the sequences in the same statement.
     await db.execute(sql.raw(`TRUNCATE TABLE ${names.join(', ')} RESTART IDENTITY CASCADE`))
   } else {

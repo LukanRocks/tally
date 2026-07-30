@@ -24,3 +24,4 @@ export const sessions = resolved.sessions as typeof sqliteSchema.sessions
 export const session_results = resolved.session_results as typeof sqliteSchema.session_results
 export const settings = resolved.settings as typeof sqliteSchema.settings
 export const bgg_games = resolved.bgg_games as typeof sqliteSchema.bgg_games
+export const _tally_meta = resolved._tally_meta as typeof sqliteSchema._tally_meta
