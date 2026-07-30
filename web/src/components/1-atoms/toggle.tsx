@@ -13,7 +13,7 @@ export const TOGGLE_VARIANTS_CONFIG = cva(
           'data-[state=on]:border-yellow-tertiary data-[state=on]:bg-yellow-primary data-[state=on]:text-ink-on-yellow data-[state=on]:hover:bg-yellow-tertiary',
         ],
         outline: [
-          'bg-card border-border text-ink-secondary hover:border-ink-muted hover:bg-paper-secondary hover:text-ink-primary',
+          'border-border bg-card text-ink-secondary hover:border-ink-muted hover:bg-paper-secondary hover:text-ink-primary',
           'data-[state=on]:border-yellow-primary data-[state=on]:text-primary data-[state=on]:hover:border-yellow-tertiary data-[state=on]:hover:bg-yellow-secondary/40',
         ],
         ghost: [

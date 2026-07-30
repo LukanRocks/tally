@@ -31,7 +31,7 @@ export function CardsSection() {
       </div>
 
       <div>
-        <p className='caption mb-3 text-ink-muted'>List row</p>
+        <p className='mb-3 caption text-ink-muted'>List row</p>
         <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
           {(
             [
