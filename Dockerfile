@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY web/package.json ./web/package.json
 COPY backend/package.json ./backend/package.json
-RUN pnpm install --frozen-lockfile --filter tally-client
+RUN pnpm install --frozen-lockfile --filter tally-web
 COPY web/ ./web/
 RUN pnpm -C web build
 
