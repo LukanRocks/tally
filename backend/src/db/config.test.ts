@@ -5,6 +5,17 @@ const resolve = (env: Record<string, string | undefined>) => resolveDatabaseConf
 
 const FULL_DISCRETE = { DB_HOST: 'pg.local', DB_NAME: 'tally', DB_USER: 'tally', DB_PASSWORD: 'secret' }
 
+/** Resolves and returns the thrown config error, for asserting on its fields. */
+function configError(env: Record<string, string | undefined>): DatabaseConfigError {
+  try {
+    resolve(env)
+  } catch (err) {
+    if (err instanceof DatabaseConfigError) return err
+    throw err
+  }
+  throw new Error('expected a DatabaseConfigError')
+}
+
 describe('resolveDatabaseConfig', () => {
   describe('sqlite (the default path)', () => {
     it('falls back to SQLite when nothing is configured', () => {
@@ -58,7 +69,8 @@ describe('resolveDatabaseConfig', () => {
     })
 
     it('rejects a non-numeric DB_PORT', () => {
-      expect(() => resolve({ ...FULL_DISCRETE, DB_PORT: 'fivefourthreetwo' })).toThrow(/DB_PORT must be a number/)
+      expect(() => resolve({ ...FULL_DISCRETE, DB_PORT: 'fivefourthreetwo' })).toThrow(DatabaseConfigError)
+      expect(configError({ ...FULL_DISCRETE, DB_PORT: 'fivefourthreetwo' }).problem).toContain('DB_PORT is "fivefourthreetwo"')
     })
   })
 
@@ -74,16 +86,18 @@ describe('resolveDatabaseConfig', () => {
       expect(() => resolve(env)).toThrow(DatabaseConfigError)
     })
 
-    it('names exactly what is missing', () => {
-      expect(() => resolve({ DB_HOST: 'pg.local' })).toThrow(/DB_NAME, DB_USER, DB_PASSWORD/)
+    it('names exactly what is missing, and what to do about it', () => {
+      // Asserting on the structured fields rather than the prose: the wording
+      // should be free to improve without breaking the test.
+      expect(configError({ DB_HOST: 'pg.local' }).problem).toContain('DB_NAME, DB_USER, DB_PASSWORD')
     })
 
     it('never silently falls back to SQLite on a partial config', () => {
-      expect(() => resolve({ DB_HOST: 'pg.local' })).toThrow(/Refusing to fall back to SQLite/)
+      expect(configError({ DB_HOST: 'pg.local' }).note).toMatch(/will not fall back to SQLite/)
     })
 
     it('throws when both DATABASE_URL and discrete variables are set', () => {
-      expect(() => resolve({ DATABASE_URL: 'postgres://u:p@h/db', ...FULL_DISCRETE })).toThrow(/Pick one/)
+      expect(configError({ DATABASE_URL: 'postgres://u:p@h/db', ...FULL_DISCRETE }).problem).toContain('both set')
     })
   })
 })

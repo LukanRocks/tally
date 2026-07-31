@@ -35,5 +35,13 @@ ENV PORT=3000
 ENV DATA_DIR=/app/data
 
 EXPOSE 3000
+
+# A misconfigured container stays up to explain itself in the browser rather than
+# crash-looping (see backend/src/degraded-app.ts). Without a healthcheck it would
+# look perfectly healthy to `docker ps`, Portainer and uptime monitors, so report
+# unhealthy unless the database is actually usable.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD node -e "require('http').get('http://127.0.0.1:'+(process.env.PORT||3000)+'/api/v1/system/db-status',r=>{let b='';r.on('data',c=>b+=c);r.on('end',()=>process.exit(r.statusCode===200&&JSON.parse(b).state!=='MISCONFIGURED'?0:1))}).on('error',()=>process.exit(1))"
+
 WORKDIR /app/backend
 CMD ["node", "dist/index.js"]

@@ -1,4 +1,5 @@
 import { join } from 'path'
+import type { HelpAnchor } from '../help-links'
 
 export type Dialect = 'sqlite' | 'postgres'
 
@@ -10,10 +11,25 @@ export type SslMode = (typeof SSL_MODES)[number]
 /** Discrete vars that must all be present together, or not at all. */
 const DISCRETE_REQUIRED = ['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASSWORD'] as const
 
+/**
+/**
+ * States what is wrong and points at the documentation. Deliberately does not
+ * carry remedial instructions: the problem text names the offending variables,
+ * and anything longer belongs in the docs rather than duplicated across a
+ * console banner, an API payload and a browser screen.
+ */
 export class DatabaseConfigError extends Error {
-  constructor(message: string) {
-    super(message)
+  readonly problem: string
+  readonly note?: string
+  /** Which documentation section explains this specific problem. */
+  readonly docs: HelpAnchor
+
+  constructor({ problem, note, docs = 'database' }: { problem: string; note?: string; docs?: HelpAnchor }) {
+    super(problem)
     this.name = 'DatabaseConfigError'
+    this.problem = problem
+    this.note = note
+    this.docs = docs
   }
 }
 
@@ -39,10 +55,10 @@ export function resolveDatabaseConfig(env: NodeJS.ProcessEnv = process.env, data
   const discretePresent = DISCRETE_REQUIRED.filter((key) => present(env, key))
 
   if (hasUrl && discretePresent.length > 0) {
-    throw new DatabaseConfigError(
-      `Both DATABASE_URL and discrete database variables (${discretePresent.join(', ')}) are set. ` +
-        `Pick one — precedence is deliberately not defined, because guessing wrong would point Tally at the wrong database.`,
-    )
+    throw new DatabaseConfigError({
+      problem: `DATABASE_URL and the discrete database variables (${discretePresent.join(', ')}) are both set. Use one or the other, not both.`,
+      note: 'Tally will not pick for you: guessing wrong would point it at the wrong database.',
+    })
   }
 
   if (hasUrl) {
@@ -53,16 +69,18 @@ export function resolveDatabaseConfig(env: NodeJS.ProcessEnv = process.env, data
     const missing = DISCRETE_REQUIRED.filter((key) => !present(env, key))
 
     if (missing.length > 0) {
-      throw new DatabaseConfigError(
-        `Incomplete Postgres configuration. Set: ${missing.join(', ')} (or unset ${discretePresent.join(', ')} to use SQLite). ` +
-          `Refusing to fall back to SQLite — that would silently write to a different database than you configured.`,
-      )
+      throw new DatabaseConfigError({
+        problem: `Postgres is only partly configured — ${discretePresent.join(', ')} ${discretePresent.length === 1 ? 'is' : 'are'} set, but ${missing.join(', ')} ${missing.length === 1 ? 'is' : 'are'} missing.`,
+        note: 'Tally will not fall back to SQLite here: it would silently write to a different database than you configured.',
+      })
     }
 
     const port = env.DB_PORT?.trim() || '5432'
 
     if (!/^\d+$/.test(port)) {
-      throw new DatabaseConfigError(`DB_PORT must be a number, got "${port}".`)
+      throw new DatabaseConfigError({
+        problem: `DB_PORT is "${port}", which is not a number.`,
+      })
     }
 
     const user = encodeURIComponent(env.DB_USER!.trim())
@@ -84,7 +102,11 @@ function parseSslMode(env: NodeJS.ProcessEnv): SslMode {
   if (!raw) return 'disable'
   if ((SSL_MODES as readonly string[]).includes(raw)) return raw as SslMode
 
-  throw new DatabaseConfigError(`DB_SSL must be one of ${SSL_MODES.join(', ')}, got "${raw}".`)
+  throw new DatabaseConfigError({
+    // The valid values define the error rather than remedy it, so they belong here.
+    problem: `DB_SSL is "${raw}". Valid modes are: ${SSL_MODES.join(', ')}.`,
+    docs: 'ssl',
+  })
 }
 
 /**

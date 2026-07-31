@@ -6,7 +6,8 @@ import { db, dialect, DATA_DIR } from './index'
 import { _tally_meta } from './schema'
 import { games, players, sessions } from './schema'
 
-export type DatabaseState = 'READY' | 'PENDING_IMPORT'
+export type { DatabaseState } from './state-types'
+import type { DatabaseState } from './state-types'
 
 export const IMPORTED_AT_KEY = 'imported_from_sqlite_at'
 

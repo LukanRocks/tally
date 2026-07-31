@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { getState } from '../db/state'
+import { helpUrl } from '../help-links'
 
 /**
  * Blocks the data API while an import is pending.
@@ -18,8 +19,11 @@ export function pendingImportGate(req: Request, res: Response, next: NextFunctio
     return
   }
 
+  // Same shape as the degraded app's payload: the frontend should not need to
+  // know which part of the backend refused it, only what is wrong and what to do.
   res.status(503).json({
-    error: 'Tally found existing SQLite data but is configured for Postgres. Choose whether to import it before continuing.',
     state: 'PENDING_IMPORT',
+    problem: 'Tally is configured for Postgres, but found existing data in the built-in SQLite database. Choose whether to import it before continuing.',
+    docsUrl: helpUrl('migration'),
   })
 }

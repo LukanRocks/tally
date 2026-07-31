@@ -1,5 +1,15 @@
 const BASE_API_ENDPOINT = '/api/v1'
 
+/** Shape the backend attaches to a failure the operator can act on. */
+export type HttpError = Error & {
+  code?: number
+  /** Set when the server is up but cannot serve data — see backend db/state-types.ts. */
+  state?: 'READY' | 'PENDING_IMPORT' | 'MISCONFIGURED'
+  problem?: string
+  /** Documentation section explaining this specific problem. */
+  docsUrl?: string
+}
+
 export const stripNulls = <T>(payload: unknown): T => {
   if (payload === null) return undefined as T
   if (Array.isArray(payload)) return payload.map(stripNulls) as T
@@ -22,9 +32,18 @@ export const perform = async <T>(endpoint: string, options?: RequestInit): Promi
 
   if (!response.ok) {
     const body = await response.json().catch(() => ({ error: response.statusText }))
-    const error = new Error(body.error ?? 'Request failed') as Error & { code: number }
+
+    // The backend uses two shapes: `error` for ordinary failures, and a
+    // `problem` + `docsUrl` pair for states the operator has to resolve (a
+    // misconfigured database, a pending migration). Reading only `error` meant
+    // those arrived as a bare "Request failed" while the real explanation sat
+    // unread in the body.
+    const error = new Error(body.error ?? body.problem ?? 'Request failed') as HttpError
 
     error.code = response.status
+    error.state = body.state
+    error.problem = body.problem
+    error.docsUrl = body.docsUrl
 
     throw error
   }
