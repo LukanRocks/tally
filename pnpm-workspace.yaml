@@ -1,6 +1,7 @@
 packages:
   - 'web'
   - 'backend'
+  - 'e2e'
 
 # Supply-chain hardening
 strictDepBuilds: true

@@ -6,7 +6,8 @@
     "dev": "pnpm --parallel --filter tally-web --filter tally-backend dev",
     "build": "pnpm -C backend build && pnpm -C web build",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test:e2e": "pnpm -C backend build && pnpm -C e2e test"
   },
   "devDependencies": {
     "prettier": "3.9.4",

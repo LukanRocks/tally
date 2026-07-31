@@ -190,6 +190,17 @@ pnpm -C backend test:all
 pnpm -C web test
 ```
 
+### End-to-end tests
+
+These boot the real built server against a real Postgres and drive it over HTTP — fresh installs on both databases, the SQLite → Postgres migration with both answers, archive integrity, failed imports, and refused configurations. They need the same test database running:
+
+```bash
+docker compose -f docker-compose.test.yml up -d --wait
+pnpm test:e2e
+```
+
+`test:e2e` rebuilds the backend first, because these run `backend/dist` rather than the sources and a stale build is exactly the kind of thing they exist to catch.
+
 ### Changing the database schema
 
 Every schema change has to be written twice — once per dialect — and the compiler will not catch a missed one. [docs/adding-a-migration.md](docs/adding-a-migration.md) is the checklist.
