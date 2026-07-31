@@ -2,8 +2,9 @@
  * Documentation links surfaced to operators, in one place.
  *
  * These appear in the console banner and in API payloads, so they must not drift
- * apart. Phase 6 writes the README sections these anchors point at — if an anchor
- * is renamed there, it is renamed here.
+ * apart. Each one points at a README heading; help-links.test.ts asserts those
+ * headings still exist, because renaming one breaks every surface at once and
+ * GitHub gives no error when an anchor misses — it just serves the page.
  */
 const DOCS_BASE = 'https://github.com/LukanRocks/tally'
 
