@@ -93,6 +93,12 @@ jobs:
       - name: Run backend tests (Postgres)
         run: pnpm -C backend test:pg
 
+      # A step in this job rather than a job of its own, so the required-check
+      # list in branch protection stays as it is. The Postgres service above is
+      # irrelevant here and simply goes unused.
+      - name: Run frontend tests
+        run: pnpm -C web test
+
   build:
     runs-on: ubuntu-latest
     needs: test
