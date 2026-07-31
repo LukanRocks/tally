@@ -318,7 +318,7 @@ Each phase is independently reviewable and independently revertible.
 | **2** | Transaction portability | Remove raw `sqlite` usage from routes; the 3 blocks move behind `withTransaction()`, converting the 2 call sites deferred from Phase 1. *As landed (#104): `db.transaction()` turned out not to be portable — see §5.1.* | Suite green. `grep -r "sqlite\." src/routes` returns nothing |
 | **3** | Dialect layer | `config.ts`, `schema.pg.ts`, `migrations/pg/`, boot-time driver resolution, `searchLike()` helper | Suite runs green against **both** dialects. Fresh Postgres boot works end to end |
 | **4** | Import + gate | `_tally_meta`, state machine, both system endpoints, 503 gate, importer with `setval`. *As landed (#108): also needed a settings-singleton replace and a WAL checkpoint before archiving — see §11.1.* | Test: seeded SQLite + empty PG → import → row-for-row parity incl. IDs; insert-after-import succeeds |
-| **5** | Frontend | Decision screen, mount-time status check | Manual: full flow both answers. Failure path surfaces the error |
+| **5** | Frontend | Decision screen, mount-time status check, first frontend test harness. *As landed (#113): the manual run turned up two defects the suite could not — see §11.1.* | Manual: full flow both answers. Failure path surfaces the error |
 | **6** | Docs + packaging | README, compose examples, `.env.example`, Dockerfile audit, **agent-facing migration guide** | A stranger can follow the README for both modes; an agent can add a dual-dialect migration without reading this ERD |
 | **7** | E2E scenario suite | Automate the migration scenarios currently run by hand: real built binaries, real Postgres, real HTTP. See §11.1 | `pnpm test:e2e` green locally and in CI; each scenario in §11.1 covered and asserted, not just executed |
 
@@ -499,6 +499,12 @@ seam is not something to verify by hand.
   parity including IDs, then assert a subsequent insert succeeds (catches a missing `setval`).
 - **Explicit case-sensitivity test** for game and BGG search on both dialects — this is the
   bug most likely to ship silently.
+- **Frontend (from Phase 5):** Vitest + Testing Library + jsdom in `web`, run as a step in the
+  existing `test` job so the required-check list does not change. Deliberately thin: only the
+  screens that carry state — the error screen's MISCONFIGURED routing, the decision screen's
+  import lifecycle, and the provider that chooses between them. It exists mainly to pin the
+  one destructive control in the product, and the double-click guard on it. It is **not** a
+  substitute for §11.1 — every Phase 5 defect above got past it.
 
 ### 11.1 End-to-end scenario tests (Phase 7)
 
@@ -507,6 +513,9 @@ found by running the real thing, not by the unit suite. The record so far:
 
 | Found by | Defect | Would have caused |
 |---|---|---|
+| E2E (Phase 5) | A failed import returned Drizzle's message — the whole statement plus every bound parameter, i.e. the user's own rows — as the on-screen explanation | Player names and session notes rendered as a wall of SQL where an explanation belonged |
+| E2E (Phase 5) | A failed import was never logged; the only record was a screen the user could navigate away from | Nothing in `docker logs` to debug a failed migration with |
+| E2E (Phase 5) | `/system/db-status` carried no `docsUrl`, unlike every other payload describing a blocked state | Decision screen rendered with nowhere to send someone unsure what an import does |
 | E2E (Phase 4) | Importing `settings` collided with the singleton seeded by migration 0002 | **Every real migration fails.** Unit tests missed it because their fixtures did not carry the seeded row |
 | E2E (Phase 4) | Archive contained only `tally.db`, not the WAL — a 4 KB snapshot beside a 290 KB orphaned `tally.db-wal` | User's revert path silently empty, discovered only when they needed it |
 | E2E (Phase 4) | `tsc` failing while `dist` looked healthy from a previous build | Broken image shipped; the missing migration would surface as a crash on boot |
