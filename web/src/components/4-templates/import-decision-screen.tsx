@@ -45,7 +45,7 @@ export const ImportDecisionScreen = ({ status, onImport, onDone }: Props) => {
   }
 
   return (
-    <div className='flex min-h-screen flex-col bg-background'>
+    <div className='flex min-h-screen flex-col bg-paper-primary'>
       <div className='mx-auto flex w-full max-w-3xl flex-1 flex-col justify-between px-12 py-16'>
         <div className='flex flex-col'>
           <div className='mb-10 flex items-center gap-2 caption text-ink-muted'>
@@ -109,7 +109,7 @@ export const ImportDecisionScreen = ({ status, onImport, onDone }: Props) => {
           </p>
         </div>
 
-        <div className='border-t border-border pt-8'>
+        <div className='border-t border-paper-muted pt-8'>
           <p className='mb-2 caption text-ink-muted'>PREFER TO STAY ON SQLITE?</p>
           <p className='text-sm leading-relaxed text-ink-secondary'>
             Remove the database variables from your compose file and restart. Your data has not been touched, and Tally will pick it up exactly as it was.
@@ -121,7 +121,7 @@ export const ImportDecisionScreen = ({ status, onImport, onDone }: Props) => {
 }
 
 const ImportComplete = ({ result, onDone }: { result: ImportResult; onDone: () => void }) => (
-  <div className='flex min-h-screen flex-col bg-background'>
+  <div className='flex min-h-screen flex-col bg-paper-primary'>
     <div className='mx-auto flex w-full max-w-3xl flex-1 flex-col justify-between px-12 py-16'>
       <div className='flex flex-col'>
         <div className='mb-10 flex items-center gap-2 caption text-ink-muted'>
@@ -156,7 +156,7 @@ const ImportComplete = ({ result, onDone }: { result: ImportResult; onDone: () =
         </div>
       </div>
 
-      <div className='border-t border-border pt-8'>
+      <div className='border-t border-paper-muted pt-8'>
         <p className='mb-2 caption text-ink-muted'>YOUR BACKUP</p>
         <p className='text-sm leading-relaxed text-ink-secondary'>The old database was archived, not deleted. Keep it until you are happy with the migration.</p>
         <p className='mt-2 monospace text-sm break-all text-ink-primary'>{result.archivedTo}</p>

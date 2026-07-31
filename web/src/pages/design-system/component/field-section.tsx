@@ -15,7 +15,7 @@ export function FieldSection() {
 
       <div className='space-y-3'>
         <p className='caption text-ink-muted'>Label</p>
-        <div className='flex flex-wrap items-center gap-6 rounded-xl border border-border bg-card p-5'>
+        <div className='flex flex-wrap items-center gap-6 rounded-xl border border-paper-muted bg-paper-primary p-5'>
           <Label>Default label</Label>
           <Label className='pointer-events-none opacity-50'>Disabled</Label>
         </div>
@@ -23,7 +23,7 @@ export function FieldSection() {
 
       <div className='space-y-3'>
         <p className='caption text-ink-muted'>Separator</p>
-        <div className='space-y-5 rounded-xl border border-border bg-card p-5'>
+        <div className='space-y-5 rounded-xl border border-paper-muted bg-paper-primary p-5'>
           <Separator />
           <div className='flex h-6 items-center gap-3'>
             <span className='text-sm text-ink-muted'>Section A</span>
@@ -38,7 +38,7 @@ export function FieldSection() {
 
       <div className='space-y-3'>
         <p className='caption text-ink-muted'>Field — vertical (default)</p>
-        <div className='rounded-xl border border-border bg-card p-5'>
+        <div className='rounded-xl border border-paper-muted bg-paper-primary p-5'>
           <FieldGroup>
             <Field>
               <FieldLabel>Game name</FieldLabel>
@@ -56,7 +56,7 @@ export function FieldSection() {
 
       <div className='space-y-3'>
         <p className='caption text-ink-muted'>Field — horizontal</p>
-        <div className='rounded-xl border border-border bg-card p-5'>
+        <div className='rounded-xl border border-paper-muted bg-paper-primary p-5'>
           <FieldGroup>
             <Field orientation='horizontal'>
               <FieldLabel>Notify me</FieldLabel>
@@ -68,7 +68,7 @@ export function FieldSection() {
 
       <div className='space-y-3'>
         <p className='caption text-ink-muted'>InputGroup — inline addons</p>
-        <div className='flex flex-row gap-3 rounded-xl border border-border bg-card p-5'>
+        <div className='flex flex-row gap-3 rounded-xl border border-paper-muted bg-paper-primary p-5'>
           <InputGroup>
             <InputGroupAddon align='inline-start'>
               <InputGroupText>
@@ -103,7 +103,7 @@ export function FieldSection() {
 
       <div className='space-y-3'>
         <p className='caption text-ink-muted'>InputGroup — block addons</p>
-        <div className='flex flex-col gap-3 rounded-xl border border-border bg-card p-5'>
+        <div className='flex flex-col gap-3 rounded-xl border border-paper-muted bg-paper-primary p-5'>
           <InputGroup>
             <InputGroupAddon align='block-start'>
               <InputGroupText>Notes</InputGroupText>

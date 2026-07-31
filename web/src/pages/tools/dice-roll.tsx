@@ -44,7 +44,7 @@ interface DieCellProps {
 
 function DieCell({ value, animating }: DieCellProps) {
   return (
-    <div className={`flex aspect-square items-center justify-center rounded-xl border border-border bg-card text-2xl font-bold tabular-nums${animating ? 'animate-pulse' : ''}`}>
+    <div className={`flex aspect-square items-center justify-center rounded-xl border border-paper-muted bg-paper-primary text-2xl font-bold tabular-nums${animating ? 'animate-pulse' : ''}`}>
       {value}
     </div>
   )
@@ -68,7 +68,7 @@ function DiceGrid({ displayValues, animating }: DiceGridProps) {
 }
 
 const inputClass =
-  'w-20 rounded-lg border border-border bg-background p-2 text-center text-4xl font-bold tabular-nums focus:ring-2 focus:ring-primary focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
+  'w-20 rounded-lg border border-paper-muted bg-paper-primary p-2 text-center text-4xl font-bold tabular-nums focus:ring-2 focus:ring-primary focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
 
 interface SetupViewProps {
   count: number

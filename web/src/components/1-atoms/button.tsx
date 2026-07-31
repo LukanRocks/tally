@@ -29,7 +29,7 @@ const BUTTON_VARIANTS_CONFIG = cva(
     compoundVariants: [
       // ── default (filled) ───────────────────────────────────────────────
       { variant: 'default', color: 'primary', className: 'border-yellow-tertiary bg-yellow-primary text-ink-on-yellow shadow-xs hover:bg-yellow-tertiary' },
-      { variant: 'default', color: 'secondary', className: 'border-secondary/50 bg-secondary text-secondary-foreground hover:bg-secondary/80' },
+      { variant: 'default', color: 'secondary', className: 'border-paper-secondary/50 bg-paper-secondary text-ink-secondary hover:bg-paper-secondary/80' },
       { variant: 'default', color: 'destructive', className: 'border-destructive/30 bg-destructive/12 text-destructive hover:border-destructive/50 hover:bg-destructive/20' },
 
       // ── outline ────────────────────────────────────────────────────────
@@ -76,7 +76,7 @@ export const Button = ({ variant, color, size, className, polymorphic = false, .
 }
 
 export const BUTTON_GROUP_VARIANTS_CONFIG = cva(
-  "group/button-group flex w-fit items-stretch *:hover:relative *:hover:z-10 *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 has-[>[data-variant=outline]]:*:data-[slot=input-group]:border-border has-[>[data-variant=outline]]:*:data-[slot=select-trigger]:border-border has-[>[data-variant=outline]]:[&>[data-slot=input-group]:has(:focus-visible)]:border-ring has-[>[data-variant=outline]]:[&>[data-slot=select-trigger]:focus-visible]:border-ring has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-4xl [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 has-[>[data-variant=outline]]:[&>input]:border-border has-[>[data-variant=outline]]:[&>input:focus-visible]:border-ring",
+  "group/button-group flex w-fit items-stretch *:hover:relative *:hover:z-10 *:focus-visible:relative *:focus-visible:z-10 has-[>[data-slot=button-group]]:gap-2 has-[>[data-variant=outline]]:*:data-[slot=input-group]:border-paper-muted has-[>[data-variant=outline]]:*:data-[slot=select-trigger]:border-paper-muted has-[>[data-variant=outline]]:[&>[data-slot=input-group]:has(:focus-visible)]:border-ring has-[>[data-variant=outline]]:[&>[data-slot=select-trigger]:focus-visible]:border-ring has-[select[aria-hidden=true]:last-child]:[&>[data-slot=select-trigger]:last-of-type]:rounded-r-4xl [&>[data-slot=select-trigger]:not([class*='w-'])]:w-fit [&>input]:flex-1 has-[>[data-variant=outline]]:[&>input]:border-paper-muted has-[>[data-variant=outline]]:[&>input:focus-visible]:border-ring",
   {
     variants: {
       orientation: {
@@ -107,7 +107,7 @@ export type ButtonGroupTextProps = ComponentProps<'div'> & { polymorphic?: boole
 
 export const ButtonGroupText = ({ className, polymorphic = false, ...props }: ButtonGroupTextProps) => {
   const Component = polymorphic ? Slot.Root : 'div'
-  const classes = cn("flex items-center gap-2 rounded-md border bg-muted px-2.5 text-sm font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4", className)
+  const classes = cn("flex items-center gap-2 rounded-md border bg-paper-muted px-2.5 text-sm font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4", className)
 
   return <Component data-slot='button-group-text' className={classes} {...props} />
 }
@@ -115,7 +115,7 @@ export const ButtonGroupText = ({ className, polymorphic = false, ...props }: Bu
 export type ButtonGroupSeparatorProps = ComponentProps<typeof Separator>
 
 export const ButtonGroupSeparator = ({ className, orientation = 'vertical', ...props }: ButtonGroupSeparatorProps) => {
-  const classes = cn('relative self-stretch bg-input data-horizontal:mx-px data-horizontal:w-auto data-vertical:my-px data-vertical:h-auto', className)
+  const classes = cn('relative self-stretch bg-paper-muted data-horizontal:mx-px data-horizontal:w-auto data-vertical:my-px data-vertical:h-auto', className)
 
   return <Separator data-slot='button-group-separator' orientation={orientation} className={classes} {...props} />
 }

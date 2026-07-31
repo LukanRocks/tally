@@ -29,7 +29,7 @@ export const GreetingBanner = () => {
   }, [settings.default_owner_id])
 
   return (
-    <div className='bg-surface-elevated flex items-center justify-between rounded-xl border border-border px-4 py-3'>
+    <div className='bg-surface-elevated flex items-center justify-between rounded-xl border border-paper-muted px-4 py-3'>
       <p>
         {greeting()}
         {ownerName ? `, ${ownerName}` : ''}.

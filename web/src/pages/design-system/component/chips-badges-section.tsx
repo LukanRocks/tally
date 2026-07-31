@@ -12,14 +12,14 @@ export const ChipsBadgesSection = () => (
       </p>
     </div>
 
-    <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
+    <div className='space-y-4 rounded-xl border border-paper-muted bg-paper-primary p-5'>
       {/* <p className='caption text-ink-muted'>Pill — selection & status</p>
         <div className='flex flex-wrap items-center gap-2'>
-          <span className='inline-flex h-7 items-center rounded-full border border-border bg-card px-3 text-sm font-medium text-ink-primary'>Default</span>
+          <span className='inline-flex h-7 items-center rounded-full border border-paper-muted bg-paper-primary px-3 text-sm font-medium text-ink-primary'>Default</span>
           <span className='inline-flex h-7 items-center rounded-full border border-ink-primary bg-ink-primary px-3 text-sm font-medium text-paper-primary'>Selected</span>
           <span className='inline-flex h-7 items-center rounded-full border border-yellow-tertiary/35 bg-yellow-secondary px-3 text-sm font-medium text-ink-primary'>Soft</span>
-          <span className='inline-flex h-7 items-center rounded-full border border-dashed border-border bg-transparent px-3 text-sm font-medium text-ink-muted'>+ add</span>
-          <span className='inline-flex h-7 items-center gap-1.5 rounded-full border border-border bg-card pr-1 pl-1.5 text-sm font-medium text-ink-primary'>
+          <span className='inline-flex h-7 items-center rounded-full border border-dashed border-paper-muted bg-transparent px-3 text-sm font-medium text-ink-muted'>+ add</span>
+          <span className='inline-flex h-7 items-center gap-1.5 rounded-full border border-paper-muted bg-paper-primary pr-1 pl-1.5 text-sm font-medium text-ink-primary'>
             <span
               className='inline-flex h-4.5 w-4.5 items-center justify-center rounded-full border border-black/10 text-[10px] font-bold text-ink-primary'
               style={{ background: 'var(--player-a)' }}

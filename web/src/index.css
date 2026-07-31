@@ -259,15 +259,14 @@
     @apply border-paper-muted outline-ring/50;
   }
 
-  /* todo: move from shadcn defaults to */
   body {
-    @apply bg-background text-foreground;
+    @apply bg-paper-primary text-ink-primary;
   }
 }
 
 @layer components {
   .input {
-    @apply w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none;
+    @apply w-full rounded-lg border border-paper-muted bg-paper-primary px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted focus:ring-2 focus:ring-ring focus:outline-none;
   }
 }
 

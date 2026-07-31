@@ -46,15 +46,15 @@ export const ErrorScreen = ({ error, onRetry }: Props) => {
   const misconfigured = error?.state === 'MISCONFIGURED'
 
   return (
-    <div className='flex min-h-screen flex-col bg-background'>
+    <div className='flex min-h-screen flex-col bg-paper-primary'>
       <div className='mx-auto flex w-full max-w-3xl flex-1 flex-col justify-between px-12 py-16'>
         <div className='flex flex-col'>
-          <div className='mb-10 flex items-center gap-2 caption text-muted-foreground'>
+          <div className='mb-10 flex items-center gap-2 caption text-ink-muted'>
             <PulseDot color='destructive' />
             TALLY · {misconfigured ? 'NOT CONFIGURED' : 'OFFLINE'}
           </div>
 
-          <h1 className='text-8xl leading-none font-black tracking-tight text-foreground'>
+          <h1 className='text-8xl leading-none font-black tracking-tight text-ink-primary'>
             Somebody
             <br />
             knocked
@@ -63,7 +63,7 @@ export const ErrorScreen = ({ error, onRetry }: Props) => {
           </h1>
           <p className='mt-1 callout text-4xl'>{tagline}</p>
 
-          <p className='mt-10 text-lg leading-relaxed text-foreground/70'>
+          <p className='mt-10 text-lg leading-relaxed text-ink-primary/70'>
             {error?.problem ?? "Your browser can see the table. It just can't sit down at it. The Tally server. We meant server."}
           </p>
 
@@ -97,7 +97,7 @@ export const ErrorScreen = ({ error, onRetry }: Props) => {
           </div>
         </div>
 
-        <div className='flex items-center justify-center gap-16 border-t border-border pt-8'>
+        <div className='flex items-center justify-center gap-16 border-t border-paper-muted pt-8'>
           {[
             ['NAME', error?.name],
             // When the problem is spelled out above, repeating it here is noise —
@@ -107,8 +107,8 @@ export const ErrorScreen = ({ error, onRetry }: Props) => {
             // ['ATTEMPT', `#${retryCount + 1}`],
           ].map(([label, value]) => (
             <div key={label}>
-              <p className='mb-1 caption text-muted-foreground'>{label}</p>
-              <p className='monospace text-sm text-foreground'>{value}</p>
+              <p className='mb-1 caption text-ink-muted'>{label}</p>
+              <p className='monospace text-sm text-ink-primary'>{value}</p>
             </div>
           ))}
         </div>

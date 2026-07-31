@@ -49,7 +49,7 @@ export default function Leaderboard() {
       .catch(() => setH2H(null))
   }, [p1, p2])
 
-  if (loading) return <div className='p-4 text-muted-foreground md:p-8'>Loading…</div>
+  if (loading) return <div className='p-4 text-ink-muted md:p-8'>Loading…</div>
 
   return (
     <div className='mx-auto max-w-5xl space-y-12 p-4 pt-16 md:p-8 md:pt-20'>
@@ -61,12 +61,12 @@ export default function Leaderboard() {
       {/* Global rankings */}
       <section>
         {leaderboard.length === 0 ? (
-          <p className='text-sm text-muted-foreground'>No sessions logged yet.</p>
+          <p className='text-sm text-ink-muted'>No sessions logged yet.</p>
         ) : (
-          <div className='overflow-hidden rounded-xl border border-border bg-card'>
+          <div className='overflow-hidden rounded-xl border border-paper-muted bg-paper-primary'>
             <div className='overflow-x-auto'>
               <table className='w-full text-sm'>
-                <thead className='bg-muted/50 text-xs tracking-wide text-muted-foreground uppercase'>
+                <thead className='bg-paper-muted/50 text-xs tracking-wide text-ink-muted uppercase'>
                   <tr>
                     <th className='px-4 py-3 text-left'>#</th>
                     <th className='px-4 py-3 text-left'>Player</th>
@@ -76,10 +76,10 @@ export default function Leaderboard() {
                     <th className='px-4 py-3 text-right'>Win Rate</th>
                   </tr>
                 </thead>
-                <tbody className='divide-y divide-border'>
+                <tbody className='divide-y divide-paper-muted'>
                   {leaderboard.map((e, i) => (
-                    <tr key={e.player_id} className='hover:bg-muted/50'>
-                      <td className='px-4 py-3 font-medium text-muted-foreground'>{i + 1}</td>
+                    <tr key={e.player_id} className='hover:bg-paper-muted/50'>
+                      <td className='px-4 py-3 font-medium text-ink-muted'>{i + 1}</td>
                       <td className='px-4 py-3'>
                         <div className='flex items-center gap-2'>
                           {e.avatar_path && <img src={e.avatar_path} alt={e.player_name} className='h-7 w-7 rounded-full object-cover' />}
@@ -90,8 +90,8 @@ export default function Leaderboard() {
                       </td>
                       <td className='px-4 py-3 text-right font-semibold'>{e.total_points}</td>
                       <td className='px-4 py-3 text-right'>{e.wins}</td>
-                      <td className='px-4 py-3 text-right text-muted-foreground'>{e.total_sessions}</td>
-                      <td className='px-4 py-3 text-right text-muted-foreground'>{e.win_rate}%</td>
+                      <td className='px-4 py-3 text-right text-ink-muted'>{e.total_sessions}</td>
+                      <td className='px-4 py-3 text-right text-ink-muted'>{e.win_rate}%</td>
                     </tr>
                   ))}
                 </tbody>
@@ -104,12 +104,12 @@ export default function Leaderboard() {
       {/* Most played */}
       <section>
         {mostPlayed.length === 0 ? (
-          <p className='text-sm text-muted-foreground'>No sessions yet.</p>
+          <p className='text-sm text-ink-muted'>No sessions yet.</p>
         ) : (
-          <div className='overflow-hidden rounded-xl border border-border bg-card'>
+          <div className='overflow-hidden rounded-xl border border-paper-muted bg-paper-primary'>
             <div className='overflow-x-auto'>
               <table className='w-full text-sm'>
-                <thead className='bg-muted/50 text-xs tracking-wide text-muted-foreground uppercase'>
+                <thead className='bg-paper-muted/50 text-xs tracking-wide text-ink-muted uppercase'>
                   <tr>
                     <th className='px-4 py-3 text-left'>#</th>
                     <th className='px-4 py-3 text-left'>Most Played Games</th>
@@ -117,10 +117,10 @@ export default function Leaderboard() {
                     <th className='px-4 py-3 text-right'>Unique Players</th>
                   </tr>
                 </thead>
-                <tbody className='divide-y divide-border'>
+                <tbody className='divide-y divide-paper-muted'>
                   {mostPlayed.map((g, i) => (
-                    <tr key={g.id} className='hover:bg-muted/50'>
-                      <td className='px-4 py-3 font-medium text-muted-foreground'>{i + 1}</td>
+                    <tr key={g.id} className='hover:bg-paper-muted/50'>
+                      <td className='px-4 py-3 font-medium text-ink-muted'>{i + 1}</td>
                       <td className='px-4 py-3'>
                         <div className='flex items-center gap-3'>
                           {g.cover_image_path && <img src={g.cover_image_path} alt={g.name} className='h-10 w-8 rounded object-cover' />}
@@ -130,7 +130,7 @@ export default function Leaderboard() {
                         </div>
                       </td>
                       <td className='px-4 py-3 text-right font-semibold'>{g.session_count}</td>
-                      <td className='px-4 py-3 text-right text-muted-foreground'>{g.unique_players}</td>
+                      <td className='px-4 py-3 text-right text-ink-muted'>{g.unique_players}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -142,12 +142,12 @@ export default function Leaderboard() {
 
       {/* Head-to-head */}
       <section>
-        <h2 className='mb-4 text-lg font-semibold text-foreground'>Head-to-Head</h2>
+        <h2 className='mb-4 text-lg font-semibold text-ink-primary'>Head-to-Head</h2>
         <div className='mb-4 flex flex-col gap-3 sm:flex-row'>
           <select
             value={p1}
             onChange={(e) => setP1(Number(e.target.value))}
-            className='rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+            className='rounded-lg border border-paper-muted bg-paper-primary px-3 py-2 text-sm text-ink-primary focus:ring-2 focus:ring-ring focus:outline-none'
           >
             <option value={0} disabled hidden>
               Player 1…
@@ -160,11 +160,11 @@ export default function Leaderboard() {
                 </option>
               ))}
           </select>
-          <span className='flex items-center font-bold text-muted-foreground'>vs</span>
+          <span className='flex items-center font-bold text-ink-muted'>vs</span>
           <select
             value={p2}
             onChange={(e) => setP2(Number(e.target.value))}
-            className='rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+            className='rounded-lg border border-paper-muted bg-paper-primary px-3 py-2 text-sm text-ink-primary focus:ring-2 focus:ring-ring focus:outline-none'
           >
             <option value={0} disabled hidden>
               Player 2…
@@ -180,26 +180,26 @@ export default function Leaderboard() {
         </div>
 
         {h2h && (
-          <div className='rounded-xl border border-border bg-card p-6'>
+          <div className='rounded-xl border border-paper-muted bg-paper-primary p-6'>
             <div className='mb-6 grid grid-cols-3 gap-4 text-center'>
               <div>
                 <p className='text-lg font-bold'>{h2h.player1.name}</p>
                 <p className='mt-1 text-3xl font-black text-primary'>{h2h.p1_wins}</p>
-                <p className='text-xs text-muted-foreground'>wins</p>
+                <p className='text-xs text-ink-muted'>wins</p>
               </div>
               <div className='flex flex-col items-center justify-center'>
-                <p className='text-sm text-muted-foreground'>{h2h.shared_sessions} shared sessions</p>
+                <p className='text-sm text-ink-muted'>{h2h.shared_sessions} shared sessions</p>
               </div>
               <div>
                 <p className='text-lg font-bold'>{h2h.player2.name}</p>
                 <p className='mt-1 text-3xl font-black text-primary'>{h2h.p2_wins}</p>
-                <p className='text-xs text-muted-foreground'>wins</p>
+                <p className='text-xs text-ink-muted'>wins</p>
               </div>
             </div>
             {h2h.sessions.length > 0 && (
               <div className='overflow-x-auto'>
                 <table className='w-full text-sm'>
-                  <thead className='text-xs text-muted-foreground uppercase'>
+                  <thead className='text-xs text-ink-muted uppercase'>
                     <tr>
                       <th className='pb-2 text-left'>Date</th>
                       <th className='pb-2 text-left'>Game</th>
@@ -207,18 +207,18 @@ export default function Leaderboard() {
                       <th className='pb-2 text-center'>{h2h.player2.name}</th>
                     </tr>
                   </thead>
-                  <tbody className='divide-y divide-border'>
+                  <tbody className='divide-y divide-paper-muted'>
                     {h2h.sessions.map((s) => (
                       <tr key={s.session_id}>
                         <td className='py-2'>{s.played_at.slice(0, 10)}</td>
-                        <td className='py-2 text-foreground/80'>{s.game_name}</td>
+                        <td className='py-2 text-ink-primary/80'>{s.game_name}</td>
                         <td className='py-2 text-center'>
-                          <span className={s.p1_rank < s.p2_rank ? 'font-bold text-green-600' : 'text-muted-foreground'}>
+                          <span className={s.p1_rank < s.p2_rank ? 'font-bold text-green-600' : 'text-ink-muted'}>
                             #{s.p1_rank} ({s.p1_points}pts)
                           </span>
                         </td>
                         <td className='py-2 text-center'>
-                          <span className={s.p2_rank < s.p1_rank ? 'font-bold text-green-600' : 'text-muted-foreground'}>
+                          <span className={s.p2_rank < s.p1_rank ? 'font-bold text-green-600' : 'text-ink-muted'}>
                             #{s.p2_rank} ({s.p2_points}pts)
                           </span>
                         </td>

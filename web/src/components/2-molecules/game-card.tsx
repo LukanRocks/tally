@@ -26,7 +26,7 @@ export const GameCard = ({ active = false, polymorphic = false, className, onCli
 
   const classes = cn(
     'overflow-hidden rounded-xl transition-[transform,box-shadow] hover:-translate-y-0.5 hover:shadow-md',
-    active ? 'border-2 border-yellow-primary' : 'border border-border bg-card',
+    active ? 'border-2 border-yellow-primary' : 'border border-paper-muted bg-paper-primary',
     className,
   )
 

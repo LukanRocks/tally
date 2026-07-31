@@ -17,7 +17,7 @@ export const ElevationSection = () => (
           { name: 'stamp', desc: 'signature moment · use rarely', cls: 'shadow-stamp', stamp: true },
         ] as const
       ).map(({ name, desc, cls, stamp }) => (
-        <div key={name} className={cn('flex min-h-32 flex-col gap-2 rounded-xl bg-card p-4', cls, stamp ? 'border-[1.5px] border-ink-primary' : 'border border-border')}>
+        <div key={name} className={cn('flex min-h-32 flex-col gap-2 rounded-xl bg-paper-primary p-4', cls, stamp ? 'border-[1.5px] border-ink-primary' : 'border border-paper-muted')}>
           <span className='text-sm font-bold text-ink-primary'>{name}</span>
           <span className='mt-auto text-[11px] text-ink-muted'>{desc}</span>
         </div>

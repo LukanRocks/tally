@@ -18,7 +18,7 @@ export const ColorsSection = () => (
           { v: '--ink-secondary', name: 'ink-secondary', desc: 'body text' },
           { v: '--ink-muted', name: 'ink-muted', desc: 'secondary text' },
         ].map((s) => (
-          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-border bg-card p-3'>
+          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-paper-muted bg-paper-primary p-3'>
             <div className='h-14 rounded-lg border border-black/10' style={{ background: `var(${s.v})` }} />
             <span className='font-mono text-[11px] font-semibold text-ink-primary'>{s.name}</span>
             <span className='text-[11px] text-ink-muted'>{s.desc}</span>
@@ -35,7 +35,7 @@ export const ColorsSection = () => (
           { v: '--yellow-secondary', name: 'yellow-secondary', desc: 'highlight backgrounds' },
           { v: '--yellow-tertiary', name: 'yellow-tertiary', desc: 'borders and hovers' },
         ].map((s) => (
-          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-border bg-card p-3'>
+          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-paper-muted bg-paper-primary p-3'>
             <div className='h-14 rounded-lg border border-black/10' style={{ background: `var(${s.v})` }} />
             <span className='font-mono text-[11px] font-semibold text-ink-primary'>{s.name}</span>
             <span className='text-[11px] text-ink-muted'>{s.desc}</span>
@@ -65,7 +65,7 @@ export const ColorsSection = () => (
           { v: '--loss', name: 'loss', desc: 'loss' },
           { v: '--tie', name: 'tie', desc: 'draw' },
         ].map((s) => (
-          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-border bg-card p-3'>
+          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-paper-muted bg-paper-primary p-3'>
             <div className='h-14 rounded-lg border border-black/10' style={{ background: `var(${s.v})` }} />
             <span className='font-mono text-[11px] font-semibold text-ink-primary'>{s.name}</span>
             <span className='text-[11px] text-ink-muted'>{s.desc}</span>
@@ -82,7 +82,7 @@ export const ColorsSection = () => (
           { v: '--medal-silver', name: 'medal-silver', desc: '2nd place' },
           { v: '--medal-bronze', name: 'medal-bronze', desc: '3rd place' },
         ].map((s) => (
-          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-border bg-card p-3'>
+          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-paper-muted bg-paper-primary p-3'>
             <div className='h-14 rounded-lg border border-black/10' style={{ background: `var(${s.v})` }} />
             <span className='font-mono text-[11px] font-semibold text-ink-primary'>{s.name}</span>
             <span className='text-[11px] text-ink-muted'>{s.desc}</span>
@@ -99,7 +99,7 @@ export const ColorsSection = () => (
           { v: '--borrowed', name: 'borrowed', desc: "friend's copy" },
           { v: '--rented', name: 'rented', desc: 'rental / due back' },
         ].map((s) => (
-          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-border bg-card p-3'>
+          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-paper-muted bg-paper-primary p-3'>
             <div className='h-14 rounded-lg border border-black/10' style={{ background: `var(${s.v})` }} />
             <span className='font-mono text-[11px] font-semibold text-ink-primary'>{s.name}</span>
             <span className='text-[11px] text-ink-muted'>{s.desc}</span>
@@ -117,7 +117,7 @@ export const ColorsSection = () => (
           { v: '--info', name: 'info', desc: 'neutral notices' },
           { v: '--destructive', name: 'destructive', desc: 'destructive actions' },
         ].map((s) => (
-          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-border bg-card p-3'>
+          <div key={s.v} className='flex flex-col gap-1.5 rounded-xl border border-paper-muted bg-paper-primary p-3'>
             <div className='h-14 rounded-lg border border-black/10' style={{ background: `var(${s.v})` }} />
             <span className='font-mono text-[11px] font-semibold text-ink-primary'>{s.name}</span>
             <span className='text-[11px] text-ink-muted'>{s.desc}</span>

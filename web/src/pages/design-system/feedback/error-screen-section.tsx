@@ -9,7 +9,7 @@ export const ErrorScreenSection = () => (
       <p className='mt-1 text-sm text-ink-secondary'>Full-screen error state when the server is unreachable. Includes auto-retry.</p>
     </div>
 
-    <div className='overflow-hidden rounded-xl border border-border'>
+    <div className='overflow-hidden rounded-xl border border-paper-muted'>
       <ErrorScreen error={mockError} onRetry={() => {}} />
     </div>
   </section>

@@ -155,15 +155,15 @@ export default function GameForm() {
 
   return (
     <div className='max-w-2xl p-4 md:p-8'>
-      <div className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'>
-        <Link to='/library' className='hover:text-foreground'>
+      <div className='mb-6 flex items-center gap-2 text-sm text-ink-muted'>
+        <Link to='/library' className='hover:text-ink-primary'>
           Library
         </Link>
         <span>/</span>
-        <span className='font-medium text-foreground'>{isEdit ? 'Edit Game' : 'Add Game'}</span>
+        <span className='font-medium text-ink-primary'>{isEdit ? 'Edit Game' : 'Add Game'}</span>
       </div>
 
-      <h1 className='mb-8 text-2xl font-bold text-foreground'>{isEdit ? 'Edit Game' : 'Add Game'}</h1>
+      <h1 className='mb-8 text-2xl font-bold text-ink-primary'>{isEdit ? 'Edit Game' : 'Add Game'}</h1>
 
       {error && <div className='mb-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive'>{error}</div>}
 
@@ -186,7 +186,7 @@ export default function GameForm() {
               data-form-type='other'
             />
             {bggResults.length > 0 && (
-              <div className='absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-border bg-popover shadow-lg'>
+              <div className='absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-paper-muted bg-paper-primary shadow-lg'>
                 {bggResults.map((g, i) => (
                   <button
                     key={g.bgg_id}
@@ -196,10 +196,10 @@ export default function GameForm() {
                       handleBggSelect(g)
                     }}
                     onMouseEnter={() => setHighlightedIndex(i)}
-                    className={`flex w-full items-center px-3 py-2 text-left text-sm ${i === highlightedIndex ? 'bg-accent text-accent-foreground' : 'hover:bg-accent hover:text-accent-foreground'}`}
+                    className={`flex w-full items-center px-3 py-2 text-left text-sm ${i === highlightedIndex ? 'bg-paper-muted text-ink-primary' : 'hover:bg-paper-muted hover:text-ink-primary'}`}
                   >
                     {g.name}
-                    {g.year_published != null && <span className='ml-1.5 text-xs text-muted-foreground'>({g.year_published})</span>}
+                    {g.year_published != null && <span className='ml-1.5 text-xs text-ink-muted'>({g.year_published})</span>}
                   </button>
                 ))}
               </div>
@@ -272,7 +272,7 @@ export default function GameForm() {
           >
             {submitting ? 'Saving…' : isEdit ? 'Save Changes' : 'Add Game'}
           </button>
-          <Link to={isEdit ? `/library/${id}` : '/library'} className='rounded-lg border border-border px-6 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground'>
+          <Link to={isEdit ? `/library/${id}` : '/library'} className='rounded-lg border border-paper-muted px-6 py-2 text-sm font-medium hover:bg-paper-muted hover:text-ink-primary'>
             Cancel
           </Link>
         </div>
@@ -284,7 +284,7 @@ export default function GameForm() {
 function Field({ label, htmlFor, children }: { label: string; htmlFor: string; children: React.ReactNode }) {
   return (
     <div>
-      <label htmlFor={htmlFor} className='mb-1.5 block text-sm font-medium text-foreground'>
+      <label htmlFor={htmlFor} className='mb-1.5 block text-sm font-medium text-ink-primary'>
         {label}
       </label>
       {children}

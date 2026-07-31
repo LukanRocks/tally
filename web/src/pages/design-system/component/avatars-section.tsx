@@ -11,7 +11,7 @@ export function AvatarsSection() {
         </p>
       </div>
 
-      <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
+      <div className='space-y-4 rounded-xl border border-paper-muted bg-paper-primary p-5'>
         <p className='caption text-ink-muted'>Sizes</p>
         <div className='flex flex-wrap items-center gap-4'>
           <Avatar size='xs' id={0} name='Alice' />

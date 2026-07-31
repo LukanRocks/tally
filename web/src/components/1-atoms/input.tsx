@@ -94,7 +94,7 @@ const INPUT_GROUP_BUTTON_VARIANTS_CONFIG = cva(
     compoundVariants: [
       // ── default (filled) ───────────────────────────────────────────────
       { variant: 'default', color: 'primary', className: 'border-yellow-tertiary bg-yellow-primary text-ink-on-yellow shadow-xs hover:bg-yellow-tertiary' },
-      { variant: 'default', color: 'secondary', className: 'border-secondary/50 bg-secondary text-secondary-foreground hover:bg-secondary/80' },
+      { variant: 'default', color: 'secondary', className: 'border-paper-secondary/50 bg-paper-secondary text-ink-secondary hover:bg-paper-secondary/80' },
       { variant: 'default', color: 'destructive', className: 'border-destructive/30 bg-destructive/12 text-destructive hover:border-destructive/50 hover:bg-destructive/20' },
 
       // ── outline ────────────────────────────────────────────────────────

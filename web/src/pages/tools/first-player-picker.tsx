@@ -44,7 +44,7 @@ export default function FirstPlayerPage() {
     return (
       <div className='flex min-h-[calc(100vh-6rem)] flex-col items-center justify-center gap-6 p-6 md:min-h-screen'>
         <h1 className='text-2xl font-bold'>Who Goes First?</h1>
-        <p className='text-sm text-muted-foreground'>Draw a prompt — whoever it fits goes first</p>
+        <p className='text-sm text-ink-muted'>Draw a prompt — whoever it fits goes first</p>
         <Button size='big' onClick={handleDraw}>
           Draw
         </Button>
