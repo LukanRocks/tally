@@ -1,7 +1,20 @@
 # Tally — project context for Claude
 
 ## Stack
-Full-stack TypeScript monorepo. Client: React + Vite + Tailwind v4 + shadcn/ui. Server: Express + SQLite + Drizzle ORM.
+Full-stack TypeScript monorepo. Client: React + Vite + Tailwind v4 + shadcn/ui. Server: Express + Drizzle ORM over **either SQLite or PostgreSQL**.
+
+## Database
+
+Tally runs on two databases. SQLite is the zero-config default; PostgreSQL is opt-in through environment variables. Both are first-class, and route code never knows which one it is talking to.
+
+**Before changing anything under `backend/src/db/`, read [docs/adding-a-migration.md](docs/adding-a-migration.md).** It is the checklist for the four rules below and several more.
+
+The four that matter most, because breaking any of them compiles cleanly and passes the default test run:
+
+1. **Every schema change is made twice** — `migrations/sqlite/` and `migrations/postgres/`, plus `schema.sqlite.ts` and `schema.pg.ts`. Column names must match exactly across the two schemas. `schema.ts` casts one dialect's tables to the other's types, so the compiler cannot see a mismatch; only the dual-dialect test matrix can.
+2. **Never `db.transaction()`** — better-sqlite3 needs a sync callback, node-postgres needs an async one. Use `withTransaction()` from `db/transaction.ts`.
+3. **Never a bare `like()`** — SQLite's `LIKE` is case-insensitive, Postgres's is not. Use `searchLike()` from `db/search.ts`.
+4. **Run both dialects before claiming green** — `pnpm -C backend test:all`, with `docker compose -f docker-compose.test.yml up -d --wait` first. The default `test` script only covers SQLite, which is the pass that will not catch a missing Postgres migration.
 
 ## Components pattern
 

@@ -21,11 +21,25 @@ RUN pnpm -C backend build
 
 FROM base AS production
 WORKDIR /app
-RUN apk add --no-cache python3 make g++
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
 COPY web/package.json ./web/package.json
 COPY backend/package.json ./backend/package.json
-RUN pnpm install --frozen-lockfile --filter tally-backend --prod
+
+# better-sqlite3 is a native module and may compile here if no prebuilt binary
+# matches. The toolchain is only needed for that install, so it is added and
+# removed in a single layer — dropping it in a later RUN would leave it in the
+# image regardless, since layers only ever add.
+#
+# Same reason the caches are cleared here rather than afterwards. pnpm's download
+# cache and node-gyp's headers came to 549 MB against 42 MB of actual
+# dependencies, over half the finished image. node_modules hardlinks into the
+# store, and hardlinks keep their data alive while any link remains, so removing
+# the store does not touch what was installed.
+RUN apk add --no-cache --virtual .build-deps python3 make g++ \
+  && pnpm install --frozen-lockfile --filter tally-backend --prod \
+  && rm -rf /root/.cache /root/.local/share/pnpm/store \
+  && apk del .build-deps
+
 COPY --from=server-build /app/backend/dist ./backend/dist
 COPY --from=client-build /app/web/dist ./backend/public
 RUN mkdir -p /app/data/covers /app/data/attachments /app/data/avatars

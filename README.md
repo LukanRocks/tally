@@ -55,20 +55,35 @@
 
 ## Running with Docker
 
-```bash
-docker run -d \
-  -p 3000:3000 \
-  -v ./tally-data:/app/data \
-  tally:latest
-```
+### Simple — one container, no configuration
 
-Or with Docker Compose:
+Tally uses its built-in SQLite database. There is nothing else to run and nothing to configure.
 
 ```bash
 docker compose up -d
 ```
 
-The app starts on [http://localhost:3000](http://localhost:3000). On first run, the database schema is initialised automatically. All data (SQLite file + uploaded files) is persisted in the mounted `/app/data` volume.
+Or without Compose:
+
+```bash
+docker run -d -p 3000:3000 -v tally_data:/app/data ghcr.io/lukanrocks/tally:latest
+```
+
+The app starts on [http://localhost:3000](http://localhost:3000) and creates its schema on first run. The database and every uploaded cover, avatar and rulebook live in the `/app/data` volume — **that volume is your backup.**
+
+### Advanced — your own PostgreSQL server
+
+For anyone already running Postgres who would rather have one database to back up than one more file to remember.
+
+```bash
+docker compose -f docker-compose.postgres.yml up -d
+```
+
+Edit the connection details in that file before starting it, or copy `.env.example` to `.env` and fill it in. Every variable is documented in [Database configuration](#database-configuration) below.
+
+Keep the data volume mounted on this path too: uploads are files rather than rows, so they live there either way.
+
+Already running Tally on SQLite? Keep the same volume and Tally will notice your existing data and offer to move it — see [Migrating from SQLite to Postgres](#migrating-from-sqlite-to-postgres).
 
 ## Database configuration
 
@@ -146,15 +161,38 @@ The archived file is your backup. Keep it until you are confident the migration 
 
 ## Local development
 
-```bash
-# Install all dependencies
-npm run install:all
+Tally is a pnpm workspace. Corepack picks up the pinned pnpm version from `package.json`, so there is nothing to install globally.
 
-# Start both server and client in watch mode
-npm run dev
+```bash
+corepack enable
+pnpm install
+pnpm dev
 ```
 
-The API server runs on port `3001` and the Vite dev server on port `5173` by default.
+`pnpm dev` starts both halves in watch mode. The API server runs on port `3001` and the Vite dev server on port `5173`, which proxies `/api` and `/files` to the backend.
+
+### Tests
+
+```bash
+pnpm -C backend test
+```
+
+That is the SQLite pass. The suite also has to pass against Postgres, which needs a database running:
+
+```bash
+docker compose -f docker-compose.test.yml up -d --wait
+pnpm -C backend test:all
+```
+
+`test:all` runs both dialects in sequence. CI runs the same matrix on every pull request, plus the frontend suite:
+
+```bash
+pnpm -C web test
+```
+
+### Changing the database schema
+
+Every schema change has to be written twice — once per dialect — and the compiler will not catch a missed one. [docs/adding-a-migration.md](docs/adding-a-migration.md) is the checklist.
 
 ---
 
