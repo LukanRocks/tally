@@ -320,14 +320,19 @@ Each phase is independently reviewable and independently revertible.
 | **4** | Import + gate | `_tally_meta`, state machine, both system endpoints, 503 gate, importer with `setval`. *As landed (#108): also needed a settings-singleton replace and a WAL checkpoint before archiving — see §11.1.* | Test: seeded SQLite + empty PG → import → row-for-row parity incl. IDs; insert-after-import succeeds |
 | **5** | Frontend | Decision screen, mount-time status check, first frontend test harness. *As landed (#113): the manual run turned up two defects the suite could not — see §11.1.* | Manual: full flow both answers. Failure path surfaces the error |
 | **6** | Docs + packaging | README, compose examples, `.env.example`, Dockerfile audit, **agent-facing migration guide** | A stranger can follow the README for both modes; an agent can add a dual-dialect migration without reading this ERD |
-| **7** | E2E scenario suite | Automate the migration scenarios currently run by hand: real built binaries, real Postgres, real HTTP. See §11.1 | `pnpm test:e2e` green locally and in CI; each scenario in §11.1 covered and asserted, not just executed |
+| **7** | E2E scenario suite | Automate the migration scenarios currently run by hand: real built binaries, real Postgres, real HTTP. See §11.1. *As landed (#115): 19 tests in `e2e/`, verified by mutation rather than by passing — see §11.3.* | `pnpm test:e2e` green locally and in CI; each scenario in §11.1 covered and asserted, not just executed |
 
 Phases 0–2 are **dialect-agnostic pure refactors with no behavior change**. See §10.2 — they
 target `main` via their own PRs, not `release-1`.
 
-**Phase 7 is required before Release 1 closes, not optional polish.** §11.1 explains why: every
-bug that reached a user-visible state in this project was found by an end-to-end run, not by
-the unit suite.
+**Phase 7 is required to call this feature done, not optional polish.** §11.1 explains why:
+every bug that reached a user-visible state in this project was found by an end-to-end run,
+not by the unit suite.
+
+To be clear about scope: Phase 7 completes **multi-database support**, not Release 1. This ERD
+is one feature aboard that train, and the train carries whatever else boards it before the
+release is cut. Finishing here means `feat/multi-db` is ready to merge into `release-1` — it
+does not mean the release is ready to ship.
 
 ---
 
@@ -505,6 +510,10 @@ seam is not something to verify by hand.
   import lifecycle, and the provider that chooses between them. It exists mainly to pin the
   one destructive control in the product, and the double-click guard on it. It is **not** a
   substitute for §11.1 — every Phase 5 defect above got past it.
+- **End-to-end (from Phase 7):** its own workspace package, `e2e/`, run with `pnpm test:e2e`.
+  Spawns the built server (`backend/dist`, never `src`) with a temp `DATA_DIR` and a dedicated
+  Postgres database per scenario, and drives it over real HTTP. `test:e2e` rebuilds the backend
+  first, because a stale `dist` is one of the defects in §11.1's table.
 
 ### 11.1 End-to-end scenario tests (Phase 7)
 
@@ -538,16 +547,46 @@ real HTTP. No mocking of the database, filesystem, or transport. Scenarios:
 5. **Archive integrity** — the archived file opens standalone and contains every row.
 6. **Failed import** — Postgres untouched, source file still present, state still
    `PENDING_IMPORT`, error surfaced through `db-status`.
-7. **Config refusal** — a partial `DB_*` set exits non-zero rather than falling back to SQLite.
-8. **Frontend flow** (after Phase 5) — load the app against a `PENDING_IMPORT` backend and
-   click through both answers in a browser.
+7. **Config refusal** — a partial `DB_*` set never falls back to SQLite. ~~exits non-zero~~ —
+   **corrected in #110**: configuration errors now keep the process up and serve the
+   explanation, because the person who just edited a compose file is looking at a browser tab.
+   The suite asserts the process is *still running*, that `db-status` reports `MISCONFIGURED`,
+   and that no `tally.db` was created. An **unreachable** database is the opposite case and
+   still exits non-zero, so it is asserted separately.
+8. **Frontend contract** (after Phase 5) — the exact request sequence the decision screen
+   performs, against a real server, asserting the exact fields it reads. See below on why this
+   is not a browser test.
 
 **Assertions, not smoke.** Scenario 3's value is the byte-identical comparison; running the
 steps without comparing output would have passed while the settings collision was live.
 
+**Scenario 8 is deliberately not a browser test.** Driving a real browser means adding
+Playwright to CI — a browser download per run and a standing flakiness budget — and the
+rendering is already covered by the component suite in `web/`. What nothing else covers is the
+*contract*: the screen reads named fields off responses the real server produces, and those two
+have already drifted once (`db-status` shipped without the `docsUrl` the screen links from).
+So the suite drives that sequence and asserts those fields. A human clicking through both
+answers stays a manual step; revisit Playwright if the screen grows branching states.
+
 **Where it runs.** Its own CI job — slower than the unit matrix and should not gate on it.
 Docker is available on the maintainer's machine as of 2026-07-30, so local and CI runs are
 equivalent.
+
+### 11.3 How the suite was verified (Phase 7)
+
+A green e2e suite proves nothing on its own — the failure mode is a test that exercises the
+code without asserting the thing that matters, and those pass forever. Each of the four
+defects §11.1 lists was therefore **reintroduced** and the suite re-run:
+
+| Reverted | Caught by | Failure |
+|---|---|---|
+| The `setval` loop after import | scenario 3 | insert after migration returned 500, not 201 |
+| The WAL checkpoint before archiving | scenario 5 | archive was 4096 bytes against a `> 20 KB` assertion — the same 4 KB stub as Phase 4 |
+| `searchLike()` → bare `like()` | scenario 2 | case-insensitive search returned `[]` on Postgres |
+| The node-postgres numeric type parsers | scenario 2 | `total_points` came back as a string |
+
+All four failed, and only the relevant test failed in each case. That is the evidence the suite
+is load-bearing; without it, "19 passed" is a claim rather than a result.
 
 ---
 
