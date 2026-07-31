@@ -9,3 +9,7 @@ pnpm-lock.yaml
 .claude/
 .agents/
 .mcp.json
+
+# Vendored third-party CSS — kept byte-identical to upstream so it can be
+# diffed against a newer shadcn release.
+web/src/shadcn-tailwind.css
