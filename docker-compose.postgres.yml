@@ -1,0 +1,47 @@
+# The advanced setup: Tally against your own PostgreSQL server.
+#
+# Use this if you already run Postgres and would rather have Tally's data live
+# there — one database to back up instead of one more file to remember.
+#
+#   docker compose -f docker-compose.postgres.yml up -d
+#
+# This file assumes Postgres already exists and is reachable. It does not run
+# one for you; that is the point of choosing this path.
+#
+# If you have been running Tally on SQLite and are switching now, keep the same
+# data volume mounted. Tally will find the old database, tell you what it found,
+# and ask in the browser whether to import it. Nothing moves until you agree.
+#
+# See: https://github.com/LukanRocks/tally#database-configuration
+services:
+  tally:
+    image: ghcr.io/lukanrocks/tally:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      # Still required on Postgres: covers, avatars and rulebooks are files, not
+      # rows, and they live here whichever database you use.
+      - tally_data:/app/data
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+
+      # Either this...
+      - DATABASE_URL=postgres://tally:secret@db.lan:5432/tally
+
+      # ...or these four, but never both, and never only some of them. Tally
+      # refuses to start on a partial configuration instead of falling back to
+      # SQLite, which would write your data somewhere you did not intend.
+      # - DB_HOST=db.lan
+      # - DB_NAME=tally
+      # - DB_USER=tally
+      # - DB_PASSWORD=secret
+      # - DB_PORT=5432
+
+      # disable (default) | require | verify-full
+      # verify-full rejects self-signed certificates — see the SSL section of
+      # the README before using it on a homelab server.
+      - DB_SSL=disable
+
+volumes:
+  tally_data:
