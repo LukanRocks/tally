@@ -12,7 +12,7 @@ export function SessionCardSection() {
 
       <div className='grid grid-cols-2 gap-4'>
         {/* Full card */}
-        <article className='flex flex-col gap-3 rounded-xl border border-border bg-card p-5 shadow-sm'>
+        <article className='flex flex-col gap-3 rounded-xl border border-paper-muted bg-paper-primary p-5 shadow-sm'>
           <header className='flex items-start justify-between gap-3'>
             <div>
               <h3 className='text-lg font-bold text-ink-primary'>Rumikubi</h3>
@@ -23,7 +23,7 @@ export function SessionCardSection() {
             </span>
           </header>
 
-          <ol className='flex flex-col divide-y divide-dashed divide-border'>
+          <ol className='flex flex-col divide-y divide-dashed divide-paper-muted'>
             {(
               [
                 { medal: '🥇', p: 'a', initial: 'A', name: 'Alyne', score: 5, first: true },
@@ -52,13 +52,13 @@ export function SessionCardSection() {
         </article>
 
         {/* Compact card */}
-        <article className='flex flex-col gap-3 rounded-xl border border-border bg-card p-5 shadow-sm'>
+        <article className='flex flex-col gap-3 rounded-xl border border-paper-muted bg-paper-primary p-5 shadow-sm'>
           <header>
             <h3 className='text-lg font-bold text-ink-primary'>Hearthstone</h3>
             <span className='text-xs text-ink-muted'>May 3 · 25 min · 3 players</span>
           </header>
 
-          <ol className='flex flex-col divide-y divide-dashed divide-border'>
+          <ol className='flex flex-col divide-y divide-dashed divide-paper-muted'>
             {(
               [
                 { medal: '🥇', p: 'b', initial: 'M', name: 'Marina', first: true },
@@ -79,7 +79,7 @@ export function SessionCardSection() {
             ))}
           </ol>
 
-          <footer className='flex gap-2 border-t border-dashed border-border pt-2'>
+          <footer className='flex gap-2 border-t border-dashed border-paper-muted pt-2'>
             <button className='inline-flex h-7.5 cursor-pointer items-center rounded-md px-2.5 text-xs font-semibold text-ink-secondary transition-colors hover:bg-paper-secondary hover:text-ink-primary'>
               View detail
             </button>

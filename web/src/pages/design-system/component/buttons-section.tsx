@@ -13,7 +13,7 @@ export function ButtonsSection() {
       </div>
 
       {/* Sizes & states */}
-      <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
+      <div className='space-y-4 rounded-xl border border-paper-muted bg-paper-primary p-5'>
         <p className='caption text-ink-muted'>Sizes</p>
         <div className='flex flex-wrap items-end gap-4'>
           {(
@@ -60,10 +60,10 @@ export function ButtonsSection() {
       </div>
 
       {/* Color × variant matrix */}
-      <div className='overflow-auto rounded-xl border border-border bg-card'>
+      <div className='overflow-auto rounded-xl border border-paper-muted bg-paper-primary'>
         <table className='w-full'>
           <thead>
-            <tr className='border-b border-border'>
+            <tr className='border-b border-paper-muted'>
               <th className='px-4 py-3 text-left caption text-ink-muted'>color</th>
               <th className='px-4 py-3 text-center caption text-ink-muted'>default</th>
               <th className='px-4 py-3 text-center caption text-ink-muted'>outline</th>
@@ -71,7 +71,7 @@ export function ButtonsSection() {
               <th className='px-4 py-3 text-center caption text-ink-muted'>link</th>
             </tr>
           </thead>
-          <tbody className='divide-y divide-dashed divide-border'>
+          <tbody className='divide-y divide-dashed divide-paper-muted'>
             {BUTTON_COLORS.map((color) => (
               <tr key={color} className='hover:bg-paper-secondary/40'>
                 <td className='px-4 py-2.5'>
@@ -104,7 +104,7 @@ export function ButtonsSection() {
       </div>
 
       {/* Button groups */}
-      <div className='space-y-5 rounded-xl border border-border bg-card p-5'>
+      <div className='space-y-5 rounded-xl border border-paper-muted bg-paper-primary p-5'>
         <p className='caption text-ink-muted'>Groups</p>
 
         <div className='space-y-1.5'>

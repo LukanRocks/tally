@@ -6,7 +6,7 @@ export function PodiumSection() {
         <p className='mt-1 text-sm text-ink-secondary'>Used at the top of Home and at the end of a session. Three columns; the winner is taller, centered, with yellow paper.</p>
       </div>
 
-      <div className='rounded-xl border border-border bg-card p-6 shadow-sm'>
+      <div className='rounded-xl border border-paper-muted bg-paper-primary p-6 shadow-sm'>
         <p className='mb-6 text-center caption text-ink-muted'>Reigning champion · this week</p>
         <div className='grid grid-cols-3 items-end gap-2'>
           {/* 2nd */}

@@ -113,12 +113,12 @@ export default function Onboarding() {
   ]
 
   return (
-    <div className='flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12'>
+    <div className='flex min-h-screen flex-col items-center justify-center bg-paper-primary px-4 py-12'>
       <div className='w-full max-w-md'>
         {/* Header */}
         <div className='mb-10 text-center'>
-          <h1 className='text-3xl font-bold text-foreground'>Welcome to Tally</h1>
-          <p className='mt-2 text-sm text-muted-foreground'>Let's get you set up in a few quick steps.</p>
+          <h1 className='text-3xl font-bold text-ink-primary'>Welcome to Tally</h1>
+          <p className='mt-2 text-sm text-ink-muted'>Let's get you set up in a few quick steps.</p>
         </div>
 
         {/* Step indicators */}
@@ -131,35 +131,35 @@ export default function Onboarding() {
                     step > s.n
                       ? 'bg-primary text-primary-foreground'
                       : step === s.n
-                        ? 'border-2 border-primary bg-background text-primary'
-                        : 'border-2 border-border bg-background text-muted-foreground'
+                        ? 'border-2 border-primary bg-paper-primary text-primary'
+                        : 'border-2 border-paper-muted bg-paper-primary text-ink-muted'
                   }`}
                 >
                   {step > s.n ? <Check size={13} /> : s.n}
                 </div>
-                <span className={`text-xs ${step === s.n ? 'font-medium text-primary' : 'text-muted-foreground'}`}>{s.label}</span>
+                <span className={`text-xs ${step === s.n ? 'font-medium text-primary' : 'text-ink-muted'}`}>{s.label}</span>
               </div>
-              {i < steps.length - 1 && <div className={`mx-3 mb-5 h-px w-12 transition-colors ${step > s.n ? 'bg-primary' : 'bg-border'}`} />}
+              {i < steps.length - 1 && <div className={`mx-3 mb-5 h-px w-12 transition-colors ${step > s.n ? 'bg-primary' : 'bg-paper-muted'}`} />}
             </div>
           ))}
         </div>
 
         {/* Step 1: Host */}
         {step === 1 && (
-          <div className='rounded-2xl border border-border bg-card p-8 shadow-sm'>
+          <div className='rounded-2xl border border-paper-muted bg-paper-primary p-8 shadow-sm'>
             <div className='mb-6 flex items-center gap-3'>
               <div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary/10'>
                 <UserRound size={20} className='text-primary' />
               </div>
               <div>
-                <h2 className='text-lg font-semibold text-foreground'>Who are you?</h2>
-                <p className='text-xs text-muted-foreground'>Create your player profile</p>
+                <h2 className='text-lg font-semibold text-ink-primary'>Who are you?</h2>
+                <p className='text-xs text-ink-muted'>Create your player profile</p>
               </div>
             </div>
 
             <form onSubmit={handleHostContinue} className='space-y-4'>
               <div>
-                <label className='mb-1.5 block text-sm font-medium text-foreground'>Your name</label>
+                <label className='mb-1.5 block text-sm font-medium text-ink-primary'>Your name</label>
                 <input
                   type='text'
                   value={hostName}
@@ -169,7 +169,7 @@ export default function Onboarding() {
                   }}
                   placeholder='e.g. Alex'
                   autoFocus
-                  className={`w-full rounded-lg border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:outline-none ${hostError ? 'border-destructive focus:ring-destructive/50' : 'border-border focus:ring-ring'}`}
+                  className={`w-full rounded-lg border bg-paper-primary px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted focus:ring-2 focus:outline-none ${hostError ? 'border-destructive focus:ring-destructive/50' : 'border-paper-muted focus:ring-ring'}`}
                 />
                 {hostError && <p className='mt-1 text-xs text-destructive'>{hostError}</p>}
               </div>
@@ -193,27 +193,27 @@ export default function Onboarding() {
 
         {/* Step 2: Friends */}
         {step === 2 && hostPlayer && (
-          <div className='rounded-2xl border border-border bg-card p-8 shadow-sm'>
+          <div className='rounded-2xl border border-paper-muted bg-paper-primary p-8 shadow-sm'>
             <div className='mb-6 flex items-center gap-3'>
               <div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary/10'>
                 <Users size={20} className='text-primary' />
               </div>
               <div>
-                <h2 className='text-lg font-semibold text-foreground'>Add your friends</h2>
-                <p className='text-xs text-muted-foreground'>You can always add more later</p>
+                <h2 className='text-lg font-semibold text-ink-primary'>Add your friends</h2>
+                <p className='text-xs text-ink-muted'>You can always add more later</p>
               </div>
             </div>
 
             {friends.map((p) => (
-              <div key={p.id} className='mb-2 flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2'>
-                <div className='flex h-8 w-8 items-center justify-center rounded-full bg-muted'>
+              <div key={p.id} className='mb-2 flex items-center gap-2 rounded-lg border border-paper-muted bg-paper-primary px-3 py-2'>
+                <div className='flex h-8 w-8 items-center justify-center rounded-full bg-paper-muted'>
                   {p.avatar_path ? (
                     <img src={p.avatar_path} alt={p.name} className='h-full w-full rounded-full object-cover' />
                   ) : (
-                    <UserRound size={15} className='text-muted-foreground' />
+                    <UserRound size={15} className='text-ink-muted' />
                   )}
                 </div>
-                <span className='text-sm text-foreground'>{p.name}</span>
+                <span className='text-sm text-ink-primary'>{p.name}</span>
               </div>
             ))}
 
@@ -226,9 +226,9 @@ export default function Onboarding() {
                   setFriendError('')
                 }}
                 placeholder="Friend's name..."
-                className='flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+                className='flex-1 rounded-lg border border-paper-muted bg-paper-primary px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted focus:ring-2 focus:ring-ring focus:outline-none'
               />
-              <button type='submit' className='flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-accent'>
+              <button type='submit' className='flex items-center gap-1.5 rounded-lg border border-paper-muted px-3 py-2 text-sm font-medium text-ink-primary hover:bg-paper-muted'>
                 <Plus size={14} /> Add
               </button>
             </form>
@@ -246,21 +246,21 @@ export default function Onboarding() {
 
         {/* Step 3: Games */}
         {step === 3 && (
-          <div className='rounded-2xl border border-border bg-card p-8 shadow-sm'>
+          <div className='rounded-2xl border border-paper-muted bg-paper-primary p-8 shadow-sm'>
             <div className='mb-6 flex items-center gap-3'>
               <div className='flex h-10 w-10 items-center justify-center rounded-full bg-primary/10'>
                 <Gamepad2 size={20} className='text-primary' />
               </div>
               <div>
-                <h2 className='text-lg font-semibold text-foreground'>Add your games</h2>
-                <p className='text-xs text-muted-foreground'>You can always add more later</p>
+                <h2 className='text-lg font-semibold text-ink-primary'>Add your games</h2>
+                <p className='text-xs text-ink-muted'>You can always add more later</p>
               </div>
             </div>
 
             {games.map((g) => (
-              <div key={g.id} className='mb-2 flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2'>
-                <Gamepad2 size={15} className='shrink-0 text-muted-foreground' />
-                <span className='text-sm text-foreground'>{g.name}</span>
+              <div key={g.id} className='mb-2 flex items-center gap-2 rounded-lg border border-paper-muted bg-paper-primary px-3 py-2'>
+                <Gamepad2 size={15} className='shrink-0 text-ink-muted' />
+                <span className='text-sm text-ink-primary'>{g.name}</span>
               </div>
             ))}
 
@@ -273,9 +273,9 @@ export default function Onboarding() {
                   setGameError('')
                 }}
                 placeholder='Game name…'
-                className='flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+                className='flex-1 rounded-lg border border-paper-muted bg-paper-primary px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted focus:ring-2 focus:ring-ring focus:outline-none'
               />
-              <button type='submit' className='flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-foreground hover:bg-accent'>
+              <button type='submit' className='flex items-center gap-1.5 rounded-lg border border-paper-muted px-3 py-2 text-sm font-medium text-ink-primary hover:bg-paper-muted'>
                 <Plus size={14} /> Add
               </button>
             </form>

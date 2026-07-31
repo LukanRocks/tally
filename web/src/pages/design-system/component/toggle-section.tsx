@@ -8,7 +8,7 @@ export const ToggleSection = () => (
       <p className='mt-1 text-sm text-ink-secondary'>Button with pressed state. Off = secondary, on = primary. Supports variant and size props.</p>
     </div>
 
-    <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
+    <div className='space-y-4 rounded-xl border border-paper-muted bg-paper-primary p-5'>
       <p className='caption text-ink-muted'>States</p>
       <div className='flex flex-wrap items-center gap-2'>
         <Toggle>Off</Toggle>
@@ -33,7 +33,7 @@ export const ToggleSection = () => (
       </div>
     </div>
 
-    <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
+    <div className='space-y-4 rounded-xl border border-paper-muted bg-paper-primary p-5'>
       <p className='caption text-ink-muted'>Sizes</p>
       <div className='flex flex-wrap items-end gap-4'>
         {(['small', 'default', 'big'] as const).map((size) => (
@@ -46,17 +46,17 @@ export const ToggleSection = () => (
     </div>
 
     {/* Variant matrix */}
-    <div className='overflow-auto rounded-xl border border-border bg-card'>
+    <div className='overflow-auto rounded-xl border border-paper-muted bg-paper-primary'>
       <table className='w-full'>
         <thead>
-          <tr className='border-b border-border'>
+          <tr className='border-b border-paper-muted'>
             <th className='px-4 py-3 text-left caption text-ink-muted'>variant</th>
             <th className='px-4 py-3 text-center caption text-ink-muted'>off</th>
             <th className='px-4 py-3 text-center caption text-ink-muted'>on</th>
             <th className='px-4 py-3 text-center caption text-ink-muted'>disabled</th>
           </tr>
         </thead>
-        <tbody className='divide-y divide-dashed divide-border'>
+        <tbody className='divide-y divide-dashed divide-paper-muted'>
           {(['default', 'outline', 'ghost'] as const).map((variant) => (
             <tr key={variant} className='hover:bg-paper-secondary/40'>
               <td className='px-4 py-2.5'>

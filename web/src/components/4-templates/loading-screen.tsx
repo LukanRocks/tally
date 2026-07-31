@@ -41,17 +41,17 @@ export const Loading = () => {
   const [phrase] = useState(() => PHRASES[Math.floor(Math.random() * PHRASES.length)])
 
   return (
-    <div className='flex min-h-screen flex-col items-center justify-center gap-6 bg-background'>
+    <div className='flex min-h-screen flex-col items-center justify-center gap-6 bg-paper-primary'>
       <img src='/logo-paper.svg' width={180} height={180} className='hidden dark:block' />
       <img src='/logo-ink.svg' width={180} height={180} className='dark:hidden' />
 
       <div className='flex flex-col items-center gap-1'>
-        <p className='callout text-5xl text-foreground'>Tally</p>
+        <p className='callout text-5xl text-ink-primary'>Tally</p>
       </div>
 
-      <div className='w-56 border-t border-dashed border-border' />
+      <div className='w-56 border-t border-dashed border-paper-muted' />
 
-      <p className='flex items-center gap-2 caption text-muted-foreground'>
+      <p className='flex items-center gap-2 caption text-ink-muted'>
         {phrase}
         <span className='flex gap-1'>
           {[0, 1, 2].map((i) => (

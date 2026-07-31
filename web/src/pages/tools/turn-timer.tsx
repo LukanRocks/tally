@@ -42,7 +42,7 @@ function TimerDisplay({ remaining, pct, state, resetting }: TimerDisplayProps) {
         }}
       />
       <div className='relative z-10 flex h-full items-center justify-center'>
-        <span className='text-[18vw] font-bold text-foreground tabular-nums drop-shadow-lg transition-opacity duration-100 select-none' style={{ opacity: visible ? 1 : 0 }}>
+        <span className='text-[18vw] font-bold text-ink-primary tabular-nums drop-shadow-lg transition-opacity duration-100 select-none' style={{ opacity: visible ? 1 : 0 }}>
           {fmt(remaining)}
         </span>
       </div>
@@ -135,7 +135,7 @@ export default function TimerPage() {
               max={99}
               value={minutes}
               onChange={(e) => setMinutes(Math.min(99, Math.max(0, Number(e.target.value))))}
-              className='w-20 [appearance:textfield] rounded-lg border border-border bg-background p-2 text-center text-4xl font-bold tabular-nums focus:ring-2 focus:ring-primary focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
+              className='w-20 [appearance:textfield] rounded-lg border border-paper-muted bg-paper-primary p-2 text-center text-4xl font-bold tabular-nums focus:ring-2 focus:ring-primary focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
             />
             <Button color='secondary' className='w-20' onClick={() => setMinutes((m) => Math.max(0, m - 1))}>
               <Minus size={16} />
@@ -162,7 +162,7 @@ export default function TimerPage() {
                   setSeconds((s) => Math.max(0, s - 1))
                 }
               }}
-              className='w-20 rounded-lg border border-border bg-background p-2 text-center text-4xl font-bold tabular-nums focus:ring-2 focus:ring-primary focus:outline-none'
+              className='w-20 rounded-lg border border-paper-muted bg-paper-primary p-2 text-center text-4xl font-bold tabular-nums focus:ring-2 focus:ring-primary focus:outline-none'
             />
             <Button color='secondary' className='w-20' onClick={() => setSeconds((s) => Math.max(0, s - 10))}>
               <Minus size={16} />

@@ -7,7 +7,7 @@ export const SwitchSection = () => (
       <p className='mt-1 text-sm text-ink-secondary'>Paper-muted track, yellow when on, paper-primary thumb.</p>
     </div>
 
-    <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
+    <div className='space-y-4 rounded-xl border border-paper-muted bg-paper-primary p-5'>
       <p className='caption text-ink-muted'>States</p>
       <div className='flex flex-wrap gap-6'>
         <Switch label='Off' />
@@ -17,7 +17,7 @@ export const SwitchSection = () => (
       </div>
     </div>
 
-    <div className='space-y-4 rounded-xl border border-border bg-card p-5'>
+    <div className='space-y-4 rounded-xl border border-paper-muted bg-paper-primary p-5'>
       <p className='caption text-ink-muted'>Sizes</p>
       <div className='flex flex-wrap items-center gap-6'>
         <Switch label='Default' />

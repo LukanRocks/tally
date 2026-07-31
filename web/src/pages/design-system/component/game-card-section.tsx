@@ -36,20 +36,20 @@ export const GameCardSection = () => {
 
       {/* <div>
         <p className='caption mb-3 text-ink-muted'>Row · list</p>
-        <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
+        <div className='overflow-hidden rounded-xl border border-paper-muted bg-paper-primary shadow-sm'>
           {(
             [
               { title: 'Rumikubi', meta: '2 sess · 2–4p · own', chip: 'last May 6', art: 'repeating-linear-gradient(135deg, #e8e2d0 0 6px, #dfd9c5 6px 12px)' },
               { title: 'Sushi Go!', meta: '0 sess · 2–5p · own', chip: 'never played', art: 'repeating-linear-gradient(45deg,  #e2e8d0 0 6px, #d5dfc5 6px 12px)' },
             ] as const
           ).map(({ title, meta, chip, art }, i, arr) => (
-            <div key={title} className={cn('grid grid-cols-[44px_1fr_auto] items-center gap-3.5 px-4 py-3', i < arr.length - 1 && 'border-b border-dashed border-border')}>
-              <div className='h-11 w-11 rounded-lg border border-border' style={{ background: art }} />
+            <div key={title} className={cn('grid grid-cols-[44px_1fr_auto] items-center gap-3.5 px-4 py-3', i < arr.length - 1 && 'border-b border-dashed border-paper-muted')}>
+              <div className='h-11 w-11 rounded-lg border border-paper-muted' style={{ background: art }} />
               <div className='flex flex-col gap-0.5'>
                 <span className='text-[15px] font-semibold text-ink-primary'>{title}</span>
                 <span className='text-xs text-ink-muted'>{meta}</span>
               </div>
-              <span className='inline-flex h-6 items-center rounded-sm border border-border bg-paper-secondary px-2 font-mono text-[11.5px] text-ink-primary'>{chip}</span>
+              <span className='inline-flex h-6 items-center rounded-sm border border-paper-muted bg-paper-secondary px-2 font-mono text-[11.5px] text-ink-primary'>{chip}</span>
             </div>
           ))}
         </div>

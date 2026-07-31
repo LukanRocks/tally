@@ -64,23 +64,23 @@ export default function GameDetail() {
     setGame((g) => (g ? { ...g, attachments: g.attachments?.filter((a) => a.id !== aid) } : g))
   }
 
-  if (loading) return <div className='p-4 text-muted-foreground md:p-8'>Loading…</div>
-  if (!game) return <div className='p-4 text-muted-foreground md:p-8'>Game not found.</div>
+  if (loading) return <div className='p-4 text-ink-muted md:p-8'>Loading…</div>
+  if (!game) return <div className='p-4 text-ink-muted md:p-8'>Game not found.</div>
 
   return (
     <div className='mx-auto max-w-4xl p-4 md:p-8'>
-      <div className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'>
-        <Link to='/library' className='hover:text-foreground'>
+      <div className='mb-6 flex items-center gap-2 text-sm text-ink-muted'>
+        <Link to='/library' className='hover:text-ink-primary'>
           Library
         </Link>
         <span>/</span>
-        <span className='font-medium text-foreground'>{game.name}</span>
+        <span className='font-medium text-ink-primary'>{game.name}</span>
       </div>
 
       <div className='flex flex-col gap-8 sm:flex-row'>
         {/* Cover */}
         <div className='shrink-0'>
-          <div className='group relative h-52 w-40 cursor-pointer overflow-hidden rounded-xl bg-muted' onClick={() => coverFileRef.current?.click()}>
+          <div className='group relative h-52 w-40 cursor-pointer overflow-hidden rounded-xl bg-paper-muted' onClick={() => coverFileRef.current?.click()}>
             {game.cover_image_path ? (
               <img src={game.cover_image_path} alt={game.name} className='h-full w-full object-cover' />
             ) : (
@@ -96,7 +96,7 @@ export default function GameDetail() {
         {/* Info */}
         <div className='min-w-0 flex-1'>
           <div className='flex flex-wrap items-start justify-between gap-4'>
-            <h1 className='text-2xl font-bold text-foreground'>{game.name}</h1>
+            <h1 className='text-2xl font-bold text-ink-primary'>{game.name}</h1>
             <div className='flex shrink-0 gap-2'>
               <Link
                 to={`/library/${gid}/session/new`}
@@ -106,7 +106,7 @@ export default function GameDetail() {
               </Link>
               <Link
                 to={`/library/${gid}/edit`}
-                className='flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground'
+                className='flex items-center gap-1.5 rounded-lg border border-paper-muted px-3 py-1.5 text-sm font-medium hover:bg-paper-muted hover:text-ink-primary'
               >
                 <Pencil size={13} /> Edit
               </Link>
@@ -119,7 +119,7 @@ export default function GameDetail() {
             </div>
           </div>
 
-          <div className='mt-3 flex gap-4 text-sm text-muted-foreground'>
+          <div className='mt-3 flex gap-4 text-sm text-ink-muted'>
             {game.min_players && game.max_players && (
               <span>
                 {game.min_players}–{game.max_players} players
@@ -130,11 +130,11 @@ export default function GameDetail() {
             {game.price != null && <span>{formatPrice(game.price, settings?.currency)}</span>}
           </div>
 
-          {game.description && <p className='mt-4 text-sm leading-relaxed text-foreground/80'>{game.description}</p>}
+          {game.description && <p className='mt-4 text-sm leading-relaxed text-ink-primary/80'>{game.description}</p>}
           {game.quick_rules && (
             <div className='mt-4'>
-              <p className='mb-2 text-xs font-semibold tracking-wide text-muted-foreground uppercase'>Quick Rules</p>
-              <p className='text-sm leading-relaxed whitespace-pre-line text-foreground/80'>{game.quick_rules}</p>
+              <p className='mb-2 text-xs font-semibold tracking-wide text-ink-muted uppercase'>Quick Rules</p>
+              <p className='text-sm leading-relaxed whitespace-pre-line text-ink-primary/80'>{game.quick_rules}</p>
             </div>
           )}
         </div>
@@ -142,13 +142,13 @@ export default function GameDetail() {
 
       {/* Attachments */}
       <div className='mt-8'>
-        <h2 className='mb-3 flex items-center gap-2 text-base font-semibold text-foreground'>
+        <h2 className='mb-3 flex items-center gap-2 text-base font-semibold text-ink-primary'>
           <Paperclip size={15} /> Attachments
         </h2>
         {game.attachments?.length ? (
           <ul className='mb-4 space-y-2'>
             {game.attachments.map((a) => (
-              <li key={a.id} className='flex items-center justify-between rounded-lg border border-border bg-muted/50 px-4 py-2'>
+              <li key={a.id} className='flex items-center justify-between rounded-lg border border-paper-muted bg-paper-muted/50 px-4 py-2'>
                 <a href={a.file_path} target='_blank' rel='noreferrer' className='text-sm text-primary hover:underline'>
                   {a.label}
                 </a>
@@ -159,7 +159,7 @@ export default function GameDetail() {
             ))}
           </ul>
         ) : (
-          <p className='mb-4 text-sm text-muted-foreground'>No attachments yet.</p>
+          <p className='mb-4 text-sm text-ink-muted'>No attachments yet.</p>
         )}
         <form onSubmit={handleAttachmentUpload} className='flex gap-2'>
           <input
@@ -167,10 +167,10 @@ export default function GameDetail() {
             placeholder='Label (e.g. Rulebook)'
             value={attachLabel}
             onChange={(e) => setAttachLabel(e.target.value)}
-            className='flex-1 rounded-lg border border-border bg-background px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+            className='flex-1 rounded-lg border border-paper-muted bg-paper-primary px-3 py-1.5 text-sm text-ink-primary placeholder:text-ink-muted focus:ring-2 focus:ring-ring focus:outline-none'
           />
-          <input type='file' ref={attachFileRef} accept='application/pdf' className='rounded-lg border border-border bg-background px-3 py-1.5 text-sm text-foreground' />
-          <button type='submit' className='rounded-lg bg-foreground px-4 py-1.5 text-sm font-medium text-background hover:bg-foreground/90'>
+          <input type='file' ref={attachFileRef} accept='application/pdf' className='rounded-lg border border-paper-muted bg-paper-primary px-3 py-1.5 text-sm text-ink-primary' />
+          <button type='submit' className='rounded-lg bg-ink-primary px-4 py-1.5 text-sm font-medium text-paper-primary hover:bg-ink-primary/90'>
             Upload
           </button>
         </form>
@@ -178,14 +178,14 @@ export default function GameDetail() {
 
       {/* Leaderboard */}
       <div className='mt-8'>
-        <h2 className='mb-3 text-base font-semibold text-foreground'>Leaderboard</h2>
+        <h2 className='mb-3 text-base font-semibold text-ink-primary'>Leaderboard</h2>
         {gameLeaderboard.length === 0 ? (
-          <p className='text-sm text-muted-foreground'>No sessions logged for this game.</p>
+          <p className='text-sm text-ink-muted'>No sessions logged for this game.</p>
         ) : (
-          <div className='overflow-hidden rounded-xl border border-border bg-card'>
+          <div className='overflow-hidden rounded-xl border border-paper-muted bg-paper-primary'>
             <div className='overflow-x-auto'>
               <table className='w-full text-sm'>
-                <thead className='bg-muted/50 text-xs tracking-wide text-muted-foreground uppercase'>
+                <thead className='bg-paper-muted/50 text-xs tracking-wide text-ink-muted uppercase'>
                   <tr>
                     <th className='px-4 py-3 text-left'>#</th>
                     <th className='px-4 py-3 text-left'>Player</th>
@@ -194,10 +194,10 @@ export default function GameDetail() {
                     <th className='px-4 py-3 text-right'>Sessions</th>
                   </tr>
                 </thead>
-                <tbody className='divide-y divide-border'>
+                <tbody className='divide-y divide-paper-muted'>
                   {gameLeaderboard.map((e, i) => (
-                    <tr key={e.player_id} className='hover:bg-muted/50'>
-                      <td className='px-4 py-3 text-muted-foreground'>{i + 1}</td>
+                    <tr key={e.player_id} className='hover:bg-paper-muted/50'>
+                      <td className='px-4 py-3 text-ink-muted'>{i + 1}</td>
                       <td className='px-4 py-3 font-medium'>
                         <Link to={`/players/${e.player_id}`} className='hover:text-primary'>
                           {e.player_name}
@@ -205,7 +205,7 @@ export default function GameDetail() {
                       </td>
                       <td className='px-4 py-3 text-right font-semibold'>{e.total_points}</td>
                       <td className='px-4 py-3 text-right'>{e.wins}</td>
-                      <td className='px-4 py-3 text-right text-muted-foreground'>{e.total_sessions}</td>
+                      <td className='px-4 py-3 text-right text-ink-muted'>{e.total_sessions}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -217,26 +217,26 @@ export default function GameDetail() {
 
       {/* Session history */}
       <div className='mt-8'>
-        <h2 className='mb-3 text-base font-semibold text-foreground'>Session History</h2>
+        <h2 className='mb-3 text-base font-semibold text-ink-primary'>Session History</h2>
         {sessions.length === 0 ? (
-          <p className='text-sm text-muted-foreground'>No sessions logged for this game.</p>
+          <p className='text-sm text-ink-muted'>No sessions logged for this game.</p>
         ) : (
-          <div className='overflow-hidden rounded-xl border border-border bg-card'>
+          <div className='overflow-hidden rounded-xl border border-paper-muted bg-paper-primary'>
             <div className='overflow-x-auto'>
               <table className='w-full text-sm'>
-                <thead className='bg-muted/50 text-xs tracking-wide text-muted-foreground uppercase'>
+                <thead className='bg-paper-muted/50 text-xs tracking-wide text-ink-muted uppercase'>
                   <tr>
                     <th className='px-4 py-3 text-left'>Date</th>
                     <th className='px-4 py-3 text-left'>Players</th>
                     <th className='px-4 py-3 text-left'>Notes</th>
                   </tr>
                 </thead>
-                <tbody className='divide-y divide-border'>
+                <tbody className='divide-y divide-paper-muted'>
                   {sessions.map((s) => (
-                    <tr key={s.id} className='hover:bg-muted/50'>
+                    <tr key={s.id} className='hover:bg-paper-muted/50'>
                       <td className='px-4 py-3 font-medium'>{s.played_at.slice(0, 10)}</td>
-                      <td className='px-4 py-3 text-muted-foreground'>{s.player_count} players</td>
-                      <td className='px-4 py-3 text-muted-foreground'>{s.notes ?? '—'}</td>
+                      <td className='px-4 py-3 text-ink-muted'>{s.player_count} players</td>
+                      <td className='px-4 py-3 text-ink-muted'>{s.notes ?? '—'}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -249,11 +249,11 @@ export default function GameDetail() {
       {/* Delete confirm dialog */}
       {deleteConfirm && (
         <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50'>
-          <div className='w-full max-w-sm rounded-2xl border border-border bg-card p-6 text-card-foreground shadow-xl'>
+          <div className='w-full max-w-sm rounded-2xl border border-paper-muted bg-paper-primary p-6 text-ink-primary shadow-xl'>
             <h3 className='mb-2 text-lg font-semibold'>Delete "{game.name}"?</h3>
-            <p className='mb-6 text-sm text-muted-foreground'>This will soft-delete the game, all its sessions, and attachments.</p>
+            <p className='mb-6 text-sm text-ink-muted'>This will soft-delete the game, all its sessions, and attachments.</p>
             <div className='flex justify-end gap-3'>
-              <button onClick={() => setDeleteConfirm(false)} className='rounded-lg border border-border px-4 py-2 text-sm hover:bg-accent hover:text-accent-foreground'>
+              <button onClick={() => setDeleteConfirm(false)} className='rounded-lg border border-paper-muted px-4 py-2 text-sm hover:bg-paper-muted hover:text-ink-primary'>
                 Cancel
               </button>
               <button onClick={handleDelete} className='rounded-lg bg-destructive px-4 py-2 text-sm text-white hover:bg-destructive/90'>

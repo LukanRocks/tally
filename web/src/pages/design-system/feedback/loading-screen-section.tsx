@@ -7,7 +7,7 @@ export const LoadingScreenSection = () => (
       <p className='mt-1 text-sm text-ink-secondary'>Full-screen loader shown while the app bootstraps. Random phrase each mount.</p>
     </div>
 
-    <div className='overflow-hidden rounded-xl border border-border'>
+    <div className='overflow-hidden rounded-xl border border-paper-muted'>
       <Loading />
     </div>
   </section>

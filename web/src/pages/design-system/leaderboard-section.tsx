@@ -11,7 +11,7 @@ export function LeaderboardSection() {
         </p>
       </div>
 
-      <div className='overflow-hidden rounded-xl border border-border bg-card shadow-sm'>
+      <div className='overflow-hidden rounded-xl border border-paper-muted bg-paper-primary shadow-sm'>
         {(
           [
             { rank: 1, p: 'a', initial: 'A', name: 'Alyne', meta: '3 sessions · 67% win', streak: '🔥 3', score: 9, delta: '▲ 2', trend: 'up' },
@@ -25,7 +25,7 @@ export function LeaderboardSection() {
             className={cn(
               'grid items-center gap-3.5 px-4 py-3',
               'grid-cols-[32px_56px_1fr_auto_50px_50px]',
-              i < arr.length - 1 && 'border-b border-dashed border-border',
+              i < arr.length - 1 && 'border-b border-dashed border-paper-muted',
               rank === 1 && 'bg-yellow-secondary/50',
             )}
           >
@@ -43,7 +43,7 @@ export function LeaderboardSection() {
             {streak ? (
               <span className='inline-flex h-6 items-center rounded-sm border border-loss/30 bg-loss/12 px-2 font-mono text-[11.5px] text-ink-primary'>{streak}</span>
             ) : (
-              <span className='inline-flex h-6 items-center rounded-sm border border-border bg-paper-secondary px-2 font-mono text-[11.5px] text-ink-primary'>—</span>
+              <span className='inline-flex h-6 items-center rounded-sm border border-paper-muted bg-paper-secondary px-2 font-mono text-[11.5px] text-ink-primary'>—</span>
             )}
             <span className='text-right font-mono text-[22px] font-bold text-ink-primary'>{score}</span>
             <span className={cn('text-right font-mono text-xs font-semibold', trend === 'up' ? 'text-win' : trend === 'down' ? 'text-loss' : 'text-ink-muted')}>{delta}</span>

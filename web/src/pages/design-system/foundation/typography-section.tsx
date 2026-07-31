@@ -20,7 +20,7 @@ export function TypographySection() {
         </p>
       </div>
 
-      <div className='divide-y divide-dashed divide-border rounded-xl border border-border bg-card'>
+      <div className='divide-y divide-dashed divide-paper-muted rounded-xl border border-paper-muted bg-paper-primary'>
         <div className='grid grid-cols-[180px_1fr] items-center gap-6 px-5 py-4'>
           <div>
             <p className='caption text-ink-muted'>Inter · UI & body</p>
@@ -46,10 +46,10 @@ export function TypographySection() {
 
       <div>
         <p className='mb-3 caption text-ink-muted'>Scale</p>
-        <div className='overflow-auto rounded-xl border border-border bg-card'>
+        <div className='overflow-auto rounded-xl border border-paper-muted bg-paper-primary'>
           <table className='w-full'>
             <thead>
-              <tr className='border-b border-border'>
+              <tr className='border-b border-paper-muted'>
                 <th className='px-4 py-3 text-left caption text-ink-muted'>token</th>
                 <th className='px-4 py-3 text-left caption text-ink-muted'>class</th>
                 <th className='px-4 py-3 text-left caption text-ink-muted'>size / line</th>
@@ -57,7 +57,7 @@ export function TypographySection() {
                 <th className='px-4 py-3 text-left caption text-ink-muted'>preview</th>
               </tr>
             </thead>
-            <tbody className='divide-y divide-dashed divide-border'>
+            <tbody className='divide-y divide-dashed divide-paper-muted'>
               {[
                 { token: 'display', cls: '.display', size: '2.25rem', line: '1.125', weight: '800' },
                 { token: 'h1', cls: '.h1', size: '1.875rem', line: '1.25', weight: '800' },

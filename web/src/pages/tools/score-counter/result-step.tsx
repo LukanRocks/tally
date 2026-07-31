@@ -13,7 +13,7 @@ export function ResultStep({ rankedResults, scoringDirection }: { rankedResults:
     return `${(Math.abs(result.total) / maxAbsTotal) * 100}%`
   }
 
-  const heroClasses = cn('relative overflow-hidden rounded-2xl border border-border p-6 text-center')
+  const heroClasses = cn('relative overflow-hidden rounded-2xl border border-paper-muted p-6 text-center')
   const rankingHeaderLabel = scoringDirection === 'highest' ? 'RANKING · HIGH TO LOW' : 'RANKING · LOW TO HIGH'
   const winnerCopy = scoringDirection === 'highest' ? 'top of the heap' : 'fewest points wins'
 
@@ -54,7 +54,7 @@ export function ResultStep({ rankedResults, scoringDirection }: { rankedResults:
 
         {rankedResults.map((result) => {
           const isWinner = result.rank === 1
-          const rowClasses = cn('flex flex-col gap-2 rounded-xl border border-border p-4', isWinner ? 'bg-yellow-primary/8' : 'bg-paper-secondary')
+          const rowClasses = cn('flex flex-col gap-2 rounded-xl border border-paper-muted p-4', isWinner ? 'bg-yellow-primary/8' : 'bg-paper-secondary')
           return (
             <div key={result.player.id} className={rowClasses}>
               <div className='flex items-center gap-3'>

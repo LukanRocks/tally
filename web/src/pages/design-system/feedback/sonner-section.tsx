@@ -38,7 +38,7 @@ export const SonnerSection = () => (
       </div>
     </div>
     <div>
-      <div className='bg-surface-elevated flex flex-wrap gap-3 rounded-xl border border-border px-6 py-5'>
+      <div className='bg-surface-elevated flex flex-wrap gap-3 rounded-xl border border-paper-muted px-6 py-5'>
         <Button onClick={() => toast('Default toast')}>Default</Button>
         <Button className='border-success/60 bg-success' onClick={() => toast.success('Success toast')}>
           Success
@@ -63,7 +63,7 @@ export const SonnerSection = () => (
           <span className='text-sm font-bold text-ink-primary'>BG3 is due back to Joy Joy in 2 days.</span>
           <span className='text-xs text-ink-secondary'>Renew rental or mark returned.</span>
         </div>
-        <button className='inline-flex h-7.5 shrink-0 cursor-pointer items-center rounded-md border border-border bg-card px-2.5 text-xs font-semibold text-ink-primary transition-colors hover:border-ink-muted hover:bg-paper-secondary'>
+        <button className='inline-flex h-7.5 shrink-0 cursor-pointer items-center rounded-md border border-paper-muted bg-paper-primary px-2.5 text-xs font-semibold text-ink-primary transition-colors hover:border-ink-muted hover:bg-paper-secondary'>
           Manage rental
         </button>
       </div>
