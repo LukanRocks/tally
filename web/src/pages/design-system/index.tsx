@@ -28,6 +28,7 @@ import { SonnerSection } from './feedback/sonner-section'
 import { EmptyStateSection } from './feedback/empty-state-section'
 import { LoadingScreenSection } from './feedback/loading-screen-section'
 import { ErrorScreenSection } from './feedback/error-screen-section'
+import { ImportDecisionScreenSection } from './feedback/import-decision-screen-section'
 
 export default () => (
   <Page container>
@@ -62,5 +63,6 @@ export default () => (
     <EmptyStateSection />
     <LoadingScreenSection />
     <ErrorScreenSection />
+    <ImportDecisionScreenSection />
   </Page>
 )
