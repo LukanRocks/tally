@@ -319,7 +319,7 @@ Each phase is independently reviewable and independently revertible.
 | **3** | Dialect layer | `config.ts`, `schema.pg.ts`, `migrations/pg/`, boot-time driver resolution, `searchLike()` helper | Suite runs green against **both** dialects. Fresh Postgres boot works end to end |
 | **4** | Import + gate | `_tally_meta`, state machine, both system endpoints, 503 gate, importer with `setval`. *As landed (#108): also needed a settings-singleton replace and a WAL checkpoint before archiving — see §11.1.* | Test: seeded SQLite + empty PG → import → row-for-row parity incl. IDs; insert-after-import succeeds |
 | **5** | Frontend | Decision screen, mount-time status check, first frontend test harness. *As landed (#113): the manual run turned up two defects the suite could not — see §11.1.* | Manual: full flow both answers. Failure path surfaces the error |
-| **6** | Docs + packaging | README, compose examples, `.env.example`, Dockerfile audit, **agent-facing migration guide** | A stranger can follow the README for both modes; an agent can add a dual-dialect migration without reading this ERD |
+| **6** | Docs + packaging | README, compose examples, `.env.example`, Dockerfile audit, **agent-facing migration guide**. *As landed (#114): the audit found `docker compose up` was broken outright and there was no `.dockerignore` — see §11.2.* | A stranger can follow the README for both modes; an agent can add a dual-dialect migration without reading this ERD |
 | **7** | E2E scenario suite | Automate the migration scenarios currently run by hand: real built binaries, real Postgres, real HTTP. See §11.1 | `pnpm test:e2e` green locally and in CI; each scenario in §11.1 covered and asserted, not just executed |
 
 Phases 0–2 are **dialect-agnostic pure refactors with no behavior change**. See §10.2 — they
@@ -548,6 +548,29 @@ steps without comparing output would have passed while the settings collision wa
 **Where it runs.** Its own CI job — slower than the unit matrix and should not gate on it.
 Docker is available on the maintainer's machine as of 2026-07-30, so local and CI runs are
 equivalent.
+
+### 11.2 Packaging findings (Phase 6)
+
+The Dockerfile audit was scoped as a tidy-up. It found two defects in the *existing*
+distribution, both predating this ERD and neither reachable by any test in the suite:
+
+| Defect | Effect |
+|---|---|
+| `docker-compose.yml` mounted the named volume `tally_data` without declaring it | **`docker compose up -d` failed outright** with "refers to undefined volume" — the primary documented install path did not work |
+| No `.dockerignore` at all | ~900 MB of build context per build; `COPY backend/ ./backend/` runs *after* `pnpm install` and overwrote the container's dependencies with the host's, and swept up a developer's live `backend/data/tally.db` (13.8 MB, plus a 27.7 MB WAL) into the build stage |
+| pnpm's download cache and node-gyp's headers were left in the final image | 549 MB of cache against 42 MB of actual dependencies. Clearing it in the same layer took the image from **1.03 GB to 323 MB** — every user pulls this |
+
+The published image never contained the database — only `dist` is copied out of the build
+stage — but nothing about that was deliberate.
+
+Both are invisible to CI by construction: CI builds from a fresh checkout, which has no
+`node_modules` or `data/` to sweep up, and it never runs `docker compose up` against the
+shipped compose file. **Scenario 1 of §11.1 should start from `docker-compose.yml` itself**
+rather than a hand-written `docker run`, or it will keep missing this class of defect.
+
+The README's other install instructions had drifted the same way: `docker run` named an image
+tag that does not exist (`tally:latest` rather than `ghcr.io/lukanrocks/tally:latest`), and the
+development section documented `npm run install:all`, a script this repo has never had.
 
 ---
 

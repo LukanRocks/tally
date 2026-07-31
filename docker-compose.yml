@@ -1,11 +1,21 @@
-version: '3.8'
+# The simple setup: one container, one volume, no configuration.
+#
+# Tally uses its built-in SQLite database here. Nothing else to run and nothing
+# to tune. To point it at an existing PostgreSQL server instead, see
+# docker-compose.postgres.yml.
 services:
   tally:
     image: ghcr.io/lukanrocks/tally:latest
     ports:
       - '3000:3000'
     volumes:
+      # Holds the SQLite database and every uploaded cover, avatar and rulebook.
       - tally_data:/app/data
     restart: unless-stopped
     environment:
       - PORT=3000
+
+# Without this declaration `docker compose up` fails outright with "refers to
+# undefined volume" — a named volume has to be defined here, not only mounted.
+volumes:
+  tally_data:
