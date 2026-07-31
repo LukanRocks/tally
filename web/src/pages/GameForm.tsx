@@ -272,7 +272,10 @@ export default function GameForm() {
           >
             {submitting ? 'Saving…' : isEdit ? 'Save Changes' : 'Add Game'}
           </button>
-          <Link to={isEdit ? `/library/${id}` : '/library'} className='rounded-lg border border-paper-muted px-6 py-2 text-sm font-medium hover:bg-paper-muted hover:text-ink-primary'>
+          <Link
+            to={isEdit ? `/library/${id}` : '/library'}
+            className='rounded-lg border border-paper-muted px-6 py-2 text-sm font-medium hover:bg-paper-muted hover:text-ink-primary'
+          >
             Cancel
           </Link>
         </div>

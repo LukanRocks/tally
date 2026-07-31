@@ -44,7 +44,9 @@ interface DieCellProps {
 
 function DieCell({ value, animating }: DieCellProps) {
   return (
-    <div className={`flex aspect-square items-center justify-center rounded-xl border border-paper-muted bg-paper-primary text-2xl font-bold tabular-nums${animating ? 'animate-pulse' : ''}`}>
+    <div
+      className={`flex aspect-square items-center justify-center rounded-xl border border-paper-muted bg-paper-primary text-2xl font-bold tabular-nums${animating ? 'animate-pulse' : ''}`}
+    >
       {value}
     </div>
   )

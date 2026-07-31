@@ -36,11 +36,7 @@ export default function PlayerProfile() {
       {/* Header */}
       <div className='mb-8 flex items-center gap-5'>
         <div className='flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-paper-muted'>
-          {player.avatar_path ? (
-            <img src={player.avatar_path} alt={player.name} className='h-full w-full object-cover' />
-          ) : (
-            <span className='text-3xl text-ink-muted'>◉</span>
-          )}
+          {player.avatar_path ? <img src={player.avatar_path} alt={player.name} className='h-full w-full object-cover' /> : <span className='text-3xl text-ink-muted'>◉</span>}
         </div>
         <div>
           <h1 className='text-2xl font-bold text-ink-primary'>{player.name}</h1>

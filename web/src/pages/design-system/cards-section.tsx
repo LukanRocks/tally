@@ -40,7 +40,10 @@ export function CardsSection() {
               { title: 'Sushi Go!', meta: '0 sessions · 2–5p · own', stars: '★★' },
             ] as const
           ).map(({ title, meta, stars }, i, arr) => (
-            <div key={title} className={cn('grid grid-cols-[44px_1fr_auto_auto] items-center gap-3.5 px-4 py-3', i < arr.length - 1 && 'border-b border-dashed border-paper-muted')}>
+            <div
+              key={title}
+              className={cn('grid grid-cols-[44px_1fr_auto_auto] items-center gap-3.5 px-4 py-3', i < arr.length - 1 && 'border-b border-dashed border-paper-muted')}
+            >
               <div
                 className='h-11 w-11 rounded-lg border border-paper-muted'
                 style={{ background: 'repeating-linear-gradient(135deg, var(--paper-secondary) 0 6px, var(--paper-muted) 6px 12px)' }}

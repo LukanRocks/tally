@@ -107,7 +107,10 @@ export type ButtonGroupTextProps = ComponentProps<'div'> & { polymorphic?: boole
 
 export const ButtonGroupText = ({ className, polymorphic = false, ...props }: ButtonGroupTextProps) => {
   const Component = polymorphic ? Slot.Root : 'div'
-  const classes = cn("flex items-center gap-2 rounded-md border bg-paper-muted px-2.5 text-sm font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4", className)
+  const classes = cn(
+    "flex items-center gap-2 rounded-md border bg-paper-muted px-2.5 text-sm font-medium [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
+    className,
+  )
 
   return <Component data-slot='button-group-text' className={classes} {...props} />
 }
