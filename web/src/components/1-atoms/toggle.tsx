@@ -9,11 +9,11 @@ export const TOGGLE_VARIANTS_CONFIG = cva(
     variants: {
       variant: {
         default: [
-          'border-secondary/50 bg-secondary text-secondary-foreground hover:bg-secondary/80',
+          'border-paper-secondary/50 bg-paper-secondary text-ink-secondary hover:bg-paper-secondary/80',
           'data-[state=on]:border-yellow-tertiary data-[state=on]:bg-yellow-primary data-[state=on]:text-ink-on-yellow data-[state=on]:hover:bg-yellow-tertiary',
         ],
         outline: [
-          'border-border bg-card text-ink-secondary hover:border-ink-muted hover:bg-paper-secondary hover:text-ink-primary',
+          'border-paper-muted bg-paper-primary text-ink-secondary hover:border-ink-muted hover:bg-paper-secondary hover:text-ink-primary',
           'data-[state=on]:border-yellow-primary data-[state=on]:text-primary data-[state=on]:hover:border-yellow-tertiary data-[state=on]:hover:bg-yellow-secondary/40',
         ],
         ghost: [

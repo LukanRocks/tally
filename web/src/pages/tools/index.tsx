@@ -18,13 +18,13 @@ const TOOLS: Tool[] = [
 const ToolCard = ({ path, icon: Icon, label, description }: Tool) => {
   return (
     <Link to={path}>
-      <div className='flex items-center gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:bg-accent'>
+      <div className='flex items-center gap-4 rounded-xl border border-paper-muted bg-paper-primary p-5 transition-colors hover:bg-paper-muted'>
         <div className='flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary'>
           <Icon size={20} />
         </div>
         <div>
           <p className='font-semibold'>{label}</p>
-          <p className='text-sm text-muted-foreground'>{description}</p>
+          <p className='text-sm text-ink-muted'>{description}</p>
         </div>
       </div>
     </Link>

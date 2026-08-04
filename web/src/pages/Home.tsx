@@ -28,7 +28,7 @@ export default () => {
       {/* Leaderboard snippet */}
       <section>
         <div className='mb-4 flex items-center justify-between'>
-          <h2 className='text-lg font-semibold text-foreground'>Top Players</h2>
+          <h2 className='text-lg font-semibold text-ink-primary'>Top Players</h2>
           <Link to='/leaderboard' className='text-sm text-primary hover:underline'>
             View all →
           </Link>
@@ -36,10 +36,10 @@ export default () => {
         {leaderboard.length === 0 ? (
           <p className='text-sm text-ink-muted'>No sessions logged yet.</p>
         ) : (
-          <div className='bg-surface-elevated overflow-hidden rounded-xl border border-border'>
+          <div className='bg-surface-elevated overflow-hidden rounded-xl border border-paper-muted'>
             <div className='overflow-x-auto'>
               <table className='w-full text-sm'>
-                <thead className='bg-muted/50'>
+                <thead className='bg-paper-muted/50'>
                   <tr>
                     <th className='px-4 py-3 text-left caption text-ink-muted'>#</th>
                     <th className='px-4 py-3 text-left caption text-ink-muted'>Player</th>
@@ -47,9 +47,9 @@ export default () => {
                     <th className='px-4 py-3 text-right caption text-ink-muted'>Wins</th>
                   </tr>
                 </thead>
-                <tbody className='divide-y divide-border'>
+                <tbody className='divide-y divide-paper-muted'>
                   {leaderboard.map((e, i) => (
-                    <tr key={e.player_id} className='hover:bg-muted/50'>
+                    <tr key={e.player_id} className='hover:bg-paper-muted/50'>
                       <td
                         className={cn('px-4 py-3 font-mono tabular-nums', i === 0 ? 'text-1st-place' : i === 1 ? 'text-2nd-place' : i === 2 ? 'text-3rd-place' : 'text-ink-muted')}
                       >
@@ -74,7 +74,7 @@ export default () => {
       {/* Most played / Least played */}
       <div className='grid gap-10 md:grid-cols-2'>
         <section>
-          <h2 className='mb-4 text-lg font-semibold text-foreground'>Most Played</h2>
+          <h2 className='mb-4 text-lg font-semibold text-ink-primary'>Most Played</h2>
           {mostPlayed.length === 0 ? (
             <p className='text-sm text-ink-muted'>No sessions logged yet.</p>
           ) : (
@@ -87,7 +87,7 @@ export default () => {
         </section>
 
         <section>
-          <h2 className='mb-4 text-lg font-semibold text-foreground'>Least Played</h2>
+          <h2 className='mb-4 text-lg font-semibold text-ink-primary'>Least Played</h2>
           {leastPlayed.length === 0 ? (
             <p className='text-sm text-ink-muted'>No sessions logged yet.</p>
           ) : (
@@ -103,7 +103,7 @@ export default () => {
       {/* Recently added */}
       <section>
         <div className='mb-4 flex items-center justify-between'>
-          <h2 className='text-lg font-semibold text-foreground'>Recently Added</h2>
+          <h2 className='text-lg font-semibold text-ink-primary'>Recently Added</h2>
           <Link to='/library' className='text-sm text-primary hover:underline'>
             View all →
           </Link>

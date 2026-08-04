@@ -18,7 +18,7 @@ export function createApp(): express.Express {
   const app = express()
 
   app.set('trust proxy', 1)
-  app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 500 }))
+  app.use(rateLimit({ windowMs: 15 * 60 * 1000, limit: 500 })) // 15min
   app.use(express.json())
 
   // Serve uploaded files

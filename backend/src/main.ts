@@ -46,12 +46,12 @@ main().catch((err) => {
 
   // Configuration errors are served rather than crashed on. They are thrown
   // before any connection attempt, restarting never resolves them, and the user
-  // who just edited a compose file is looking at a browser tab, not a log.
+  // who just edited a compose file is probably looking at a browser tab first, not a log.
   // See degraded-app.ts for why this is the only class treated this way.
   if (err instanceof DatabaseConfigError) {
     createDegradedApp(err).listen(PORT, () => {
       console.error(
-        `Tally is running in a degraded state on http://localhost:${PORT} — it will explain the problem in the browser, but cannot serve data until the configuration is fixed.`,
+        `Tally is staying up at http://localhost:${PORT} to report this in the browser as well. Restarting will not clear a configuration error. No data is served until it is fixed.`,
       )
     })
     return

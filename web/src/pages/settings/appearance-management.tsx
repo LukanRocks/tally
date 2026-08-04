@@ -26,7 +26,7 @@ export const AppearanceManagement = () => {
         <CardTitle>Appearance</CardTitle>
       </CardHeader>
 
-      <CardContent className='flex flex-col divide-y divide-border'>
+      <CardContent className='flex flex-col divide-y divide-paper-muted'>
         <Field orientation='horizontal' className='py-4 first:pt-0 last:pb-0'>
           <FieldContent>
             <FieldTitle>Currency</FieldTitle>

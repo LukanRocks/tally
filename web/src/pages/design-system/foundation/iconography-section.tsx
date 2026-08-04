@@ -86,7 +86,7 @@ export const IconographySection = () => (
           { label: 'Loader2', Icon: Loader2 },
         ] as { label: string; Icon: LucideIcon }[]
       ).map(({ label, Icon }) => (
-        <div key={label} className='flex flex-col items-center gap-2 rounded-lg border border-border p-3 text-ink-primary'>
+        <div key={label} className='flex flex-col items-center gap-2 rounded-lg border border-paper-muted p-3 text-ink-primary'>
           <Icon size={22} strokeWidth={1.75} />
           <span className='font-mono text-[10px] text-ink-muted'>{label}</span>
         </div>

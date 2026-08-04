@@ -8,7 +8,7 @@ import { Client } from 'pg'
 /**
  * Boots the real server, the way a user's container does.
  *
- * Everything here drives built artifacts — `backend/dist/index.js`, not `src` —
+ * Everything here drives built artifacts — `backend/dist/main.js`, not `src` —
  * against a real Postgres over real HTTP. Nothing is mocked, because every
  * defect this suite exists to catch lived at a seam a mock would have
  * reproduced rather than exercised: the migration runner, driver type coercion,
@@ -17,7 +17,7 @@ import { Client } from 'pg'
 
 export const REPO_ROOT = resolve(__dirname, '..', '..')
 export const BACKEND_DIR = join(REPO_ROOT, 'backend')
-export const SERVER_ENTRY = join(BACKEND_DIR, 'dist', 'index.js')
+export const SERVER_ENTRY = join(BACKEND_DIR, 'dist', 'main.js')
 
 /** Matches docker-compose.test.yml, so local and CI runs are identical. */
 const PG_HOST = process.env.E2E_PG_HOST ?? 'localhost'

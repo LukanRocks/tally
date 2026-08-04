@@ -24,13 +24,13 @@ function SortableItem({ player, rank, n }: { player: RankedPlayer; rank: number;
     <div
       ref={setNodeRef}
       style={style}
-      className={`flex items-center gap-3 rounded-xl border bg-card px-4 py-3 ${isDragging ? 'border-primary opacity-90 shadow-lg' : 'border-border'}`}
+      className={`flex items-center gap-3 rounded-xl border bg-paper-primary px-4 py-3 ${isDragging ? 'border-primary opacity-90 shadow-lg' : 'border-paper-muted'}`}
     >
-      <div {...attributes} {...listeners} className='cursor-grab text-muted-foreground select-none'>
+      <div {...attributes} {...listeners} className='cursor-grab text-ink-muted select-none'>
         <GripVertical size={16} />
       </div>
       <span
-        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${rank === 1 ? 'bg-yellow-100 text-yellow-700' : 'bg-muted text-muted-foreground'}`}
+        className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${rank === 1 ? 'bg-yellow-100 text-yellow-700' : 'bg-paper-muted text-ink-muted'}`}
       >
         {rank}
       </span>
@@ -146,17 +146,17 @@ export default function SessionLogger() {
 
   return (
     <div className='max-w-2xl p-4 md:p-8'>
-      <h1 className='mb-8 text-2xl font-bold text-foreground'>Log Session</h1>
+      <h1 className='mb-8 text-2xl font-bold text-ink-primary'>Log Session</h1>
 
       {error && <div className='mb-4 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive'>{error}</div>}
 
       <form onSubmit={handleSubmit} className='space-y-6'>
         <div>
-          <label className='mb-1.5 block text-sm font-medium text-foreground'>Game *</label>
+          <label className='mb-1.5 block text-sm font-medium text-ink-primary'>Game *</label>
           <select
             value={gameId}
             onChange={(e) => setGameId(Number(e.target.value))}
-            className='w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+            className='w-full rounded-lg border border-paper-muted bg-paper-primary px-3 py-2 text-sm text-ink-primary focus:ring-2 focus:ring-ring focus:outline-none'
           >
             <option value={0}>Select a game…</option>
             {games.map((g) => (
@@ -169,42 +169,42 @@ export default function SessionLogger() {
 
         <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
           <div>
-            <label className='mb-1.5 block text-sm font-medium text-foreground'>Date *</label>
+            <label className='mb-1.5 block text-sm font-medium text-ink-primary'>Date *</label>
             <input
               type='date'
               value={playedAt}
               onChange={(e) => setPlayedAt(e.target.value)}
-              className='w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+              className='w-full rounded-lg border border-paper-muted bg-paper-primary px-3 py-2 text-sm text-ink-primary focus:ring-2 focus:ring-ring focus:outline-none'
             />
           </div>
           <div>
-            <label className='mb-1.5 block text-sm font-medium text-foreground'>Notes</label>
+            <label className='mb-1.5 block text-sm font-medium text-ink-primary'>Notes</label>
             <input
               type='text'
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder='Optional notes…'
-              className='w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+              className='w-full rounded-lg border border-paper-muted bg-paper-primary px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted focus:ring-2 focus:ring-ring focus:outline-none'
             />
           </div>
         </div>
 
         {/* Player search */}
         <div>
-          <label className='mb-1.5 block text-sm font-medium text-foreground'>Add Players</label>
+          <label className='mb-1.5 block text-sm font-medium text-ink-primary'>Add Players</label>
           <div className='relative'>
             <input
               type='text'
               value={playerSearch}
               onChange={(e) => setPlayerSearch(e.target.value)}
               placeholder='Search players…'
-              className='w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+              className='w-full rounded-lg border border-paper-muted bg-paper-primary px-3 py-2 text-sm text-ink-primary placeholder:text-ink-muted focus:ring-2 focus:ring-ring focus:outline-none'
             />
             {playerSearch && filteredPlayers.length > 0 && (
-              <ul className='absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-border bg-card shadow-lg'>
+              <ul className='absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-paper-muted bg-paper-primary shadow-lg'>
                 {filteredPlayers.slice(0, 8).map((p) => (
                   <li key={p.id}>
-                    <button type='button' onClick={() => addPlayer(p)} className='w-full px-4 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground'>
+                    <button type='button' onClick={() => addPlayer(p)} className='w-full px-4 py-2 text-left text-sm hover:bg-paper-muted hover:text-ink-primary'>
                       {p.name}
                     </button>
                   </li>
@@ -222,9 +222,9 @@ export default function SessionLogger() {
                 value={newPlayerName}
                 onChange={(e) => setNewPlayerName(e.target.value)}
                 placeholder='Player name…'
-                className='flex-1 rounded-lg border border-border bg-background px-3 py-1.5 text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring focus:outline-none'
+                className='flex-1 rounded-lg border border-paper-muted bg-paper-primary px-3 py-1.5 text-sm text-ink-primary placeholder:text-ink-muted focus:ring-2 focus:ring-ring focus:outline-none'
               />
-              <button type='button' onClick={createPlayer} className='rounded-lg bg-foreground px-3 py-1.5 text-sm text-background hover:bg-foreground/90'>
+              <button type='button' onClick={createPlayer} className='rounded-lg bg-ink-primary px-3 py-1.5 text-sm text-paper-primary hover:bg-ink-primary/90'>
                 Add
               </button>
             </div>
@@ -234,7 +234,7 @@ export default function SessionLogger() {
         {/* Ranked list */}
         {ranked.length > 0 && (
           <div>
-            <p className='mb-2 text-sm font-medium text-foreground'>Ranking — drag to reorder (1st at top)</p>
+            <p className='mb-2 text-sm font-medium text-ink-primary'>Ranking — drag to reorder (1st at top)</p>
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <SortableContext items={ranked.map((p) => p.id)} strategy={verticalListSortingStrategy}>
                 <div className='space-y-2'>
@@ -243,7 +243,7 @@ export default function SessionLogger() {
                       <div className='flex-1'>
                         <SortableItem player={p} rank={i + 1} n={ranked.length} />
                       </div>
-                      <button type='button' onClick={() => removePlayer(p.id)} className='text-muted-foreground hover:text-destructive'>
+                      <button type='button' onClick={() => removePlayer(p.id)} className='text-ink-muted hover:text-destructive'>
                         <X size={16} />
                       </button>
                     </div>
@@ -262,7 +262,11 @@ export default function SessionLogger() {
           >
             {submitting ? 'Saving…' : 'Log Session'}
           </button>
-          <button type='button' onClick={() => navigate(-1)} className='rounded-lg border border-border px-6 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground'>
+          <button
+            type='button'
+            onClick={() => navigate(-1)}
+            className='rounded-lg border border-paper-muted px-6 py-2 text-sm font-medium hover:bg-paper-muted hover:text-ink-primary'
+          >
             Cancel
           </button>
         </div>

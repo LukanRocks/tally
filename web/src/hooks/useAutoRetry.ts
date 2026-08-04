@@ -4,36 +4,49 @@ export const useAutoRetry = (fn: () => void, interval = 30) => {
   const [enabled, setEnabled] = useState(true)
   const [countdown, setCountdown] = useState(interval)
   const fnRef = useRef(fn)
+  // The countdown is kept in a ref and mirrored into state for display. The tick
+  // has to read the current value and decide whether this is the attempt, and
+  // that decision cannot live inside a setCountdown updater: React runs updaters
+  // lazily, during the render phase of the component holding the state. Firing
+  // the retry from in there called setState on whoever owns the callback while
+  // this component was rendering — the "Cannot update a component while
+  // rendering a different component" warning — and StrictMode's double
+  // invocation of updaters ran the whole retry twice per cycle.
+  const countdownRef = useRef(interval)
 
   fnRef.current = fn
 
-  const fire = useCallback(() => {
+  const reset = useCallback(() => {
+    countdownRef.current = interval
     setCountdown(interval)
-    fnRef.current()
   }, [interval])
+
+  const fire = useCallback(() => {
+    reset()
+    fnRef.current()
+  }, [reset])
 
   const toggle = useCallback(() => {
     setEnabled((e) => !e)
-    setCountdown(interval)
-  }, [interval])
+    reset()
+  }, [reset])
 
   useEffect(() => {
-    setCountdown(interval)
-  }, [interval])
+    reset()
+  }, [reset])
 
   useEffect(() => {
     if (!enabled) return
+
     const id = setInterval(() => {
-      setCountdown((c) => {
-        if (c <= 1) {
-          fnRef.current()
-          return interval
-        }
-        return c - 1
-      })
+      if (countdownRef.current <= 1) return fire()
+
+      countdownRef.current -= 1
+      setCountdown(countdownRef.current)
     }, 1000)
+
     return () => clearInterval(id)
-  }, [enabled, interval])
+  }, [enabled, fire])
 
   const formatted = `${Math.floor(countdown / 60)}:${String(countdown % 60).padStart(2, '0')}`
 

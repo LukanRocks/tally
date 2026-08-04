@@ -98,7 +98,7 @@ export function CountStep({ selectedPlayers, scores, onScoresChange }: CountStep
       <div className='flex flex-col gap-3'>
         {/* Active player card */}
         {activePlayer && (
-          <div className='relative overflow-hidden rounded-xl border border-border p-4'>
+          <div className='relative overflow-hidden rounded-xl border border-paper-muted p-4'>
             <div className='pointer-events-none absolute inset-0' style={{ backgroundColor: getPlayerColor(activePlayerId), opacity: 0.12 }} />
             <div className='relative flex flex-col gap-3'>
               <div className='flex items-center gap-3'>
@@ -156,7 +156,7 @@ export function CountStep({ selectedPlayers, scores, onScoresChange }: CountStep
               return (
                 <button
                   key={id}
-                  className='flex shrink-0 items-center gap-2 rounded-xl border border-border bg-paper-secondary px-3 py-2 transition-colors hover:bg-paper-muted'
+                  className='flex shrink-0 items-center gap-2 rounded-xl border border-paper-muted bg-paper-secondary px-3 py-2 transition-colors hover:bg-paper-muted'
                   onClick={() => handleSetActivePlayer(id)}
                 >
                   <Avatar id={player.id} name={player.name} avatar_path={player.avatar_path} size='sm' />
@@ -177,7 +177,7 @@ export function CountStep({ selectedPlayers, scores, onScoresChange }: CountStep
             return (
               <button
                 key={id}
-                className='flex items-center gap-3 rounded-xl border border-border bg-paper-secondary px-4 py-3 transition-colors hover:bg-paper-muted'
+                className='flex items-center gap-3 rounded-xl border border-paper-muted bg-paper-secondary px-4 py-3 transition-colors hover:bg-paper-muted'
                 onClick={() => handleSetActivePlayer(id)}
               >
                 <Avatar id={player.id} name={player.name} avatar_path={player.avatar_path} size='sm' />
@@ -212,7 +212,7 @@ export function CountStep({ selectedPlayers, scores, onScoresChange }: CountStep
         <div className='flex flex-col gap-2'>
           <div
             className={cn(
-              'rounded-xl border border-border bg-paper-secondary px-4 py-3 text-right font-mono text-2xl font-bold tabular-nums',
+              'rounded-xl border border-paper-muted bg-paper-secondary px-4 py-3 text-right font-mono text-2xl font-bold tabular-nums',
               inputBuffer === '' ? 'text-ink-muted' : 'text-ink-primary',
             )}
           >
@@ -230,8 +230,8 @@ export function CountStep({ selectedPlayers, scores, onScoresChange }: CountStep
               const keyClasses = cn(
                 'flex h-14 items-center justify-center rounded-xl border text-base font-semibold transition-colors select-none',
                 isAction
-                  ? 'border-border bg-paper-secondary text-ink-secondary hover:bg-paper-muted'
-                  : 'border-border bg-paper-primary text-ink-primary hover:bg-paper-secondary active:bg-paper-muted',
+                  ? 'border-paper-muted bg-paper-secondary text-ink-secondary hover:bg-paper-muted'
+                  : 'border-paper-muted bg-paper-primary text-ink-primary hover:bg-paper-secondary active:bg-paper-muted',
               )
               return (
                 <button key={key} className={keyClasses} onClick={handleKey}>

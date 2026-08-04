@@ -19,32 +19,28 @@ export default function PlayerProfile() {
       .catch(() => setLoading(false))
   }, [pid])
 
-  if (loading) return <div className='p-4 text-muted-foreground md:p-8'>Loading…</div>
-  if (!player) return <div className='p-4 text-muted-foreground md:p-8'>Player not found.</div>
-  if (player.player_type === 'shop') return <div className='p-4 text-muted-foreground md:p-8'>Profiles are only available for person-type players.</div>
+  if (loading) return <div className='p-4 text-ink-muted md:p-8'>Loading…</div>
+  if (!player) return <div className='p-4 text-ink-muted md:p-8'>Player not found.</div>
+  if (player.player_type === 'shop') return <div className='p-4 text-ink-muted md:p-8'>Profiles are only available for person-type players.</div>
 
   return (
     <div className='max-w-4xl p-4 md:p-8'>
-      <div className='mb-6 flex items-center gap-2 text-sm text-muted-foreground'>
-        <Link to='/players' className='hover:text-foreground'>
+      <div className='mb-6 flex items-center gap-2 text-sm text-ink-muted'>
+        <Link to='/players' className='hover:text-ink-primary'>
           Players
         </Link>
         <span>/</span>
-        <span className='font-medium text-foreground'>{player.name}</span>
+        <span className='font-medium text-ink-primary'>{player.name}</span>
       </div>
 
       {/* Header */}
       <div className='mb-8 flex items-center gap-5'>
-        <div className='flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-muted'>
-          {player.avatar_path ? (
-            <img src={player.avatar_path} alt={player.name} className='h-full w-full object-cover' />
-          ) : (
-            <span className='text-3xl text-muted-foreground'>◉</span>
-          )}
+        <div className='flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-paper-muted'>
+          {player.avatar_path ? <img src={player.avatar_path} alt={player.name} className='h-full w-full object-cover' /> : <span className='text-3xl text-ink-muted'>◉</span>}
         </div>
         <div>
-          <h1 className='text-2xl font-bold text-foreground'>{player.name}</h1>
-          <p className='mt-1 text-sm text-muted-foreground'>Member since {player.created_at?.slice(0, 10)}</p>
+          <h1 className='text-2xl font-bold text-ink-primary'>{player.name}</h1>
+          <p className='mt-1 text-sm text-ink-muted'>Member since {player.created_at?.slice(0, 10)}</p>
         </div>
       </div>
 
@@ -58,30 +54,30 @@ export default function PlayerProfile() {
 
       {/* Session history */}
       <div>
-        <h2 className='mb-3 text-base font-semibold text-foreground'>Recent Sessions</h2>
+        <h2 className='mb-3 text-base font-semibold text-ink-primary'>Recent Sessions</h2>
         {sessions.length === 0 ? (
-          <p className='text-sm text-muted-foreground'>No sessions found.</p>
+          <p className='text-sm text-ink-muted'>No sessions found.</p>
         ) : (
-          <div className='overflow-hidden rounded-xl border border-border bg-card'>
+          <div className='overflow-hidden rounded-xl border border-paper-muted bg-paper-primary'>
             <div className='overflow-x-auto'>
               <table className='w-full text-sm'>
-                <thead className='bg-muted/50 text-xs tracking-wide text-muted-foreground uppercase'>
+                <thead className='bg-paper-muted/50 text-xs tracking-wide text-ink-muted uppercase'>
                   <tr>
                     <th className='px-4 py-3 text-left'>Date</th>
                     <th className='px-4 py-3 text-left'>Game</th>
                     <th className='px-4 py-3 text-right'>Players</th>
                   </tr>
                 </thead>
-                <tbody className='divide-y divide-border'>
+                <tbody className='divide-y divide-paper-muted'>
                   {sessions.slice(0, 20).map((s) => (
-                    <tr key={s.id} className='hover:bg-muted/50'>
+                    <tr key={s.id} className='hover:bg-paper-muted/50'>
                       <td className='px-4 py-3 font-medium'>{s.played_at.slice(0, 10)}</td>
-                      <td className='px-4 py-3 text-foreground/80'>
+                      <td className='px-4 py-3 text-ink-primary/80'>
                         <Link to={`/library/${s.game_id}`} className='hover:text-primary'>
                           {s.game_name}
                         </Link>
                       </td>
-                      <td className='px-4 py-3 text-right text-muted-foreground'>{s.player_count}</td>
+                      <td className='px-4 py-3 text-right text-ink-muted'>{s.player_count}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -96,9 +92,9 @@ export default function PlayerProfile() {
 
 function StatCard({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className='rounded-xl border border-border bg-card p-4'>
-      <p className='text-xs tracking-wide text-muted-foreground uppercase'>{label}</p>
-      <p className='mt-1 text-2xl font-bold text-foreground'>{value}</p>
+    <div className='rounded-xl border border-paper-muted bg-paper-primary p-4'>
+      <p className='text-xs tracking-wide text-ink-muted uppercase'>{label}</p>
+      <p className='mt-1 text-2xl font-bold text-ink-primary'>{value}</p>
     </div>
   )
 }

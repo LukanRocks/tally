@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch src/main.ts",
     "build": "rm -rf dist && tsc && cp -r src/db/migrations dist/db/",
-    "start": "node dist/index.js",
+    "start": "node dist/main.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:pg": "DATABASE_URL=postgres://tally:tally@localhost:55432/tally_test vitest run",

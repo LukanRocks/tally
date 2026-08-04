@@ -29,7 +29,7 @@ export const ImportDecisionScreenSection = () => (
       </p>
     </div>
 
-    <div className='overflow-hidden rounded-xl border border-border'>
+    <div className='overflow-hidden rounded-xl border border-paper-muted'>
       <ImportDecisionScreen status={mockStatus} onImport={mockImport} onDone={() => {}} />
     </div>
   </section>

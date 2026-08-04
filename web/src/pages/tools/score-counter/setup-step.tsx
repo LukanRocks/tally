@@ -23,7 +23,7 @@ interface SetupStepProps {
 export const SetupStep = ({ players, games, selectedPlayers, selectedGameId, scoringDirection, setSelectedPlayers, setSelectedGameId, setScoringDirection }: SetupStepProps) => (
   <>
     {/* Players card */}
-    <div className='rounded-2xl border border-border bg-paper-secondary p-5'>
+    <div className='rounded-2xl border border-paper-muted bg-paper-secondary p-5'>
       <div className='mb-4 flex items-start justify-between gap-3'>
         <div>
           <p className='mb-0.5 text-[11px] font-semibold tracking-widest text-ink-muted uppercase'>Players</p>
@@ -39,7 +39,7 @@ export const SetupStep = ({ players, games, selectedPlayers, selectedGameId, sco
           const selected = selectedPlayers.some((p) => p.id === player.id)
           const chipClasses = cn(
             'flex shrink-0 items-center gap-2 rounded-full border-2 py-1.5 pr-3 pl-1.5 transition-colors',
-            selected ? 'border-yellow-primary bg-yellow-primary/10' : 'border-border bg-paper-primary hover:border-ink-muted',
+            selected ? 'border-yellow-primary bg-yellow-primary/10' : 'border-paper-muted bg-paper-primary hover:border-ink-muted',
           )
           return (
             <button
@@ -57,7 +57,7 @@ export const SetupStep = ({ players, games, selectedPlayers, selectedGameId, sco
     </div>
 
     {/* Game card */}
-    <div className='space-y-4 rounded-2xl border border-border bg-paper-secondary p-5'>
+    <div className='space-y-4 rounded-2xl border border-paper-muted bg-paper-secondary p-5'>
       <div className='flex items-start justify-between gap-4'>
         <div>
           <p className='mb-0.5 text-[11px] font-semibold tracking-widest text-ink-muted uppercase'>Game · Optional</p>
@@ -70,7 +70,7 @@ export const SetupStep = ({ players, games, selectedPlayers, selectedGameId, sco
         type='button'
         className={cn(
           'flex w-full items-center gap-3 overflow-hidden rounded-xl border-2 transition-colors',
-          selectedGameId === undefined ? 'border-yellow-primary bg-yellow-primary/10' : 'border-border bg-paper-primary hover:bg-paper-muted',
+          selectedGameId === undefined ? 'border-yellow-primary bg-yellow-primary/10' : 'border-paper-muted bg-paper-primary hover:bg-paper-muted',
         )}
         onClick={() => setSelectedGameId(undefined)}
       >
@@ -91,7 +91,7 @@ export const SetupStep = ({ players, games, selectedPlayers, selectedGameId, sco
     </div>
 
     {/* Scoring direction card */}
-    <div className='rounded-2xl border border-border bg-paper-secondary p-5'>
+    <div className='rounded-2xl border border-paper-muted bg-paper-secondary p-5'>
       <div className='mb-4'>
         <p className='mb-0.5 text-[11px] font-semibold tracking-widest text-ink-muted uppercase'>Scoring</p>
         <h2 className='text-lg font-bold text-ink-primary'>Which way is up?</h2>
@@ -109,7 +109,7 @@ export const SetupStep = ({ players, games, selectedPlayers, selectedGameId, sco
               key={direction}
               className={cn(
                 'flex flex-1 items-center gap-3 rounded-xl border-2 p-4 text-left transition-colors',
-                active ? 'border-yellow-primary bg-yellow-primary/10' : 'border-border bg-paper-primary hover:bg-paper-muted',
+                active ? 'border-yellow-primary bg-yellow-primary/10' : 'border-paper-muted bg-paper-primary hover:bg-paper-muted',
               )}
               onClick={() => setScoringDirection(direction)}
             >

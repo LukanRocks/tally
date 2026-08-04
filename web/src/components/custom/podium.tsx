@@ -59,7 +59,7 @@ export const Podium = ({ entries, ready }: PodiumProps) => {
                   <img src={entry.avatar_path} alt={entry.player_name} className={`${rank === 1 ? 'h-16 w-16' : 'h-12 w-12'} rounded-full object-cover ring-2 ${style.ring}`} />
                 ) : (
                   <div
-                    className={`${rank === 1 ? 'h-16 w-16 text-xl' : 'h-12 w-12 text-lg'} flex items-center justify-center rounded-full bg-muted font-bold ring-2 ${style.text} ${style.ring}`}
+                    className={`${rank === 1 ? 'h-16 w-16 text-xl' : 'h-12 w-12 text-lg'} flex items-center justify-center rounded-full bg-paper-muted font-bold ring-2 ${style.text} ${style.ring}`}
                   >
                     {entry.player_name[0].toUpperCase()}
                   </div>
@@ -72,7 +72,7 @@ export const Podium = ({ entries, ready }: PodiumProps) => {
               </Link>
             )}
             {hasPlayer && (
-              <p className='relative text-xs text-muted-foreground'>
+              <p className='relative text-xs text-ink-muted'>
                 {entry.wins} wins · {entry.win_rate}%
               </p>
             )}
