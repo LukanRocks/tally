@@ -1,0 +1,19 @@
+// Typecheck-only config covering everything tsconfig.json leaves out.
+//
+// tsconfig.json is the *build* config: it emits to dist/, and the Dockerfile
+// copies that directory wholesale into a production stage installed with
+// --prod. Test files must stay excluded there, or the published image ships
+// dist/**/*.test.js importing supertest and vitest that are not installed.
+//
+// That exclusion had a side effect, though: `tsc` during build was the backend's
+// only type check, so the test suite — the thing CLAUDE.md §Database calls the
+// only verification that the two dialect schemas have not drifted — was itself
+// the one body of TypeScript here with no compiler behind it. Vitest transpiles
+// via esbuild and checks nothing. This config closes that gap without touching
+// what gets emitted.
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "noEmit": true },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

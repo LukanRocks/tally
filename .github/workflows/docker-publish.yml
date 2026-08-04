@@ -87,6 +87,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # The `build` job compiles the backend, but its tsconfig excludes the test
+      # files so they stay out of the published image — which left them checked
+      # by nothing at all. This covers them. It runs first because a type error
+      # is cheaper to read than the test failure it would surface as.
+      - name: Typecheck backend (including tests)
+        run: pnpm -C backend typecheck
+
       - name: Run backend tests (SQLite)
         run: pnpm -C backend test
 

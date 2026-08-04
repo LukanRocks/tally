@@ -1,6 +1,6 @@
 import request from 'supertest'
 import type { Express } from 'express'
-import { sql } from 'drizzle-orm'
+import { sql, type SQL } from 'drizzle-orm'
 import { createApp } from '../app'
 import { runMigrations, db, dialect } from '../db'
 import { games, game_attachments, players, sessions, session_results, settings, bgg_games, _tally_meta } from '../db/schema'
@@ -41,7 +41,13 @@ export async function resetDb(): Promise<void> {
   if (dialect === 'postgres') {
     const names = ['settings', 'bgg_games', 'session_results', 'sessions', 'game_attachments', 'games', 'players', '_tally_meta']
     // TRUNCATE ... RESTART IDENTITY resets the sequences in the same statement.
-    await db.execute(sql.raw(`TRUNCATE TABLE ${names.join(', ')} RESTART IDENTITY CASCADE`))
+    //
+    // `db` is typed as the SQLite client (see the cast in db/index.ts) but is a
+    // node-postgres client on this branch — the same seam db/import-sqlite.ts
+    // crosses, handled the same way. `.execute()` is the Postgres raw-SQL entry
+    // point.
+    const pgDb = db as unknown as { execute: (query: SQL) => Promise<unknown> }
+    await pgDb.execute(sql.raw(`TRUNCATE TABLE ${names.join(', ')} RESTART IDENTITY CASCADE`))
   } else {
     for (const table of TABLES) {
       await db.delete(table)
