@@ -8,7 +8,7 @@ import { request, testApp, resetDb } from '../test/helpers'
 import { db, dialect } from './index'
 import { games, players, sessions, session_results, settings, bgg_games, game_attachments } from './schema'
 import { importFromSqlite, countAll } from './import-sqlite'
-import { readLegacySqliteCounts, determineState, getState, markReady, __resetStateForTests, IMPORTED_AT_KEY, readMeta } from './state'
+import { readLegacySqliteCounts, determineState, getState, __resetStateForTests, IMPORTED_AT_KEY, readMeta } from './state'
 
 // This whole file is about moving data INTO Postgres, so it is meaningless on
 // the SQLite pass. Skipping keeps the matrix honest rather than asserting
