@@ -31,7 +31,7 @@ export const DesktopNav = () => {
                 <div
                   className={cn(
                     'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium capitalize transition-all',
-                    isActive ? 'bg-primary/10 text-ink-primary shadow-[-2px_0_0_var(--color-primary)]' : 'text-ink-muted hover:text-ink-primary',
+                    isActive ? 'bg-primary/10 text-ink-primary' : 'text-ink-muted hover:text-ink-primary',
                   )}
                 >
                   <Icon size={16} />
