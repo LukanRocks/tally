@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "build": "rm -rf dist && tsc && cp -r src/db/migrations dist/db/",
+    "typecheck": "tsc -p tsconfig.test.json",
     "start": "node dist/main.js",
     "test": "vitest run",
     "test:watch": "vitest",
